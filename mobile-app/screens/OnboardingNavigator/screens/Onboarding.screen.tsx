@@ -23,17 +23,21 @@ export function OnboardingScreen (): JSX.Element {
     return (
        <ScrolledView
         testId="OnboardingScreen.View"
+        style={{backgroundColor: '#ffffff'}}
         contentContainerStyle={{overflow: 'hidden'}}
        >
             <OnboardingCarousel />
-           <View style={[tailwind('bg-primary-500 flex w-full py-8 px-12'), {height: 160}]}>
-               <Text style={tailwind('font-semibold text-white text-center text-xl')}>Login or Signup with EatLater</Text>
+           <View style={tailwind('bg-white flex w-full pt-8 pb-12 px-12')}>
+               <View>
+                   <Text style={tailwind('font-semibold text-black text-center text-2xl')}>Order Food And More</Text>
+                   <Text style={tailwind('font-medium text-black text-center text-lg')}>Login or Signup with Nana</Text>
+               </View>
                 <GenericButton
                     onPress={() => navigator.navigate(OnboardingScreenName.ENTER_MOBILE_PHONE)}
                     label="Continue"
                     labelColor={tailwind('text-white')}
-                    backgroundColor={tailwind('bg-brand-black-500')}
-                    style={tailwind('mt-4')}
+                    backgroundColor={tailwind('bg-black')}
+                    style={tailwind('mt-4 border-2 border-white')}
                     testId="GenericButton.Onboarding.Continue"
                 />
            </View>

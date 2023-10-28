@@ -40,7 +40,7 @@ export function VerificationCodeInput({
                     !hasValue && styles.borderColor,
                     hasValue && styles.borderColorFilled,
                     tailwind({
-                        'bg-brand-gray-200': !hasValue,
+                        'bg-primary-200': !hasValue,
                         'bg-transparent': hasValue
                     }),
                     index === 0 && {marginLeft: 0}
@@ -78,7 +78,7 @@ export function VerificationCodeInput({
 const styles = StyleSheet.create({
 
     borderColor: {
-        borderColor: getColor('brand-gray-200'),
+        borderColor: getColor('primary-200'),
     },
 
     borderColorFilled: {
@@ -87,21 +87,21 @@ const styles = StyleSheet.create({
     cell: {
         alignItems: "center",
         backgroundColor: getColor('brand-gray-200'),
-        borderRadius: 10,
+        borderRadius: 5,
         borderStyle: "solid",
         borderWidth: 1,
         color: getColor('brand-black-500'),
         display: "flex" ,
         fontSize: 20,
         fontWeight: "500",
-        height: 40,
+        height: 50,
         justifyContent: "center",
         lineHeight: 20,
-        marginLeft: 25,
+        marginLeft: 15,
         paddingLeft: 1,
         paddingTop: 1,
         textAlign: "center",
-        width: 40,
+        width: 50,
 
     }
 });

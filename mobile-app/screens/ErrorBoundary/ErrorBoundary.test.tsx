@@ -4,12 +4,10 @@ import ErrorBoundary from "./ErrorBoundary";
 
 describe("ErrorBoundary", () => {
     let consoleErrorSpy: jest.SpyInstance;
-    let errorMock: Error;
 
     beforeAll(() => {
         consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(() => {
         });
-        errorMock = new Error("This is a test error!");
     });
 
     afterAll(() => {
@@ -23,7 +21,7 @@ describe("ErrorBoundary", () => {
                     <Text>'Child Component'</Text>
                 </ErrorBoundary>
             ).toJSON();
-            expect(tree);
+            expect(tree).toMatchSnapshot();
         });
     })
 

@@ -3,46 +3,57 @@ import {StackScreenProps} from "@react-navigation/stack";
 import {useState} from 'react'
 
 import {tailwind} from "@tailwind";
-import {TextArea} from "@components/commons/inputs/TextInput";
+import {GenericTextInput} from "@components/commons/inputs/TextInput";
 import {GenericButton} from "@components/commons/buttons/GenericButton";
 
 import {TermsConditionRow} from "@screens/OnboardingNavigator/screens/components/TermsConditionSection";
-import {BackButton} from "@screens/OnboardingNavigator/screens/components/BackButton";
 import {OnboardingParamsList} from "@screens/OnboardingNavigator/OnboardingNav";
 import {OnboardingScreenName} from "@screens/OnboardingNavigator/ScreenName.enum";
-import {ImageWithTextRow} from "@screens/OnboardingNavigator/screens/components/ImageWithTextRow";
-import {PhoneNumberFormater} from "../../../../../utils/phoneNumberFomartter";
+import {internationalisePhoneNumber} from '@nanahq/sticky'
+import {_api} from "@api/_request";
+import {ShowToast} from "@components/commons/Toast";
 
 type EnterPhoneNumberScreenProps = StackScreenProps<OnboardingParamsList, OnboardingScreenName.ENTER_MOBILE_PHONE>
 export function EnterPhoneNumberScreen ({navigation}: EnterPhoneNumberScreenProps): JSX.Element {
     const [phoneNumber, setPhoneNumber] = useState<string>('')
+    const [loading, setLoading] = useState<boolean>(false)
+    async function onContinue(): Promise<void> {
+        setLoading(true)
+       try {
+           const {data} = await _api.requestData({
+               method: 'GET',
+               url: `user/validate/${internationalisePhoneNumber(phoneNumber)}`,
+           }) as {data: {hasAccount: boolean, firstName?: string}}
 
-
-    function onContinue(): void {
-
-        navigation.navigate({
-            name: OnboardingScreenName.ENTER_PASSWORD,
-            params: {
-               phoneNumber: PhoneNumberFormater.format(phoneNumber),
-            },
-            merge: true,
-        });
+           navigation.navigate({
+               name: OnboardingScreenName.ENTER_PASSWORD,
+               params: {
+                   phoneNumber: internationalisePhoneNumber(phoneNumber),
+                   ...data
+               },
+               merge: true,
+           });
+       } catch (error: any) {
+          ShowToast('error', error.message)
+       } finally {
+           setLoading(false)
+       }
     }
     return (
         <View
             testID="OnboardingScreen.EnterPhoneNumberScreen"
-            style={[tailwind('pt-12'), {overflow: 'hidden'}]}
+            style={[tailwind('pt-12 bg-white flex-1'), {overflow: 'hidden'}]}
         >
 
-        <View style={tailwind('pt-5 px-5')}>
+        <View style={tailwind('pt-10 px-5 bg-white')}>
             <Text
                 testID='OnboardingScreen.EnterPhoneNumberScreen.EnterPhoneText'
-                style={tailwind('font-medium text-lg text-brand-black-500')}
+                style={tailwind('font-bold text-2xl mb-5 text-black')}
             >
-                Enter mobile number
+                Enter your mobile number
             </Text>
-            <TextArea
-                containerStyle={tailwind('mt-2.5 mb-6 overflow-hidden')}
+            <GenericTextInput
+                containerStyle={tailwind('mt-2.5 mb-10 mb-6 overflow-hidden')}
                 textAlign='left'
                 keyboardPad='phone-pad'
                 testID="EnterPhoneNumberScreen.TextInput"
@@ -50,9 +61,9 @@ export function EnterPhoneNumberScreen ({navigation}: EnterPhoneNumberScreenProp
                 initialText={phoneNumber}
                 placeholder="091 740 48621"
                 placeHolderStyle="#717171"
-                style={tailwind('w-full bg-brand-gray-200 rounded-xl  font-medium text-base text-brand-black-500')}
             />
             <GenericButton
+                loading={loading}
                 onPress={onContinue}
                 labelColor={tailwind('text-white')}
                 label='Continue'
@@ -61,16 +72,9 @@ export function EnterPhoneNumberScreen ({navigation}: EnterPhoneNumberScreenProp
                 disabled={phoneNumber === "" || phoneNumber.length < 11}
             />
         </View>
-            <View style={tailwind('mt-14 pt-3.5 px-5')}>
+             <View style={tailwind('mt-14 pt-3.5 px-5')}>
                <TermsConditionRow testID="EnterPhoneNumberScreen.Terms" />
-                <BackButton onPress={() => navigation.goBack()}   testID="EnterPhoneNumberScreen.BackButton" />
             </View>
-            <ImageWithTextRow>
-                <View testID="EnterPhoneNumberScreen.ImageWithTextRow" style={tailwind('flex flex-row items-center px-2 mt-20')}>
-                    <Text style={tailwind('text-3xl font-semibold text-primary-500 mr-0.5')}>Are you </Text>
-                    <Text style={tailwind('text-3xl font-semibold text-secondary-500 ml-0.5')}>Hungry?</Text>
-                </View>
-            </ImageWithTextRow>
         </View>
     )
 }

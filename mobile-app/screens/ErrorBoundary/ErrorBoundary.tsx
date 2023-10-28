@@ -3,6 +3,7 @@ import {Logger} from '@api/logging.util'
 import {View, Text, Image} from "react-native";
 import ErrorImage from '@assets/app-config/error.jpg'
 import {tailwind} from "@tailwind";
+
 interface State {
     hasError: boolean
 }

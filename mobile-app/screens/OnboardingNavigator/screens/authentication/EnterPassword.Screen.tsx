@@ -1,17 +1,16 @@
 import {useState} from "react";
 import {OnboardingScreenName} from "@screens/OnboardingNavigator/ScreenName.enum";
 import {Text, View} from "react-native";
-import {getColor, tailwind} from "@tailwind";
-import {TextArea} from "@components/commons/inputs/TextInput";
+import { tailwind} from "@tailwind";
 import {GenericButton} from "@components/commons/buttons/GenericButton";
-import {TermsConditionRow} from "@screens/OnboardingNavigator/screens/components/TermsConditionSection";
 import {BackButton} from "@screens/OnboardingNavigator/screens/components/BackButton";
-import {ImageWithTextRow} from "@screens/OnboardingNavigator/screens/components/ImageWithTextRow";
 import {StackScreenProps} from "@react-navigation/stack";
 import {OnboardingParamsList} from "@screens/OnboardingNavigator/OnboardingNav";
 import {_api} from "@api/_request";
-import {LoaderComponent} from "@components/commons/LoaderComponent";
 import {useAuthPersistence} from "@contexts/AuthPersistenceProvider";
+import {TextInputWithLabel} from "@components/commons/inputs/TextInputWithLabel";
+import {showTost} from "@components/commons/Toast";
+import {useToast} from "react-native-toast-notifications";
 import {cookieParser} from "../../../../../utils/cookieParser";
 
 
@@ -21,83 +20,73 @@ export function EnterPasswordScreen ({navigation, route}: EnterPasswordScreenPro
     const {setToken} = useAuthPersistence()
 
     const [password, setPassword] = useState<string>('')
-    const [hasError, _setHasError] = useState<boolean>(false)
-    const [errorMessage, _setErrorMessage] = useState<string>('')
+    const [email, setEmail] = useState<string>('')
     const [loading, _setIsLoading] = useState<boolean>(false)
-
+    const toast = useToast()
 
     async function onContinue(): Promise<void> {
         try {
-            _setHasError(false)
-            _setErrorMessage('')
             _setIsLoading(true)
-           const {data, cookies} = await _api.requestData({
-                method: 'POST',
-                url: 'auth/login',
-                data: {
-                    phoneNumber: route.params.phoneNumber,
-                    password
-                }
-            })
-
-            if (data.status === 1) {
-                navigation.navigate( OnboardingScreenName.VERIFY_PHONE_NUMBER, {
-                    phoneNumber: route.params.phoneNumber
+            if (route.params.hasAccount) {
+                const { cookies} = await _api.requestData({
+                    method: 'POST',
+                    url: 'auth/login',
+                    data: {
+                        phone: route.params.phoneNumber,
+                        password,
+                    }
                 })
-                return
+                await  setToken(cookieParser(cookies[0]))
+                showTost(toast, 'Login successfully', 'success')
+            } else  {
+                const {data} = await _api.requestData({
+                    method: 'POST',
+                    url: 'user/register',
+                    data: {
+                        phone: '08065032636',
+                        password,
+                        email: email.toLowerCase()
+                    }
+                })
+                if (data.status === 1) {
+                    navigation.navigate( OnboardingScreenName.VERIFY_PHONE_NUMBER, {
+                        phoneNumber: route.params.phoneNumber
+                    })
+
+                }
             }
-            await  setToken(cookieParser(cookies[0]))
 
         } catch (error: any) {
-            _setHasError(true)
-            if (Number(error.statusCode) === 500) {
-                _setErrorMessage('Something went wrong. Try again')
-            } else {
-                _setErrorMessage(error.message)
-            }
+            showTost(toast, typeof error.message !== 'string' ? error.message[0] : error.message, 'error')
         } finally {
             _setIsLoading(false)
         }
 
     }
 
+    const HeaderTextExistingAccount = `Welcome back, ${route?.params?.firstName  ?? 'User'}`
+
     return (
         <View
             testID="OnboardingScreen.EnterPasswordScreen"
-            style={[tailwind('pt-12'), {overflow: 'hidden'}]}
+            style={[tailwind('pt-12 flex-1'), {overflow: 'hidden'}]}
         >
 
             <View style={tailwind('pt-5 px-5')}>
                    <Text
                        testID='OnboardingScreen.EnterPasswordScreen.EnterPasswordText'
-                       style={tailwind('font-medium text-lg text-brand-black-500')}
+                       style={tailwind('font-bold text-2xl mb-5 text-brand-black-500')}
                    >
-                       Enter password
+                       {route.params.hasAccount ? HeaderTextExistingAccount : 'Sign up for a new account'}
                    </Text>
-                <TextArea
-                    containerStyle={tailwind('mt-2.5 overflow-hidden')}
-                    textAlign='left'
-                    testID="EnterPasswordScreen.TextInput"
-                    onChangeText={setPassword}
-                    initialText={password}
-                    placeholder="Password must not be less than 8 characters"
-                    placeHolderStyle="#717171"
-                    style={tailwind('w-full bg-brand-gray-200 rounded-xl  font-medium text-base text-brand-black-500')}
-                />
-                {hasError && (
-                    <Text style={tailwind('mt-3.5 text-center text-red-600 text-xs font-semibold')}>{errorMessage}</Text>
-                )}
-                {loading &&
-                    <LoaderComponent
-                    size='small'
-                    containerStyle={tailwind('my-3')}
-                    color={getColor('secondary-500')}
-                />}
+                <View style={tailwind('flex flex-col')}>
+                    {route.params.hasAccount === false && (
+                        <TextInputWithLabel placeholder="musa@example.com" label="Email" containerStyle={tailwind('my-3')} labelTestId="EnterPasswordScreen.TextInput.Label" onChangeText={setEmail} value={email} />
+                    )}
+                    <TextInputWithLabel secureTextEntry containerStyle={tailwind('my-3 mb-10')}  label="Password" moreInfo="Password should be at least 8 characters" labelTestId="EnterPasswordScreen.TextInput.Label" onChangeText={setPassword} value={password} />
+                </View>
                 <GenericButton
-                    style={tailwind({
-                        'mt-3.5': hasError,
-                        'mt-6': !hasError && !loading
-                    })}
+                    loading={loading}
                     onPress={onContinue}
                     labelColor={tailwind('text-white')}
                     label='Continue'
@@ -105,20 +94,10 @@ export function EnterPasswordScreen ({navigation, route}: EnterPasswordScreenPro
                     testId="OnboardingScreen.EnterPasswordScreen.ContinueButton"
                     disabled={password === "" || password.length <= 7 || loading}
                 />
-                {hasError && (
-                    <Text style={tailwind('text-center mt-5 text-brand-gray-700 text-xs font-semibold underline')}>forgot password?</Text>
-                )}
             </View>
             <View style={tailwind('mt-14 pt-3.5 px-5')}>
-                <TermsConditionRow testID="EnterPasswordScreen.Terms" />
                 <BackButton onPress={() => navigation.goBack()}   testID="EnterPasswordScreen.BackButton" />
             </View>
-            <ImageWithTextRow>
-                <View testID="EnterPasswordScreen.ImageWithTextRow" style={tailwind('flex flex-row items-center px-2 mt-20')}>
-                    <Text style={tailwind('text-3xl font-semibold text-primary-500 mr-0.5')}>Eating Made </Text>
-                    <Text style={tailwind('text-3xl font-semibold text-secondary-500 ml-0.5')}>Easy</Text>
-                </View>
-            </ImageWithTextRow>
         </View>
     )
 }

@@ -7,6 +7,10 @@ import {NativeLoggingProvider, useLogger} from "@contexts/NativeLoggingProvider"
 import {AuthPersistenceProvider} from "@contexts/AuthPersistenceProvider";
 import {persistence} from "@api/persistence";
 import ErrorBoundary from "@screens/ErrorBoundary/ErrorBoundary";
+import {ToastProps} from "react-native-toast-notifications/lib/typescript/toast";
+import {AppToast} from "@components/commons/AppToast";
+import {ToastProvider} from "react-native-toast-notifications";
+import {StoreProvider} from "@store/StoreProvider";
 
 export default function App() {
   const isLoaded = useCachedResource()
@@ -19,7 +23,13 @@ export default function App() {
     return null;
   }
 
-  return (
+    const customToast = {
+        app_toast_success: (toast: ToastProps) => <AppToast  type="success" toast={toast} />,
+        app_toast_error: (toast: ToastProps) => <AppToast type="error" toast={toast} />,
+    };
+
+
+    return (
     <NativeLoggingProvider>
        <ErrorBoundary>
            <AuthPersistenceProvider
@@ -27,11 +37,15 @@ export default function App() {
                    ...persistence
                }}
            >
-               <GestureHandlerRootView
-                   style={tailwind('flex-1')}
-               >
-                   <MainScreen />
-               </GestureHandlerRootView>
+               <StoreProvider>
+                   <GestureHandlerRootView
+                       style={tailwind('flex-1')}
+                   >
+                       <ToastProvider renderType={customToast}>
+                           <MainScreen />
+                       </ToastProvider>
+                   </GestureHandlerRootView>
+               </StoreProvider>
            </AuthPersistenceProvider>
        </ErrorBoundary>
     </NativeLoggingProvider>

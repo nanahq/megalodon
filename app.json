@@ -3,8 +3,8 @@
     "name": "EatLater",
     "description": "Order food from your favorite vendors and restaurants",
     "slug": "wallet",
-    "owner": "imagyne",
-    "version": "0.0.0",
+    "owner": "nanahq",
+    "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/app-config/icon.png",
     "scheme": "myapp",
@@ -13,7 +13,7 @@
     "splash": {
       "image": "./assets/app-config/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#000000"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -22,12 +22,12 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": false
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/app-config/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
+        "backgroundColor": "#000000"
       }
     },
     "web": {

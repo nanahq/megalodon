@@ -3,8 +3,8 @@ export type APIService = 'API_GATEWAY' | 'VENDOR_GATEWAY' | 'ADMIN_GATEWAY'
 
 
 export const NetworkMapper: Record<NetworkType, string> = {
-    PLAYGROUND: 'http://localhost',
-    PRODUCTION: process.env.API_URL ?? 'http://k8s-default-eatlater-c70abaf92d-1736854636.af-south-1.elb.amazonaws.com'
+    PLAYGROUND: 'http://k8s-default-nanahydr-874b0d28d1-561484973.af-south-1.elb.amazonaws.com',
+    PRODUCTION: process.env.API_URL ?? 'http://k8s-default-nanahydr-874b0d28d1-561484973.af-south-1.elb.amazonaws.com'
 }
 
 

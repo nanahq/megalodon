@@ -12,3 +12,12 @@ export function LoaderComponent (props: LoaderComponentProps): JSX.Element {
         </View>
     )
 }
+
+
+export function LoaderComponentScreen (): JSX.Element {
+    return (
+        <View style={tailwind('flex-1 items-center justify-center')}>
+            <LoaderComponent size='large' />
+        </View>
+    )
+}

@@ -17,6 +17,8 @@ import {OnboardingScreenName} from "./ScreenName.enum";
 export interface OnboardingParamsList {
     [OnboardingScreenName.ENTER_PASSWORD]: {
         phoneNumber: string
+        hasAccount: boolean
+        firstName?: string | undefined
     }
 
     [OnboardingScreenName.VERIFY_PHONE_NUMBER]: {

@@ -1,4 +1,5 @@
 module.exports = {
+  content: ['/**/*.{ts,tsx}'],
   theme: {
     extend: {
       colors: {
@@ -24,10 +25,10 @@ module.exports = {
         },
         primary: {
           100: '#edf8ee',
-          200: '#c8e9cd',
+          200: '#DFE5E7',
           300: '#a3dbac',
           400: '#7fcd8b',
-          500: '#5cbf6b',
+          500: '#00C2E8',
           600: '#41a550',
           700: '#32803e',
           800: '#32803e',
@@ -50,6 +51,7 @@ module.exports = {
         },
 
         'brand-blue': {
+          200: '#DBE1E5',
           500: '#0b1c3a',
         },
 
@@ -59,14 +61,45 @@ module.exports = {
         'brand-gray': {
           200: '#D9D9D9',
           500: '#F6F6F9',
+          400: '#8D959B',
           700: '#737373',
           800: '#717171'
         },
         'brand-gray-text': {
           500: '#0b1c3a99',
         },
-
-      }
+        'brand-green': {
+          500: '#4FD3BC'
+        },
+        success: {
+          50: "#F2FBF4",
+          100: "#E6F7E8",
+          200: "#6FFD83",
+          300: "#9AE1A4",
+          500: "#02B31B",
+          600: "#12BB41",
+        },
+        error: {
+          50: "#FFE5E5",
+          100: "#FFE6E6",
+          200: "#FF9999",
+          300: "#FF6666",
+          500: "#FF0000",
+          600: "#E60000",
+        },
+        warning: {
+          50: "#FFFAF4",
+          100: "#FFF5EA",
+          200: "#FFD2A3",
+          300: "#FFD5A9",
+          500: "#FF9629",
+          600: "#E68725",
+        }
+      },
+    borderWidth: {
+      0.5: 0.5,
+      1.5: 1.5,
+    },
     },
   },
 }
