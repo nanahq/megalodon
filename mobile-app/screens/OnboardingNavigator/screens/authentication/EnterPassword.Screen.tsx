@@ -25,8 +25,8 @@ export function EnterPasswordScreen ({navigation, route}: EnterPasswordScreenPro
     const toast = useToast()
 
     async function onContinue(): Promise<void> {
+        _setIsLoading(true)
         try {
-            _setIsLoading(true)
             if (route.params.hasAccount) {
                 const { cookies} = await _api.requestData({
                     method: 'POST',
@@ -39,21 +39,23 @@ export function EnterPasswordScreen ({navigation, route}: EnterPasswordScreenPro
                 await  setToken(cookieParser(cookies[0]))
                 showTost(toast, 'Login successfully', 'success')
             } else  {
-                const {data} = await _api.requestData({
+                const { cookies} = await _api.requestData({
                     method: 'POST',
                     url: 'user/register',
                     data: {
-                        phone: '08065032636',
+                        phone: route.params.phoneNumber,
                         password,
                         email: email.toLowerCase()
                     }
                 })
-                if (data.status === 1) {
-                    navigation.navigate( OnboardingScreenName.VERIFY_PHONE_NUMBER, {
-                        phoneNumber: route.params.phoneNumber
-                    })
 
-                }
+
+                showTost(toast, 'Account created', 'success')
+
+                setTimeout( async () => {
+                    await  setToken(cookieParser(cookies[0]))
+                }, 5000)
+
             }
 
         } catch (error: any) {
