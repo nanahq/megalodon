@@ -1,15 +1,25 @@
 {
   "expo": {
-    "name": "EatLater",
+    "name": "Nana",
     "description": "Order food from your favorite vendors and restaurants",
-    "slug": "wallet",
-    "owner": "nanahq",
+    "slug": "nana-main",
+    "owner": "nana-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/app-config/icon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "jsEngine": "hermes",
+    "plugins": [
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "usesCleartextTraffic": true
+          }
+        }
+      ]
+    ],
     "splash": {
       "image": "./assets/app-config/splash.png",
       "resizeMode": "contain",
@@ -32,6 +42,11 @@
     },
     "web": {
       "favicon": "./assets/app-config/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "4cb797ba-86fc-4789-9d3a-fda5e16fd634"
+      }
     }
   }
 }

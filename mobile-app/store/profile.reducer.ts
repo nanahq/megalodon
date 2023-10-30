@@ -13,6 +13,7 @@ interface StateI extends Omit<UserI, 'location'>{
 export interface ProfileState {
   profile: StateI
   hasFetchedProfile: boolean
+  updatingProfile: boolean
 }
 
 const initialState: ProfileState = {
@@ -32,7 +33,8 @@ const initialState: ProfileState = {
         isDeleted: false,
         expoNotificationToken: undefined
     },
-    hasFetchedProfile: true
+    hasFetchedProfile: false,
+    updatingProfile: false,
 };
 
 export const fetchProfile = createAsyncThunk(
@@ -90,5 +92,15 @@ export const profile = createSlice({
         ).addCase(fetchProfile.pending, (state) => {
             state.hasFetchedProfile = false
         })
+            .addCase(updateUserProfile.pending, (state) => {
+                state.updatingProfile = true
+            })
+            .addCase(updateUserProfile.fulfilled, (state) => {
+                state.updatingProfile = false
+            })
+            .addCase(updateUserProfile.rejected, (state) => {
+                state.updatingProfile = false
+            })
+
     },
 });
