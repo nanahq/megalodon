@@ -35,10 +35,14 @@ export function BottomTabNavigator ():JSX.Element {
                 headerShown: false,
                 tabBarLabelPosition: "below-icon",
                 tabBarStyle: tailwind(
-                    "px-5 py-3 h-24 border-t bg-brand-black-500"),
+                    "h-28 border-t bg-white"),
                 tabBarActiveTintColor: getColor("primary-500"),
-                tabBarInactiveTintColor: '#ffffff',
-                tabBarItemStyle: tailwind({ "pb-6 pt-2": Device.osName === 'iOS'}),
+                tabBarInactiveTintColor: '#B5B5B5',
+                tabBarItemStyle: tailwind({
+                    "pb-6": Device.osName === 'iOS',
+                    "pb-8": Device.osName === 'Android'
+                }),
+
             }}
         >
             <BottomTab.Screen
@@ -50,10 +54,11 @@ export function BottomTabNavigator ():JSX.Element {
                             focused,
                             color,
                             title: 'Home',
+
                         }),
                     tabBarTestID: "BottomTabHome",
                     tabBarIcon: ({ color }) => (
-                        <IconComponent iconType='Feather' name="home"  size={24} color={color}/>
+                        <IconComponent iconType='AntDesign' name="home"  size={28} color={color}/>
                     ),
                 }}
             />
@@ -69,7 +74,7 @@ export function BottomTabNavigator ():JSX.Element {
                         }),
                     tabBarTestID: "BottomTabHome",
                     tabBarIcon: ({ color }) => (
-                        <IconComponent iconType='Feather' name="search"  size={24} color={color}/>
+                        <IconComponent iconType='AntDesign' name="search1"  size={28} color={color}/>
                     ),
                 }}
             />
@@ -81,11 +86,27 @@ export function BottomTabNavigator ():JSX.Element {
                         getTabBarLabel({
                             focused,
                             color,
+                            title: 'Deals',
+                        }),
+                    tabBarTestID: "BottomTabHome",
+                    tabBarIcon: ({ color }) => (
+                        <IconComponent iconType='AntDesign' name="tagso"  size={28} color={color}/>
+                    ),
+                }}
+            />
+            <BottomTab.Screen
+                component={SearchScreen}
+                name={AppScreenName.HOME}
+                options={{
+                    tabBarLabel: ({ focused, color }) =>
+                        getTabBarLabel({
+                            focused,
+                            color,
                             title: 'Orders',
                         }),
                     tabBarTestID: "BottomTabHome",
                     tabBarIcon: ({ color }) => (
-                        <IconComponent iconType='MaterialIcons' name="takeout-dining"  size={24} color={color}/>
+                        <IconComponent iconType='Ionicons' name="fast-food-outline"  size={28} color={color}/>
                     ),
                 }}
             />
@@ -101,7 +122,7 @@ export function BottomTabNavigator ():JSX.Element {
                         }),
                     tabBarTestID: "BottomTabHome",
                     tabBarIcon: ({ color }) => (
-                        <IconComponent iconType='Feather' name="user"  size={24} color={color}/>
+                        <IconComponent iconType='AntDesign' name="user"  size={28} color={color}/>
                     ),
                 }}
             />
