@@ -29,9 +29,9 @@ export function AppNavigator(): JSX.Element {
         return <LocationPermission />
     }
 
-    if (hasFetchedProfile && profile.expoNotificationToken === undefined) {
-        return <NotificationPermission/>
-    }
+    // if (hasFetchedProfile && profile.expoNotificationToken === undefined) {
+    //     return <NotificationPermission/>
+    // }
 
     return (
         <NavigationContainer linking={LinkingConfiguration}>

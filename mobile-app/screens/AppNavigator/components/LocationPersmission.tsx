@@ -58,7 +58,6 @@ export function LocationPermission (): JSX.Element {
                       labelColor={tailwind('text-white')}
                       onPress={requestLocation}
                       label='Share Location'
-                      // style={tailwind('mt-28 px-10')}
                       backgroundColor={tailwind("bg-primary-500")} testId=""
                   />
               </View>
