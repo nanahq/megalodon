@@ -32,6 +32,7 @@ import {_api} from "@api/_request";
 import {deleteCartFromStorage} from "@store/cart.reducer";
 import moment from "moment";
 import {parseSelectedScheduledDateTime} from "../../../../../utils/DateFormatter";
+import {OrderScreenName} from "@screens/AppNavigator/Screens/orders/OrderScreenName";
 
 export const ADDRESS_MODAL = 'ADDRESS_MODAL'
 export const SCHEDULE_MODAL = 'SCHEDULE_MODAL'
@@ -220,7 +221,11 @@ export const Checkout: React.FC = () => {
                order: response,
                paymentType: paymentMethod
            })
-
+           // Reset navigation stack to 'ORDERS' screen
+           navigation.reset({
+               index: 0,
+               routes: [{ name: BasketScreenName.BASKET }],
+           });
        }  catch (error) {
            showTost(toast, 'Failed to place order. Contact support', 'error')
        } finally {

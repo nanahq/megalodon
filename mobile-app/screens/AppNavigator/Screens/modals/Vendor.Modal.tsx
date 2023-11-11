@@ -19,7 +19,7 @@ import {RootState, useAppDispatch, useAppSelector} from "@store/index";
 import {GenericButton} from "@components/commons/buttons/GenericButton";
 import {readCartFromStorage} from "@store/cart.reducer";
 import {BasketScreenName} from "@screens/AppNavigator/Screens/basket/BasketScreenName.enum";
-import {ModalScreenName} from "@screens/AppNavigator/ScreenName.enum";
+import {AppScreenName, ModalScreenName} from "@screens/AppNavigator/ScreenName.enum";
 import {AppParamList} from "@screens/AppNavigator/AppNav";
 
 type VendorModalScreenProps = StackScreenProps<AppParamList, ModalScreenName.MODAL_VENDOR_SCREEN>
@@ -93,7 +93,9 @@ type VendorModalScreenProps = StackScreenProps<AppParamList, ModalScreenName.MOD
 
      const goToBasket = () => {
          setTimeout(() => {
-             navigation.navigate(BasketScreenName.BASKET)
+             navigation.navigate(AppScreenName.BASKET, {
+                 screen: BasketScreenName.BASKET
+             })
          }, 1000)
      }
     return (

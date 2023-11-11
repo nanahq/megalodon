@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import { AppParamList } from '@screens/AppNavigator/AppNav';
-import { ModalScreenName } from '@screens/AppNavigator/ScreenName.enum';
+import {AppScreenName, ModalScreenName} from '@screens/AppNavigator/ScreenName.enum';
 import { tailwind } from '@tailwind';
 import { _api } from '@api/_request';
 import { BankTransferAccountDetails, PaymentI } from '@nanahq/sticky';
@@ -111,7 +111,9 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ navigation, route })
                 setVerified(() => true)
 
                 setTimeout(() => {
-                    navigation.navigate(OrderScreenName.ORDERS)
+                    navigation.navigate(AppScreenName.ORDERS, {
+                        screen: OrderScreenName.ORDERS
+                    })
                 }, 2000)
             }
         } catch (error) {
