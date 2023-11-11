@@ -41,6 +41,7 @@
         "consistent-return": "off",
         "default-case": "warn",
         "arrow-body-style": "off",
+        "react/function-component-definition": "off",
         "@typescript-eslint/no-use-before-define": "off",
         "react/destructuring-assignment": "off",
         "@typescript-eslint/no-shadow": "off",

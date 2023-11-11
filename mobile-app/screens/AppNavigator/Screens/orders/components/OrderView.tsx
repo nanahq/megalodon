@@ -1,0 +1,23 @@
+import React, {memo} from "react";
+import {Pressable, Text, View} from "react-native";
+import {tailwind} from "@tailwind";
+import {OrderStatus} from "@nanahq/sticky";
+
+const _OrderView: React.FC<{onButtonClick: (name: string) => void, view: OrderStatus, }>  = ({ onButtonClick, view}) => {
+    return (
+        <View style={tailwind('my-4 flex flex-col')}>
+            <View style={tailwind('bg-brand-ash p-2 rounded-40')}>
+                <View style={tailwind('flex flex-row items-center justify-between w-full')}>
+                    <Pressable onPress={() => onButtonClick(OrderStatus.PAYMENT_PENDING)} style={tailwind('rounded-40 py-2 px-12', {'bg-white ': view === OrderStatus.PAYMENT_PENDING})}>
+                        <Text style={tailwind(' text-black', {'text-brand-gray-700':view === OrderStatus.FULFILLED })}>Pending Orders</Text>
+                    </Pressable>
+                    <Pressable onPress={() => onButtonClick("DELIVERED_TO_CUSTOMER")} style={tailwind('rounded-40 py-2 px-12', {'bg-white ': view === OrderStatus.FULFILLED})}>
+                        <Text style={tailwind(' text-black', {'text-brand-gray-700':view === OrderStatus.PAYMENT_PENDING })}>Past Orders</Text>
+                    </Pressable>
+                </View>
+            </View>
+        </View>
+    )
+}
+
+export const OrderView = memo(_OrderView)

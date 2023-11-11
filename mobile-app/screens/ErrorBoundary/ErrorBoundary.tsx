@@ -18,7 +18,7 @@ function ErrorBoundaryComponent(): JSX.Element {
             <Image source={ErrorImage}  resizeMode='cover' style={{width: 400, height: 350}} />
             <View style={tailwind('px-5')}>
                 <Text style={tailwind('font-bold text-3xl text-brand-blue-500 text-center')}>Something went wrong!!</Text>
-                <Text style={tailwind('font-semilbold text-xl text-brand-blue-500 text-center mt-4')}>Please restart the app</Text>
+                <Text style={tailwind('font-semibold text-xl text-brand-blue-500 text-center mt-4')}>Please restart the app</Text>
             </View>
         </View>
     )

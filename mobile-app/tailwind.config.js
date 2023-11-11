@@ -59,7 +59,7 @@ module.exports = {
           500: '#1e2327',
         },
         'brand-gray': {
-          200: '#D9D9D9',
+          200: '#E6E6E6',
           500: '#F6F6F9',
           400: '#8D959B',
           700: '#B5B5B5',
@@ -94,12 +94,18 @@ module.exports = {
           300: "#FFD5A9",
           500: "#FF9629",
           600: "#E68725",
-        }
+        },
+        'brand-ash': '#EEEEEE'
       },
     borderWidth: {
       0.5: 0.5,
       1.5: 1.5,
     },
+      borderRadius: {
+        5: 5,
+        40: 50
+      }
+
     },
   },
 }

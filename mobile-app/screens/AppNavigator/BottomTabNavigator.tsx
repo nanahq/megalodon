@@ -1,11 +1,15 @@
-import {Text} from 'react-native'
+import {Text, View} from 'react-native'
 import {getColor, tailwind} from "@tailwind";
 import {AppScreenName} from "@screens/AppNavigator/ScreenName.enum";
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
-import {ListingsScreen} from "@screens/AppNavigator/Screens/listings/Home.Screen";
+import {HomeScreen} from "@screens/AppNavigator/Screens/home/Home.Screen";
 import  * as Device from 'expo-device'
 import {IconComponent} from "@components/commons/IconComponent";
-import {SearchScreen} from "@screens/AppNavigator/Screens/listings/SearchScreen";
+import {HomeNavigator} from "@screens/AppNavigator/Screens/home/HomeNavigator";
+import {RootState, useAppSelector} from "@store/index";
+import {BasketNavigator} from "@screens/AppNavigator/Screens/basket/BasketNavigator";
+import {ProfileNavigator} from "@screens/AppNavigator/Screens/profile/ProfileNavigator";
+import {OrderNavigator} from "@screens/AppNavigator/Screens/orders/OrderNavigator";
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>()
 
@@ -28,9 +32,10 @@ const getTabBarLabel = (props: {
 
 
 export function BottomTabNavigator ():JSX.Element {
+    const {cart}  = useAppSelector((state: RootState) => state.cart)
     return (
         <BottomTab.Navigator
-            initialRouteName={AppScreenName.LISTINGS}
+            initialRouteName={AppScreenName.HOME}
             screenOptions={{
                 headerShown: false,
                 tabBarLabelPosition: "below-icon",
@@ -43,11 +48,12 @@ export function BottomTabNavigator ():JSX.Element {
                     "pb-8": Device.osName === 'Android'
                 }),
 
+                lazy: true
             }}
         >
             <BottomTab.Screen
-                component={ListingsScreen}
-                name={AppScreenName.LISTINGS}
+                component={HomeNavigator}
+                name={AppScreenName.HOME}
                 options={{
                     tabBarLabel: ({ focused, color }) =>
                         getTabBarLabel({
@@ -63,24 +69,29 @@ export function BottomTabNavigator ():JSX.Element {
                 }}
             />
             <BottomTab.Screen
-                component={SearchScreen}
-                name={AppScreenName.SEARCH}
+                component={BasketNavigator}
+                name={AppScreenName.BASKET}
                 options={{
                     tabBarLabel: ({ focused, color }) =>
                         getTabBarLabel({
                             focused,
                             color,
-                            title: 'Search',
+                            title: 'Basket',
                         }),
                     tabBarTestID: "BottomTabHome",
                     tabBarIcon: ({ color }) => (
-                        <IconComponent iconType='AntDesign' name="search1"  size={28} color={color}/>
+                        <View style={tailwind('relative')}>
+                            <IconComponent iconType='Ionicons' name="ios-cart-outline"  size={28} color={color}/>
+                            {cart !== undefined && (<View style={tailwind('absolute z-50 w-3 h-3 flex justify-center items-center rounded-full bg-green-500 top-0 right-0')}>
+                                <Text style={tailwind('text-xs text-black')}>{cart.length}</Text>
+                            </View>)}
+                        </View>
                     ),
                 }}
             />
             <BottomTab.Screen
-                component={SearchScreen}
-                name={AppScreenName.ORDERS}
+                component={HomeScreen}
+                name={AppScreenName.DEALS}
                 options={{
                     tabBarLabel: ({ focused, color }) =>
                         getTabBarLabel({
@@ -95,8 +106,8 @@ export function BottomTabNavigator ():JSX.Element {
                 }}
             />
             <BottomTab.Screen
-                component={SearchScreen}
-                name={AppScreenName.HOME}
+                component={OrderNavigator}
+                name={AppScreenName.ORDERS}
                 options={{
                     tabBarLabel: ({ focused, color }) =>
                         getTabBarLabel({
@@ -111,7 +122,7 @@ export function BottomTabNavigator ():JSX.Element {
                 }}
             />
             <BottomTab.Screen
-                component={SearchScreen}
+                component={ProfileNavigator}
                 name={AppScreenName.PROFILE}
                 options={{
                     tabBarLabel: ({ focused, color }) =>
@@ -132,9 +143,9 @@ export function BottomTabNavigator ():JSX.Element {
 
 
 export const AppLinking = {
-    [AppScreenName.LISTINGS]: {
+    [AppScreenName.DEALS]: {
         screens: {
-            ListingsScreen: AppScreenName.LISTINGS,
+            DealsScreen: AppScreenName.DEALS,
         },
     },
 
@@ -149,9 +160,9 @@ export const AppLinking = {
             ProfileScreen: AppScreenName.PROFILE,
         },
     },
-    [AppScreenName.SEARCH]: {
+    [AppScreenName.BASKET]: {
     screens: {
-        SearchScreen: AppScreenName.SEARCH,
+        BasketScreen: AppScreenName.BASKET,
     },
 },
 };
