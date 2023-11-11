@@ -1,10 +1,4 @@
-import React, {
-    createContext,
-    useContext,
-    useEffect,
-    useState,
-    PropsWithChildren,
-} from "react";
+import React, {createContext, PropsWithChildren, useContext, useEffect, useState,} from "react";
 
 
 interface AuthPersistenceI {
@@ -27,6 +21,7 @@ interface AuthPersistenceProviderI {
     api: {
         get: () => Promise<string | null>;
         set: (token: string) => Promise<void>;
+        delete: () => Promise<boolean>
     };
 }
 
@@ -64,8 +59,9 @@ export function AuthPersistenceProvider(
             setIsAuthenticated(true)
         },
         async clearToken(): Promise<void> {
-            await api.set('');
-            setToken(await api.get());
+            await api.delete();
+            setIsAuthenticated(false)
+            setToken(null);
         },
     };
 

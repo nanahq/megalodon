@@ -5,10 +5,10 @@ import {LoaderComponent} from "@components/commons/LoaderComponent";
 interface  GenericButtonProps {
     onPress: () => void,
     label: string
-    style?: StyleProp<TouchableOpacityProps>
+    style?: StyleProp<any>
     backgroundColor: StyleProp<TouchableOpacityProps>
     labelColor?: StyleProp<TextProps>
-    testId: string
+    testId?: string
     loading?: boolean
 }
 

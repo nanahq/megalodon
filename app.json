@@ -18,6 +18,12 @@
             "usesCleartextTraffic": true
           }
         }
+      ],
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "Show current location on map."
+        }
       ]
     ],
     "splash": {
@@ -36,7 +42,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/app-config/adaptive-icon.png",
+        "foregroundImage": "./assets/app-config/-icon.png",
         "backgroundColor": "#000000"
       }
     },

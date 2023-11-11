@@ -1,6 +1,7 @@
 import { forwardRef } from "react";
 
 import { ScrollView } from "react-native";
+import {tailwind} from "@tailwind";
 
 interface ScrolledViewProps {
     testId: string
@@ -14,7 +15,7 @@ export const ScrolledView = forwardRef(
 
         return (
             <ScrollView
-                style={style}
+                style={[tailwind('px-4'), style]}
                 ref={ref}
                 {...rest}
             />

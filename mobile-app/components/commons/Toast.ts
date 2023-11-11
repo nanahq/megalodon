@@ -9,7 +9,7 @@ export const ShowToast = (type: 'success' | 'error', message: string) => {
     });
 }
 
-export const showTost =  (toast: ToastType, message: string, type: 'success' | 'error' ): void  =>{
+export const showTost =  (toast: ToastType, message: string, type: 'success' | 'error' | 'warning' ): void  =>{
     toast.hideAll()
     toast.show(message, {
         type: `app_toast_${type}`,

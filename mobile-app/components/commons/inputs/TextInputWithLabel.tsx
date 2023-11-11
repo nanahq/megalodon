@@ -9,9 +9,10 @@ export interface TextInputWithLabelProps extends TextInputProps {
     labelStyle?:StyleProp<TextInputProps>
     containerStyle?:StyleProp<ViewStyle>
     label: string
-    labelTestId: string
+    labelTestId?: string
     moreInfo?: string,
     placeHolderStyle?: string
+    errors?: boolean | string
 }
 
 

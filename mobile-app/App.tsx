@@ -11,21 +11,25 @@ import {ToastProps} from "react-native-toast-notifications/lib/typescript/toast"
 import {AppToast} from "@components/commons/AppToast";
 import {ToastProvider} from "react-native-toast-notifications";
 import {StoreProvider} from "@store/StoreProvider";
+import {BottomSheetModalProvider} from "@gorhom/bottom-sheet";
+import {SafeAreaProvider} from "react-native-safe-area-context";
 
 export default function App() {
   const isLoaded = useCachedResource()
    const logger = useLogger()
 
 
-   // delay splashscreen till cached resources are loaded
-  if (!isLoaded) {
-    SplashScreen.preventAutoHideAsync().catch(logger.error);
-    return null;
-  }
-
+// delay splash screen till cached resources are loaded
+    if (!isLoaded) {
+        setTimeout(() => {
+            SplashScreen.preventAutoHideAsync().catch(logger.error);
+        }, 2000)
+        return null;
+    }
     const customToast = {
         app_toast_success: (toast: ToastProps) => <AppToast  type="success" toast={toast} />,
         app_toast_error: (toast: ToastProps) => <AppToast type="error" toast={toast} />,
+        app_toast_warning: (toast: ToastProps) => <AppToast type="warning" toast={toast} />,
     };
 
 
@@ -34,16 +38,22 @@ export default function App() {
        <ErrorBoundary>
            <AuthPersistenceProvider
                api={{
-                   ...persistence
+                   get: persistence.getSecure,
+                   set: persistence.setSecure,
+                   delete: persistence.deleteSecure
                }}
            >
                <StoreProvider>
                    <GestureHandlerRootView
                        style={tailwind('flex-1')}
                    >
-                       <ToastProvider renderType={customToast}>
-                           <MainScreen />
-                       </ToastProvider>
+                      <SafeAreaProvider>
+                          <BottomSheetModalProvider>
+                              <ToastProvider renderType={customToast}>
+                                  <MainScreen />
+                              </ToastProvider>
+                          </BottomSheetModalProvider>
+                      </SafeAreaProvider>
                    </GestureHandlerRootView>
                </StoreProvider>
            </AuthPersistenceProvider>
