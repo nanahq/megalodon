@@ -10,6 +10,7 @@ import {ModalScreenName} from "@screens/AppNavigator/ScreenName.enum";
 import {AppParamList} from "@screens/AppNavigator/AppNav";
 import {useAppSelector} from "@store/index";
 import * as Device from 'expo-device'
+
 const _VendorCard: React.FC<{ vendor: VendorUserI }> = (props) => {
     const [travelInfo, setTravelInfo] = useState<DeliveryFeeResult | undefined>(undefined);
     const userProfile = useAppSelector(state => state.profile)

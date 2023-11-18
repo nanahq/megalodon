@@ -32,7 +32,6 @@ import {_api} from "@api/_request";
 import {deleteCartFromStorage} from "@store/cart.reducer";
 import moment from "moment";
 import {parseSelectedScheduledDateTime} from "../../../../../utils/DateFormatter";
-import {OrderScreenName} from "@screens/AppNavigator/Screens/orders/OrderScreenName";
 
 export const ADDRESS_MODAL = 'ADDRESS_MODAL'
 export const SCHEDULE_MODAL = 'SCHEDULE_MODAL'
@@ -95,7 +94,6 @@ export const Checkout: React.FC = () => {
                     setDeliveryEta((prevState) => ({...prevState, ...response}))
                 } catch (error) {
                     showTost(toast, 'failed to fetch delivery fee', 'error')
-
                 }
             }
         }
@@ -195,7 +193,7 @@ export const Checkout: React.FC = () => {
             orderValuePayable: Object.values(orderBreakDown).reduce((a, r) => a + r),
             preciseLocation: {
                 type: 'Point',
-                coordinates: selectedAddress?.coordinates
+                coordinates: selectedAddress?.location?.coordinates
             },
             primaryContact: userProfile.profile.phone,
             vendor: vendor?._id ?? '',

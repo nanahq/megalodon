@@ -1,12 +1,12 @@
 {
   "expo": {
     "name": "Nana",
-    "description": "Order food from your favorite vendors and restaurants",
+    "description": "Order food online and get it delivered in minutes",
     "slug": "nana-main",
-    "owner": "nana-app",
+    "owner": "nana_logistics",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/app-config/icon.png",
+    "icon": "./assets/app-config/Icon-blue-ios180.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "jsEngine": "hermes",
@@ -24,12 +24,19 @@
         {
           "locationWhenInUsePermission": "Show current location on map."
         }
+      ],
+      [
+        "@rnmapbox/maps",
+        {
+          "RNMapboxMapsImpl": "mapbox",
+          "RNMapboxMapsDownloadToken": "sk.eyJ1Ijoic3VyYWphdXdhbCIsImEiOiJjbHAwY25wcjEwM2Z1MnFwamc2bDd6Mmx0In0.mvt4AIl-lQDehhIFIdfSrQ"
+        }
       ]
     ],
     "splash": {
-      "image": "./assets/app-config/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#000000"
+      "image": "./assets/app-config/nana-splash.png",
+      "resizeMode": "cover",
+      "backgroundColor": "#00C2E8"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -38,13 +45,20 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": false
+      "supportsTablet": false,
+      "bundleIdentifier": "com.nana-app.nana-main"
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/app-config/-icon.png",
+        "foregroundImage": "./assets/app-config/Icon-Android-512px.png",
         "backgroundColor": "#000000"
-      }
+      },
+      "permissions": [
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.FOREGROUND_SERVICE"
+      ],
+      "package": "com.nanaapp.nanamain"
     },
     "web": {
       "favicon": "./assets/app-config/favicon.png"

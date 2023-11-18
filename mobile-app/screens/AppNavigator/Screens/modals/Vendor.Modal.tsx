@@ -1,6 +1,6 @@
 import {StackScreenProps} from "@react-navigation/stack";
 import {HomeScreenName} from "@screens/AppNavigator/Screens/home/HomeScreenNames.enum";
-import React, { useCallback, useEffect, useState} from "react";
+import React, {useCallback, useEffect, useMemo, useState} from "react";
 import { Image, ListRenderItemInfo, ScrollView, Text, View} from "react-native";
 import {tailwind} from "@tailwind";
 import {ModalCloseIcon} from "@screens/AppNavigator/Screens/modals/components/ModalCloseIcon";
@@ -34,6 +34,11 @@ type VendorModalScreenProps = StackScreenProps<AppParamList, ModalScreenName.MOD
 
     const {cart} = useAppSelector((state: RootState) => state.cart)
 
+     const filteredCategories = useMemo(() => {
+         if(categories.length) {
+             return categories.filter(ct => ct.listingsMenu.length >= 1)
+         }
+     }, [categories])
     useEffect(() => {
 
         async function fetchData () {
@@ -98,6 +103,26 @@ type VendorModalScreenProps = StackScreenProps<AppParamList, ModalScreenName.MOD
              })
          }, 1000)
      }
+
+     const getVendorDelivery = (): string => {
+        switch (route.params.vendor?.settings?.deliveryType) {
+            case 'PRE_ORDER':
+                return 'only pre-orders'
+            break;
+
+            case 'ON_DEMAND':
+                return 'only instant orders'
+            break;
+
+            case 'PRE_AND_INSTANT':
+                return 'accepts instant and pre-orders'
+            break;
+
+            default:
+                return 'all orders'
+        }
+     }
+
     return (
         <View style={tailwind('flex-1 bg-white relative')}>
             <ScrollView style={tailwind('')}>
@@ -118,22 +143,25 @@ type VendorModalScreenProps = StackScreenProps<AppParamList, ModalScreenName.MOD
                             </>
                         ) : (
                             <View style={tailwind('flex-1')}>
-                                <View style={tailwind('flex flex-row items-center')}>
-                                    <IconComponent iconType="Feather" name="star" size={14} style={tailwind('text-black')}/>
-                                    <Text style={tailwind('text-brand-black-500 text-lg')}>{reviews?.rating} ({reviews?.numberOfReviews}+ ratings and reviews)</Text>
-                                </View>
-                                <View style={tailwind('flex flex-row items-center')}>
+                                    <View style={tailwind('flex flex-row items-center')}>
+                                        <IconComponent iconType="Feather" name="star" size={14} style={tailwind('text-black')}/>
+                                        <Text style={tailwind('text-brand-black-500')}>{reviews?.rating} ({reviews?.numberOfReviews} ratings and reviews)</Text>
+                                    </View>
+                                <View style={tailwind('flex flex-row items-center mt-1')}>
                                     <Text style={tailwind('text-brand-gray-700 text-sm')}>Delivery in 15 Min</Text>
+                                </View>
+                                <View style={tailwind('flex flex-row items-center mt-1')}>
+                                    <Text style={tailwind('text-brand-gray-700 text-sm')}>Accepts {getVendorDelivery()}</Text>
                                 </View>
                                 {scheduled.length > 0 && (
                                     <ScheduledMenuSection onPress={onPress} menu={scheduled} />
                                 )}
                                 <FlashList
                                     contentContainerStyle={tailwind('py-4')}
-                                    data={categories}
+                                    data={filteredCategories}
                                     renderItem={renderItem as any}
                                     keyExtractor={(item) => item._id}
-                                    estimatedItemSize={categories.length * 4}
+                                    estimatedItemSize={Number(filteredCategories?.length ?? 1) * 4}
                                     showsVerticalScrollIndicator={false}
                                 />
                             </View>

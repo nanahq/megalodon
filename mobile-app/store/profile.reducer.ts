@@ -6,12 +6,12 @@ import {ResponseWithStatus, UserI, UpdateUserDto, LocationCoordinates} from '@na
 import { showToastStandard } from "@components/commons/Toast";
 
 
-interface StateI extends Omit<UserI, 'location'>{
+export interface ProfileStateI extends Omit<UserI, 'location'>{
     location?: LocationCoordinates
     expoNotificationToken?: string
 }
 export interface ProfileState {
-  profile: StateI
+  profile: ProfileStateI
   hasFetchedProfile: boolean
   updatingProfile: boolean
 }
@@ -49,7 +49,7 @@ export const fetchProfile = createAsyncThunk(
 
 export const updateUserProfile = createAsyncThunk(
     AppActions.UPDATE_PROFILE,
-    async (data: Partial<UpdateUserDto>, {dispatch}): Promise<ResponseWithStatus> => {
+    async (data: Partial<any>, {dispatch}): Promise<ResponseWithStatus> => {
         const res = (await _api.requestData<Partial<UpdateUserDto>>({
             method: 'PUT',
             url: 'user/update',

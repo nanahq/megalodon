@@ -10,12 +10,16 @@ import * as Device from "expo-device";
 import {UndeliveredSingleOrderScreen} from "@screens/AppNavigator/Screens/orders/UndeliveredSingleOrder.Screen";
 import {OrderI} from "@nanahq/sticky";
 import {SingleOrderScreen} from "@screens/AppNavigator/Screens/orders/SingleOrder.Screen";
+import {Tracking} from "@screens/AppNavigator/Screens/orders/tracking";
 
 export interface OrderParamsList {
     [OrderScreenName.UNDELIVERED_SINGLE_ORDER]: {
         order: OrderI
     },
     [OrderScreenName.DELIVERED_SINGLE_ORDER]: {
+        order: OrderI
+    },
+    [OrderScreenName.TRACK_ORDER]: {
         order: OrderI
     },
     [key: string]: undefined | object;
@@ -48,6 +52,14 @@ export const OrderNavigator: React.FC = () => {
             <OrderStack.Screen
                 component={UndeliveredSingleOrderScreen}
                 name={OrderScreenName.UNDELIVERED_SINGLE_ORDER}
+                options={{
+                    cardStyleInterpolator: isAndroid ? CardStyleInterpolators.forBottomSheetAndroid : CardStyleInterpolators.forVerticalIOS,
+
+                }}
+            />
+            <OrderStack.Screen
+                component={Tracking}
+                name={OrderScreenName.TRACK_ORDER}
                 options={{
                     cardStyleInterpolator: isAndroid ? CardStyleInterpolators.forBottomSheetAndroid : CardStyleInterpolators.forVerticalIOS,
 

@@ -5,6 +5,7 @@ import React,  {memo} from "react";
 import {formatRelativeDate} from "../../../../../../utils/DateFormatter";
 
  const _VendorCategorySection: React.FC<{category: ListingCategoryI, onPress: (listing:ListingMenuI) => void}> = (props) => {
+
      return (
         <View style={tailwind('my-5 flex-1')}>
             <View style={tailwind('flex flex-row items-center')}>
@@ -29,7 +30,7 @@ const VendorMenuCard: React.FC<{menu: ListingMenuI, onPress: () => void, disable
          <Pressable  disabled={props.disabled} onPress={props.onPress} style={tailwind('flex flex-row items-center py-4 justify-between')}>
             <View style={tailwind('flex flex-col w-2/3')}>
                 <Text style={tailwind('font-bold text-sm ')}>{props.menu.name}</Text>
-                <Text style={tailwind('text-primary-500 text-sm font-bold')}>₦{props.menu.price}</Text>
+                <Text style={tailwind('text-sm font-bold')}>₦{props.menu.price}</Text>
                 <Text style={tailwind('text-brand-gray-700 my-2')}>{props.menu.desc}</Text>
             </View>
              <View style={tailwind('w-1/3 ml-8')}>

@@ -13,6 +13,7 @@ import {ToastProvider} from "react-native-toast-notifications";
 import {StoreProvider} from "@store/StoreProvider";
 import {BottomSheetModalProvider} from "@gorhom/bottom-sheet";
 import {SafeAreaProvider} from "react-native-safe-area-context";
+import 'expo-dev-client';
 
 export default function App() {
   const isLoaded = useCachedResource()

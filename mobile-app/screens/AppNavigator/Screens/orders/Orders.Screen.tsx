@@ -67,15 +67,9 @@ export const OrderScreen: React.FC = () => {
 
 
     const onPress = (order: OrderI) => {
-        if (order.orderStatus === OrderStatus.FULFILLED) {
-            navigation.navigate(OrderScreenName.DELIVERED_SINGLE_ORDER, {
-                order
-            })
-        } else {
-            navigation.navigate(OrderScreenName.UNDELIVERED_SINGLE_ORDER, {
-                order
-            })
-        }
+        navigation.navigate(OrderScreenName.UNDELIVERED_SINGLE_ORDER, {
+            order
+        })
     }
 
     function PendingRenderItem({item}: any) {

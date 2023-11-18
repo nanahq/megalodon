@@ -9,11 +9,9 @@ import {OrderStatus} from "@nanahq/sticky";
 //     COURIER_PICKUP = "COURIER_PICKUP"
 export const MappedDeliveryStatus: Record<OrderStatus, string> = {
     COLLECTED_FROM_VENDOR: "Order ready for delivery",
-    COURIER_PICKUP: "string",
+    COURIER_PICKUP: "Order has been prepared",
     DELIVERED_TO_CUSTOMER: "Order Delivered",
-    ORDER_ACCEPTED: "string",
     ORDER_PLACED: "Order Paid",
     OUT_FOR_DELIVERY: "Delivery In progress",
     PAYMENT_PENDING: "Payment pending"
-
 }

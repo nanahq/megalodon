@@ -10,6 +10,7 @@ import {LoaderComponentScreen} from "@components/commons/LoaderComponent";
 import {VendorCard} from "@screens/AppNavigator/Screens/modals/components/VendorCard";
 import * as Device from 'expo-device'
 
+
 const {height} = Dimensions.get('screen')
 export function HomeScreen (): JSX.Element {
     const {top: topInsert} = useSafeAreaInsets()

@@ -33,6 +33,8 @@ interface baseParamProps<T> {
     data?: T
     type?: 'requestData'
     headers?: any
+
+    baseUrl?: string
 }
 
 async function base<T>(param: baseParamProps<T>) {
@@ -43,7 +45,7 @@ async function base<T>(param: baseParamProps<T>) {
     }, 50000);
     return await axios({
         method: param.method,
-        baseURL: config.baseUrl,
+        baseURL: param.baseUrl ?? config.baseUrl,
         url: param.url,
         headers: param.headers !== undefined ?  param.headers : config.headers,
         cancelToken: source.token,
@@ -80,8 +82,8 @@ async function request<T> (method: Method, url: string): Promise<{data: any, coo
         .catch(err => Promise.reject(err));
 }
 
-async function requestData<T> ({method, url, data}: baseParamProps<T>): Promise<{data: any, cookies: string[]}> {
-    return await base<T>({method, url, data})
+async function requestData<T> (params: baseParamProps<T>): Promise<{data: any, cookies: string[]}> {
+    return await base<T>({...params})
         .then(res => Promise.resolve<{data: any, cookies: string[]}>(res))
         .catch(err => Promise.reject(err));
 }

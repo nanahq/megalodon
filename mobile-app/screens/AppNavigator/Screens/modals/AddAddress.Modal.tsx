@@ -1,5 +1,5 @@
-import {View, Text, TouchableOpacity} from "react-native";
-import {tailwind} from "@tailwind";
+import {View, Text, TouchableOpacity, ActivityIndicator} from "react-native";
+import {getColor, tailwind} from "@tailwind";
 import React, {useEffect, useState} from "react";
 import {ModalCloseIcon} from "@screens/AppNavigator/Screens/modals/components/ModalCloseIcon";
 import {ModalScreenName} from "@screens/AppNavigator/ScreenName.enum";
@@ -102,7 +102,9 @@ export const AddAddressModal: React.FC<AddAddressModalProps> = ({navigation, rou
             return
         }
 
-        dispatch(addAddressBook(newAddress))
+        const {coordinates, ...rest} = newAddress
+
+        dispatch(addAddressBook({...rest, location: {coordinates}}))
 
         setTimeout(() => {
             if (route?.params?.callback !== undefined) {
@@ -174,7 +176,11 @@ export const AddAddressModal: React.FC<AddAddressModalProps> = ({navigation, rou
                         Location Points (we use precise location for delivery)
                     </Text>
                     <TouchableOpacity  style={tailwind('py-2',)} disabled={gettingLocation} onPress={requestCurrentLocation}>
-                        <Text style={tailwind('font-bold text-lg underline', {'text-brand-gray-700': gettingLocation})}>{newAddress.coordinates[0] === 0 ? 'Use current Location' : 'We have this location'}</Text>
+                        {gettingLocation ? (
+                            <ActivityIndicator size="small" color={getColor('primary-500')} />
+                            ) : (
+                            <Text style={tailwind('font-bold text-lg underline', {'text-brand-gray-700': gettingLocation})}>{newAddress.coordinates[0] === 0 ? 'Use current Location' : 'We have this location'}</Text>
+                        )}
                     </TouchableOpacity>
                     {errors.coordinates !== false && (
                         <Text style={tailwind('text-red-500 mt-1')}>{errors.coordinates}</Text>

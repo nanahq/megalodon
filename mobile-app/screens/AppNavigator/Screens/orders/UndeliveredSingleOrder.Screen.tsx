@@ -75,7 +75,14 @@ export const UndeliveredSingleOrderScreen: React.FC<UndeliveredSingleOrderScreen
                         <Text style={tailwind('text-lg font-bold')}>Order Status</Text>
                         <View style={tailwind('flex flex-row   mt-2 items-center')}>
                             <IconComponent iconType="Ionicons" name="ios-cart-outline" size={20} />
-                            <Text style={tailwind('text-lg ml-5')}>{MappedDeliveryStatus[route.params.order.orderStatus]} {[OrderStatus.FULFILLED, OrderStatus.COURIER_PICKUP, OrderStatus.PROCESSED,  OrderStatus.IN_ROUTE].includes(route.params.order.orderStatus) && `| delivery by ${moment(route.params.order.orderDeliveryScheduledTime).format('HH:mm Do MMM')}`} {route.params.order.orderStatus === OrderStatus.FULFILLED && moment(route.params.order.updatedAt).format('DD MMM YYYY HH:mm')}</Text>
+                            <View>
+                                <Text style={tailwind('text-lg ml-5')}>
+                                    {MappedDeliveryStatus[route.params.order.orderStatus]}
+                                </Text>
+                                {[OrderStatus.FULFILLED, OrderStatus.COURIER_PICKUP, OrderStatus.PROCESSED,  OrderStatus.IN_ROUTE].includes(route.params.order.orderStatus) && (
+                                    <Text style={tailwind('text-lg ml-5')}>{ route.params.order.orderStatus === OrderStatus.FULFILLED  ? `Delivered on ${moment(route.params.order.updatedAt).format('DD MMM YYYY HH:mm')}`  : `Delivery by ${moment(route.params.order.orderDeliveryScheduledTime).format('HH:mm Do MMM')}` } </Text>
+                                )}
+                            </View>
                         </View>
                     </View>
                     <View style={tailwind('flex flex-col mb-5')}>
@@ -102,8 +109,10 @@ export const UndeliveredSingleOrderScreen: React.FC<UndeliveredSingleOrderScreen
                     {route.params.order.orderStatus === OrderStatus.FULFILLED && (
                         <GenericButton onPress={() => {} } label="Order Again" labelColor={tailwind('text-white')} backgroundColor={tailwind('bg-primary-500')} />
                     )}
-                    { [OrderStatus.FULFILLED, OrderStatus.COURIER_PICKUP, OrderStatus.PROCESSED,  OrderStatus.IN_ROUTE].includes(route.params.order.orderStatus) && (
-                        <GenericButton onPress={() => {} } label="Track Delivery" labelColor={tailwind('text-white')} backgroundColor={tailwind('bg-primary-500')} />
+                    { [OrderStatus.COURIER_PICKUP, OrderStatus.PROCESSED,  OrderStatus.IN_ROUTE].includes(route.params.order.orderStatus) && (
+                        <GenericButton onPress={() => navigation.navigate(OrderScreenName.TRACK_ORDER, {
+                            order: route.params.order
+                        })} label="Track Delivery" labelColor={tailwind('text-white')} backgroundColor={tailwind('bg-primary-500')} />
                     )}
                     {route.params.order.orderStatus === OrderStatus.PAYMENT_PENDING && (
                         <GenericButton onPress={() => navigation.navigate(ModalScreenName.MODAL_PAYMENT_SCREEN, {

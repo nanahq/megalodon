@@ -17,7 +17,7 @@ import {IconComponent} from "@components/commons/IconComponent";
 import {useAppSelector} from "@store/index";
 
 
-const AddressIconMapper: Record<string, any> = {
+export const AddressIconMapper: Record<string, any> = {
   'Home':  {
       name: 'home',
       type: 'MaterialIcons'
