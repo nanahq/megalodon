@@ -7,12 +7,15 @@ export interface CartState {
     vendor: string | undefined;
     cart: Cart[] | undefined;
     hasItemsInCart: boolean;
+
+    cartItemAvailableDate?: number
 }
 
 const initialState: CartState = {
     vendor: undefined,
     cart: undefined,
     hasItemsInCart: false,
+    cartItemAvailableDate: undefined
 };
 
 export const readCartFromStorage = createAsyncThunk(AppActions.READ_CART_FROM_STORAGE,
@@ -20,7 +23,7 @@ export const readCartFromStorage = createAsyncThunk(AppActions.READ_CART_FROM_ST
         try {
             const storedCart = await AsyncStorage.getItem("cart");
             if (!storedCart) {
-                return;
+                return null;
             }
 
             return JSON.parse(storedCart)
@@ -40,7 +43,7 @@ export const deleteCartFromStorage = createAsyncThunk(AppActions.DELETE_CART_FRO
     });
 export const saveCartToStorage = createAsyncThunk(
     AppActions.SAVE_CART_TO_STORAGE,
-    async (cartData: { vendor: string; cart: Cart }) => {
+    async (cartData: { vendor: string; cart: Cart, cartAvailableDate?: number}) => {
             // Read the existing cart data from storage (if any)
             const storedCart = await AsyncStorage.getItem("cart");
             let existingCart: CartState = initialState; // Initialize with the initial state
@@ -56,11 +59,13 @@ export const saveCartToStorage = createAsyncThunk(
                     newCart.cart = [...existingCart.cart, cartData.cart];
                     newCart.hasItemsInCart = true;
                     newCart.vendor = cartData.vendor;
+                    newCart.cartItemAvailableDate = cartData.cartAvailableDate
                 }
             } else {
                 newCart.vendor = cartData.vendor;
                 newCart.cart = [cartData.cart];
                 newCart.hasItemsInCart = true;
+                newCart.cartItemAvailableDate = cartData.cartAvailableDate
             }
 
             // Save the updated cart data to storage
@@ -101,6 +106,7 @@ export const cart = createSlice({
                state.cart = payload.cart
                state.vendor = payload.vendor
                 state.hasItemsInCart = payload.hasItemsInCart
+                state.cartItemAvailableDate = payload.cartItemAvailableDate
             }
         )
             .addCase(
@@ -109,14 +115,25 @@ export const cart = createSlice({
                     state.cart = undefined
                     state.vendor = undefined
                     state.hasItemsInCart = false
+                    state.cartItemAvailableDate = undefined
+
                 }
             )
             .addCase(
                 readCartFromStorage.fulfilled,
                 (state, {payload}: any ) => {
+                    if(payload === null) {
+                        state.cart = undefined
+                        state.vendor = undefined
+                        state.hasItemsInCart = false
+                        state.cartItemAvailableDate = undefined
+                        return
+                    }
                     state.cart = payload.cart
                     state.vendor = payload.vendor
                     state.hasItemsInCart = true
+                    state.cartItemAvailableDate = payload.cartItemAvailableDate
+
                 }
             )
     }

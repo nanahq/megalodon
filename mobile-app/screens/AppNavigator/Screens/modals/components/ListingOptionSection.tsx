@@ -47,8 +47,8 @@ const _ListingOptionSection: React.FC<{
                         <Text style={tailwind("text-brand-gray-700 text-sm")}>{SelectedText()}</Text>
                     </View>
                     {isRequired && (
-                        <View style={tailwind("bg-brand-gray-700 p-1 rounded-5")}>
-                            <Text style={tailwind("text-black")}>Required</Text>
+                        <View style={tailwind("border-1.5 border-primary-500 p-1 rounded-5")}>
+                            <Text style={tailwind("text-black text-sm")}>Required</Text>
                         </View>
                     )}
                 </View>

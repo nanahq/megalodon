@@ -4,14 +4,14 @@ export type APIService = 'API_GATEWAY' | 'VENDOR_GATEWAY' | 'ADMIN_GATEWAY'
 
 export const NetworkMapper: Record<NetworkType, string> = {
     PLAYGROUND: 'http://k8s-default-nanahydr-874b0d28d1-561484973.af-south-1.elb.amazonaws.com',
-    PRODUCTION: process.env.API_URL ?? 'http://k8s-default-nanahydr-874b0d28d1-561484973.af-south-1.elb.amazonaws.com'
+    PRODUCTION: process.env.API_URL ?? 'https://api.trynanaapp.com'
 }
 
 
-export const PlaygroundServicePort: Record<APIService, number> = {
-    API_GATEWAY: 3000,
-    VENDOR_GATEWAY: 3001,
-    ADMIN_GATEWAY: 3002
+export const PlaygroundServicePort: Record<APIService, string> = {
+    API_GATEWAY: '3000',
+    VENDOR_GATEWAY: '3001',
+    ADMIN_GATEWAY: '3002'
 
 }
 

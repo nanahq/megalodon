@@ -1,21 +1,30 @@
-import {Dimensions, SafeAreaView, ScrollView} from "react-native";
-import { useMemo} from "react";
-import {useSafeAreaInsets} from "react-native-safe-area-context";
+import {Dimensions, ScrollView} from "react-native";
+import {useEffect, useMemo} from "react";
+import {SafeAreaView} from "react-native-safe-area-context";
 import {tailwind} from "@tailwind";
 import {HomeHeader} from "@screens/AppNavigator/Screens/modals/components/Header";
 import {CategorySection} from "@screens/AppNavigator/Screens/modals/components/Tags";
 import {HomeSection} from "@screens/AppNavigator/Screens/modals/components/HomeSection";
-import {RootState, useAppSelector} from "@store/index";
+import {RootState, useAppDispatch, useAppSelector} from "@store/index";
 import {LoaderComponentScreen} from "@components/commons/LoaderComponent";
 import {VendorCard} from "@screens/AppNavigator/Screens/modals/components/VendorCard";
-import * as Device from 'expo-device'
+import {fetchSubscriptions} from "@store/vendors.reducer";
 
 
 const {height} = Dimensions.get('screen')
 export function HomeScreen (): JSX.Element {
-    const {top: topInsert} = useSafeAreaInsets()
     const {hasFetchedVendor, vendors} = useAppSelector((state: RootState) => state.vendors)
+    const {hasFetchedProfile, profile} = useAppSelector((state: RootState) => state.profile)
 
+    const dispatch = useAppDispatch()
+
+    useEffect(() => {
+        if (!hasFetchedProfile || !profile) {
+            return
+        }
+
+        dispatch(fetchSubscriptions(profile._id))
+    }, [hasFetchedProfile, profile._id])
 
     const popular = useMemo(() => {
         if (vendors !== undefined && hasFetchedVendor) {
@@ -27,12 +36,11 @@ export function HomeScreen (): JSX.Element {
        return <LoaderComponentScreen />
     }
 
-    const top = Device.osName === 'Android' ? topInsert + 20 : 10
 
     return (
            <SafeAreaView style={tailwind('flex-1 bg-white')}>
                <ScrollView
-                   style={{backgroundColor: 'rgba(230, 230, 230, 0.4)', height, top,}}
+                   style={{backgroundColor: 'rgba(230, 230, 230, 0.4)', height,}}
                >
                     <HomeHeader />
                    <CategorySection />
@@ -51,7 +59,7 @@ export function HomeScreen (): JSX.Element {
                            <VendorCard vendor={vendor} key={index} />
                        ))}
                    </HomeSection>
-        </ScrollView>
+                 </ScrollView>
            </SafeAreaView>
     )
 }

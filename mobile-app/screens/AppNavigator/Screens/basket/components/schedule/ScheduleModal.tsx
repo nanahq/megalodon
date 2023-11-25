@@ -26,7 +26,9 @@ type ScheduleDeliveryProps =   {
     vendor: VendorUserI
 
     onScheduleSet: (time:{time: string, date: string}) => void
-    startDate?: string;
+    startDate?: number;
+
+    endDate?: number
 
 }
 
@@ -52,21 +54,22 @@ interface ScheduleItem {
     }, [props.startDate])
 
 
-    const generateSchedule = () => {
-        const schedules: ScheduleItem[] = [];
-        let currentDate = moment(startDate);
+     const generateSchedule = () => {
+         const schedules: ScheduleItem[] = [];
+         let currentDate = moment(props.startDate);
+         const end = props.endDate ? moment(props.endDate) : moment(startDate).add(3, 'days')
+         while (currentDate.isSameOrBefore(end)) {
+             const isToday = currentDate.isSame(moment(), 'day');
+             schedules.push({
+                 date: `${formatRelativeDate(currentDate)} ${currentDate.format('Do')}`,
+                 timeSlots: generateTimeSlots(operations?.startTime, operations?.cutoffTime, isToday),
+             });
+             currentDate = currentDate.add(1, 'day');
+         }
 
-        while (currentDate.isSameOrBefore(moment(startDate).add(3, 'days'))) {
-            const isToday = currentDate.isSame(moment(), 'day');
-            schedules.push({
-                date: `${formatRelativeDate(currentDate)} ${currentDate.format('Do')}`,
-                timeSlots: generateTimeSlots(operations?.startTime, operations?.cutoffTime, isToday),
-            });
-            currentDate = currentDate.add(1, 'day');
-        }
+         setSchedule(schedules);
+     };
 
-        setSchedule(schedules);
-    };
 
      const generateTimeSlots = (start: string = '', end: string = '', isToday: boolean = false): TimeSlot[] => {
          const timeSlots: TimeSlot[] = [];
@@ -89,10 +92,18 @@ interface ScheduleItem {
              });
          }
 
+         // Check if the current time is before the restaurant's start time
+         if (currentTime.isBefore(moment(operations?.startTime))) {
+             currentTime.set({
+                 hour: moment(operations?.startTime).hour(),
+                 minute: moment(operations?.startTime).minute(),
+             });
+         }
+
          while (currentTime.isBefore(endTime) && !currentTime.isSameOrAfter(endTime)) {
              timeSlots.push({
                  start: currentTime.format('HH:mm'),
-                 end: currentTime.add(45, 'minutes').format('HH:mm'),
+                 end: currentTime.add(30, 'minutes').format('HH:mm'),
              });
          }
          return timeSlots;
@@ -199,7 +210,7 @@ interface ScheduleItem {
                     <FlatList
                         style={[tailwind('mt-4'), {maxHeight: 400}]}
                         data={schedule.find((item) => item.date === selectedDate)?.timeSlots || []}
-                        showsVerticalScrollIndicator={false}
+                        showsVerticalScrollIndicator={true as any}
                         keyExtractor={(item) => item.start}
                         renderItem={({ item }) => (
                             <TouchableOpacity

@@ -92,7 +92,7 @@ export function EnterPasswordScreen ({navigation, route}: EnterPasswordScreenPro
                     onPress={onContinue}
                     labelColor={tailwind('text-white')}
                     label='Continue'
-                    backgroundColor={tailwind('bg-brand-black-500')}
+                    backgroundColor={tailwind('bg-primary-500')}
                     testId="OnboardingScreen.EnterPasswordScreen.ContinueButton"
                     disabled={password === "" || password.length <= 7 || loading}
                 />

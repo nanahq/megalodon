@@ -8,11 +8,14 @@ import {VendorUserI} from '@nanahq/sticky'
 
 export interface VendorState {
     vendors: VendorUserI[] | undefined
+
+    subscriptions: any[] | undefined
     hasFetchedVendor: boolean
 }
 
 const initialState: VendorState = {
-    hasFetchedVendor: false ,
+    hasFetchedVendor: false,
+    subscriptions: undefined,
     vendors: undefined
 };
 
@@ -26,19 +29,22 @@ export const fetchVendors = createAsyncThunk(
     }
 );
 
+export const fetchSubscriptions = createAsyncThunk(
+    AppActions.FETCH_SUBS,
+    async (id: string) => {
+        return await _api.requestData<undefined>({
+            method: 'get',
+            url: `vendor/subscriptions/${id}`
+        })
+    }
+);
+
 export const vendors = createSlice({
-    name: "profile",
-    initialState,
-    reducers: {
-        setHasFetchedProfile: (state, action: PayloadAction<boolean>) => {
-            state.hasFetchedVendor = action.payload
-        }
-    },
     extraReducers: (builder) => {
         builder
             .addCase(
                 fetchVendors.fulfilled,
-                (state, {payload: {data}}: PayloadAction<{data: any, cookies: any}>) => {
+                (state, {payload: {data}}: PayloadAction<{ data: any, cookies: any }>) => {
                     state.vendors = data
                     state.hasFetchedVendor = true
                 }
@@ -55,7 +61,17 @@ export const vendors = createSlice({
             }
         ).addCase(fetchVendors.pending, (state) => {
             state.hasFetchedVendor = false
-        })
 
+        }).addCase(fetchSubscriptions.fulfilled, (state, {payload: {data}}: PayloadAction<{ data: any, cookies: any }>) => {
+                state.subscriptions = data
+            })
+
+    },
+    initialState,
+    name: "profile",
+    reducers: {
+        setHasFetchedProfile: (state, action: PayloadAction<boolean>) => {
+            state.hasFetchedVendor = action.payload
+        }
     },
 });

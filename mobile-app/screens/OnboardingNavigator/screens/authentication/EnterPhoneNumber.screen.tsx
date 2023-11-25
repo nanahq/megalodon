@@ -67,7 +67,7 @@ export function EnterPhoneNumberScreen ({navigation}: EnterPhoneNumberScreenProp
                 onPress={onContinue}
                 labelColor={tailwind('text-white')}
                 label='Continue'
-                backgroundColor={tailwind('bg-brand-black-500')}
+                backgroundColor={tailwind('bg-primary-500')}
                 testId="OnboardingScreen.EnterPhoneNumberScreen.ContinueButton"
                 disabled={phoneNumber === "" || phoneNumber.length < 11}
             />

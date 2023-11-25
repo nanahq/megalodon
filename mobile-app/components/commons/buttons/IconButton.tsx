@@ -29,7 +29,7 @@ export function IconButton (props: IconButtonProps): JSX.Element {
                     iconType={props.iconType}
                     size={props.iconSize}
                     name={props.iconName}
-                    style={props.iconStyle}
+                    style={[props.iconStyle, tailwind({'text-brand-gray-700': props.disabled})]}
                 />
             )}
 

@@ -14,10 +14,10 @@ import * as Linking from 'expo-linking';
 
 const socketEndpoint = NetworkMapper.PRODUCTION;
 
-const MAPBOX_APIKEY = 'pk.eyJ1Ijoic3VyYWphdXdhbCIsImEiOiJjbGxiNHhpNW8wMHBpM2lxb215NnZmN3ZuIn0.a6zWnzIF0KcVZ2AUiDNBDA';
-MapboxGL.setAccessToken(MAPBOX_APIKEY);
-MapboxGL.setTelemetryEnabled(false);
-MapboxGL.setWellKnownTileServer('mapbox');
+// const MAPBOX_APIKEY = 'pk.eyJ1Ijoic3VyYWphdXdhbCIsImEiOiJjbGxiNHhpNW8wMHBpM2lxb215NnZmN3ZuIn0.a6zWnzIF0KcVZ2AUiDNBDA';
+// MapboxGL.setAccessToken(MAPBOX_APIKEY);
+// MapboxGL.setTelemetryEnabled(false);
+// MapboxGL.setWellKnownTileServer('mapbox');
 
 export const Map: React.FC<{ order: OrderI }> = ({ order }) => {
     const { height } = Dimensions.get('screen');
@@ -164,103 +164,103 @@ export const Map: React.FC<{ order: OrderI }> = ({ order }) => {
 
     return (
         <View style={tailwind('flex-1 relative flex flex-col items-center justify-center')}>
-            {loading  || currentLocation === undefined ? (
-                <View style={tailwind('flex flex-row items-center justify-center flex-1 w-full')}>
-                    <View style={tailwind('flex flex-col items-center')}>
-                        <ActivityIndicator size="large" color={getColor('primary-500')} />
-                        <Text style={tailwind('font-bold text-3xl text-center mt-4')}>Fetching Delivery Information..... it will take 3 seconds</Text>
-                    </View>
-                </View>
-            ) : (
-                <>
-                    <View style={[tailwind('w-full'), { height }]}>
-                        <MapboxGL.MapView
-                            style={tailwind('flex-1')}
-                            id="MapboxMap"
-                            zoomEnabled
-                            styleURL="mapbox://styles/mapbox/navigation-night-v1"
-                            rotateEnabled
-                        >
-                            <MapboxGL.Camera
-                                centerCoordinate={currentLocation?.coordinates ?? [0,0]}
-                                zoomLevel={15}
-                                animationMode="flyTo"
-                                animationDuration={2000}
-                                pitch={60}
-                            />
-                            {places && (
-                                <MapboxGL.ShapeSource id="placesSource" shape={places}>
-                                    <MapboxGL.SymbolLayer
-                                        id="placesIconLayer"
-                                        style={{
-                                            iconImage: '{icon}-15',
-                                            iconSize: 6,
-                                            iconAllowOverlap: true,
-                                            textField: ['get', 'description'],
-                                            textVariableAnchor: 'right',
-                                            textPadding: 20,
-                                            textColor: '#FF9629',
-                                            textSize: 24
-                                        }}
-                                    />
-                                </MapboxGL.ShapeSource>
-                            )}
-                            <MapboxGL.PointAnnotation
-                                selected
-                                coordinate={currentLocation?.coordinates ?? [0,0]}
-                                id="UserCoords"
-                            >
-                                <View>
-                                    <IconComponent iconType="MaterialCommunityIcons" name="bike-fast" size={50} style={[tailwind('text-secondary-700'), {color: "#f96d1f"}]} />
-                                </View>
-                            </MapboxGL.PointAnnotation>
+            {/* {loading  || currentLocation === undefined ? ( */}
+            {/*     <View style={tailwind('flex flex-row items-center justify-center flex-1 w-full')}> */}
+            {/*         <View style={tailwind('flex flex-col items-center')}> */}
+            {/*             <ActivityIndicator size="large" color={getColor('primary-500')} /> */}
+            {/*             <Text style={tailwind('font-bold text-3xl text-center mt-4')}>Fetching Delivery Information..... it will take 3 seconds</Text> */}
+            {/*         </View> */}
+            {/*     </View> */}
+            {/* ) : ( */}
+            {/*     <> */}
+            {/*         <View style={[tailwind('w-full'), { height }]}> */}
+            {/*             <MapboxGL.MapView */}
+            {/*                 style={tailwind('flex-1')} */}
+            {/*                 id="MapboxMap" */}
+            {/*                 zoomEnabled */}
+            {/*                 styleURL="mapbox://styles/mapbox/navigation-night-v1" */}
+            {/*                 rotateEnabled */}
+            {/*             > */}
+            {/*                 <MapboxGL.Camera */}
+            {/*                     centerCoordinate={currentLocation?.coordinates ?? [0,0]} */}
+            {/*                     zoomLevel={15} */}
+            {/*                     animationMode="flyTo" */}
+            {/*                     animationDuration={2000} */}
+            {/*                     pitch={60} */}
+            {/*                 /> */}
+            {/*                 {places && ( */}
+            {/*                     <MapboxGL.ShapeSource id="placesSource" shape={places}> */}
+            {/*                         <MapboxGL.SymbolLayer */}
+            {/*                             id="placesIconLayer" */}
+            {/*                             style={{ */}
+            {/*                                 iconImage: '{icon}-15', */}
+            {/*                                 iconSize: 6, */}
+            {/*                                 iconAllowOverlap: true, */}
+            {/*                                 textField: ['get', 'description'], */}
+            {/*                                 textVariableAnchor: 'right', */}
+            {/*                                 textPadding: 20, */}
+            {/*                                 textColor: '#FF9629', */}
+            {/*                                 textSize: 24 */}
+            {/*                             }} */}
+            {/*                         /> */}
+            {/*                     </MapboxGL.ShapeSource> */}
+            {/*                 )} */}
+            {/*                 <MapboxGL.PointAnnotation */}
+            {/*                     selected */}
+            {/*                     coordinate={currentLocation?.coordinates ?? [0,0]} */}
+            {/*                     id="UserCoords" */}
+            {/*                 > */}
+            {/*                     <View> */}
+            {/*                         <IconComponent iconType="MaterialCommunityIcons" name="bike-fast" size={50} style={[tailwind('text-secondary-700'), {color: "#f96d1f"}]} /> */}
+            {/*                     </View> */}
+            {/*                 </MapboxGL.PointAnnotation> */}
 
-                            <MapboxGL.PointAnnotation
-                                selected
-                                coordinate={deliveryInformation?.dropOffLocation.coordinates ?? order.preciseLocation.coordinates ?? [0,0]}
-                                id="VendorCoord"
-                            >
-                                <View>
-                                    <IconComponent iconType="Ionicons" name="ios-location-outline" size={50} style={tailwind('text-white')} />
-                                </View>
-                            </MapboxGL.PointAnnotation>
-                        </MapboxGL.MapView>
-                    </View>
+            {/*                 <MapboxGL.PointAnnotation */}
+            {/*                     selected */}
+            {/*                     coordinate={deliveryInformation?.dropOffLocation.coordinates ?? order.preciseLocation.coordinates ?? [0,0]} */}
+            {/*                     id="VendorCoord" */}
+            {/*                 > */}
+            {/*                     <View> */}
+            {/*                         <IconComponent iconType="Ionicons" name="ios-location-outline" size={50} style={tailwind('text-white')} /> */}
+            {/*                     </View> */}
+            {/*                 </MapboxGL.PointAnnotation> */}
+            {/*             </MapboxGL.MapView> */}
+            {/*         </View> */}
 
-                    {deliveryInformation && (
-                        <>
-                            <View style={tailwind('absolute bottom-10 z-50  w-full px-4')}>
-                                <View style={[tailwind('flex flex-col rounded-3xl mt-4 p-4'), { backgroundColor: '#000' }]}>
-                                    <Text style={tailwind('text-white text-sm')}>Delivery Person</Text>
-                                    <View style={tailwind('flex flex-row items-center  justify-between')}>
-                                        <Text style={tailwind('text-white text-xl')}>{`${deliveryInformation?.driver?.firstName} ${deliveryInformation?.driver?.lastName}`}</Text>
-                                        <Pressable onPress={() => Linking.openURL(`tel:${deliveryInformation?.driver?.phone}`)} style={tailwind('p-2')}>
-                                            <IconComponent name="telephone" iconType="Foundation" size={40} style={tailwind('text-success-500')} />
-                                        </Pressable>
-                                    </View>
-                                    <Text style={tailwind('text-brand-ash')}>{deliveryInformation.driver.totalTrips} Trips Made</Text>
-                                </View>
-                                <View style={[tailwind('flex flex-col rounded-3xl mt-3 p-4'), { backgroundColor: '#000' }]}>
-                                    <View style={tailwind('flex flex-row items-center')}>
-                                        <Text style={tailwind('text-white text-4xl mr-2')}>ETA:</Text>
-                                        <Text style={tailwind('text-white text-4xl text-brand-gray-700')}>9 minutes</Text>
-                                    </View>
-                                    <View style={tailwind('flex flex-col')}>
-                                        <Text style={tailwind('text-white text-lg mr-2')}>Delivery Address</Text>
-                                        <Text style={tailwind('text-white text-lg text-brand-gray-700')}>Suite C22 Ummi Plaza, Zoo road</Text>
-                                    </View>
-                                </View>
-                            </View>
-                            <ModalCloseIcon
-                                size={40}
-                                onPress={() => navigation.goBack()}
-                                iconStyle={tailwind('text-black mx-0')}
-                                buttonStyle={tailwind('absolute rounded-full p-2 bg-white top-10 left-5')}
-                            />
-                        </>
-                    )}
-                </>
-            )}
+            {/*         {deliveryInformation && ( */}
+            {/*             <> */}
+            {/*                 <View style={tailwind('absolute bottom-10 z-50  w-full px-4')}> */}
+            {/*                     <View style={[tailwind('flex flex-col rounded-3xl mt-4 p-4'), { backgroundColor: '#000' }]}> */}
+            {/*                         <Text style={tailwind('text-white text-sm')}>Delivery Person</Text> */}
+            {/*                         <View style={tailwind('flex flex-row items-center  justify-between')}> */}
+            {/*                             <Text style={tailwind('text-white text-xl')}>{`${deliveryInformation?.driver?.firstName} ${deliveryInformation?.driver?.lastName}`}</Text> */}
+            {/*                             <Pressable onPress={() => Linking.openURL(`tel:${deliveryInformation?.driver?.phone}`)} style={tailwind('p-2')}> */}
+            {/*                                 <IconComponent name="telephone" iconType="Foundation" size={40} style={tailwind('text-success-500')} /> */}
+            {/*                             </Pressable> */}
+            {/*                         </View> */}
+            {/*                         <Text style={tailwind('text-brand-ash')}>{deliveryInformation.driver.totalTrips} Trips Made</Text> */}
+            {/*                     </View> */}
+            {/*                     <View style={[tailwind('flex flex-col rounded-3xl mt-3 p-4'), { backgroundColor: '#000' }]}> */}
+            {/*                         <View style={tailwind('flex flex-row items-center')}> */}
+            {/*                             <Text style={tailwind('text-white text-4xl mr-2')}>ETA:</Text> */}
+            {/*                             <Text style={tailwind('text-white text-4xl text-brand-gray-700')}>9 minutes</Text> */}
+            {/*                         </View> */}
+            {/*                         <View style={tailwind('flex flex-col')}> */}
+            {/*                             <Text style={tailwind('text-white text-lg mr-2')}>Delivery Address</Text> */}
+            {/*                             <Text style={tailwind('text-white text-lg text-brand-gray-700')}>Suite C22 Ummi Plaza, Zoo road</Text> */}
+            {/*                         </View> */}
+            {/*                     </View> */}
+            {/*                 </View> */}
+            {/*                 <ModalCloseIcon */}
+            {/*                     size={40} */}
+            {/*                     onPress={() => navigation.goBack()} */}
+            {/*                     iconStyle={tailwind('text-black mx-0')} */}
+            {/*                     buttonStyle={tailwind('absolute rounded-full p-2 bg-white top-10 left-5')} */}
+            {/*                 /> */}
+            {/*             </> */}
+            {/*         )} */}
+            {/*     </> */}
+            {/* )} */}
         </View>
     );
 };

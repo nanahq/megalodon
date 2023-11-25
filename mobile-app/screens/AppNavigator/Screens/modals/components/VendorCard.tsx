@@ -26,7 +26,7 @@ const _VendorCard: React.FC<{ vendor: VendorUserI }> = (props) => {
                     method: "POST",
                     url: "location/delivery-fee",
                     data: {
-                        userCoords: userProfile.profile.location?.coordinates ,
+                        userCoords: userProfile.profile.location?.coordinates,
                         vendorCoords: props.vendor.location.coordinates ,
                     },
                 });
@@ -63,7 +63,7 @@ const _VendorCard: React.FC<{ vendor: VendorUserI }> = (props) => {
                 {!loading && !error && (
                     <View style={tailwind("flex flex-row items-center")}>
                         <View style={tailwind("flex flex-row items-center")}>
-                            <Text style={tailwind("text-brand-gray-text-500")}>₦{travelInfo?.fee} Delivery Fee</Text>
+                            <Text style={tailwind("text-brand-gray-text-500")}>Delivery from ₦{travelInfo?.fee}</Text>
                             <IconComponent iconType="MaterialIcons" name="delivery-dining" size={14} style={tailwind('font-medium text-black ml-1')} />
                         </View>
                         <Text style={tailwind("text-brand-gray-text-500 mx-1")}>{10}-{Number(travelInfo?.duration ?? 0) + Number(props?.vendor?.settings?.preparationTime ?? 0)} Minutes</Text>

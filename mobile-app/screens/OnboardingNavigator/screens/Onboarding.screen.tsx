@@ -36,7 +36,7 @@ export function OnboardingScreen (): JSX.Element {
                     onPress={() => navigator.navigate(OnboardingScreenName.ENTER_MOBILE_PHONE)}
                     label="Continue"
                     labelColor={tailwind('text-white')}
-                    backgroundColor={tailwind('bg-black')}
+                    backgroundColor={tailwind('bg-primary-500')}
                     style={tailwind('mt-4 border-2 border-white')}
                     testId="GenericButton.Onboarding.Continue"
                 />

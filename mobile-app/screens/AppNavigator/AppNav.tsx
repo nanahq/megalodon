@@ -32,7 +32,8 @@ export interface AppParamList {
 
     [ModalScreenName.MODAL_LISTING_SCREEN]: {
         listing: ListingMenuI,
-        isScheduled: boolean
+        isScheduled: boolean,
+        availableDate?: number
     },
 
     [ModalScreenName.MODAL_ADD_ADDRESS_SCREEN]: {
@@ -41,7 +42,10 @@ export interface AppParamList {
 
     [ModalScreenName.MODAL_PAYMENT_SCREEN]: {
         order: OrderI,
-        paymentType?: 'BANK_TRANSFER' | 'USSD'
+        meta:  {
+            authorization_url?: string,
+            reference: string
+        }
     },
 
     [key: string]: undefined | object;
@@ -91,12 +95,10 @@ export function AppNavigator(): JSX.Element {
         const {coords: {longitude, latitude}} = await Location.getCurrentPositionAsync({
             accuracy: 6
         });
-
         const location: LocationCoordinates = {
             type: 'Point',
             coordinates: [longitude, latitude]
         }
-
         try {
             await _api.requestData<Partial<UpdateUserDto>>({
                 method: 'PUT',
@@ -107,6 +109,10 @@ export function AppNavigator(): JSX.Element {
             console.error(error)
         }
     }
+
+    useEffect(() => {
+        void requestLocation()
+    }, [])
 
     useEffect(() => {
         notificationListener.current = Notifications.addNotificationReceivedListener(_ => {
@@ -120,7 +126,6 @@ export function AppNavigator(): JSX.Element {
             Notifications.removeNotificationSubscription(notificationListener.current);
             Notifications.removeNotificationSubscription(responseListener.current);
         };
-        void requestLocation()
     }, [])
 
     if (hasFetchedProfile && profile.location?.coordinates[0] === 0) {

@@ -2,24 +2,25 @@ import axios, { Method} from 'axios'
 import {persistence} from "@api/persistence";
 import { showToastStandard } from "@components/commons/Toast";
 import {cookieParser} from "../../utils/cookieParser";
+import {ApiRoute, APIService, NetworkMapper, PlaygroundServicePort} from "@api/network.mapper";
 
-// type Environment = 'production' | 'development'
-export  function getUrl (): string {
-    // const environment: Environment | any = process.env.NODE_ENV ?? 'production'
-    //
-    // let url: string
-    //
-    // if (environment === 'development') {
-    //     url =   `${NetworkMapper.PLAYGROUND}:${PlaygroundServicePort[gateway]}/${ApiRoute[gateway]}/v1`
-    // } else  {
-    //     url =`${NetworkMapper.PRODUCTION}/${ApiRoute[gateway]}/v1`
-    // }
+type Environment = 'production' | 'development' | string
+export  function getUrl (gateway: APIService): string {
+    const environment: Environment = 'production'
 
-    return 'http://k8s-default-nanahydr-874b0d28d1-561484973.af-south-1.elb.amazonaws.com/api-gateway/v1'
+    let url: string
+
+    if (environment === 'development') {
+        url =   `${NetworkMapper.PLAYGROUND}:${PlaygroundServicePort[gateway]}/${ApiRoute[gateway]}/v1`
+    } else  {
+        url =`${NetworkMapper.PRODUCTION}/${ApiRoute[gateway]}/v1`
+    }
+
+    return url
 }
 
 const config = {
-    baseUrl: getUrl(),
+    baseUrl: getUrl('API_GATEWAY'),
     headers: {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*'

@@ -7,17 +7,17 @@ import {ProfileParamsList} from "@screens/AppNavigator/Screens/profile/ProfileNa
 import React, {useEffect} from "react";
 import {IconButton} from "@components/commons/buttons/IconButton";
 import {ProfileAvatar} from "@screens/AppNavigator/Screens/profile/components/ProfileAvatar";
-import {getInitials} from "../../../../../utils/getInitials";
 import {NumericFormat as NumberFormat} from "react-number-format";
 import {ProfileSection} from "@screens/AppNavigator/Screens/profile/components/ProfileSection";
 import {ProfileScreenName} from "@screens/AppNavigator/Screens/profile/ProfileScreenName";
+import {getInitials} from "../../../../../utils/getInitials";
 
 export const ProfileScreen = () => {
     const navigation = useNavigation<NavigationProp<ProfileParamsList>>()
     const {profile, hasFetchedProfile} = useAppSelector(state => state.profile)
 
 
-    if(!hasFetchedProfile) {
+    if (!hasFetchedProfile) {
         return <LoaderComponentScreen />
     }
 

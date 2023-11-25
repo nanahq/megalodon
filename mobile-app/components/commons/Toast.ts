@@ -9,12 +9,12 @@ export const ShowToast = (type: 'success' | 'error', message: string) => {
     });
 }
 
-export const showTost =  (toast: ToastType, message: string, type: 'success' | 'error' | 'warning' ): void  =>{
+export const showTost =  (toast: ToastType, message: string, type: 'success' | 'error' | 'warning' , duration?: number): void  =>{
     toast.hideAll()
     toast.show(message, {
         type: `app_toast_${type}`,
         placement: "top",
-        duration: 3000,
+        duration: duration ?? 3000,
     })
 }
 

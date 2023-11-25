@@ -24,7 +24,6 @@ import Checkbox from "expo-checkbox";
 import {TextInputWithLabel} from "@components/commons/inputs/TextInputWithLabel";
 import {ScheduleDeliveryModal} from "@screens/AppNavigator/Screens/basket/components/schedule/ScheduleModal";
 import {ScheduleDeliveryBox} from "@screens/AppNavigator/Screens/basket/components/schedule/ScheduleDeliveryBox";
-import {PaymentOptionsBox} from "@screens/AppNavigator/Screens/basket/components/payment/PaymentBox";
 import {GenericButton} from "@components/commons/buttons/GenericButton";
 import {useToast} from "react-native-toast-notifications";
 import {showTost} from "@components/commons/Toast";
@@ -43,7 +42,6 @@ export const Checkout: React.FC = () => {
     const [selectedAddress, setSelectedAddress] = useState<any | undefined>(undefined)
     const [isThirdParty, setIsThirdParty] = useState<boolean>(false)
     const [deliveryTime, setDeliveryItem] = useState<{time: string, date: string} | undefined>(undefined)
-    const [paymentMethod, setPaymentMethod] = useState<'BANK_TRANSFER' | 'USSD' | undefined>(undefined)
     const [fetchingConstant, setFetchingConstants] = useState<boolean>(true)
     const [deliveryEta, setDeliveryEta] = useState<DeliveryFeeResult | undefined>(undefined)
     const [placingOrder, setPlacingOrder] = useState<boolean>(false)
@@ -171,8 +169,7 @@ export const Checkout: React.FC = () => {
 
 
     const placeOrder = async () => {
-        const check = [selectedAddress, paymentMethod ]
-        if (check.includes(undefined) ){
+        if (selectedAddress === undefined ){
             return
         }
         const payload = {
@@ -197,7 +194,7 @@ export const Checkout: React.FC = () => {
             },
             primaryContact: userProfile.profile.phone,
             vendor: vendor?._id ?? '',
-            totalOrderValue: orderBreakDown.orderCost,
+            totalOrderValue: Object.values(orderBreakDown).reduce((a, r) => a + r),
             quantity: cartState.cart?.map(crt => {
                 return {
                     listing: crt.cartItem._id,
@@ -211,13 +208,13 @@ export const Checkout: React.FC = () => {
                method:'POST',
                url: 'order/create',
                data: payload
-           })).data?.data as OrderI
+           })).data?.data as {order: OrderI, paymentMeta: {authorization_url: string, reference: string}}
 
             dispatch(deleteCartFromStorage())
 
            navigation.navigate(ModalScreenName.MODAL_PAYMENT_SCREEN, {
-               order: response,
-               paymentType: paymentMethod
+               order: response.order,
+               meta: response.paymentMeta
            })
            // Reset navigation stack to 'ORDERS' screen
            navigation.reset({
@@ -235,9 +232,9 @@ export const Checkout: React.FC = () => {
         let isBlocked: boolean
 
         if (view === 'ON_DEMAND') {
-            isBlocked = [selectedAddress , paymentMethod ].includes(undefined)
+            isBlocked = selectedAddress === undefined
         } else  {
-            isBlocked = [selectedAddress, deliveryTime, paymentMethod ].includes(undefined)
+            isBlocked = [selectedAddress, deliveryTime ].includes(undefined)
 
         }
         return isBlocked
@@ -247,7 +244,6 @@ export const Checkout: React.FC = () => {
         <ScrollView style={tailwind('flex-1 bg-white px-4')}>
             <CheckoutButton vendorType={vendor?.settings.deliveryType ?? 'ON_DEMAND'} view={view} onButtonClick={setView}  />
             <DeliveryAddressBox onPress={() => openModal() } selectedAddress={selectedAddress} />
-
             { view === 'ON_DEMAND' && deliveryEta !== undefined && vendor !== undefined && (
                 <View style={tailwind('mt-10')}>
                    <View style={tailwind('flex flex-row items-center w-full justify-between')}>
@@ -263,7 +259,6 @@ export const Checkout: React.FC = () => {
                     selectedDate={deliveryTime}
                 />
             )}
-            <PaymentOptionsBox selectedPaymentMethod={paymentMethod} onPress={(method: any) => setPaymentMethod(method)} />
             <View style={tailwind('flex my-6 flex-row items-center w-full justify-between')}>
                 <Text style={tailwind('text-lg')}>
                     Buying for someone else?
@@ -300,6 +295,8 @@ export const Checkout: React.FC = () => {
                     modalRef={scheduleModalRef}
                     vendor={vendor as any}
                     onScheduleSet={setDeliveryItem}
+                    startDate={cartState.cartItemAvailableDate}
+                    endDate={cartState.cartItemAvailableDate}
                 />
             )}
 
