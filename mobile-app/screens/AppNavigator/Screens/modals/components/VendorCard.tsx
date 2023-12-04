@@ -1,6 +1,6 @@
 import {DeliveryFeeResult, VendorUserI} from "@nanahq/sticky";
 import React, { memo, useEffect, useState } from "react";
-import { Image, Pressable, Text, View } from "react-native";
+import { Pressable, StyleProp, Text, View, ViewStyle} from "react-native";
 import { tailwind } from "@tailwind";
 import { _api } from "@api/_request";
 import { SkeletonLoader, SkeletonLoaderScreen } from "@components/commons/SkeletonLoaders/SkeletonLoader";
@@ -9,16 +9,14 @@ import {NavigationProp, useNavigation} from "@react-navigation/native";
 import {ModalScreenName} from "@screens/AppNavigator/ScreenName.enum";
 import {AppParamList} from "@screens/AppNavigator/AppNav";
 import {useAppSelector} from "@store/index";
-import * as Device from 'expo-device'
+import FastImage from "react-native-fast-image";
 
-const _VendorCard: React.FC<{ vendor: VendorUserI }> = (props) => {
+const _VendorCard: React.FC<{ vendor: VendorUserI, fullWidth?: boolean, style?: StyleProp<ViewStyle>, height?: number}> = (props) => {
     const [travelInfo, setTravelInfo] = useState<DeliveryFeeResult | undefined>(undefined);
     const userProfile = useAppSelector(state => state.profile)
     const [loading, setLoading] = useState<boolean>(true);
     const navigator = useNavigation<NavigationProp<AppParamList>>()
     const [error, setError] = useState<boolean>(false)
-
-    const isAndroid = Device.osName === 'Android'
     useEffect(() => {
         async function fetchData() {
             try {
@@ -45,16 +43,21 @@ const _VendorCard: React.FC<{ vendor: VendorUserI }> = (props) => {
 
 
     const onPress = () => navigator.navigate(ModalScreenName.MODAL_VENDOR_SCREEN, {
-        vendor: props.vendor
+        vendor: props.vendor,
+        delivery: travelInfo
     })
 
     return (
-        <Pressable onPress={onPress} style={[tailwind("w-full mb-4 flex flex-col mr-5"), { width: 300, height: 215 }]}>
-            <View style={tailwind("flex flex-col w-full")}>
-                <Image source={{ uri: props.vendor.businessImage, cache: "force-cache" }} style={[tailwind("w-full rounded-lg"), { height: isAndroid ? 150 : 155 }]} />
+        <Pressable onPress={onPress} style={[tailwind("w-full mb-1 flex flex-col "), props.style, { width: props.fullWidth ? undefined : 300, height: props.height ? undefined : 250 }]}>
+            <View style={tailwind("flex flex-col w-full items-center")}>
+                <FastImage
+                    source={{ uri: props.vendor.businessImage, priority: FastImage.priority.high }}
+                    resizeMode={FastImage.resizeMode.cover}
+                    style={[tailwind("w-full rounded-lg"), { aspectRatio: 16 / 9 }]}
+                />
             </View>
             <View style={tailwind("p-2")}>
-                <Text style={tailwind("flex font-bold text-lg text-black")}>{props.vendor.businessName}</Text>
+                <Text style={tailwind("text-lg text-black")}>{props.vendor.businessName}</Text>
                 {loading && (
                     <View>
                         <SkeletonLoader row={1} screen={SkeletonLoaderScreen.VendorDistanceLoader} />

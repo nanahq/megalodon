@@ -12,7 +12,7 @@ import {fetchVendors} from "@store/vendors.reducer";
 import {readCartFromStorage} from "@store/cart.reducer";
 import {fetchAddressBook, fetchAddressLabels} from "@store/AddressBook.reducer";
 import {ModalScreenName} from "@screens/AppNavigator/ScreenName.enum";
-import {ListingMenuI, LocationCoordinates, OrderI, UpdateUserDto, VendorUserI} from "@nanahq/sticky";
+import {DeliveryFeeResult, ListingMenuI, LocationCoordinates, OrderI, UpdateUserDto, VendorUserI} from "@nanahq/sticky";
 import {VendorModal} from "@screens/AppNavigator/Screens/modals/Vendor.Modal";
 import {ListingModal} from "@screens/AppNavigator/Screens/modals/Listing.Modal";
 import {AddAddressModal} from "@screens/AppNavigator/Screens/modals/AddAddress.Modal";
@@ -21,13 +21,15 @@ import * as Device from 'expo-device'
 import * as Location from "expo-location";
 import {_api} from "@api/_request";
 import * as Notifications from "expo-notifications";
+import {fetchHomaPage } from "@store/listings.reducer";
 
 
 const App = createStackNavigator<AppParamList>()
 
 export interface AppParamList {
     [ModalScreenName.MODAL_VENDOR_SCREEN]: {
-        vendor: VendorUserI
+        vendor: VendorUserI,
+        delivery?: DeliveryFeeResult
     },
 
     [ModalScreenName.MODAL_LISTING_SCREEN]: {
@@ -86,11 +88,12 @@ export function AppNavigator(): JSX.Element {
         dispatch(readCartFromStorage() as any)
         dispatch(fetchAddressLabels() as any)
         dispatch(fetchAddressBook() as any)
+        dispatch(fetchHomaPage({type: "Point", coordinates:[0,0]}) as any)
     }, [])
 
 
     const requestLocation = async () => {
-        await Location.requestForegroundPermissionsAsync();
+        await Location.requestBackgroundPermissionsAsync();
 
         const {coords: {longitude, latitude}} = await Location.getCurrentPositionAsync({
             accuracy: 6

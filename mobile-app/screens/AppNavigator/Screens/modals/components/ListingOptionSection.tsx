@@ -43,11 +43,11 @@ const _ListingOptionSection: React.FC<{
             <View style={tailwind("flex flex-col px-4")}>
                 <View style={tailwind("flex flex-row items-center w-full justify-between")}>
                     <View>
-                        <Text style={tailwind("font-bold text-xl")}>{option.name}</Text>
+                        <Text style={tailwind(" text-2xl")}>{option.name}</Text>
                         <Text style={tailwind("text-brand-gray-700 text-sm")}>{SelectedText()}</Text>
                     </View>
                     {isRequired && (
-                        <View style={tailwind("border-1.5 border-primary-500 p-1 rounded-5")}>
+                        <View style={tailwind("bg-brand-gray-500 border-0.5 border-brand-gray-700 p-1 rounded-5")}>
                             <Text style={tailwind("text-black text-sm")}>Required</Text>
                         </View>
                     )}

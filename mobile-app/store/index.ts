@@ -5,6 +5,7 @@ import {TypedUseSelectorHook, useDispatch, useSelector} from "react-redux";
 import {vendors} from "@store/vendors.reducer";
 import {cart} from "@store/cart.reducer";
 import {addressBook} from "@store/AddressBook.reducer";
+import {listings} from "@store/listings.reducer";
 /**
  * RootState for Nana Main App
  *
@@ -21,6 +22,7 @@ export function initializeStore() {
             vendors: vendors.reducer,
             cart: cart.reducer,
             addressBook: addressBook.reducer,
+            listings: listings.reducer
         },
         middleware: (getDefaultMiddleware) =>
             getDefaultMiddleware({ serializableCheck: false })

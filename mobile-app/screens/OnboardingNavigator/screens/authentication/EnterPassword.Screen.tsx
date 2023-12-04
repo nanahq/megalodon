@@ -39,7 +39,7 @@ export function EnterPasswordScreen ({navigation, route}: EnterPasswordScreenPro
                 await  setToken(cookieParser(cookies[0]))
                 showTost(toast, 'Login successfully', 'success')
             } else  {
-                const { cookies} = await _api.requestData({
+                 await _api.requestData({
                     method: 'POST',
                     url: 'user/register',
                     data: {
@@ -48,18 +48,20 @@ export function EnterPasswordScreen ({navigation, route}: EnterPasswordScreenPro
                         email: email.toLowerCase()
                     }
                 })
-
-
                 showTost(toast, 'Account created', 'success')
-
-                setTimeout( async () => {
-                    await  setToken(cookieParser(cookies[0]))
-                }, 5000)
-
+                navigation.navigate(OnboardingScreenName.VERIFY_PHONE_NUMBER, {
+                    phoneNumber: route.params.phoneNumber
+                })
             }
 
         } catch (error: any) {
-            showTost(toast, typeof error.message !== 'string' ? error.message[0] : error.message, 'error')
+            if (error?.message.toLowerCase().includes("verify")) {
+                navigation.navigate(OnboardingScreenName.VERIFY_PHONE_NUMBER, {
+                    phoneNumber: route.params.phoneNumber
+                })
+            } else {
+                showTost(toast, typeof error.message !== 'string' ? error.message[0] : error.message, 'error')
+            }
         } finally {
             _setIsLoading(false)
         }

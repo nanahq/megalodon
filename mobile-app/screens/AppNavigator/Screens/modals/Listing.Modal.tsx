@@ -19,6 +19,7 @@ import {BasketScreenName} from "@screens/AppNavigator/Screens/basket/BasketScree
 import { ModalScreenName} from "@screens/AppNavigator/ScreenName.enum";
 import {AppParamList} from "@screens/AppNavigator/AppNav";
 import moment from "moment";
+import FastImage from "react-native-fast-image";
 import {calculateTotalValue} from "../../../../../utils/CalculateCartTotal";
 
 type ListingModalScreenProps = StackScreenProps<AppParamList, ModalScreenName.MODAL_LISTING_SCREEN>
@@ -110,7 +111,7 @@ export const ListingModal: React.FC<ListingModalScreenProps>  = ({navigation, ro
             headerTitleAlign: 'center',
             headerTitleStyle: tailwind('text-xl'),
             headerRight: () => <ShareListingIcon  onPress={() => {}}/>,
-            headerLeft: () => <ModalCloseIcon onPress={() => navigation.navigate(ModalScreenName.MODAL_VENDOR_SCREEN, {} as any)} />,
+            headerLeft: () => <ModalCloseIcon onPress={() => navigation.goBack()} />,
         })
     }, [])
 
@@ -184,11 +185,11 @@ export const ListingModal: React.FC<ListingModalScreenProps>  = ({navigation, ro
         <View style={tailwind('flex-1  relative bg-white')}>
            <ScrollView style={tailwind('pb-10')}>
                <View style={tailwind('pb-5 mb-3 bg-white')}>
-                   <Image source={{ uri: route.params.listing.photo, cache: "force-cache" }} style={[tailwind("w-full"), { height: 170 }]} />
+                   <FastImage resizeMode={FastImage.resizeMode.cover} source={{ uri: route.params.listing.photo, priority: FastImage.priority.normal }} style={[tailwind("w-full"), { height: 170 }]} />
                    <View style={tailwind('px-4 flex flex-col mt-6')}>
                        <View style={tailwind('flex flex-row items-center w-full justify-between')}>
-                           <View style={tailwind('flex flex-col')}>
-                               <Text style={[tailwind(' p-0 m-0 mb-2 text-4xl'), {
+                           <View style={tailwind('flex flex-col w-3/4')}>
+                               <Text style={[tailwind('mb-2  text-3xl'), {
                                    lineHeight: 0
                                }]}>
                                    {route.params.listing.name}
@@ -224,7 +225,7 @@ export const ListingModal: React.FC<ListingModalScreenProps>  = ({navigation, ro
                                </TouchableOpacity>
                            </View>
                        </View>
-                       <Text style={[tailwind(' p-0 m-0  text-lg text-brand-gray-700'), {
+                       <Text style={[tailwind('mt-3 text-lg text-brand-gray-700'), {
                            lineHeight: 0
                        }]}>
                            {route.params.listing.desc}

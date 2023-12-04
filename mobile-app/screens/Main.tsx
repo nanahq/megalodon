@@ -6,8 +6,8 @@ export function MainScreen (): JSX.Element {
 
     return (
         <SafeAreaProvider>
-            <RootNavigator />
             <StatusBar />
+            <RootNavigator />
         </SafeAreaProvider>
     )
 }

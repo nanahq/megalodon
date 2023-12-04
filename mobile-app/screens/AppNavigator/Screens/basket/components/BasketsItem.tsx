@@ -10,6 +10,7 @@ import {useAppDispatch} from "@store/index";
 import {NavigationProp, useNavigation} from "@react-navigation/native";
 import {BasketParamsList} from "@screens/AppNavigator/Screens/basket/BasketNavigator";
 import {BasketScreenName} from "@screens/AppNavigator/Screens/basket/BasketScreenName.enum";
+import FastImage from "react-native-fast-image";
 
 export const BasketsItem: React.FC<{cart: Cart[], vendor: any}> = ({cart, vendor}) => {
     const navigation = useNavigation<NavigationProp<BasketParamsList>>()
@@ -36,7 +37,7 @@ export const BasketsItem: React.FC<{cart: Cart[], vendor: any}> = ({cart, vendor
     return (
         <View style={tailwind('border-0.5 border-brand-gray-700 rounded-lg px-3 py-5 mt-10')}>
             <View style={tailwind('flex flex-row items-start')}>
-                <Image source={{uri: vendor?.businessImage,  cache: 'force-cache'}} style={tailwind('rounded-full w-20 h-20')} />
+                <FastImage source={{uri: vendor?.businessImage}} style={tailwind('rounded-full w-20 h-20')} />
                  <View style={tailwind('w-2/3 ml-5')}>
                     <Text style={tailwind('font-medium text-2xl')}>{vendor?.businessName}</Text>
                     <View>

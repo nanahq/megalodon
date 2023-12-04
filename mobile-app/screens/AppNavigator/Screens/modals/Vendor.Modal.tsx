@@ -1,7 +1,7 @@
 import {StackScreenProps} from "@react-navigation/stack";
 import {HomeScreenName} from "@screens/AppNavigator/Screens/home/HomeScreenNames.enum";
 import React, {useCallback, useEffect, useMemo, useState} from "react";
-import { Image, ListRenderItemInfo, ScrollView, Text, View} from "react-native";
+import {  ListRenderItemInfo, ScrollView, Text, View} from "react-native";
 import {tailwind} from "@tailwind";
 import {ModalCloseIcon} from "@screens/AppNavigator/Screens/modals/components/ModalCloseIcon";
 import {ListingCategoryI, ListingMenuI, ScheduledListingI, VendorReviewOverview} from "@nanahq/sticky";
@@ -23,6 +23,8 @@ import {AppScreenName, ModalScreenName} from "@screens/AppNavigator/ScreenName.e
 import {AppParamList} from "@screens/AppNavigator/AppNav";
 import {IconButton} from "@components/commons/buttons/IconButton";
 import {fetchSubscriptions} from "@store/vendors.reducer";
+import FastImage from "react-native-fast-image";
+import moment from 'moment';
 
 type VendorModalScreenProps = StackScreenProps<AppParamList, ModalScreenName.MODAL_VENDOR_SCREEN>
 
@@ -82,7 +84,6 @@ return
      }
 
     useEffect(() => {
-
         async function fetchData () {
             try {
                 const fetchReviews = _api.requestData({
@@ -166,19 +167,18 @@ return
             break;
 
             case 'PRE_AND_INSTANT':
-                return 'accepts instant and pre-orders'
+                return 'instant and pre-orders'
             break;
 
             default:
                 return 'all orders'
         }
      }
-
     return (
         <View style={tailwind('flex-1 bg-white relative')}>
-            <ScrollView style={tailwind('')}>
+            <ScrollView style={tailwind('pb-20')}>
                 <View style={tailwind('flex flex-col w-full')}>
-                    <Image source={{ uri: route.params?.vendor?.businessImage, cache: "force-cache" }} style={[tailwind("w-full"), { height: 170 }]} />
+                    <FastImage resizeMode={FastImage.resizeMode.cover} source={{ uri: route.params?.vendor?.businessImage, priority:FastImage.priority.high }} style={[tailwind("w-full"), { height: 170 }]} />
                     <View style={tailwind('px-4 flex flex-col mt-6')}>
                         <View style={tailwind('flex flex-row items-center w-full justify-between')}>
                             <Text style={[tailwind('w-2/3 p-0 m-0 mb-2 font-bold text-4xl'), {
@@ -208,20 +208,28 @@ return
                                         <IconComponent iconType="Foundation" name="star" size={14} style={tailwind('text-yellow-500')}/>
                                         <IconComponent iconType="Foundation" name="star" size={14} style={tailwind('text-yellow-500')}/>
                                         <IconComponent iconType="Foundation" name="star" size={14} style={tailwind('text-yellow-500')}/>
+                                        <Text  style={tailwind('text-brand-gray-700 text-sm ml-1')}>Excellent</Text>
                                     </View>
                                 <View style={tailwind('flex flex-row items-center w-full')}>
                                     <View style={tailwind('flex flex-row items-center mt-1')}>
-                                        <Text style={tailwind('text-brand-gray-700 text-sm')}>Delivery in 15 Min</Text>
+                                        <Text style={tailwind('text-brand-gray-700 text-sm')}>Delivery in {route.params.delivery?.duration ?? '20'} Minutes</Text>
                                     </View>
                                     <View style={tailwind('flex flex-row items-center mt-1 border-l-1.5 ml-5 px-2 border-brand-gray-700')}>
                                         <Text style={tailwind('text-brand-gray-700 text-sm')}>Accepts {getVendorDelivery()}</Text>
+                                    </View>
+                                </View>
+                                <View style={tailwind('flex flex-row items-center w-full')}>
+                                    <View style={tailwind('flex flex-row mt-1 items-center')}>
+                                        <IconComponent iconType="AntDesign" name="clockcircleo" style={tailwind('text-brand-gray-700')} />
+                                        <Text  style={tailwind('text-brand-gray-700 text-sm ml-1')}>Opens</Text>
+                                        <Text style={tailwind('text-brand-gray-700 text-sm ml-2')}>{moment().format('HH:mm')}</Text>
                                     </View>
                                 </View>
                                 {scheduled.length > 0 && (
                                     <ScheduledMenuSection onPress={onPress} menu={scheduled} />
                                 )}
                                 <FlashList
-                                    contentContainerStyle={tailwind('py-4')}
+                                    contentContainerStyle={tailwind('py-4 pb-16')}
                                     data={filteredCategories}
                                     renderItem={renderItem as any}
                                     keyExtractor={(item) => item._id}

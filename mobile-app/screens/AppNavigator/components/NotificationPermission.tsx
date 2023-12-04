@@ -32,7 +32,6 @@ export function NotificationPermission (): JSX.Element {
             dispatch(fetchProfile())
         } catch (error: any) {
             showTost(toast, typeof error.message !== 'string' ? error.message[0] : error.message, 'error')
-
         } finally {
             setLoading(false)
         }

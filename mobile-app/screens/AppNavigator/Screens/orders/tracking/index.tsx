@@ -41,9 +41,10 @@ export const Tracking: React.FC<TrackingProps> = ({navigation, route}) => {
     const text = () => {
         switch (route.params.order.orderStatus ) {
             case OrderStatus.PROCESSED:
-            case OrderStatus.COURIER_PICKUP:
                 return 'Preparing Your Order....'
 
+            case OrderStatus.COURIER_PICKUP:
+                return 'Our Delivery Guys are on the way'
             case OrderStatus.IN_ROUTE:
             case OrderStatus.COLLECTED:
                 return 'Almost there....'
@@ -76,7 +77,7 @@ export const Tracking: React.FC<TrackingProps> = ({navigation, route}) => {
                    <View style={tailwind('px-4')}>
                        <View style={tailwind('my-4')}>
                            <Text style={tailwind('text-2xl')}>{text()}</Text>
-                           <Text style={tailwind('mt-2')}>Latest Arrival by {moment(route.params.order.orderDeliveryScheduledTime).format('HH:mm Do MMM')}</Text>
+                           <Text style={tailwind('mt-2')}>Latest Arrival by {moment(route.params.order.orderType === "PRE_ORDER" ? route.params.order.orderDeliveryScheduledTime : route.params.order.createdAt).format('HH:mm Do MMM')}</Text>
                        </View>
                        <View style={tailwind('flex flex-row')}>
                            {Array(4).fill(0).map((_, index) => {

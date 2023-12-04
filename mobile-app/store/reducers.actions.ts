@@ -6,9 +6,12 @@ export enum AppActions {
     UPDATE_PROFILE = 'app/updateProfile',
 
     FETCH_VENDORS = 'app/fetchVendors',
+    FETCH_HOMEPAGE = 'app/fetchHomePage',
     FETCH_SUBS = 'app/fetchSubscriptions',
 
     FETCH_CART = 'app/fetchCart',
+
+    FETCH_CATEGORY = 'app/fetchCategory',
 
     UPDATE_CART = 'app/updateCart',
 
@@ -20,4 +23,6 @@ export enum AppActions {
 ADD_ADDRESS_BOOK = 'ADD_ADDRESS_BOOK',
 FETCH_ADDRESS_BOOK = 'FETCH_ADDRESS_BOOK',
 FETCH_ADDRESS_LABEL = 'FETCH_ADDRESS_LABEL',
+
+    FETCHED_SCHEDULED_LISTING = 'FETCHED_SCHEDULED_LISTING'
 }
