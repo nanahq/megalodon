@@ -54,7 +54,7 @@ export function NotificationPermission (): JSX.Element {
     )
 }
 
-async function registerForPushNotificationsAsync() {
+export async function registerForPushNotificationsAsync() {
     let token;
     Notifications.setNotificationHandler({
         handleNotification: async () => ({

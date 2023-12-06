@@ -13,7 +13,6 @@ import {showTost} from "@components/commons/Toast";
 import {useToast} from "react-native-toast-notifications";
 import {cookieParser} from "../../../../../utils/cookieParser";
 
-
 type EnterPasswordScreenProps = StackScreenProps<OnboardingParamsList, OnboardingScreenName.ENTER_PASSWORD>
 
 export function EnterPasswordScreen ({navigation, route}: EnterPasswordScreenProps): JSX.Element {
@@ -49,16 +48,16 @@ export function EnterPasswordScreen ({navigation, route}: EnterPasswordScreenPro
                     }
                 })
                 showTost(toast, 'Account created', 'success')
-                navigation.navigate(OnboardingScreenName.VERIFY_PHONE_NUMBER, {
+                navigation.navigate(OnboardingScreenName.VERIFY_PHONE_NUMBER as any, {
                     phoneNumber: route.params.phoneNumber
-                })
+                } as any)
             }
 
         } catch (error: any) {
             if (error?.message.toLowerCase().includes("verify")) {
-                navigation.navigate(OnboardingScreenName.VERIFY_PHONE_NUMBER, {
+                navigation.navigate(OnboardingScreenName.VERIFY_PHONE_NUMBER as any, {
                     phoneNumber: route.params.phoneNumber
-                })
+                } as any)
             } else {
                 showTost(toast, typeof error.message !== 'string' ? error.message[0] : error.message, 'error')
             }

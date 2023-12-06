@@ -2,7 +2,7 @@
   "expo": {
     "name": "Nana",
     "description": "Order food online and get it delivered in minutes",
-    "slug": "nana-main",
+    "slug": "nana-app",
     "owner": "nana_logistics",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -46,7 +46,8 @@
     "ios": {
       "icon": "./assets/app-config/Icon-blue-ios1024.png",
       "supportsTablet": false,
-      "bundleIdentifier": "com.nanaeats.nana"
+      "buildNumber": "1.0.0",
+      "bundleIdentifier": "com.nanaeats.nana-app"
     },
     "android": {
       "icon": "./assets/app-config/Icon-Android-512px.png",
@@ -60,7 +61,7 @@
         "android.permission.FOREGROUND_SERVICE",
         "android.permission.POST_NOTIFICATIONS"
       ],
-      "package": "com.nanaeats.nana",
+      "package": "com.nanaeats.nana_app",
       "googleServicesFile": "./google-services.json",
       "useNextNotificationsApi": true
     },
@@ -69,7 +70,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "4cb797ba-86fc-4789-9d3a-fda5e16fd634"
+        "projectId": "8235481d-016d-4aa1-a436-7cc06ccc1f14"
       }
     }
   }
