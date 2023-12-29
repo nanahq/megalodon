@@ -28,10 +28,10 @@ const _VendorCategorySection: React.FC<{category: ListingCategoryI, onPress: (li
  export const VendorCategorySection = memo(_VendorCategorySection)
 const VendorMenuCard: React.FC<{menu: ListingMenuI, onPress: () => void, disabled: boolean}> = (props) => {
      return (
-         <Pressable  onPress={props.onPress} style={tailwind('flex flex-row items-center py-4 justify-between')}>
+         <Pressable disabled={props.disabled} onPress={props.onPress} style={tailwind('flex flex-row items-center py-4 justify-between')}>
             <View style={tailwind('flex flex-col w-2/3')}>
                 <Text style={tailwind('text-lg ')}>{props.menu.name}</Text>
-                <Text style={tailwind('text-brand-gray-700 my-2')}>{props.menu.desc}</Text>
+                <Text style={tailwind('text-brand-gray-700 my-2')} ellipsizeMode="tail" numberOfLines={3}>{props.menu.desc}</Text>
                 <Text style={tailwind('mt-1')}>₦{props.menu.price}</Text>
             </View>
              <View style={tailwind('w-1/3 ml-8')}>
@@ -82,8 +82,8 @@ const ScheduledMenuCard: React.FC<{menu: ScheduledListingI, onPress: () => void}
                      <Text style={tailwind('text-xs text-white')}>Sold out!</Text>
                  </View>
                  ) : (
-                 <View style={tailwind('bg-green-600  rounded-r-lg p-1 absolute top-0')}>
-                     <Text style={tailwind('text-xs text-white')}>Available on {chosenDate}</Text>
+                 <View style={tailwind('bg-purple-400  rounded-r-lg p-1 absolute top-0')}>
+                     <Text style={tailwind('text-xs text-white')}>Available {chosenDate}</Text>
                  </View>
              )}
          </Pressable>

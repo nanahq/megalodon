@@ -3,7 +3,7 @@ export type APIService = 'API_GATEWAY' | 'VENDOR_GATEWAY' | 'ADMIN_GATEWAY'
 
 
 export const NetworkMapper: Record<NetworkType, string> = {
-    PLAYGROUND: 'http://k8s-default-nanahydr-874b0d28d1-561484973.af-south-1.elb.amazonaws.com',
+    PLAYGROUND: ' https://56ac-197-210-53-151.ngrok-free.app',
     PRODUCTION: process.env.API_URL ?? 'https://api.trynanaapp.com'
 }
 

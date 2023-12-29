@@ -106,7 +106,7 @@ export const AddReviewScreen: React.FC<SingleOrderScreenProps> = ({navigation, r
                                 multiline
                                 numberOfLines={4}
                                 style={[tailwind('py-4 w-full px-3  bg-primary-200 rounded  text-lg text-black'), {height: 150}]}
-                                placeholderTextColor='This food is very good!'
+                                placeholder='This food is very good!'
                             />
                         </View>
                     </View>

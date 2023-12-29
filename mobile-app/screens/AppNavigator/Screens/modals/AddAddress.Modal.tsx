@@ -132,7 +132,7 @@ export const AddAddressModal: React.FC<AddAddressModalProps> = ({navigation, rou
             accuracy: 6
         });
 
-        handleUpdateForm('coordinates', [longitude, latitude])
+        handleUpdateForm('coordinates', [latitude, longitude])
 
         showTost(toast, 'Precise location added', 'success')
 

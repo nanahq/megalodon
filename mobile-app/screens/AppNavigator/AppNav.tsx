@@ -100,7 +100,7 @@ export function AppNavigator(): JSX.Element {
         });
         const location: LocationCoordinates = {
             type: 'Point',
-            coordinates: [longitude, latitude]
+            coordinates: [latitude, longitude]
         }
         try {
             await _api.requestData<Partial<UpdateUserDto>>({

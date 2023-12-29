@@ -178,12 +178,10 @@ return
         <View style={tailwind('flex-1 bg-white relative')}>
             <ScrollView style={tailwind('pb-20')}>
                 <View style={tailwind('flex flex-col w-full')}>
-                    <FastImage resizeMode={FastImage.resizeMode.cover} source={{ uri: route.params?.vendor?.businessImage, priority:FastImage.priority.high }} style={[tailwind("w-full"), { height: 170 }]} />
+                    <FastImage  resizeMode={FastImage.resizeMode.cover} source={{ uri: route.params?.vendor?.businessImage, priority:FastImage.priority.high }} style={[tailwind("w-full"), { height: 170 }]} />
                     <View style={tailwind('px-4 flex flex-col mt-6')}>
                         <View style={tailwind('flex flex-row items-center w-full justify-between')}>
-                            <Text style={[tailwind('w-2/3 p-0 m-0 mb-2 font-bold text-4xl'), {
-                                lineHeight: 0
-                            }]}>
+                            <Text style={tailwind('w-2/3 p-0 m-0 mb-2 font-bold text-4xl')}>
                                 {route.params?.vendor?.businessName}
                             </Text>
                                 <View style={tailwind('flex flex-row')}>
@@ -218,11 +216,16 @@ return
                                         <Text style={tailwind('text-brand-gray-700 text-sm')}>Accepts {getVendorDelivery()}</Text>
                                     </View>
                                 </View>
-                                <View style={tailwind('flex flex-row items-center w-full')}>
-                                    <View style={tailwind('flex flex-row mt-1 items-center')}>
+                                <View style={tailwind('flex flex-col w-full')}>
+                                    <View style={tailwind('flex flex-row mt-1  items-center')}>
                                         <IconComponent iconType="AntDesign" name="clockcircleo" style={tailwind('text-brand-gray-700')} />
                                         <Text  style={tailwind('text-brand-gray-700 text-sm ml-1')}>Opens</Text>
-                                        <Text style={tailwind('text-brand-gray-700 text-sm ml-2')}>{moment().format('HH:mm')}</Text>
+                                        <Text style={tailwind('text-brand-gray-700 text-sm ml-2')}>{moment(route.params.vendor.settings.startTime).format('HH:mm')}</Text>
+                                    </View>
+                                    <View style={tailwind('flex flex-row mt-1 items-center')}>
+                                        <IconComponent iconType="AntDesign" name="clockcircleo" style={tailwind('text-brand-gray-700')} />
+                                        <Text  style={tailwind('text-brand-gray-700 text-sm ml-1')}>Closes</Text>
+                                        <Text style={tailwind('text-brand-gray-700 text-sm ml-2')}>{moment(route.params.vendor.settings.cutoffTime).format('HH:mm')}</Text>
                                     </View>
                                 </View>
                                 {scheduled.length > 0 && (

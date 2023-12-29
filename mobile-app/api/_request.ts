@@ -11,7 +11,7 @@ export  function getUrl (gateway: APIService): string {
     let url: string
 
     if (environment === 'development') {
-        url =   `${NetworkMapper.PLAYGROUND}:${PlaygroundServicePort[gateway]}/${ApiRoute[gateway]}/v1`
+        url =   `${NetworkMapper.PLAYGROUND}/${ApiRoute[gateway]}/v1`
     } else  {
         url =`${NetworkMapper.PRODUCTION}/${ApiRoute[gateway]}/v1`
     }

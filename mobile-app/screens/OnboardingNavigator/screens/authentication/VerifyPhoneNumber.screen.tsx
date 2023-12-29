@@ -8,7 +8,7 @@ import { OnboardingParamsList } from "@screens/OnboardingNavigator/OnboardingNav
 import { VerificationCodeInput } from "@components/commons/inputs/VerificationCodeInput";
 import { _api } from "@api/_request";
 import { useAuthPersistence } from "@contexts/AuthPersistenceProvider";
-import {ShowToast, showTost} from "@components/commons/Toast";
+import { showTost} from "@components/commons/Toast";
 import {OnboardingScreenName} from "@screens/OnboardingNavigator/ScreenName.enum";
 import {useToast} from "react-native-toast-notifications";
 import { cookieParser } from "../../../../../utils/cookieParser";
@@ -25,14 +25,17 @@ export function VerifyPhoneNumberScreen({
     const { setToken } = useAuthPersistence();
     const [code, setCode] = useState<string>("");
     const [loading, _setIsLoading] = useState<boolean>(false);
-    const [resendDisabled, setResendDisabled] = useState<boolean>(false);
-
+    const [resendDisabled] = useState<boolean>(false);
+    const [sendingVerification, setSendingVerification] = useState(false)
     const toast = useToast()
+
+
+
     async function onContinue(): Promise<void> {
         try {
             _setIsLoading(true);
 
-            const { data, cookies } = await _api.requestData({
+            const { cookies } = await _api.requestData({
                 method: "POST",
                 url: "user/verify",
                 data: {
@@ -40,10 +43,7 @@ export function VerifyPhoneNumberScreen({
                     code,
                 },
             });
-
-            if (data.status === 1) {
-                await setToken(cookieParser(cookies[0]));
-            }
+            await setToken(cookieParser(cookies[0]));
         } catch (error: any) {
             showTost(toast,error.message, 'error');
         } finally {
@@ -51,20 +51,19 @@ export function VerifyPhoneNumberScreen({
         }
     }
 
-    const resendPhoneNumber = () => {
-        if (!resendDisabled) {
-            // Trigger the resend logic here
-            // For now, let's just log a message
-            console.log("Resending code...");
+    const resendPhoneNumber = async () => {
+        try {
+            setSendingVerification(true)
+            await _api.requestData({
+                method: 'GET',
+                url: `user/resend-validation/${route.params.phoneNumber}`
+            })
 
-            // Disable the button for 60 seconds
-            setResendDisabled(true);
-
-            setTimeout(() => {
-                setResendDisabled(false);
-            }, 60000);
-        } else {
-            showTost(toast, 'Wait for 60 seconds before resending code', 'warning')
+            showTost(toast, 'Verification code sent successfully', 'success')
+        } catch (error: any) {
+            showTost(toast,typeof error.message !== 'string' ? error.message[0] : error.message, 'error')
+        } finally {
+            setSendingVerification(false)
         }
     };
 
@@ -99,9 +98,9 @@ export function VerifyPhoneNumberScreen({
                 </View>
                 <View style={tailwind("flex flex-row justify-center mt-5 items-center")}>
                     <Text style={tailwind("text-sm text-brand-gray-700")}>Didn't get code?</Text>
-                    <Pressable onPress={resendPhoneNumber}>
+                    <Pressable disabled={resendDisabled} onPress={resendPhoneNumber}>
                         <Text style={tailwind("text-sm text-brand-gray-700 ml-2 font-bold underline")}>
-                            Resend
+                            {sendingVerification ? 'resending' : 'Resend'}
                         </Text>
                     </Pressable>
                 </View>

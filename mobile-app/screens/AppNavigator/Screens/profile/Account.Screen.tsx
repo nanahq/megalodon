@@ -38,7 +38,7 @@ export const AccountScreen: React.FC<AccountScreenNavigationProps> = ({navigatio
                             style={tailwind('bg-brand-ash rounded-full p-3 w-14 h-14')}
                         />
                     <View style={tailwind('w-full mt-3 flex flex-row items-center justify-between')}>
-                        <Text style={tailwind('font-bold text-3xl')}>Account</Text>
+                        <Text style={tailwind('font-bold text-xl')}>Account</Text>
                         <Text style={tailwind('text-lg text-brand-gray-700')}>v{Constants.expoConfig?.version}</Text>
                     </View>
                 </View>

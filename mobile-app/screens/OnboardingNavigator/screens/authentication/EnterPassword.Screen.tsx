@@ -83,7 +83,7 @@ export function EnterPasswordScreen ({navigation, route}: EnterPasswordScreenPro
                        {route.params.hasAccount ? HeaderTextExistingAccount : 'Sign up for a new account'}
                    </Text>
                 <View style={tailwind('flex flex-col')}>
-                    {route.params.hasAccount === false && (
+                    {!route.params.hasAccount && (
                         <TextInputWithLabel placeholder="musa@example.com" label="Email" containerStyle={tailwind('my-3')} labelTestId="EnterPasswordScreen.TextInput.Label" onChangeText={setEmail} value={email} />
                     )}
                     <TextInputWithLabel secureTextEntry containerStyle={tailwind('my-3 mb-10')}  label="Password" moreInfo="Password should be at least 8 characters" labelTestId="EnterPasswordScreen.TextInput.Label" onChangeText={setPassword} value={password} />
@@ -98,7 +98,7 @@ export function EnterPasswordScreen ({navigation, route}: EnterPasswordScreenPro
                     disabled={password === "" || password.length <= 7 || loading}
                 />
             </View>
-            <View style={tailwind('mt-14 pt-3.5 px-5')}>
+            <View style={tailwind('pt-3.5 px-5')}>
                 <BackButton onPress={() => navigation.goBack()}   testID="EnterPasswordScreen.BackButton" />
             </View>
         </View>

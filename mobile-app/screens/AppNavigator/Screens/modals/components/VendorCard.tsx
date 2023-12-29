@@ -17,6 +17,7 @@ const _VendorCard: React.FC<{ vendor: VendorUserI, fullWidth?: boolean, style?: 
     const [loading, setLoading] = useState<boolean>(true);
     const navigator = useNavigation<NavigationProp<AppParamList>>()
     const [error, setError] = useState<boolean>(false)
+
     useEffect(() => {
         async function fetchData() {
             try {

@@ -12,6 +12,7 @@ import {fetchSubscriptions} from "@store/vendors.reducer";
 import {ListingMenuCard} from "@screens/AppNavigator/Screens/modals/components/ListingCard";
 import {FlashList} from "@shopify/flash-list";
 import {fetchHomaPage} from "@store/listings.reducer";
+import {ExploreSections} from "@screens/AppNavigator/Screens/modals/components/ExploreSections";
 
 const {height} = Dimensions.get('screen')
 export function HomeScreen (): JSX.Element {
@@ -52,6 +53,7 @@ export function HomeScreen (): JSX.Element {
                >
                     <HomeHeader />
                    <CategorySection />
+                   <ExploreSections vendors={hompage?.allVendors.slice(0, 5) ?? []} />
                    {hompage?.mostPopularVendors !== undefined && hompage?.mostPopularVendors.length > 0 && (
                        <HomeSection label="Top Rated Vendors">
                            <FlashList

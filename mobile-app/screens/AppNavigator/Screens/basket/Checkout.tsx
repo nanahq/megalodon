@@ -278,7 +278,7 @@ export const Checkout: React.FC = () => {
             </View>
 
             <View style={tailwind('my-5')}>
-                <GenericButton  loading={placingOrder} disabled={check()} onPress={placeOrder} labelColor={tailwind('text-white font-bold')}  label="Place order" backgroundColor={tailwind('bg-primary-500')} />
+                <GenericButton  loading={placingOrder} disabled={check()} onPress={placeOrder} labelColor={tailwind('text-white font-bold')}  label="Place order" backgroundColor={tailwind('bg-black')} />
             </View>
             <AddressBookModal
                 selectedAddressId={selectedAddress?._id}
