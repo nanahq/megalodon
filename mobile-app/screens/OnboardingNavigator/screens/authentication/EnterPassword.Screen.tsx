@@ -13,7 +13,6 @@ import {showTost} from "@components/commons/Toast";
 import {useToast} from "react-native-toast-notifications";
 import {cookieParser} from "../../../../../utils/cookieParser";
 
-
 type EnterPasswordScreenProps = StackScreenProps<OnboardingParamsList, OnboardingScreenName.ENTER_PASSWORD>
 
 export function EnterPasswordScreen ({navigation, route}: EnterPasswordScreenProps): JSX.Element {
@@ -39,7 +38,7 @@ export function EnterPasswordScreen ({navigation, route}: EnterPasswordScreenPro
                 await  setToken(cookieParser(cookies[0]))
                 showTost(toast, 'Login successfully', 'success')
             } else  {
-                const { cookies} = await _api.requestData({
+                 await _api.requestData({
                     method: 'POST',
                     url: 'user/register',
                     data: {
@@ -48,18 +47,20 @@ export function EnterPasswordScreen ({navigation, route}: EnterPasswordScreenPro
                         email: email.toLowerCase()
                     }
                 })
-
-
                 showTost(toast, 'Account created', 'success')
-
-                setTimeout( async () => {
-                    await  setToken(cookieParser(cookies[0]))
-                }, 5000)
-
+                navigation.navigate(OnboardingScreenName.VERIFY_PHONE_NUMBER as any, {
+                    phoneNumber: route.params.phoneNumber
+                } as any)
             }
 
         } catch (error: any) {
-            showTost(toast, typeof error.message !== 'string' ? error.message[0] : error.message, 'error')
+            if (error?.message.toLowerCase().includes("verify")) {
+                navigation.navigate(OnboardingScreenName.VERIFY_PHONE_NUMBER as any, {
+                    phoneNumber: route.params.phoneNumber
+                } as any)
+            } else {
+                showTost(toast, typeof error.message !== 'string' ? error.message[0] : error.message, 'error')
+            }
         } finally {
             _setIsLoading(false)
         }
@@ -82,7 +83,7 @@ export function EnterPasswordScreen ({navigation, route}: EnterPasswordScreenPro
                        {route.params.hasAccount ? HeaderTextExistingAccount : 'Sign up for a new account'}
                    </Text>
                 <View style={tailwind('flex flex-col')}>
-                    {route.params.hasAccount === false && (
+                    {!route.params.hasAccount && (
                         <TextInputWithLabel placeholder="musa@example.com" label="Email" containerStyle={tailwind('my-3')} labelTestId="EnterPasswordScreen.TextInput.Label" onChangeText={setEmail} value={email} />
                     )}
                     <TextInputWithLabel secureTextEntry containerStyle={tailwind('my-3 mb-10')}  label="Password" moreInfo="Password should be at least 8 characters" labelTestId="EnterPasswordScreen.TextInput.Label" onChangeText={setPassword} value={password} />
@@ -97,7 +98,7 @@ export function EnterPasswordScreen ({navigation, route}: EnterPasswordScreenPro
                     disabled={password === "" || password.length <= 7 || loading}
                 />
             </View>
-            <View style={tailwind('mt-14 pt-3.5 px-5')}>
+            <View style={tailwind('pt-3.5 px-5')}>
                 <BackButton onPress={() => navigation.goBack()}   testID="EnterPasswordScreen.BackButton" />
             </View>
         </View>

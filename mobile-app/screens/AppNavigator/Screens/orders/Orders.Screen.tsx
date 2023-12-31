@@ -21,6 +21,8 @@ export const OrderScreen: React.FC = () => {
     const [fetchingOrders, setFetchingOrders] = useState<boolean>(true)
     const [orders, setOrders] = useState<OrderI[]>([])
     const [view, setView] = useState<OrderStatus>(OrderStatus.PAYMENT_PENDING)
+
+
     const ordersInProgress = useMemo(() => {
         if (orders.length < 1) {
             return []

@@ -122,7 +122,7 @@ export const cart = createSlice({
             .addCase(
                 readCartFromStorage.fulfilled,
                 (state, {payload}: any ) => {
-                    if(payload === null) {
+                    if (payload === null) {
                         state.cart = undefined
                         state.vendor = undefined
                         state.hasItemsInCart = false

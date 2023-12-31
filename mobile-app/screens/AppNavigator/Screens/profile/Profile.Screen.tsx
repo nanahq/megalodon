@@ -71,10 +71,10 @@ export const ProfileScreen = () => {
                </Pressable>
                <ProfileSection heading="Quick Links">
                    <ProfileSection.Item onPress={() => {} } label="Invite friends" />
-                   {/* <ProfileSection.Item onPress={() => {} } label="Enter promo code" /> */}
+                    <ProfileSection.Item onPress={() => {} } label="Enter promo code" />
                    <ProfileSection.Item onPress={() => {} } label="Contact customer support" />
                    <ProfileSection.Item onPress={() => {} } label="Payment history" />
-                   {/* <ProfileSection.Item onPress={() => {} } label="Send a gift" /> */}
+                    <ProfileSection.Item onPress={() => {} } label="Send a gift" />
                </ProfileSection>
 
                <ProfileSection heading="Settings">

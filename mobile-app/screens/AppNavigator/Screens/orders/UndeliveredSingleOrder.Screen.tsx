@@ -3,7 +3,7 @@ import {tailwind} from "@tailwind";
 import {HeaderStyleInterpolators, StackScreenProps} from "@react-navigation/stack";
 import {OrderParamsList} from "@screens/AppNavigator/Screens/orders/OrderNavigator";
 import {OrderScreenName} from "@screens/AppNavigator/Screens/orders/OrderScreenName";
-import React, {PropsWithChildren, useEffect, useMemo} from "react";
+import React, {PropsWithChildren, useEffect, useMemo, useState} from "react";
 import {ModalCloseIcon} from "@screens/AppNavigator/Screens/modals/components/ModalCloseIcon";
 import {MappedDeliveryStatus} from "@constants/MappedDeliveryStatus";
 import moment from "moment";
@@ -12,6 +12,9 @@ import {ListingMenuI, OrderStatus} from "@nanahq/sticky";
 import {GenericButton} from "@components/commons/buttons/GenericButton";
 import {NumericFormat as NumberFormat} from "react-number-format";
 import {ModalScreenName} from "@screens/AppNavigator/ScreenName.enum";
+import { LoaderComponentScreen} from "@components/commons/LoaderComponent";
+import {_api} from "@api/_request";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export interface TransformedOrderItem {
     listing: ListingMenuI;
@@ -21,6 +24,27 @@ export interface TransformedOrderItem {
 
 type UndeliveredSingleOrderScreenProps = StackScreenProps<OrderParamsList, OrderScreenName.UNDELIVERED_SINGLE_ORDER>
 export const UndeliveredSingleOrderScreen: React.FC<UndeliveredSingleOrderScreenProps> = ({navigation, route}) => {
+    const [rating, setRating] = useState<null | string>(null)
+
+    useEffect(() => {
+        navigation.addListener('focus' ,() => {
+            AsyncStorage.getItem(route.params.order._id)
+                .then(_rating => {
+                    setRating(_rating)
+                })
+        })
+
+        return () => navigation.removeListener('focus', () => {
+            AsyncStorage.getItem(route.params.order._id)
+                .then(_rating => {
+                    setRating(_rating)
+                })
+        })
+    }, [])
+
+
+
+
     useEffect(() => {
         navigation.setOptions({
             headerShown: true,
@@ -31,11 +55,6 @@ export const UndeliveredSingleOrderScreen: React.FC<UndeliveredSingleOrderScreen
             headerLeft: () => <ModalCloseIcon onPress={() => navigation.goBack()} />,
             headerStyleInterpolator: HeaderStyleInterpolators.forFade
         })
-    }, [])
-
-
-    useEffect(() => {
-
     }, [])
 
 
@@ -106,8 +125,12 @@ export const UndeliveredSingleOrderScreen: React.FC<UndeliveredSingleOrderScreen
                     </View>
                 </View>
                 <View style={tailwind('my-10')}>
-                    {route.params.order.orderStatus === OrderStatus.FULFILLED && (
-                        <GenericButton onPress={() => {} } label="Order Again" labelColor={tailwind('text-white')} backgroundColor={tailwind('bg-primary-500')} />
+                    {route.params.order.orderStatus === OrderStatus.FULFILLED && !rating && (
+                        <>
+                            <GenericButton style={tailwind('mt-4')} onPress={() => navigation.navigate(OrderScreenName.ADD_REVIEW, {
+                                order: route.params.order
+                            }) } label="Add A Review" labelColor={tailwind('text-white')} backgroundColor={tailwind('bg-primary-500 bg-opacity-40')} />
+                        </>
                     )}
                     { [OrderStatus.COURIER_PICKUP, OrderStatus.PROCESSED,  OrderStatus.IN_ROUTE].includes(route.params.order.orderStatus) && (
                         <GenericButton onPress={() => navigation.navigate(OrderScreenName.TRACK_ORDER, {

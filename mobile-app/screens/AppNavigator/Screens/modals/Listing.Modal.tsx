@@ -19,6 +19,7 @@ import {BasketScreenName} from "@screens/AppNavigator/Screens/basket/BasketScree
 import { ModalScreenName} from "@screens/AppNavigator/ScreenName.enum";
 import {AppParamList} from "@screens/AppNavigator/AppNav";
 import moment from "moment";
+import FastImage from "react-native-fast-image";
 import {calculateTotalValue} from "../../../../../utils/CalculateCartTotal";
 
 type ListingModalScreenProps = StackScreenProps<AppParamList, ModalScreenName.MODAL_LISTING_SCREEN>
@@ -110,7 +111,7 @@ export const ListingModal: React.FC<ListingModalScreenProps>  = ({navigation, ro
             headerTitleAlign: 'center',
             headerTitleStyle: tailwind('text-xl'),
             headerRight: () => <ShareListingIcon  onPress={() => {}}/>,
-            headerLeft: () => <ModalCloseIcon onPress={() => navigation.navigate(ModalScreenName.MODAL_VENDOR_SCREEN, {} as any)} />,
+            headerLeft: () => <ModalCloseIcon onPress={() => navigation.goBack()} />,
         })
     }, [])
 
@@ -172,7 +173,7 @@ export const ListingModal: React.FC<ListingModalScreenProps>  = ({navigation, ro
             cart: _cart,
             cartAvailableDate:  route.params.availableDate ?? undefined
         }))
-        navigation.navigate(ModalScreenName.MODAL_VENDOR_SCREEN, {} as any)
+        navigation.goBack()
     }
 
     const goToBasket = () => {
@@ -184,11 +185,11 @@ export const ListingModal: React.FC<ListingModalScreenProps>  = ({navigation, ro
         <View style={tailwind('flex-1  relative bg-white')}>
            <ScrollView style={tailwind('pb-10')}>
                <View style={tailwind('pb-5 mb-3 bg-white')}>
-                   <Image source={{ uri: route.params.listing.photo, cache: "force-cache" }} style={[tailwind("w-full"), { height: 170 }]} />
+                   <FastImage resizeMode={FastImage.resizeMode.cover} source={{ uri: route.params.listing.photo, priority: FastImage.priority.normal }} style={[tailwind("w-full"), { height: 170 }]} />
                    <View style={tailwind('px-4 flex flex-col mt-6')}>
                        <View style={tailwind('flex flex-row items-center w-full justify-between')}>
-                           <View style={tailwind('flex flex-col')}>
-                               <Text style={[tailwind(' p-0 m-0 mb-2 text-4xl'), {
+                           <View style={tailwind('flex flex-col w-3/4')}>
+                               <Text style={[tailwind('mb-2  text-3xl'), {
                                    lineHeight: 0
                                }]}>
                                    {route.params.listing.name}
@@ -201,32 +202,28 @@ export const ListingModal: React.FC<ListingModalScreenProps>  = ({navigation, ro
                                        displayType="text"
                                        renderText={(value) => (
                                            <Text
-                                               style={tailwind('text-2xl font-bold text-primary-500')}
+                                               style={tailwind('text-2xl font-bold text-black')}
                                            >
                                                {value}
                                            </Text>
                                        )}
                                    />
-                                   <Text style={[tailwind(' ml-2 text-brand-gray-700 text-base'), {
-                                       lineHeight: 0
-                                   }]}>
+                                   <Text style={tailwind(' ml-2 text-brand-gray-700 text-base')}>
                                        {route.params.listing.serving}
                                    </Text>
                                </View>
                            </View>
                            <View style={tailwind('flex-row  items-center')}>
-                               <TouchableOpacity disabled={quantity <= 1} onPress={handleDecrease} style={tailwind('bg-white w-8 h-8  rounded border-1.5 border-primary-500  flex items-center justify-center')}>
+                               <TouchableOpacity disabled={quantity <= 1} onPress={handleDecrease} style={tailwind('bg-white w-8 h-8  rounded border-1.5 border-black flex items-center justify-center')}>
                                    <IconComponent iconType="AntDesign" name="minus"  size={16}/>
                                </TouchableOpacity>
                                <Text style={tailwind('text-lg font-bold mx-3')}>{quantity}</Text>
-                               <TouchableOpacity onPress={handleIncrease} style={tailwind('bg-primary-500 w-8 h-8 rounded border-1.5 border-primary-500 flex items-center justify-center')}>
+                               <TouchableOpacity onPress={handleIncrease} style={tailwind('bg-black w-8 h-8 rounded border-1.5 border-black flex items-center justify-center')}>
                                    <IconComponent iconType="AntDesign" name="plus" size={16} style={tailwind('text-white')} />
                                </TouchableOpacity>
                            </View>
                        </View>
-                       <Text style={[tailwind(' p-0 m-0  text-lg text-brand-gray-700'), {
-                           lineHeight: 0
-                       }]}>
+                       <Text style={tailwind('mt-3 text-lg text-brand-gray-700')}>
                            {route.params.listing.desc}
                        </Text>
                    </View>
@@ -246,9 +243,9 @@ export const ListingModal: React.FC<ListingModalScreenProps>  = ({navigation, ro
             {!loading && (
                 <View style={tailwind('px-4 py-2 bg-white pb-10')}>
                     {hasItemsInCart && cart?.length && cartvendor === listing?.vendor._id ? (
-                        <GenericButton onPress={() => goToBasket() } label={`View basket (${cart?.length})`} labelColor={tailwind('text-white')} backgroundColor={tailwind('bg-primary-500')} testId="" />
+                        <GenericButton onPress={() => goToBasket() } label={`View basket (${cart?.length})`} labelColor={tailwind('text-white')} backgroundColor={tailwind('bg-black')} testId="" />
                     ) : (
-                        <GenericButton onPress={() => addToBasket()} label={`Add ${_cart.quantity} to basket ~ ₦${_cart.totalValue.toLocaleString()}`} labelColor={tailwind('text-white')} backgroundColor={tailwind('bg-primary-500')} testId="" />
+                        <GenericButton onPress={() => addToBasket()} label={`Add ${_cart.quantity} to basket ~ ₦${_cart.totalValue.toLocaleString()}`} labelColor={tailwind('text-white')} backgroundColor={tailwind('bg-black')} testId="" />
                     )}
                 </View>
             )}

@@ -11,6 +11,7 @@ import {UndeliveredSingleOrderScreen} from "@screens/AppNavigator/Screens/orders
 import {OrderI} from "@nanahq/sticky";
 import {SingleOrderScreen} from "@screens/AppNavigator/Screens/orders/SingleOrder.Screen";
 import {Tracking} from "@screens/AppNavigator/Screens/orders/tracking";
+import {AddReviewScreen} from "@screens/AppNavigator/Screens/orders/Rating.Screen";
 
 export interface OrderParamsList {
     [OrderScreenName.UNDELIVERED_SINGLE_ORDER]: {
@@ -20,6 +21,10 @@ export interface OrderParamsList {
         order: OrderI
     },
     [OrderScreenName.TRACK_ORDER]: {
+        order: OrderI
+    },
+
+    [OrderScreenName.ADD_REVIEW]: {
         order: OrderI
     },
     [key: string]: undefined | object;
@@ -66,8 +71,8 @@ export const OrderNavigator: React.FC = () => {
                 }}
             />
             <OrderStack.Screen
-                component={SingleOrderScreen}
-                name={OrderScreenName.DELIVERED_SINGLE_ORDER}
+                component={AddReviewScreen}
+                name={OrderScreenName.ADD_REVIEW}
                 options={{
                     cardStyleInterpolator: isAndroid ? CardStyleInterpolators.forBottomSheetAndroid : CardStyleInterpolators.forVerticalIOS,
                 }}

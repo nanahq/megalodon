@@ -25,11 +25,10 @@ const getTabBarLabel = (props: {
     color: string;
     title: string;
 }): JSX.Element => (
-    <Text style={{ color: props.color, ...tailwind("font-medium text-xs") }}>
+    <Text style={{ color: props.focused ? getColor('primary-500') : props.color, ...tailwind("font-medium mt-2 text-xs") }}>
         {props.focused ? props.title : props.title}
     </Text>
 );
-
 
 export function BottomTabNavigator ():JSX.Element {
     const {cart}  = useAppSelector((state: RootState) => state.cart)
@@ -40,14 +39,17 @@ export function BottomTabNavigator ():JSX.Element {
                 headerShown: false,
                 tabBarLabelPosition: "below-icon",
                 tabBarStyle: tailwind(
-                    "h-28 border-t bg-white"),
-                tabBarActiveTintColor: getColor("primary-500"),
+                    "border-t bg-white", {
+                "h-32": Device.osName === 'iOS',
+                "h-28": Device.osName === 'Android'
+            }),
+                tabBarActiveTintColor: '#ffffff',
                 tabBarInactiveTintColor: '#B5B5B5',
                 tabBarItemStyle: tailwind({
-                    "pb-6": Device.osName === 'iOS',
+                    "py-6": Device.osName === 'iOS',
                     "pb-8": Device.osName === 'Android'
                 }),
-
+                // tabBarLabelStyle: tailwind('mt-2'),
                 lazy: true
             }}
         >
@@ -63,8 +65,10 @@ export function BottomTabNavigator ():JSX.Element {
 
                         }),
                     tabBarTestID: "BottomTabHome",
-                    tabBarIcon: ({ color }) => (
-                        <IconComponent iconType='AntDesign' name="home"  size={28} color={color}/>
+                    tabBarIcon: ({ color, focused }) => (
+                        <View style={tailwind('w-10 h-10 flex flex-row items-center justify-center rounded-full', {' bg-primary-500': focused})}>
+                            <IconComponent iconType='AntDesign' name="home"  size={28} color={color}/>
+                        </View>
                     ),
                 }}
             />
@@ -79,11 +83,11 @@ export function BottomTabNavigator ():JSX.Element {
                             title: 'Basket',
                         }),
                     tabBarTestID: "BottomTabHome",
-                    tabBarIcon: ({ color }) => (
-                        <View style={tailwind('relative')}>
+                    tabBarIcon: ({ color , focused}) => (
+                        <View style={tailwind('relative w-10 h-10 flex flex-row items-center justify-center rounded-full', {'bg-primary-500': focused})}>
                             <IconComponent iconType='Ionicons' name="ios-cart-outline"  size={28} color={color}/>
-                            {cart !== undefined && (<View style={tailwind('absolute z-50 w-3 h-3 flex justify-center items-center rounded-full bg-green-500 top-0 right-0')}>
-                                <Text style={tailwind('text-xs text-black')}>{cart.length}</Text>
+                            {cart !== undefined && (<View style={tailwind('absolute z-50 w-4 h-4 flex justify-center items-center rounded-full bg-black top-0 right-0')}>
+                                <Text style={tailwind('text-xs text-white')}>{cart.length}</Text>
                             </View>)}
                         </View>
                     ),
@@ -100,8 +104,10 @@ export function BottomTabNavigator ():JSX.Element {
                             title: 'Deals',
                         }),
                     tabBarTestID: "BottomTabHome",
-                    tabBarIcon: ({ color }) => (
-                        <IconComponent iconType='AntDesign' name="tagso"  size={28} color={color}/>
+                    tabBarIcon: ({ color, focused }) => (
+                        <View style={tailwind('w-10 h-10 flex flex-row items-center justify-center rounded-full', {' bg-primary-500': focused})}>
+                            <IconComponent iconType='AntDesign' name="tagso"  size={28} color={color}/>
+                        </View>
                     ),
                 }}
             />
@@ -116,8 +122,10 @@ export function BottomTabNavigator ():JSX.Element {
                             title: 'Orders',
                         }),
                     tabBarTestID: "BottomTabHome",
-                    tabBarIcon: ({ color }) => (
-                        <IconComponent iconType='Ionicons' name="fast-food-outline"  size={28} color={color}/>
+                    tabBarIcon: ({ color, focused }) => (
+                        <View style={tailwind('w-10 h-10 flex flex-row items-center justify-center rounded-full', {' bg-primary-500': focused})}>
+                            <IconComponent iconType='Ionicons' name="fast-food-outline"  size={28} color={color}/>
+                        </View>
                     ),
                 }}
             />
@@ -132,8 +140,10 @@ export function BottomTabNavigator ():JSX.Element {
                             title: 'Profile',
                         }),
                     tabBarTestID: "BottomTabHome",
-                    tabBarIcon: ({ color }) => (
-                        <IconComponent iconType='AntDesign' name="user"  size={28} color={color}/>
+                    tabBarIcon: ({ color, focused }) => (
+                        <View style={tailwind('w-10 h-10 flex flex-row items-center justify-center rounded-full', {' bg-primary-500': focused})}>
+                            <IconComponent iconType='AntDesign' name="user"  size={28} color={color}/>
+                        </View>
                     ),
                 }}
             />

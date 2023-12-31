@@ -40,14 +40,14 @@ export const AccountScreenItem: React.FC<{onPress: () => void, label: string, mo
         <Pressable onPress={onPress} style={tailwind('py-4 border-b-0.5 border-gray-300')}>
             <View style={tailwind('flex flex-row items-center w-full items-center justify-between')}>
                 <View style={tailwind('flex flex-col')}>
-                    <Text style={[tailwind('text-lg'), labelStyle]}>{label}</Text>
+                    <Text style={[tailwind(''), labelStyle]}>{label}</Text>
                     {moreInfo !== undefined && (
                         <Text style={tailwind('mt-2 text-brand-gray-700')}>{moreInfo}</Text>
                     )}
                 </View>
                 <View style={tailwind('flex flex-row items-center')}>
                     {defaultValue && (
-                        <Text style={tailwind('font-bold text-lg')}>{defaultValue}</Text>
+                        <Text style={tailwind('')}>{defaultValue}</Text>
                     )}
                     {showDefaults && !defaultValue &&
                         (
