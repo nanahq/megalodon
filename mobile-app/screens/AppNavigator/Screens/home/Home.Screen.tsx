@@ -114,7 +114,7 @@ export function HomeScreen (): JSX.Element {
                    <HomeSectionVertical label="All Vendors">
                        <FlashList
                            showsVerticalScrollIndicator={false}
-                           contentContainerStyle={tailwind('px-0 mx-0')}
+                           contentContainerStyle={tailwind('px-0')}
                            data={hompage?.allVendors}
                            renderItem={(props) => <RenderItem {...props} />}
                            keyExtractor={item => item._id}

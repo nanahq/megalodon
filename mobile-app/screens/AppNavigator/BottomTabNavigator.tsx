@@ -25,7 +25,7 @@ const getTabBarLabel = (props: {
     color: string;
     title: string;
 }): JSX.Element => (
-    <Text style={{ color: props.focused ? getColor('primary-500') : props.color, ...tailwind("font-medium mt-2 text-xs") }}>
+    <Text style={{ color: props.focused ? getColor('primary-500') : props.color, ...tailwind("font-medium text-xs", {'mt-2': Device.osName === 'iOS'}) }}>
         {props.focused ? props.title : props.title}
     </Text>
 );

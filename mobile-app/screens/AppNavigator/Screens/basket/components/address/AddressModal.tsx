@@ -107,7 +107,7 @@ export function AddressBookModal(props: AddressBookModalProps): JSX.Element {
             <ScrollView style={tailwind('bg-white rounded-t-3xl px-5 pt-10 flex-1')}>
                 <View style={tailwind('flex flex-row w-full justify-between items-center')}>
                     <Text style={tailwind('font-bold text-3xl')}>Saved Addresses</Text>
-                    <ModalCloseIcon onPress={() => closeModal()} size={32} />
+                    <ModalCloseIcon buttonStyle={[tailwind('bg-gray-200 rounded-full flex flex-row items-center justify-center p-0 m-0'), {width: 50, height: 50}]} onPress={() => closeModal()} size={22} />
                 </View>
                 {addressBook.length > 0 ? (
                     <View style={tailwind('flex flex-col')}>

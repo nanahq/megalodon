@@ -14,7 +14,11 @@ import {StoreProvider} from "@store/StoreProvider";
 import {BottomSheetModalProvider} from "@gorhom/bottom-sheet";
 import {SafeAreaProvider} from "react-native-safe-area-context";
 import 'expo-dev-client';
+import {WebSocketProvider} from "@contexts/SocketProvider";
+import {NetworkMapper, NetworkType} from "@api/network.mapper";
 
+
+const WEBSOCKET_ENDPOINT = NetworkMapper['PRODUCTION']
 export default function App() {
   const isLoaded = useCachedResource()
    const logger = useLogger()
@@ -44,19 +48,21 @@ export default function App() {
                    delete: persistence.deleteSecure
                }}
            >
-               <StoreProvider>
-                   <GestureHandlerRootView
-                       style={tailwind('flex-1')}
-                   >
-                      <SafeAreaProvider>
-                          <BottomSheetModalProvider>
-                              <ToastProvider renderType={customToast}>
-                                  <MainScreen />
-                              </ToastProvider>
-                          </BottomSheetModalProvider>
-                      </SafeAreaProvider>
-                   </GestureHandlerRootView>
-               </StoreProvider>
+               <WebSocketProvider socketEndpoint={WEBSOCKET_ENDPOINT}>
+                   <StoreProvider>
+                       <GestureHandlerRootView
+                           style={tailwind('flex-1')}
+                       >
+                           <SafeAreaProvider>
+                               <BottomSheetModalProvider>
+                                   <ToastProvider renderType={customToast}>
+                                       <MainScreen />
+                                   </ToastProvider>
+                               </BottomSheetModalProvider>
+                           </SafeAreaProvider>
+                       </GestureHandlerRootView>
+                   </StoreProvider>
+               </WebSocketProvider>
            </AuthPersistenceProvider>
        </ErrorBoundary>
     </NativeLoggingProvider>

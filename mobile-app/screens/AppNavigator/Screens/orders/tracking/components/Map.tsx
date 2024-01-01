@@ -1,115 +1,134 @@
-import React, { useEffect, useState } from 'react';
-import {View, Text, Dimensions, ActivityIndicator, Pressable} from 'react-native';
+import React, {memo, useEffect, useState} from 'react';
+import {View, Text, ActivityIndicator} from 'react-native';
 import {getColor, tailwind} from '@tailwind';
 import { IconComponent } from '@components/commons/IconComponent';
-import { DeliveryI, LocationCoordinates, OrderI, TravelDistanceResult } from '@nanahq/sticky';
+import {
+    DeliveryI,
+    LocationCoordinates,
+    OrderI,
+    OrderStatus,
+    SOCKET_MESSAGE,
+    TravelDistanceResult
+} from '@nanahq/sticky';
 import { _api } from '@api/_request';
 import MapboxGL from '@rnmapbox/maps';
-import { NavigationProp, useNavigation } from "@react-navigation/native";
-import { OrderParamsList } from "@screens/AppNavigator/Screens/orders/OrderNavigator";
-import { ModalCloseIcon } from "@screens/AppNavigator/Screens/modals/components/ModalCloseIcon";
-import { NetworkMapper } from "@api/network.mapper";
-import { io, Socket } from "socket.io-client";
-import * as Linking from 'expo-linking';
+import {useWebSocket} from "@contexts/SocketProvider";
+import LocationTracker from '@assets/app/location-tracker.svg'
+import moment from "moment";
+import * as Notifications from "expo-notifications";
 import {mapboxLocationMapper} from "../../../../../../../utils/mapboxLocationMappper";
+import {useExpoPushNotification} from "@hooks/useExpoNotification";
 
-const socketEndpoint = NetworkMapper.PRODUCTION;
 
 const MAPBOX_APIKEY = 'pk.eyJ1Ijoic3VyYWphdXdhbCIsImEiOiJjbGxiNHhpNW8wMHBpM2lxb215NnZmN3ZuIn0.a6zWnzIF0KcVZ2AUiDNBDA';
 MapboxGL.setAccessToken(MAPBOX_APIKEY);
 MapboxGL.setTelemetryEnabled(false);
 MapboxGL.setWellKnownTileServer('mapbox');
 
-export const Map: React.FC<{ order: OrderI }> = ({ order }) => {
-    const { height } = Dimensions.get('screen');
-    const navigation = useNavigation<NavigationProp<OrderParamsList>>();
+ const _Map: React.FC<{ order: OrderI }> = ({ order }) => {
     const [deliveryInformation, setDeliveryInformation] = useState<DeliveryI | null>(null);
     const [currentLocation, setCurrentLocation] = useState<LocationCoordinates | undefined>(undefined);
     const [loading, setLoading] = useState(true);
-    const [travelInformation, setTravelInformation] = useState<TravelDistanceResult | null>(null);
-    const [socket, setSocketClient] = useState<Socket | null>(null);
     const [places, setPlaces] = useState<any>(null);
 
+    const {socketClient, isConnected} = useWebSocket()
+
+
+     const [remainingTime, setRemainingTime] = useState<number | null>(deliveryInformation !== null ? calculateRemainingTime(deliveryInformation?.travelMeta?.travelTime as any) : null);
+     const {schedulePushNotification} = useExpoPushNotification()
+
+     useEffect(() => {
+         if (deliveryInformation?.deliveryTime !== null) {
+             const intervalId = setInterval(() => {
+                 setRemainingTime(calculateRemainingTime(deliveryInformation?.travelMeta?.travelTime as any));
+             }, 1000);
+
+             // Cleanup interval on component unmount
+             return () => clearInterval(intervalId);
+         }
+     }, [deliveryInformation?.deliveryTime]);
+
+     function calculateRemainingTime(targetTime: number): number {
+         const currentTime = moment(deliveryInformation?.order.updatedAt);
+         const endTime = moment(deliveryInformation?.order.updatedAt).add(targetTime, 'minutes');
+         const duration = moment.duration(endTime.diff(currentTime));
+
+         // Calculate remaining time in minutes
+         const remainingMinutes = duration.asMinutes();
+
+         return Math.max(0, Math.round(remainingMinutes));
+     }
     useEffect(() => {
-        let _socket: Socket;
-        if (socket === null) {
-            _socket = io(socketEndpoint, {
-                transports: ['websocket'],
+        if (socketClient !== undefined && isConnected) {
+
+            socketClient?.on('connect', () => {
+                console.log('Websocket gateway connected');
             });
-            setSocketClient(_socket);
-        }
+            socketClient?.on(SOCKET_MESSAGE.DRIVER_LOCATION_UPDATED, (message: { deliveryId: string, location: LocationCoordinates, travelMeta?: TravelDistanceResult}) => {
+                setLoading(false);
+                if (message.deliveryId === deliveryInformation?._id) {
+                    setPlaces(() => {
+                        return {
+                            type: 'FeatureCollection',
+                            features: [
+                                {
+                                    type: 'Feature',
+                                    properties: {
+                                        description: mapboxLocationMapper(deliveryInformation?.order?.deliveryAddress as any),
+                                        icon: 'marker',
 
-        return () => {
-            if (_socket) {
-                _socket.disconnect();
-            }
-        };
-    }, [socketEndpoint]);
-
-    useEffect(() => {
-        if (!socket) {
-            return;
-        }
-
-        if (!deliveryInformation) {
-            return;
-        }
-
-        socket.on('connect', () => {
-            console.log('Websocket gateway connected');
-        });
-
-        socket.on('DRIVER_LOCATION_UPDATED', (message: { deliveryId: string, location: LocationCoordinates, travelMeta?: TravelDistanceResult}) => {
-             setLoading(false);
-            if (message.deliveryId === deliveryInformation?._id) {
-                setPlaces(() => {
-                    return {
-                        type: 'FeatureCollection',
-                        features: [
-                            {
-                                type: 'Feature',
-                                properties: {
-                                    description: mapboxLocationMapper(deliveryInformation.order.deliveryAddress as any),
-                                    icon: 'marker',
-
+                                    },
+                                    geometry: {
+                                        type: 'Point',
+                                        coordinates: mapboxLocationMapper(deliveryInformation.dropOffLocation.coordinates as any),
+                                    },
                                 },
-                                geometry: {
-                                    type: 'Point',
-                                    coordinates: mapboxLocationMapper(deliveryInformation.dropOffLocation.coordinates as any),
-                                },
-                            },
-                            {
-                                type: 'Feature',
-                                properties: {
-                                    description: 'Your Food',
-                                    icon: 'scooter',
-                                },
-                                geometry: {
-                                    type: 'Point',
-                                    coordinates: mapboxLocationMapper(message.location.coordinates as any),
-                                },
+                            ],
+                        };
+                    });
+                    setCurrentLocation(() => message.location);
+                }
+            });
+
+            socketClient?.on(SOCKET_MESSAGE.UPDATE_ORDER_STATUS, (message: {userId: string, orderId: string, status: OrderStatus, driver: string, vendorName?: string}) => {
+                const isOrder = message.orderId === order._id
+                if (isOrder) {
+                    const notificationPayload: Notifications.NotificationRequestInput = {
+                        trigger: {
+                            seconds: 1,
+                            repeats: false
+                        },
+                        identifier: OrderStatus.IN_ROUTE,
+                        content: {
+                            sticky: true,
+                            badge: 2,
+                            title: order.vendor.businessName,
+                            body: 'Your order is on its way',
+                            sound: 'default',
+                            data: {
+                                order
                             }
-                        ],
-                    };
-                });
-                setCurrentLocation(() => message.location);
+                        }
 
-                // if(message.travelMeta !== undefined) {
-                //     //Check if one minute left to delivery
-                //     if(message.travelMeta.travelTime <= 1) {
-                //     //     send expo notification
-                //     //     play a sound
-                //     }
-                // }
-            }
-        });
+                    }
 
-        return () => {
-            socket.close();
-            socket.disconnect();
-        };
-
-    }, [socket, deliveryInformation]);
+                    switch (message.status) {
+                        case OrderStatus.IN_ROUTE:
+                             Notifications.getPermissionsAsync()
+                                 .then(status => {
+                                     console.log(status)
+                                 })
+                                 .catch(error => {
+                                     console.log(error)
+                                 });
+                            void schedulePushNotification(notificationPayload)
+                            break;
+                        default:
+                    }
+                }
+            })
+        }
+    }, []);
 
     useEffect(() => {
         const fetchDeliveryInformation = async (): Promise<void> => {
@@ -128,29 +147,19 @@ export const Map: React.FC<{ order: OrderI }> = ({ order }) => {
                                 type: 'Feature',
                                 properties: {
                                     description: information?.order.deliveryAddress,
-                                    icon: 'marker',
-
                                 },
                                 geometry: {
                                     type: 'Point',
-                                    coordinates: information?.dropOffLocation.coordinates,
-                                },
-                            },
-                            {
-                                type: 'Feature',
-                                properties: {
-                                    description: 'Your Food',
-                                    icon: 'scooter',
-                                },
-                                geometry: {
-                                    type: 'Point',
-                                    coordinates: information?.currentLocation.coordinates ?? [0,0],
+                                    coordinates: mapboxLocationMapper(information?.dropOffLocation.coordinates),
                                 },
                             }
                         ],
                     };
                 });
-                setCurrentLocation(() => information?.currentLocation as any);
+
+                const hasCurrentCoord = !checkForNullishCoords(information?.currentLocation?.coordinates as any)
+                const current = hasCurrentCoord  ? information?.currentLocation : information?.driver?.location
+                setCurrentLocation(() => current);
             } catch (error) {
                 console.error(error);
             } finally {
@@ -161,10 +170,18 @@ export const Map: React.FC<{ order: OrderI }> = ({ order }) => {
         void fetchDeliveryInformation();
 
     }, []);
+    function checkForNullishCoords (coord: [number, number] | null): boolean {
+        if (coord === null) {
+        return true
+        } else if (coord[0] + coord[1] < 1) {
+            return true
+        }
+        return false
+    }
 
     return (
         <View style={tailwind('flex-1 bg-primary-200 flex flex-col items-center justify-center')}>
-             {loading  || currentLocation === undefined ? (
+             {loading ? (
                  <View style={tailwind('flex flex-row items-center justify-center flex-1 w-full')}>
                      <View style={tailwind('flex flex-col items-center')}>
                          <ActivityIndicator size="large" color={getColor('primary-500')} />
@@ -173,16 +190,16 @@ export const Map: React.FC<{ order: OrderI }> = ({ order }) => {
                  </View>
              ) : (
                  <>
-                     <View style={[tailwind('w-full'), { height: height / 5 * 3 }]}>
+                     <View style={tailwind('w-full flex-1 flex-grow')}>
                          <MapboxGL.MapView
                              style={tailwind('flex-1')}
                              id="MapboxMap"
                              zoomEnabled
-                             styleURL="mapbox://styles/mapbox/navigation-day-v1"
+                             styleURL="mapbox://styles/mapbox/navigation-night-v1"
                              rotateEnabled
                          >
                              <MapboxGL.Camera
-                                 centerCoordinate={mapboxLocationMapper(currentLocation?.coordinates) ?? [0,0]}
+                                 centerCoordinate={mapboxLocationMapper(currentLocation?.coordinates)}
                                  zoomLevel={15}
                                  animationMode="flyTo"
                                  animationDuration={2000}
@@ -197,20 +214,21 @@ export const Map: React.FC<{ order: OrderI }> = ({ order }) => {
                                              iconSize: 6,
                                              iconAllowOverlap: true,
                                              textField: ['get', 'description'],
-                                             textPadding: 20,
-                                             textColor: '#FF9629',
-                                             textSize: 24
+                                             textPadding: 100,
+                                             textColor: '#fff',
+                                             textSize: 18,
+                                             textAnchor: "left"
                                          }}
                                      />
                                  </MapboxGL.ShapeSource>
                              )}
                              <MapboxGL.PointAnnotation
                                  selected
-                                 coordinate={mapboxLocationMapper(currentLocation?.coordinates) ?? [0,0]}
+                                 coordinate={mapboxLocationMapper(currentLocation?.coordinates)}
                                  id="UserCoords"
                              >
                                  <View>
-                                     <IconComponent iconType="MaterialCommunityIcons" name="bike-fast" size={50} style={[tailwind('text-secondary-700'), {color: "#f96d1f"}]} />
+                                     <LocationTracker width={50} height={50} />
                                  </View>
                              </MapboxGL.PointAnnotation>
 
@@ -220,41 +238,27 @@ export const Map: React.FC<{ order: OrderI }> = ({ order }) => {
                                  id="VendorCoord"
                              >
                                  <View>
-                                     <IconComponent iconType="Ionicons" name="ios-location-outline" size={50} style={tailwind('text-white')} />
+                                     <IconComponent iconType="Ionicons" name="md-location" size={50} style={tailwind('text-white')} />
                                  </View>
                              </MapboxGL.PointAnnotation>
                          </MapboxGL.MapView>
                      </View>
-
                      {deliveryInformation && (
                          <>
-                             <View style={[tailwind('w-full px-4 py-4  bg-white '), {height: height / 5 * 2}]}>
+                             <View style={tailwind('w-full  px-4 py-4 z-50 bg-primary-200 h-1/5')}>
                                  <View style={tailwind('flex flex-col')}>
                                      <View style={tailwind('flex w-full  flex-col items-center')}>
-                                         <View style={tailwind('flex flex-col items-center')}>
-                                             <Text style={tailwind('text-black text-4xl font-bold text-black')}>9</Text>
-                                             <Text style={tailwind('text-black text-lg text-brand-gray-700')}>MIN</Text>
+                                         <View style={tailwind('flex flex-col bottom-2 justify-center  items-center rounded-full')}>
+                                             {remainingTime !== null && (
+                                                 <Text style={tailwind('text-black  text-black my-2 text-2xl')}>Arriving in {remainingTime} minutes</Text>
+                                             )}
+                                             <Text style={tailwind('text-black text-center text-black text-lg')}>Done! Your order is ready is been delivered now.</Text>
                                          </View>
-                                         <Text style={tailwind('text-black')}>Until Delivered</Text>
-                                         <Text style={tailwind('text-white text-lg text-black mt-4')}>Suite C22 Ummi Plaza, Zoo road</Text>
                                      </View>
                                  </View>
-                                 <View style={tailwind('flex flex-col mt-5 ')}>
-                                     <Text style={tailwind('text-lg')}>Delivery Rider </Text>
-                                     <View style={tailwind('flex flex-row items-center  justify-between')}>
-                                         <Text style={tailwind('text-black')}>{`${deliveryInformation?.driver?.firstName} ${deliveryInformation?.driver?.lastName}`}</Text>
-                                         <Pressable onPress={() => Linking.openURL(`tel:${deliveryInformation?.driver?.phone}`)} style={tailwind('p-2')}>
-                                             <IconComponent name="telephone" iconType="Foundation" size={40} style={tailwind('text-success-500')} />
-                                         </Pressable>
-                                     </View>
-                                 </View>
+
                              </View>
-                             {/*<ModalCloseIcon*/}
-                             {/*    size={40}*/}
-                             {/*    onPress={() => navigation.goBack()}*/}
-                             {/*    iconStyle={tailwind('text-black mx-0')}*/}
-                             {/*    buttonStyle={tailwind(' rounded-full p-2 bg-white top-10 left-5')}*/}
-                             {/*/>*/}
+
                          </>
                      )}
                  </>
@@ -263,3 +267,5 @@ export const Map: React.FC<{ order: OrderI }> = ({ order }) => {
     );
 };
 
+
+ export const Map = memo(_Map)

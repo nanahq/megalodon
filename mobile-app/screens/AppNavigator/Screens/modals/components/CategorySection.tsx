@@ -4,22 +4,32 @@ import {tailwind} from "@tailwind";
 import React, {memo} from "react";
 import FastImage from "react-native-fast-image";
 import {formatRelativeDate} from "../../../../../../utils/DateFormatter";
+import {showTost} from "@components/commons/Toast";
 
-const _VendorCategorySection: React.FC<{category: ListingCategoryI, onPress: (listing:ListingMenuI) => void}> = (props) => {
+const _VendorCategorySection: React.FC<{category: ListingCategoryI, vendorOperationStatus: boolean, warningCallback: () => void, onPress: (listing:ListingMenuI) => void}> = (props) => {
 
      return (
         <View style={tailwind('my-5 flex-1')}>
-            <View style={tailwind('flex flex-row items-center')}>
-             <Text style={tailwind('text-xl uppercase font-bold text-black')}>{props.category.name}</Text>
+            <View style={tailwind('flex flex-col')}>
+                <View style={tailwind('flex flex-row items-center')}>
+                    <Text style={tailwind('text-xl uppercase font-bold text-black')}>{props.category.name}</Text>
+                    {props.category.type === 'PRE_ORDER' && (
+                        <View style={tailwind('bg-primary-500 p-1 rounded-full ml-2')}>
+                            <Text style={tailwind('text-white text-xs text-center')}>Pre-orders</Text>
+                        </View>
+                    )}
+                </View>
                 {props.category.type === 'PRE_ORDER' && (
-                    <View style={tailwind('bg-primary-500 p-1 rounded-full ml-2')}>
-                        <Text style={tailwind('text-white text-xs text-center')}>Pre-orders</Text>
-                    </View>
+                    <Text style={tailwind('text-xs text-gray-500')}>This menu is only available on a scheduled basis. subscribe to vendor and we will let you know when menu is available</Text>
                 )}
             </View>
             <View style={tailwind('flex flex-col')}>
                 {props.category.listingsMenu.filter(menu => menu.status === ListingApprovalStatus.APPROVED).map((listing, index) => (
-                    <VendorMenuCard disabled={props.category.type === 'PRE_ORDER'} menu={listing} key={index} onPress={() => props.onPress(listing)} />
+                    <VendorMenuCard
+                        disabled={props.category.type === 'PRE_ORDER'}
+                        menu={listing} key={index}
+                        onPress={() => props.vendorOperationStatus ? props.onPress(listing) : props.warningCallback()}
+                    />
                 ))}
             </View>
         </View>

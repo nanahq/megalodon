@@ -2552,10 +2552,10 @@
   resolved "https://registry.yarnpkg.com/@leichtgewicht/ip-codec/-/ip-codec-2.0.4.tgz#b2ac626d6cb9c8718ab459166d4bb405b8ffa78b"
   integrity sha512-Hcv+nVC0kZnQ3tD9GVu5xSMR4VVYOteQIr/hwFPVEvPdlXqgGEuRjiheChHgdM+JyqdgNcmzZOX/tnl0JOiI7A==
 
-"@nanahq/sticky@^0.1.22":
-  version "0.1.22"
-  resolved "https://registry.yarnpkg.com/@nanahq/sticky/-/sticky-0.1.22.tgz#10eecaaf8089c79f7231b42b01066dff67a452cb"
-  integrity sha512-S4Py/UzLwu0q1WkJTMoN5ppAVryhiOi/EB2MWfWvK2jRRqwxyhTyLi0040NJ+yrVeC75euMZ2XYGqDsOMm1sdA==
+"@nanahq/sticky@^0.1.26":
+  version "0.1.26"
+  resolved "https://registry.yarnpkg.com/@nanahq/sticky/-/sticky-0.1.26.tgz#2066e670aea682bd7fc0a1d44730f1296bdbd5b2"
+  integrity sha512-rTrNkininO4/HlJDRWG/vZVI6aCi4Py09GAfb/mNVJhob77gce9juNvPn8bx2YqZnnoNi2MEmraj+dvcXFks3Q==
 
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
@@ -6702,7 +6702,7 @@ end-of-stream@^1.1.0:
   dependencies:
     once "^1.4.0"
 
-engine.io-client@~6.5.1:
+engine.io-client@~6.5.2:
   version "6.5.3"
   resolved "https://registry.yarnpkg.com/engine.io-client/-/engine.io-client-6.5.3.tgz#4cf6fa24845029b238f83c628916d9149c399bc5"
   integrity sha512-9Z0qLB0NIisTRt1DZ/8U2k12RJn8yls/nXMZLn+/N8hANT3TcYjKFKcwbw5zFQiN4NTde3TSY9zb79e1ij6j9Q==
@@ -14113,14 +14113,14 @@ snake-case@^3.0.4:
     dot-case "^3.0.4"
     tslib "^2.0.3"
 
-socket.io-client@4.7.1:
-  version "4.7.1"
-  resolved "https://registry.yarnpkg.com/socket.io-client/-/socket.io-client-4.7.1.tgz#48e5f703abe4fb0402182bcf9c06b7820fb3453b"
-  integrity sha512-Qk3Xj8ekbnzKu3faejo4wk2MzXA029XppiXtTF/PkbTg+fcwaTw1PlDrTrrrU4mKoYC4dvlApOnSeyLCKwek2w==
+socket.io-client@^4.7.2:
+  version "4.7.2"
+  resolved "https://registry.yarnpkg.com/socket.io-client/-/socket.io-client-4.7.2.tgz#f2f13f68058bd4e40f94f2a1541f275157ff2c08"
+  integrity sha512-vtA0uD4ibrYD793SOIAwlo8cj6haOeMHrGvwPxJsxH7CeIksqJ+3Zc06RvWTIFgiSqx4A3sOnTXpfAEE2Zyz6w==
   dependencies:
     "@socket.io/component-emitter" "~3.1.0"
     debug "~4.3.2"
-    engine.io-client "~6.5.1"
+    engine.io-client "~6.5.2"
     socket.io-parser "~4.2.4"
 
 socket.io-parser@~4.2.4:

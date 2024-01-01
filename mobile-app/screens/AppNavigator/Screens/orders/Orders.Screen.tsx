@@ -97,7 +97,7 @@ export const OrderScreen: React.FC = () => {
                 ) : (
                     <FlashList
                         showsVerticalScrollIndicator={false}
-                        contentContainerStyle={tailwind(' bg-white')}
+                        contentContainerStyle={tailwind(' bg-white', {'pb-20': isAndroid})}
                         data={ordersDelivered}
                         renderItem={(props) => <PendingRenderItem {...props} />}
                         keyExtractor={item => item._id}
