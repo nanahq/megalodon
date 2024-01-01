@@ -25,6 +25,7 @@ import {IconButton} from "@components/commons/buttons/IconButton";
 import {fetchSubscriptions} from "@store/vendors.reducer";
 import FastImage from "react-native-fast-image";
 import moment from 'moment';
+import {isRestaurantOpen} from "../../../../../utils/DateFormatter";
 
 type VendorModalScreenProps = StackScreenProps<AppParamList, ModalScreenName.MODAL_VENDOR_SCREEN>
 
@@ -133,6 +134,14 @@ return
             })
         }, [])
 
+     const restaurantOperationStatus = useMemo(() => {
+         return isRestaurantOpen(route.params.vendor.settings.startTime ?? '', route.params.vendor.settings.cutoffTime ?? '')
+     }, [route.params.vendor])
+
+     const warnClosed = () => {
+         showTost(toast, `${route.params.vendor.businessName} is closed now. will open tomorrow at ${moment(route.params.vendor.settings.startTime).format('HH:mm')}`, 'warning')
+     }
+
      const onPress = (listing: ListingMenuI) => {
          navigation.navigate(
              ModalScreenName.MODAL_LISTING_SCREEN,
@@ -145,7 +154,11 @@ return
      }
 
      const renderItem = useCallback(({item}:  ListRenderItemInfo<ListingCategoryI>) => {
-         return <VendorCategorySection onPress={onPress} category={item}/>
+         return <VendorCategorySection
+             warningCallback={warnClosed}
+             vendorOperationStatus={restaurantOperationStatus}
+             onPress={onPress} category={item}
+         />
      }, [])
 
      const goToBasket = () => {
@@ -174,11 +187,21 @@ return
                 return 'all orders'
         }
      }
+
+
+
     return (
         <View style={tailwind('flex-1 bg-white relative')}>
             <ScrollView style={tailwind('pb-20')}>
                 <View style={tailwind('flex flex-col w-full')}>
-                    <FastImage  resizeMode={FastImage.resizeMode.cover} source={{ uri: route.params?.vendor?.businessImage, priority:FastImage.priority.high }} style={[tailwind("w-full"), { height: 170 }]} />
+                    <View style={tailwind('relative')}>
+                        <FastImage  resizeMode={FastImage.resizeMode.cover} source={{ uri: route.params?.vendor?.businessImage, priority:FastImage.priority.high }} style={[tailwind("w-full"), { height: 170 }]} />
+                        {route.params.vendor.settings.deliveryType !== 'PRE_ORDER' && (
+                            <View style={tailwind(' absolute bottom-2  left-2 rounded-xl py-1.5 ', {'bg-primary-500 px-4': restaurantOperationStatus, 'bg-gray-100 px-2': !restaurantOperationStatus})}>
+                                <Text style={tailwind('text-center text-white', {'text-black': !restaurantOperationStatus } )}>{restaurantOperationStatus ? 'Open' : `Closed. opens ${moment(route.params.vendor.settings.startTime).format('hh:mm')} tomorrow`}</Text>
+                            </View>
+                        )}
+                    </View>
                     <View style={tailwind('px-4 flex flex-col mt-6')}>
                         <View style={tailwind('flex flex-row items-center w-full justify-between')}>
                             <Text style={tailwind('w-2/3 p-0 m-0 mb-2 font-bold text-4xl')}>
@@ -200,7 +223,7 @@ return
                                 </View>
                             </>
                         ) : (
-                            <View style={tailwind('flex-1')}>
+                            <View style={tailwind('flex-1 h-full')}>
                                     <View style={tailwind('flex flex-row items-center')}>
                                         <IconComponent iconType="Foundation" name="star" size={14} style={tailwind('text-yellow-500')}/>
                                         <IconComponent iconType="Foundation" name="star" size={14} style={tailwind('text-yellow-500')}/>

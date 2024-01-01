@@ -37,3 +37,15 @@ export function parseSelectedScheduledDateTime(selectedDate: string, selectedTim
 
     return null;
 }
+
+export function isRestaurantOpen(openingTime: string, closingTime: string): boolean {
+    const format = 'HH:mm:ss';
+    const formattedOpening = moment(openingTime).format(format)
+    const formattedClosing = moment(closingTime).format(format)
+    const formattedNow = moment().format(format)
+    const now = moment(formattedNow, format)
+    const opening = moment(formattedOpening, format)
+    const closing = moment(formattedClosing, format)
+
+    return now.isBetween(opening, closing, undefined, '[]');
+}
