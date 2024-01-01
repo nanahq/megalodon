@@ -3,11 +3,12 @@ import {LinkingOptions, NavigationContainer} from "@react-navigation/native";
 import {AppLinking, BottomTabNavigator} from "@screens/AppNavigator/BottomTabNavigator";
 import * as Linking from "expo-linking"
 import {fetchProfile} from "@store/profile.reducer";
-import {useEffect, useRef} from "react";
+import {useEffect} from "react";
 import {RootState, useAppDispatch} from "@store/index";
 import {useSelector} from "react-redux";
-import {LocationPermission} from "@screens/AppNavigator/components/LocationPersmission";
-import {NotificationPermission} from "@screens/AppNavigator/components/NotificationPermission";
+import {
+    registerForPushNotificationsAsync
+} from "@screens/AppNavigator/components/NotificationPermission";
 import {fetchVendors} from "@store/vendors.reducer";
 import {readCartFromStorage} from "@store/cart.reducer";
 import {fetchAddressBook, fetchAddressLabels} from "@store/AddressBook.reducer";
@@ -56,30 +57,30 @@ export interface AppParamList {
 Notifications.setNotificationHandler({
     handleNotification: async () => ({
         shouldShowAlert: true,
-        shouldPlaySound: false,
-        shouldSetBadge: false,
+        shouldPlaySound: true,
+        shouldSetBadge: true,
 
     }),
 });
 
-if (Device.osName === 'Android') {
-    void Notifications.setNotificationChannelAsync('default', {
-        name: 'default',
-        showBadge: true,
-        enableLights: true,
-        enableVibrate: true,
-        importance: Notifications.AndroidImportance.MAX,
-        vibrationPattern: [0, 250, 250, 250],
-        lightColor: '#FF231F7C',
-    });
-}
+
+// if (Device.osName === 'Android') {
+//     void Notifications.setNotificationChannelAsync('default', {
+//         name: 'default',
+//         showBadge: true,
+//         enableLights: true,
+//         enableVibrate: true,
+//         sound: 'default',
+//         importance: Notifications.AndroidImportance.MAX,
+//         vibrationPattern: [0, 250, 250, 250],
+//         lightColor: '#FF231F7C',
+//     });
+// }
 
 
 export function AppNavigator(): JSX.Element {
     const {profile, hasFetchedProfile} = useSelector((state: RootState) => state.profile)
     const isAndroid  = Device.osName === 'Android'
-    const notificationListener = useRef<any>();
-    const responseListener = useRef<any>();
     const dispatch = useAppDispatch()
 
     useEffect(() => {
@@ -93,8 +94,11 @@ export function AppNavigator(): JSX.Element {
 
 
     const requestLocation = async () => {
-        await Location.requestBackgroundPermissionsAsync();
+        const {status} = await Location.requestForegroundPermissionsAsync();
 
+        if (status !== 'granted' ) {
+            return
+        }
         const {coords: {longitude, latitude}} = await Location.getCurrentPositionAsync({
             accuracy: 6
         });
@@ -103,11 +107,13 @@ export function AppNavigator(): JSX.Element {
             coordinates: [latitude, longitude]
         }
         try {
+
             await _api.requestData<Partial<UpdateUserDto>>({
                 method: 'PUT',
                 url: 'user/update',
                 data: {location}
             })
+
         } catch (error: any) {
             console.error(error)
         }
@@ -115,28 +121,24 @@ export function AppNavigator(): JSX.Element {
 
     useEffect(() => {
         void requestLocation()
+
+        if (hasFetchedProfile && profile.expoNotificationToken === undefined) {
+            void requestPermission()
+        }
     }, [])
 
-    useEffect(() => {
-        notificationListener.current = Notifications.addNotificationReceivedListener(_ => {
-        });
 
-        responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-            console.log(response);
-        });
 
-        return () => {
-            Notifications.removeNotificationSubscription(notificationListener.current);
-            Notifications.removeNotificationSubscription(responseListener.current);
-        };
-    }, [])
 
-    if (hasFetchedProfile && profile.location?.coordinates[0] === 0) {
-        return <LocationPermission />
-    }
-
-    if (hasFetchedProfile && profile.expoNotificationToken === undefined) {
-        return <NotificationPermission/>
+    const requestPermission = async () => {
+        const token = await registerForPushNotificationsAsync(requestPermission)
+        const payload = {expoNotificationToken: token} as any
+        await _api.requestData<Partial<UpdateUserDto>>({
+            method: 'PUT',
+            url: 'user/update',
+            data: payload
+        })
+        dispatch(fetchProfile())
     }
 
     return (

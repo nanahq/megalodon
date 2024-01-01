@@ -12,8 +12,6 @@ import {ListingMenuI, OrderStatus} from "@nanahq/sticky";
 import {GenericButton} from "@components/commons/buttons/GenericButton";
 import {NumericFormat as NumberFormat} from "react-number-format";
 import {ModalScreenName} from "@screens/AppNavigator/ScreenName.enum";
-import { LoaderComponentScreen} from "@components/commons/LoaderComponent";
-import {_api} from "@api/_request";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export interface TransformedOrderItem {
