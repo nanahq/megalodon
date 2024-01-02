@@ -58,13 +58,15 @@ export function AddressBookModal(props: AddressBookModalProps): JSX.Element {
     const {addressBook} = useAppSelector(state => state.addressBook)
     const { dismiss } = useBottomSheetModal();
     const getSnapPoints = (): string[] => {
-        if (Device.osName === "iOS") {
-            return ["50%"]; // ios measures space without keyboard
-        } else if (Device.osName === "Android") {
-            return ["50%"]; // android measure space by including keyboard
+        if (props.addressBook.length < 2) {
+            return ["20%"]
+        } else if (props.addressBook.length < 6) {
+            const size = props.addressBook.length * 15
+            return [`${size}%`]
         }
-        return [];
+        return ["50%"]
     }
+
 
     const closeModal = useCallback(() => {
             dismiss(props.promptModalName);

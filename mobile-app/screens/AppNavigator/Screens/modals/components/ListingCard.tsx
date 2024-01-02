@@ -1,6 +1,6 @@
 import React, {memo, useMemo} from "react";
 import {ListingMenuI} from "@nanahq/sticky";
-import {Image, Pressable, Text, View} from "react-native";
+import { Pressable, Text, View} from "react-native";
 import {tailwind} from "@tailwind";
 import * as Device from "expo-device";
 import {useAppSelector} from "@store/index";
@@ -27,7 +27,7 @@ const _ListingCard: React.FC<{listing: ListingMenuI}>  = (props)=> {
             </View>
             <View style={tailwind("p-2")}>
                 <View style={tailwind('flex flex-row items-center justify-between w-full')}>
-                    <Text style={tailwind("flex text-lg text-black")}>{props.listing.name}</Text>
+                    <Text style={tailwind("flex text-lg text-black w-2/3")} numberOfLines={1} ellipsizeMode="tail">{props.listing.name}</Text>
                     <Text style={tailwind("flex text-lg font-medium text-gray-700")}>{vendor?.businessName}</Text>
                 </View>
                 <View>

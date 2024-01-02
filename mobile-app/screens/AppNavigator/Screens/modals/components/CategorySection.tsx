@@ -82,7 +82,7 @@ const ScheduledMenuCard: React.FC<{menu: ScheduledListingI, onPress: () => void}
              <View>
                  <FastImage source={{uri: props.menu.listing.photo, priority: FastImage.priority.high }} style={[tailwind('rounded'), {aspectRatio: 10/8, width: 160}]}  resizeMode="cover"   />
                 <View style={tailwind('mt-1')}>
-                    <Text style={tailwind('text-lg')}>{props.menu.listing.name}</Text>
+                    <Text style={tailwind('text-lg')} numberOfLines={1} ellipsizeMode="tail">{props.menu.listing.name}</Text>
                     <Text style={tailwind('text-sm')}>{props.menu.remainingQuantity} servings left</Text>
                     <Text style={tailwind('text-black')}>₦{props.menu.listing.price}</Text>
                 </View>

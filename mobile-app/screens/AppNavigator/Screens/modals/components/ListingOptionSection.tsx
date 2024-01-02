@@ -7,36 +7,48 @@ import { NumericFormat as NumberFormat } from "react-number-format";
 
 const _ListingOptionSection: React.FC<{
     option: ListingOptionGroupI,
-    onSelectedOptionsChange: (selectedOptions: {name: string, price: string}[]) => void;
+    onSelectedOptionsChange: (selectedOptions: {name: string, price: string, isSelected: boolean }[]) => void;
 }> = ({ option, onSelectedOptionsChange }) => {
-    const [selectedOptions, setSelectedOptions] = useState<{ [name: string]: boolean }>(
-        Object.fromEntries(option.options.map((op) => [op.name, false]))
+    const [selectedOptions, setSelectedOptions] = useState<any>(
+        option.options.map((op) => ({ ...op, isSelected: false }))
     );
 
-    const isRequired = Boolean(option.min);
-    const onValueChange = (name: string, value: boolean,) => {
-        setSelectedOptions((prevSelectedOptions) => ({
-            ...prevSelectedOptions,
-            [name]: value,
-        }));
+    const isRequired = Boolean(option.min > 0);
+    const isSingleSelection = isRequired && option.min === 1;
 
+    const onValueChange = (name: string, value: boolean) => {
+        setSelectedOptions((prevSelectedOptions: any) => {
+            let updatedOptions: ListingOption[] = [];
+
+            if (isSingleSelection && value) {
+                // If it's a required single selection, unselect all other options in the section
+                updatedOptions = prevSelectedOptions.map((op: any) => ({
+                    ...op,
+                    isSelected: op.name === name && value,
+                }));
+            } else {
+                // Otherwise, toggle the selected option
+                updatedOptions = prevSelectedOptions.map((op: any) =>
+                    op.name === name ? { ...op, isSelected: value } : op
+                );
+            }
+
+            return updatedOptions;
+        });
     };
 
     useEffect(() => {
-        const selectedOptionsList = Object.keys(selectedOptions)
-            .filter((name) => selectedOptions[name])
-            .map((name) => ({ name, price: option.options.find((op) => op.name === name)!.price }));
-
-        onSelectedOptionsChange(selectedOptionsList);
+        onSelectedOptionsChange(selectedOptions);
     }, [selectedOptions]);
 
     const SelectedText = () => {
-        if (option.max <= 1 && option.min > 0) {
-            return 'Select only 1 option'
-        } else if (option.min < 1 && option.max > 0) {
-            return `Select up to ${option.max} option(s)`
+        if (isSingleSelection) {
+            return 'Select only 1 option';
+        } else if (isRequired) {
+            return `Select up to ${option.max} option(s)`;
         }
-    }
+        return '';
+    };
 
     return (
         <View style={tailwind("bg-white py-4 mt-3")}>
@@ -55,10 +67,11 @@ const _ListingOptionSection: React.FC<{
                 <View>
                     {option.options.map((op, index) => (
                         <CheckBoxes
-                            isChecked={selectedOptions[op.name]}
+                            isRequired={isSingleSelection}
                             key={index}
                             option={op}
-                            onValueChange={(value) => onValueChange(op.name, value,)}
+                            isChecked={selectedOptions.some((selectedOp: any) => selectedOp.name === op.name && selectedOp.isSelected)}
+                            onValueChange={(value) => onValueChange(op.name, value)}
                         />
                     ))}
                 </View>
@@ -67,11 +80,15 @@ const _ListingOptionSection: React.FC<{
     );
 };
 
+export const ListingOptionSection = memo(_ListingOptionSection);
+
+
 const CheckBoxes: React.FC<{
     isChecked: boolean;
     onValueChange: (value: boolean) => void;
     option: ListingOption;
-}> = ({ option, onValueChange, isChecked }) => {
+    isRequired: boolean
+}> = ({ option, onValueChange, isChecked, isRequired }) => {
     return (
         <View style={tailwind("flex flex-row items-center justify-between py-5")}>
             <View style={tailwind("flex flex-col")}>
@@ -88,9 +105,8 @@ const CheckBoxes: React.FC<{
                     />
                 ):  <Text style={tailwind("text-sm text-brand-black-500")}>Free</Text>}
             </View>
-            <Checkbox style={{margin: 8}} color={isChecked ? getColor('brand-black-500') : undefined} value={isChecked} onValueChange={onValueChange} />
+            <Checkbox style={[{margin: 8}, tailwind({'rounded-full': isRequired})]} color={isChecked ? getColor('brand-black-500') : undefined} value={isChecked} onValueChange={onValueChange} />
         </View>
     );
 };
 
-export const ListingOptionSection = memo(_ListingOptionSection);

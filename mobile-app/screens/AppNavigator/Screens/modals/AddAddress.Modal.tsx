@@ -15,8 +15,43 @@ import {addAddressBook} from "@store/AddressBook.reducer";
 import {NavigationProp, useNavigation} from "@react-navigation/native";
 import {ProfileParamsList} from "@screens/AppNavigator/Screens/profile/ProfileNavigator";
 import {HomeScreenName} from "@screens/AppNavigator/Screens/home/HomeScreenNames.enum";
+import {_api} from "@api/_request";
+import {mapboxLocationMapper} from "../../../../../utils/mapboxLocationMappper";
 
 type AddAddressModalProps = StackScreenProps<AppParamList, ModalScreenName.MODAL_ADD_ADDRESS_SCREEN>
+
+
+interface MapboxFeature {
+    id: string;
+    type: string;
+    place_type: string[];
+    relevance: number;
+    properties: {
+        mapbox_id: string;
+    };
+    text: string;
+    place_name: string;
+    bbox?: number[];
+    center: number[];
+    geometry?: {
+        type: string;
+        coordinates: number[];
+    };
+    context?: {
+        id: string;
+        mapbox_id: string;
+        wikidata?: string;
+        short_code?: string;
+        text: string;
+    }[];
+}
+
+interface MapboxResponse {
+    type: string;
+    query: number[];
+    features: MapboxFeature[];
+    attribution: string;
+}
 
 interface NewAddress  {
     labelName: string
@@ -134,28 +169,42 @@ export const AddAddressModal: React.FC<AddAddressModalProps> = ({navigation, rou
 
         handleUpdateForm('coordinates', [latitude, longitude])
 
+
         showTost(toast, 'Precise location added', 'success')
 
         setGettingLocation(false)
 
+
+    }
+
+    useEffect(() => {
+        void fetchDeliveryMeta()
+    }, [newAddress.coordinates])
+
+    const fetchDeliveryMeta = async () => {
+
+        const MAPBOX_TOKEN = 'pk.eyJ1Ijoic3VyYWphdXdhbCIsImEiOiJjbGxiNHhpNW8wMHBpM2lxb215NnZmN3ZuIn0.a6zWnzIF0KcVZ2AUiDNBDA'
+
+        const coords = mapboxLocationMapper(newAddress.coordinates, true)
+
+        const url = `geocoding/v5/mapbox.places/${coords}.json?access_token=${MAPBOX_TOKEN}`
+
+        const {data} = await  _api.requestData<null, MapboxResponse>({
+                method: 'GET',
+            baseUrl: 'https://api.mapbox.com',
+            url,
+        })
+
+        const address = extractAddress(data)
+
+
+        if (address !== undefined) {
+            handleUpdateForm('address', address)
+        }
     }
     return (
         <View style={tailwind('flex-1 bg-white px-4 pt-4 relative')}>
             <View>
-               <View style={tailwind('mb-6')}>
-                   <TextInputWithLabel
-                       label="Address"
-                       containerStyle={tailwind('mt-2.5 overflow-hidden')}
-                       textAlign='left'
-                       onChangeText={(value) => handleUpdateForm('address', value) }
-                       value={`${newAddress.address}`}
-                       placeholder="Ummi Plaza Zoo road"
-                       placeHolderStyle="#717171"
-                   />
-                   {errors.address !== false && (
-                       <Text style={tailwind('text-red-500 mt-1')}>{errors.address}</Text>
-                   )}
-               </View>
                 <View style={tailwind('mb-6')}>
                     <TextInputWithLabel
                         label="Name"
@@ -178,7 +227,7 @@ export const AddAddressModal: React.FC<AddAddressModalProps> = ({navigation, rou
                     <TouchableOpacity  style={tailwind('py-2',)} disabled={gettingLocation} onPress={requestCurrentLocation}>
                         {gettingLocation ? (
                             <ActivityIndicator size="small" color={getColor('primary-500')} />
-                            ) : (
+                        ) : (
                             <Text style={tailwind('font-bold text-lg underline', {'text-brand-gray-700': gettingLocation})}>{newAddress.coordinates[0] === 0 ? 'Use current Location' : 'We have this location'}</Text>
                         )}
                     </TouchableOpacity>
@@ -186,6 +235,21 @@ export const AddAddressModal: React.FC<AddAddressModalProps> = ({navigation, rou
                         <Text style={tailwind('text-red-500 mt-1')}>{errors.coordinates}</Text>
                     )}
                 </View>
+               <View style={tailwind('mb-6')}>
+                   <TextInputWithLabel
+                       editable={false}
+                       label="Address"
+                       containerStyle={tailwind('mt-2.5 overflow-hidden')}
+                       textAlign='left'
+                       onChangeText={(value) => handleUpdateForm('address', value) }
+                       value={`${newAddress.address}`}
+                       placeholder="Ummi Plaza Zoo road"
+                       placeHolderStyle="#717171"
+                   />
+                   {errors.address !== false && (
+                       <Text style={tailwind('text-red-500 mt-1')}>{errors.address}</Text>
+                   )}
+               </View>
                 {addressLabels.length > 0 && (
                     <View style={tailwind('flex flex-col my-5')}>
                         <Text style={tailwind('font-medium text-sm text-brand-black-500 mb-5')}>
@@ -215,4 +279,18 @@ export const AddAddressModal: React.FC<AddAddressModalProps> = ({navigation, rou
             </View>
         </View>
     )
+}
+
+
+function extractAddress(mapboxResponse: MapboxResponse): string | undefined {
+    if (mapboxResponse.features && mapboxResponse.features.length > 0) {
+        const primaryFeature = mapboxResponse.features[0];
+        if (primaryFeature.place_name) {
+            // Remove state and country from the address
+            const addressParts = primaryFeature.place_name.split(',').slice(0, -2).slice(1).join(',').trim();
+            return addressParts;
+        }
+    }
+
+    return undefined;
 }

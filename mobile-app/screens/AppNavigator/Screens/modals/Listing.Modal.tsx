@@ -72,19 +72,42 @@ export const ListingModal: React.FC<ListingModalScreenProps>  = ({navigation, ro
         }
     };
 
-    const onOptionValueChange = (_selectedOptions: ListingOption[]) => {
-        setSelectedOptions(_selectedOptions);
+    const onOptionValueChange = (_selectedOptions: {name: string, price: string, isSelected: boolean }[]) => {
+        // Assuming each option group has a unique identifier like 'groupId'
+        const mergedOptions = _selectedOptions.reduce((acc, option) => {
+            if (option.isSelected) {
+                const existingOptionIndex = acc.findIndex((existingOption) => existingOption.name === option.name);
+
+                if (existingOptionIndex !== -1) {
+                    // Replace the existing option in the same group
+                    acc[existingOptionIndex] = option;
+                } else {
+                    // Add the new option to the array
+                    acc.push(option);
+                }
+            } else {
+                // Option is unselected, remove it from the array
+                acc = acc.filter((existingOption) => existingOption.name !== option.name);
+            }
+
+            return acc;
+        }, selectedOptions)
+        .map(s =>  ({name: s.name, price: s.price}))
+
+        setSelectedOptions(mergedOptions);
         setCart((prevCart) => ({
             ...prevCart,
-            options: _selectedOptions,
-            totalValue: calculateTotalValue(prevCart.quantity, +route.params.listing.price, _selectedOptions),
+            options: mergedOptions,
+            totalValue: calculateTotalValue(prevCart.quantity, +route.params.listing.price, mergedOptions),
         }));
     };
+
+
 
     useEffect(() => {
         async function fetchData () {
             try {
-                const {data: _listing} = await _api.requestData({
+                const {data: _listing} = await _api.requestData<null, ListingMenuI>({
                     method: 'GET',
                     url: `listing/menu/${route.params.listing._id}`
                 })
@@ -121,11 +144,9 @@ export const ListingModal: React.FC<ListingModalScreenProps>  = ({navigation, ro
             const requiredOptions: ListingOptionGroupI[] = []
 
             for (const optionGroup of listing.optionGroups) {
-                if (optionGroup.min) {
+                if (optionGroup.min > 0) {
                     requiredOptions.push(optionGroup)
                 }
-                setRequiredOption(Boolean(optionGroup.min))
-
             }
 
             const options = requiredOptions.flatMap((group) => {
@@ -136,6 +157,7 @@ export const ListingModal: React.FC<ListingModalScreenProps>  = ({navigation, ro
                 selectedOptions.some((option) => option.name === name)
             );
 
+            setRequiredOption(requiredOptions.length > 0)
             setRequiredOptions(allRequiredOptionsSelected)
 
         }

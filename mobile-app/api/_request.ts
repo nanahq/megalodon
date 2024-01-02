@@ -83,7 +83,7 @@ async function request<T> (method: Method, url: string): Promise<{data: any, coo
         .catch(err => Promise.reject(err));
 }
 
-async function requestData<T> (params: baseParamProps<T>): Promise<{data: any, cookies: string[]}> {
+async function requestData<T, K> (params: baseParamProps<T>): Promise<{data: K, cookies: string[]}> {
     return await base<T>({...params})
         .then(res => Promise.resolve<{data: any, cookies: string[]}>(res))
         .catch(err => Promise.reject(err));
