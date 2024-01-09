@@ -87,18 +87,18 @@ return
     useEffect(() => {
         async function fetchData () {
             try {
-                const fetchReviews = _api.requestData({
+                const fetchReviews = _api.requestData<null, VendorReviewOverview >({
                     method: 'GET',
                     url: `review/stats/vendor-reviews/${route.params?.vendor?._id}`
                 })
 
-                const fetchCategories = _api.requestData({
+                const fetchCategories = _api.requestData<null, ListingCategoryI[]>({
                     method: 'GET',
                     url: `listing/categories/${route.params?.vendor?._id}`,
 
                 })
 
-                const fetchScheduled = _api.requestData({
+                const fetchScheduled = _api.requestData<null, ScheduledListingI[]>({
                     method: 'GET',
                     url: `listing/scheduled/${route.params?.vendor?._id}`,
 
@@ -254,14 +254,16 @@ return
                                 {scheduled.length > 0 && (
                                     <ScheduledMenuSection onPress={onPress} menu={scheduled} />
                                 )}
-                                <FlashList
-                                    contentContainerStyle={tailwind('py-4 pb-16')}
-                                    data={filteredCategories}
-                                    renderItem={renderItem as any}
-                                    keyExtractor={(item) => item._id}
-                                    estimatedItemSize={Number(filteredCategories?.length ?? 1) * 4}
-                                    showsVerticalScrollIndicator={false}
-                                />
+                                <View style={tailwind('h-full')}>
+                                    <FlashList
+                                        contentContainerStyle={tailwind('py-4 pb-16')}
+                                        data={filteredCategories}
+                                        renderItem={renderItem as any}
+                                        keyExtractor={(item) => item._id}
+                                        estimatedItemSize={Number(filteredCategories?.length ?? 1) * 4}
+                                        showsVerticalScrollIndicator={false}
+                                    />
+                                </View>
                             </View>
                         )}
                     </View>

@@ -3,7 +3,7 @@ import {ListingMenuI, ListingOption, ListingOptionGroupI} from "@nanahq/sticky";
 import {useToast} from "react-native-toast-notifications";
 import {_api} from "@api/_request";
 import {showTost} from "@components/commons/Toast";
-import { Image, ScrollView, Text, TouchableOpacity, View} from "react-native";
+import { ScrollView, Text, TouchableOpacity, View} from "react-native";
 import {StackScreenProps} from "@react-navigation/stack";
 import {tailwind} from "@tailwind";
 import {ModalCloseIcon} from "@screens/AppNavigator/Screens/modals/components/ModalCloseIcon";

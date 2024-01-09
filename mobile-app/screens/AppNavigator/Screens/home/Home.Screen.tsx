@@ -11,7 +11,6 @@ import {VendorCard} from "@screens/AppNavigator/Screens/modals/components/Vendor
 import {fetchSubscriptions} from "@store/vendors.reducer";
 import {ListingMenuCard} from "@screens/AppNavigator/Screens/modals/components/ListingCard";
 import {FlashList} from "@shopify/flash-list";
-import {fetchHomaPage} from "@store/listings.reducer";
 import {ExploreSections} from "@screens/AppNavigator/Screens/modals/components/ExploreSections";
 
 const {height} = Dimensions.get('screen')

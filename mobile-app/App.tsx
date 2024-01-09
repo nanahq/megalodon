@@ -15,10 +15,10 @@ import {BottomSheetModalProvider} from "@gorhom/bottom-sheet";
 import {SafeAreaProvider} from "react-native-safe-area-context";
 import 'expo-dev-client';
 import {WebSocketProvider} from "@contexts/SocketProvider";
-import {NetworkMapper, NetworkType} from "@api/network.mapper";
+import {NetworkMapper} from "@api/network.mapper";
 
 
-const WEBSOCKET_ENDPOINT = NetworkMapper['PRODUCTION']
+const WEBSOCKET_ENDPOINT = NetworkMapper.PRODUCTION
 export default function App() {
   const isLoaded = useCachedResource()
    const logger = useLogger()

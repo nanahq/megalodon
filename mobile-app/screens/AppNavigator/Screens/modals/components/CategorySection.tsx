@@ -4,7 +4,6 @@ import {tailwind} from "@tailwind";
 import React, {memo} from "react";
 import FastImage from "react-native-fast-image";
 import {formatRelativeDate} from "../../../../../../utils/DateFormatter";
-import {showTost} from "@components/commons/Toast";
 
 const _VendorCategorySection: React.FC<{category: ListingCategoryI, vendorOperationStatus: boolean, warningCallback: () => void, onPress: (listing:ListingMenuI) => void}> = (props) => {
 
@@ -24,7 +23,7 @@ const _VendorCategorySection: React.FC<{category: ListingCategoryI, vendorOperat
                 )}
             </View>
             <View style={tailwind('flex flex-col')}>
-                {props.category.listingsMenu.filter(menu => menu.status === ListingApprovalStatus.APPROVED).map((listing, index) => (
+                {props.category.listingsMenu.filter(menu => menu.status === ListingApprovalStatus.APPROVED && menu.price !== undefined).map((listing, index) => (
                     <VendorMenuCard
                         disabled={props.category.type === 'PRE_ORDER'}
                         menu={listing} key={index}
