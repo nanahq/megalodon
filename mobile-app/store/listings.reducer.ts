@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppActions } from "@store/reducers.actions";
 import {_api} from "@api/_request";
-import {LocationCoordinates, UserHomePage} from "@nanahq/sticky";
+import {ListingCategoryI, LocationCoordinates, ScheduledListingI, UserHomePage} from "@nanahq/sticky";
 
 export interface ListingsState {
     hompage: UserHomePage | undefined
@@ -16,7 +16,7 @@ const initialState: ListingsState = {
 export const fetchAllScheduledListings = createAsyncThunk(
     AppActions.FETCHED_SCHEDULED_LISTING,
     async () => {
-        return await _api.requestData<undefined>({
+        return await _api.requestData<undefined, ScheduledListingI[]>({
             method: 'get',
             url: 'listing/scheduled'
         })
@@ -26,7 +26,7 @@ export const fetchAllScheduledListings = createAsyncThunk(
 export const fetchHomaPage = createAsyncThunk(
     AppActions.FETCH_HOMEPAGE,
     async (data: LocationCoordinates) => {
-        return await _api.requestData<LocationCoordinates>({
+        return await _api.requestData<LocationCoordinates, UserHomePage>({
             method: 'POST',
             url: 'listing/homepage',
             data
@@ -37,7 +37,7 @@ export const fetchHomaPage = createAsyncThunk(
 export const fetchAllCategories = createAsyncThunk(
     AppActions.FETCH_CATEGORY,
     async (data: LocationCoordinates) => {
-        return await _api.requestData<LocationCoordinates>({
+        return await _api.requestData<LocationCoordinates, ListingCategoryI[]>({
             method: 'POST',
             url: 'listing/categories',
             data
@@ -69,6 +69,7 @@ export const listings = createSlice({
             .addCase(
                 fetchHomaPage.rejected,
                 (state, payload) => {
+                    console.log(payload)
                     state.hasFetchedListings = false
                 }
             )

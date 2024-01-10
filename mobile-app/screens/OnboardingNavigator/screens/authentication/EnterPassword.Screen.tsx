@@ -20,6 +20,8 @@ export function EnterPasswordScreen ({navigation, route}: EnterPasswordScreenPro
 
     const [password, setPassword] = useState<string>('')
     const [email, setEmail] = useState<string>('')
+    const [firstName, setFirstName] = useState<string>('')
+    const [lastName, setLastName] = useState<string>('')
     const [loading, _setIsLoading] = useState<boolean>(false)
     const toast = useToast()
 
@@ -44,7 +46,9 @@ export function EnterPasswordScreen ({navigation, route}: EnterPasswordScreenPro
                     data: {
                         phone: route.params.phoneNumber,
                         password,
-                        email: email.toLowerCase()
+                        email: email.toLowerCase(),
+                        firstName: firstName.toLowerCase(),
+                        lastName: lastName.toLowerCase()
                     }
                 })
                 showTost(toast, 'Account created', 'success')
@@ -84,7 +88,19 @@ export function EnterPasswordScreen ({navigation, route}: EnterPasswordScreenPro
                    </Text>
                 <View style={tailwind('flex flex-col')}>
                     {!route.params.hasAccount && (
-                        <TextInputWithLabel placeholder="musa@example.com" label="Email" containerStyle={tailwind('my-3')} labelTestId="EnterPasswordScreen.TextInput.Label" onChangeText={setEmail} value={email} />
+                        <>
+                            <TextInputWithLabel placeholder="musa@example.com" label="Email" containerStyle={tailwind('my-3')} labelTestId="EnterPasswordScreen.TextInput.Label" onChangeText={setEmail} value={email} />
+                            <View style={tailwind('my-3')}>
+                                <Text
+                                    style={tailwind('font-normal text-xs text-brand-gray-700')}>
+                                    How will our delivery partners call you?
+                                </Text>
+                                <View style={tailwind('flex flex-row items-center w-full')}>
+                                    <TextInputWithLabel placeholder="Habiba" label="First Name" containerStyle={tailwind(' w-1/2 pr-2')} labelTestId="EnterPasswordScreen.TextInput.Label" onChangeText={setFirstName} value={firstName} />
+                                    <TextInputWithLabel placeholder="Musa" label="Last Name" containerStyle={tailwind('w-1/2 pl-2')} labelTestId="EnterPasswordScreen.TextInput.Label" onChangeText={setLastName} value={lastName} />
+                                </View>
+                            </View>
+                        </>
                     )}
                     <TextInputWithLabel secureTextEntry containerStyle={tailwind('my-3 mb-10')}  label="Password" moreInfo="Password should be at least 8 characters" labelTestId="EnterPasswordScreen.TextInput.Label" onChangeText={setPassword} value={password} />
                 </View>
@@ -98,7 +114,7 @@ export function EnterPasswordScreen ({navigation, route}: EnterPasswordScreenPro
                     disabled={password === "" || password.length <= 7 || loading}
                 />
             </View>
-            <View style={tailwind('pt-3.5 px-5')}>
+            <View style={tailwind( 'px-5')}>
                 <BackButton onPress={() => navigation.goBack()}   testID="EnterPasswordScreen.BackButton" />
             </View>
         </View>
