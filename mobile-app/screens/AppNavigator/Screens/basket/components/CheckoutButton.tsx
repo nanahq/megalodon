@@ -12,10 +12,10 @@ const _CheckoutButton: React.FC<{onButtonClick: (name: VendorOperationType) => v
            <View style={tailwind('bg-brand-ash p-2 rounded-40')}>
                <View style={tailwind('flex flex-row items-center justify-between w-full')}>
                    <Pressable  disabled={vendorType === 'PRE_ORDER'} onPress={() => onButtonClick("ON_DEMAND")} style={tailwind(' rounded-40 py-2 px-12', {'bg-primary-500 text-white': view === 'ON_DEMAND'})}>
-                       <Text style={tailwind('text-lg', {'text-white': view === 'ON_DEMAND'})}>Deliver Now</Text>
+                       <Text style={tailwind('text-base', {'text-white': view === 'ON_DEMAND'})}>Deliver Now</Text>
                    </Pressable>
                    <Pressable disabled={vendorType === 'ON_DEMAND'} onPress={() => onButtonClick("PRE_ORDER")} style={tailwind('text-lg rounded-40 py-2 px-12', {'bg-primary-500 text-white': view === 'PRE_ORDER'})}>
-                       <Text style={tailwind('text-lg', {'text-white': view === 'PRE_ORDER'})}>Pre Order</Text>
+                       <Text style={tailwind('text-base', {'text-white': view === 'PRE_ORDER'})}>Pre Order</Text>
                    </Pressable>
                </View>
            </View>

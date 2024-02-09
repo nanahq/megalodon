@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import { tailwind } from "@tailwind";
 import { GenericButton } from "@components/commons/buttons/GenericButton";
@@ -70,7 +70,7 @@ export function VerifyPhoneNumberScreen({
     return (
         <View
             testID="OnboardingScreen.VerifyPhoneNumberScreen"
-            style={[tailwind("pt-12 flex-1"), { overflow: "hidden" }]}
+            style={tailwind("pt-12 flex-1 overflow-hidden")}
         >
             <View style={tailwind("pt-5 px-5")}>
                 <View>

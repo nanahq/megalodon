@@ -1,5 +1,5 @@
 import React from "react";
-import {Image, Pressable, View, Text} from "react-native";
+import { Pressable, View, Text} from "react-native";
 import OneStar from '@assets/app/emojis/1.svg'
 import TwoStar from '@assets/app/emojis/2.svg'
 import ThreeStar from '@assets/app/emojis/3.svg'

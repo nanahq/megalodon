@@ -13,12 +13,13 @@ import {ToastProvider} from "react-native-toast-notifications";
 import {StoreProvider} from "@store/StoreProvider";
 import {BottomSheetModalProvider} from "@gorhom/bottom-sheet";
 import {SafeAreaProvider} from "react-native-safe-area-context";
-import 'expo-dev-client';
 import {WebSocketProvider} from "@contexts/SocketProvider";
 import {NetworkMapper} from "@api/network.mapper";
 
+import 'expo-dev-client';
 
 const WEBSOCKET_ENDPOINT = NetworkMapper.PRODUCTION
+
 export default function App() {
   const isLoaded = useCachedResource()
    const logger = useLogger()
@@ -31,6 +32,9 @@ export default function App() {
         }, 2000)
         return null;
     }
+
+    
+
     const customToast = {
         app_toast_success: (toast: ToastProps) => <AppToast  type="success" toast={toast} />,
         app_toast_error: (toast: ToastProps) => <AppToast type="error" toast={toast} />,

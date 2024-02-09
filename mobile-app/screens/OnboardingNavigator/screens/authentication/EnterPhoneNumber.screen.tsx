@@ -42,9 +42,8 @@ export function EnterPhoneNumberScreen ({navigation}: EnterPhoneNumberScreenProp
     return (
         <View
             testID="OnboardingScreen.EnterPhoneNumberScreen"
-            style={[tailwind('pt-12 bg-white flex-1'), {overflow: 'hidden'}]}
+            style={tailwind('pt-12 bg-white flex-1 overflow-hidden')}
         >
-
         <View style={tailwind('pt-10 px-5 bg-white')}>
             <Text
                 testID='OnboardingScreen.EnterPhoneNumberScreen.EnterPhoneText'

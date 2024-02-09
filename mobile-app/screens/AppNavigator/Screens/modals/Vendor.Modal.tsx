@@ -25,11 +25,13 @@ import {IconButton} from "@components/commons/buttons/IconButton";
 import {fetchSubscriptions} from "@store/vendors.reducer";
 import FastImage from "react-native-fast-image";
 import moment from 'moment';
+import {NumericFormat as NumberFormat} from "react-number-format";
 import {isRestaurantOpen} from "../../../../../utils/DateFormatter";
 
 type VendorModalScreenProps = StackScreenProps<AppParamList, ModalScreenName.MODAL_VENDOR_SCREEN>
 
  export const VendorModal: React.FC<VendorModalScreenProps> = ({navigation, route}) => {
+     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [_, setReviews] = useState<VendorReviewOverview | undefined>()
     const [loading, setLoading] = useState<boolean>(true)
     const [categories, setCategories] = useState<ListingCategoryI[]>([])
@@ -135,11 +137,11 @@ return
         }, [])
 
      const restaurantOperationStatus = useMemo(() => {
-         return isRestaurantOpen(route.params.vendor.settings.startTime ?? '', route.params.vendor.settings.cutoffTime ?? '')
+         return isRestaurantOpen(route.params.vendor.settings?.startTime ?? '', route.params.vendor.settings?.cutoffTime ?? '')
      }, [route.params.vendor])
 
      const warnClosed = () => {
-         showTost(toast, `${route.params.vendor.businessName} is closed now. will open tomorrow at ${moment(route.params.vendor.settings.startTime).format('HH:mm')}`, 'warning')
+         showTost(toast, `${route.params.vendor.businessName} is closed now. will open tomorrow at ${moment(route.params.vendor.settings?.startTime).format('HH:mm')}`, 'warning')
      }
 
      const onPress = (listing: ListingMenuI) => {
@@ -196,11 +198,27 @@ return
                 <View style={tailwind('flex flex-col w-full')}>
                     <View style={tailwind('relative')}>
                         <FastImage  resizeMode={FastImage.resizeMode.cover} source={{ uri: route.params?.vendor?.businessImage, priority:FastImage.priority.high }} style={[tailwind("w-full"), { height: 170 }]} />
-                        {route.params.vendor.settings.deliveryType !== 'PRE_ORDER' && (
-                            <View style={tailwind(' absolute bottom-2  left-2 rounded-xl py-1.5 ', {'bg-primary-500 px-4': restaurantOperationStatus, 'bg-gray-100 px-2': !restaurantOperationStatus})}>
-                                <Text style={tailwind('text-center text-white', {'text-black': !restaurantOperationStatus } )}>{restaurantOperationStatus ? 'Open' : `Closed. opens ${moment(route.params.vendor.settings.startTime).format('hh:mm')} tomorrow`}</Text>
+                        <View style={tailwind('absolute bottom-2  left-2 flex flex-row items-center')}>
+                            {route.params.vendor.settings.deliveryType !== 'PRE_ORDER' && (
+                                <View style={tailwind('rounded-xl py-1.5 ', {'bg-primary-500 px-4': restaurantOperationStatus, 'bg-gray-100 px-2': !restaurantOperationStatus})}>
+                                    <Text style={tailwind('text-center text-white', {'text-black': !restaurantOperationStatus } )}>{restaurantOperationStatus ? 'Open' : `Closed. opens ${moment(route.params.vendor.settings.startTime).format('hh:mm')} tomorrow`}</Text>
+                                </View>
+                            )}
+                            <View style={tailwind('rounded-xl py-1.5 bg-gray-100 ml-2 px-4')}>
+                                <View style={tailwind('flex flex-row items-center')}>
+                                    <Text style={tailwind('text-black')}>Min order:</Text>
+                                    <NumberFormat
+                                        prefix="₦"
+                                        value={route.params.vendor.settings.minOrder}
+                                        thousandSeparator
+                                        displayType="text"
+                                        renderText={(value) => (
+                                            <Text style={tailwind("text-center text-primary-500")}>{value}</Text>
+                                        )}
+                                    />
+                                </View>
                             </View>
-                        )}
+                        </View>
                     </View>
                     <View style={tailwind('px-4 flex flex-col mt-6')}>
                         <View style={tailwind('flex flex-row items-center w-full justify-between')}>
@@ -243,12 +261,12 @@ return
                                     <View style={tailwind('flex flex-row mt-1  items-center')}>
                                         <IconComponent iconType="AntDesign" name="clockcircleo" style={tailwind('text-brand-gray-700')} />
                                         <Text  style={tailwind('text-brand-gray-700 text-sm ml-1')}>Opens</Text>
-                                        <Text style={tailwind('text-brand-gray-700 text-sm ml-2')}>{moment(route.params.vendor.settings.startTime).format('HH:mm')}</Text>
+                                        <Text style={tailwind('text-brand-gray-700 text-sm ml-2')}>{moment(route.params.vendor.settings?.startTime).format('HH:mm')}</Text>
                                     </View>
                                     <View style={tailwind('flex flex-row mt-1 items-center')}>
                                         <IconComponent iconType="AntDesign" name="clockcircleo" style={tailwind('text-brand-gray-700')} />
                                         <Text  style={tailwind('text-brand-gray-700 text-sm ml-1')}>Closes</Text>
-                                        <Text style={tailwind('text-brand-gray-700 text-sm ml-2')}>{moment(route.params.vendor.settings.cutoffTime).format('HH:mm')}</Text>
+                                        <Text style={tailwind('text-brand-gray-700 text-sm ml-2')}>{moment(route.params.vendor.settings?.cutoffTime).format('HH:mm')}</Text>
                                     </View>
                                 </View>
                                 {scheduled.length > 0 && (

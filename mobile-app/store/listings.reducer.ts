@@ -68,8 +68,7 @@ export const listings = createSlice({
             )
             .addCase(
                 fetchHomaPage.rejected,
-                (state, payload) => {
-                    console.log(payload)
+                (state) => {
                     state.hasFetchedListings = false
                 }
             )
