@@ -16,8 +16,8 @@ import {useWebSocket} from "@contexts/SocketProvider";
 import LocationTracker from '@assets/app/location-tracker.svg'
 import moment from "moment";
 import * as Notifications from "expo-notifications";
-import {mapboxLocationMapper} from "../../../../../../../utils/mapboxLocationMappper";
 import {useExpoPushNotification} from "@hooks/useExpoNotification";
+import {mapboxLocationMapper} from "../../../../../../../utils/mapboxLocationMappper";
 
 
 const MAPBOX_APIKEY = 'pk.eyJ1Ijoic3VyYWphdXdhbCIsImEiOiJjbGxiNHhpNW8wMHBpM2lxb215NnZmN3ZuIn0.a6zWnzIF0KcVZ2AUiDNBDA';
@@ -60,10 +60,6 @@ MapboxGL.setWellKnownTileServer('mapbox');
      }
     useEffect(() => {
         if (socketClient !== undefined && isConnected) {
-
-            socketClient?.on('connect', () => {
-                console.log('Websocket gateway connected');
-            });
             socketClient?.on(SOCKET_MESSAGE.DRIVER_LOCATION_UPDATED, (message: { deliveryId: string, location: LocationCoordinates, travelMeta?: TravelDistanceResult}) => {
                 setLoading(false);
                 if (message.deliveryId === deliveryInformation?._id) {
@@ -109,18 +105,10 @@ MapboxGL.setWellKnownTileServer('mapbox');
                                 order
                             }
                         }
-
                     }
-
                     switch (message.status) {
                         case OrderStatus.IN_ROUTE:
-                             Notifications.getPermissionsAsync()
-                                 .then(status => {
-                                     console.log(status)
-                                 })
-                                 .catch(error => {
-                                     console.log(error)
-                                 });
+                            void Notifications.getPermissionsAsync()
                             void schedulePushNotification(notificationPayload)
                             break;
                         default:
@@ -160,8 +148,9 @@ MapboxGL.setWellKnownTileServer('mapbox');
                 const hasCurrentCoord = !checkForNullishCoords(information?.currentLocation?.coordinates as any)
                 const current = hasCurrentCoord  ? information?.currentLocation : information?.driver?.location
                 setCurrentLocation(() => current);
+                // eslint-disable-next-line no-useless-catch
             } catch (error) {
-                console.error(error);
+                throw error
             } finally {
                 setLoading(false);
             }

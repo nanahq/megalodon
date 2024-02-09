@@ -26,7 +26,7 @@ export function WebSocketProvider(
     const  {isAuthenticated} = useAuthPersistence()
     useEffect(() => {
 
-        if(!isAuthenticated) {
+        if (!isAuthenticated) {
             return
         }
         let _socket: Socket;

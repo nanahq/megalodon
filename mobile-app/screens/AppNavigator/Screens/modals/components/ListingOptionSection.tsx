@@ -90,7 +90,7 @@ const CheckBoxes: React.FC<{
     isRequired: boolean
 }> = ({ option, onValueChange, isChecked, isRequired }) => {
     return (
-        <View style={tailwind("flex flex-row items-center justify-between py-5")}>
+        <View style={tailwind("flex flex-row items-center justify-between py-2 border-b-0.5 border-gray-200")}>
             <View style={tailwind("flex flex-col")}>
                 <Text style={tailwind(" text-lg text-brand-black-500")}>{option.name}</Text>
                 {+option.price ? (

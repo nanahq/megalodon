@@ -79,7 +79,7 @@ export function EnterPasswordScreen ({navigation, route}: EnterPasswordScreenPro
             style={[tailwind('pt-12 flex-1'), {overflow: 'hidden'}]}
         >
 
-            <View style={tailwind('pt-5 px-5')}>
+            <View style={tailwind('pt-5 px-5  flex-grow')}>
                    <Text
                        testID='OnboardingScreen.EnterPasswordScreen.EnterPasswordText'
                        style={tailwind('font-bold text-2xl mb-5 text-brand-black-500')}
@@ -114,7 +114,8 @@ export function EnterPasswordScreen ({navigation, route}: EnterPasswordScreenPro
                     disabled={password === "" || password.length <= 7 || loading}
                 />
             </View>
-            <View style={tailwind( 'px-5')}>
+
+            <View style={tailwind( 'px-5 flex-1')}>
                 <BackButton onPress={() => navigation.goBack()}   testID="EnterPasswordScreen.BackButton" />
             </View>
         </View>

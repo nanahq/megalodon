@@ -58,8 +58,11 @@ export function AddressBookModal(props: AddressBookModalProps): JSX.Element {
     const {addressBook} = useAppSelector(state => state.addressBook)
     const { dismiss } = useBottomSheetModal();
     const getSnapPoints = (): string[] => {
+        if (props.addressBook.length < 1) {
+            return ["40%"]
+        }
         if (props.addressBook.length < 2) {
-            return ["20%"]
+            return ["30%"]
         } else if (props.addressBook.length < 6) {
             const size = props.addressBook.length * 15
             return [`${size}%`]

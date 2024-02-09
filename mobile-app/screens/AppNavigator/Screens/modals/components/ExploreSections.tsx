@@ -13,7 +13,7 @@ export const ExploreSections: React.FC<{vendors: VendorUserI[]}> = (props) => {
             <View style={tailwind('mb-2')}>
                 <Text style={tailwind('text-xl text-black')}>Explore</Text>
             </View>
-            <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} >
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} >
                 {props.vendors.map(vendor => (
                     <VendorItem vendor={vendor} key={vendor.businessImage} />
                 ))}

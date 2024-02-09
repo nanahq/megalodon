@@ -71,6 +71,7 @@ module.exports = {
         'brand-green': {
           500: '#4FD3BC'
         },
+        'nana-lime': '#4ADE80',
         success: {
           50: "#F2FBF4",
           100: "#E6F7E8",

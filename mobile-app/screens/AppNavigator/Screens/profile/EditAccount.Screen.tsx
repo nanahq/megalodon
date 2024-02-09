@@ -51,7 +51,7 @@ export const EditAccountScreen: React.FC<AccountScreenNavigationProps> = ({navig
 
         try {
             setLoading(true)
-             await _api.requestData<Partial<UpdateUserDto>>({
+             await _api.requestData<Partial<UpdateUserDto>, undefined>({
                 method: 'PUT',
                 url: 'user/update',
                 data: payload

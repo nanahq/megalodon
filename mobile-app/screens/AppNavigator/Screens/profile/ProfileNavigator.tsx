@@ -8,10 +8,9 @@ import { ProfileScreen } from "@screens/AppNavigator/Screens/profile/Profile.Scr
 import {tailwind} from "@tailwind";
 import * as Device from "expo-device";
 import {AccountScreen} from "@screens/AppNavigator/Screens/profile/Account.Screen";
-import {ProfileStateI} from "@store/profile.reducer";
 import {EditAccountScreen} from "@screens/AppNavigator/Screens/profile/EditAccount.Screen";
 import {AddressBookScreen} from "@screens/AppNavigator/Screens/profile/AddressBook.Screen";
-import {useNavigation} from "@react-navigation/native";
+import {WalletScreen} from "@screens/AppNavigator/Screens/profile/Wallet.Screen";
 
 export interface ProfileParamsList {
     [ProfileScreenName.EDIT_ACCOUNT]: {
@@ -26,20 +25,19 @@ const Profile = createStackNavigator<ProfileParamsList>();
 
 export const ProfileNavigator: React.FC = () => {
     const isAndroid = Device.osName === 'Android'
-    const navigation = useNavigation()
     return (
         <Profile.Navigator
             initialRouteName={ProfileScreenName.PROFILE_HOME}
             screenOptions={{
+                headerStyleInterpolator: HeaderStyleInterpolators.forFade,
                 animationEnabled: true,
-                cardStyleInterpolator: isAndroid ?  CardStyleInterpolators.forScaleFromCenterAndroid : CardStyleInterpolators.forVerticalIOS
+                cardStyleInterpolator: isAndroid ?  CardStyleInterpolators.forScaleFromCenterAndroid : CardStyleInterpolators.forHorizontalIOS
             }}
         >
             <Profile.Screen
                 component={ProfileScreen}
                 name={ProfileScreenName.PROFILE_HOME}
                 options={{
-                    headerStyleInterpolator: HeaderStyleInterpolators.forUIKit,
                     headerShown: true,
                     headerTitleAlign: 'center',
                     headerTitleStyle: tailwind('text-xl'),
@@ -57,10 +55,21 @@ export const ProfileNavigator: React.FC = () => {
             />
 
             <Profile.Screen
+                component={WalletScreen}
+                name={ProfileScreenName.WALLET}
+                options={{
+                    headerShown: true,
+                    headerTitleAlign: 'center',
+                    headerTitleStyle: tailwind('text-xl'),
+                    headerTitle: 'Wallet',
+                    headerBackTitleVisible: false,
+                }}
+            />
+
+            <Profile.Screen
                 component={AddressBookScreen}
                 name={ProfileScreenName.ADDRESS_BOOK}
                 options={{
-                    headerStyleInterpolator: HeaderStyleInterpolators.forUIKit,
                     headerShown: true,
                     presentation: 'modal',
                     headerTitleAlign: 'center',

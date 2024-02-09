@@ -11,7 +11,7 @@ interface AppToastProps {
 export function AppToast (props: AppToastProps): JSX.Element {
     return  (
         <View style={tailwind('py-4 w-3/4 px-4 mt-16 rounded-lg flex items-center justify-center', {
-            'bg-success-600': props.type === 'success',
+            'bg-nana-lime': props.type === 'success',
             'bg-error-600': props.type === 'error',
             'bg-warning-600': props.type === 'warning',
         })}>

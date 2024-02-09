@@ -7,7 +7,7 @@ import {AddressBookI} from "@nanahq/sticky";
 const _DeliveryAddressBox: React.FC<{selectedAddress: AddressBookI | undefined,  onPress: () => void}> = (props) => {
     return (
         <View style={tailwind('mt-10')}>
-            <Text style={tailwind('text-black font-bold text-xl mb-2')}>Delivery Address</Text>
+            <Text style={tailwind('text-black font-bold text-lg mb-2')}>Delivery Address</Text>
             <Pressable onPress={props.onPress} style={tailwind('border-0.5 border-brand-ash py-4 px-2')}>
                 <View style={tailwind('flex flex-row items-center justify-between w-full')}>
                     <IconComponent iconType="Ionicons" name="location-sharp" style={tailwind('text-primary-500')} size={34} />

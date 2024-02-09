@@ -3,7 +3,7 @@ import React, {useCallback, useEffect, useRef, useState} from "react";
 import {ModalCloseIcon} from "@screens/AppNavigator/Screens/modals/components/ModalCloseIcon";
 import {NavigationProp, useNavigation} from "@react-navigation/native";
 import {BasketParamsList} from "@screens/AppNavigator/Screens/basket/BasketNavigator";
-import {getColor, tailwind} from "@tailwind";
+import { tailwind} from "@tailwind";
 import {BasketScreenName} from "@screens/AppNavigator/Screens/basket/BasketScreenName.enum";
 import {CheckoutButton} from "@screens/AppNavigator/Screens/basket/components/CheckoutButton";
 import {
@@ -20,8 +20,6 @@ import {DeliveryAddressBox} from "@screens/AppNavigator/Screens/basket/component
 import {AddressBookModal} from "@screens/AppNavigator/Screens/basket/components/address/AddressModal";
 import {ModalScreenName} from "@screens/AppNavigator/ScreenName.enum";
 import {AppParamList} from "@screens/AppNavigator/AppNav";
-import Checkbox from "expo-checkbox";
-import {TextInputWithLabel} from "@components/commons/inputs/TextInputWithLabel";
 import {ScheduleDeliveryModal} from "@screens/AppNavigator/Screens/basket/components/schedule/ScheduleModal";
 import {ScheduleDeliveryBox} from "@screens/AppNavigator/Screens/basket/components/schedule/ScheduleDeliveryBox";
 import {GenericButton} from "@components/commons/buttons/GenericButton";
@@ -30,17 +28,26 @@ import {showTost} from "@components/commons/Toast";
 import {_api} from "@api/_request";
 import {deleteCartFromStorage} from "@store/cart.reducer";
 import moment from "moment";
+import {OrderScreenName} from "@screens/AppNavigator/Screens/orders/OrderScreenName";
+import {
+    PaymentMethodBox,
+    PaymentMethodI
+} from "@screens/AppNavigator/Screens/basket/components/payment/PaymentMethodBox";
+import {LoaderComponent} from "@components/commons/LoaderComponent";
+import {PaymentMethodModal} from "@screens/AppNavigator/Screens/basket/components/payment/PaymentModal";
 import {parseSelectedScheduledDateTime} from "../../../../../utils/DateFormatter";
 
 export const ADDRESS_MODAL = 'ADDRESS_MODAL'
 export const SCHEDULE_MODAL = 'SCHEDULE_MODAL'
+
+export const PAYMENT_METHOD_MODAL = 'PAYMENT_METHOD_MODAL'
 export const Checkout: React.FC = () => {
 
     // App state
     const [view, setView] = useState<VendorOperationType>("ON_DEMAND")
     const [vendor, setVendor] = useState<VendorUserI | undefined>(undefined)
     const [selectedAddress, setSelectedAddress] = useState<any | undefined>(undefined)
-    const [isThirdParty, setIsThirdParty] = useState<boolean>(false)
+    const [isThirdParty] = useState<boolean>(false)
     const [deliveryTime, setDeliveryItem] = useState<{time: string, date: string} | undefined>(undefined)
     const [fetchingConstant, setFetchingConstants] = useState<boolean>(true)
     const [deliveryEta, setDeliveryEta] = useState<DeliveryFeeResult | undefined>(undefined)
@@ -52,6 +59,9 @@ export const Checkout: React.FC = () => {
         systemFee: 0
     })
 
+    const [paymentMethod, setPaymentMethod] = useState<PaymentMethodI | undefined>(undefined)
+    const [fetchingDeliveryFee, setFetchingDeliveryFee] = useState<boolean>(false)
+
     // App store
     const state = useAppSelector((state: RootState) => state.vendors)
     const cartState = useAppSelector((state: RootState) => state.cart)
@@ -61,12 +71,17 @@ export const Checkout: React.FC = () => {
     const navigation = useNavigation<NavigationProp<BasketParamsList>>()
     const modalNavigation = useNavigation<NavigationProp<AppParamList>>()
     const addressModalRef = useRef<any>(null)
+    const paymentModalRef = useRef<any>(null)
     const scheduleModalRef = useRef<any>(null)
     const toast = useToast()
     const openModal = useCallback(() => {
         addressModalRef.current.present()
     }, [])
 
+
+    const openPaymentModal = useCallback(() => {
+        paymentModalRef.current.present()
+    }, [])
     const openScheduleModal =  useCallback(() => {
         scheduleModalRef.current.present()
     }, [])
@@ -74,15 +89,16 @@ export const Checkout: React.FC = () => {
     useEffect(() => {
         async function fetchDeliveryFee () {
             if (vendor !== undefined) {
+                setFetchingDeliveryFee(true)
                 try {
-                    const response = (await _api.requestData<{userCoords: number[], vendorCoords: number[]}>({
+                    const response = (await _api.requestData<{userCoords: number[], vendorCoords: number[]}, DeliveryFeeResult>({
                         method: 'POST',
                         url: '/location/delivery-fee',
                         data: {
                             userCoords: selectedAddress?.location?.coordinates ?? [0, 0],
                             vendorCoords: vendor.location?.coordinates ?? [0, 0],
                         }
-                    })).data as DeliveryFeeResult
+                    })).data
 
                     setOrderBreakdown((prevState) => ({
                         ...prevState,
@@ -92,6 +108,9 @@ export const Checkout: React.FC = () => {
                     setDeliveryEta((prevState) => ({...prevState, ...response}))
                 } catch (error) {
                     showTost(toast, 'failed to fetch delivery fee', 'error')
+                } finally {
+                    setFetchingDeliveryFee(false)
+
                 }
             }
         }
@@ -103,10 +122,10 @@ export const Checkout: React.FC = () => {
     useEffect(() => {
         async function fetchConstants (): Promise<void> {
             try {
-                const response = (await _api.requestData<undefined>({
+                const response = (await _api.requestData<undefined, AppConstants>({
                     method: 'GET',
                     url: '/general/app-constants'
-                })).data as AppConstants
+                })).data
 
                     setOrderBreakdown((prevState) => ({...prevState, vat: response.cart.VAT_FEE, systemFee: response.cart.SERVICE_FEE}))
                     } catch (error) {
@@ -204,22 +223,23 @@ export const Checkout: React.FC = () => {
         }
        try {
             setPlacingOrder(true)
-           const response = (await _api.requestData<any>({
+           const response = (await _api.requestData<any, {data: {order: OrderI, paymentMeta: {authorization_url: string, reference: string}}}>({
                method:'POST',
                url: 'order/create',
                data: payload
-           })).data?.data as {order: OrderI, paymentMeta: {authorization_url: string, reference: string}}
+           })).data
 
             dispatch(deleteCartFromStorage())
 
            navigation.navigate(ModalScreenName.MODAL_PAYMENT_SCREEN, {
-               order: response.order,
-               meta: response.paymentMeta
+               order: response.data.order,
+               meta: response.data.paymentMeta
            })
+
            // Reset navigation stack to 'ORDERS' screen
            navigation.reset({
                index: 0,
-               routes: [{ name: BasketScreenName.BASKET }],
+               routes: [{ name: OrderScreenName.ORDERS }],
            });
        }  catch (error) {
            showTost(toast, 'Failed to place order. Contact support', 'error')
@@ -248,7 +268,11 @@ export const Checkout: React.FC = () => {
                 <View style={tailwind('mt-10')}>
                    <View style={tailwind('flex flex-row items-center w-full justify-between')}>
                        <Text>Delivery Food with be with you in</Text>
-                       <Text>{Number(deliveryEta.duration) + Number(vendor.settings.preparationTime)} Minutes</Text>
+                       {fetchingDeliveryFee ? (
+                           <LoaderComponent size="small" />
+                           ) : (
+                           <Text>{Number(deliveryEta.duration) + Number(vendor.settings.preparationTime)} Minutes</Text>
+                       )}
                  </View>
                 </View>
             )}
@@ -259,18 +283,11 @@ export const Checkout: React.FC = () => {
                     selectedDate={deliveryTime}
                 />
             )}
-            <View style={tailwind('flex my-6 flex-row items-center w-full justify-between')}>
-                <Text style={tailwind('text-lg')}>
-                    Buying for someone else?
-                </Text>
-                <Checkbox style={{margin: 8}} color={isThirdParty ? getColor('primary-500') : undefined} value={isThirdParty} onValueChange={(value) => setIsThirdParty(value)} />
-            </View>
-            {isThirdParty && (
-                <View style={tailwind('flex flex-col')}>
-                    <TextInputWithLabel containerStyle={tailwind('mb-5')} label="Receiver first" />
-                    <TextInputWithLabel containerStyle={tailwind('mb-5')} label="Receiver phone" />
-                </View>
-            )}
+            <PaymentMethodBox
+                onPress={() => openPaymentModal()}
+                selectedMethod={paymentMethod}
+
+            />
             <View style={tailwind('flex flex-col mt-5')}>
                 <CheckoutBreakDown label="Subtotal" value={orderBreakDown.orderCost} />
                 <CheckoutBreakDown label="Delivery Fee" value={orderBreakDown.deliveryFee} />
@@ -299,6 +316,13 @@ export const Checkout: React.FC = () => {
                     endDate={cartState.cartItemAvailableDate}
                 />
             )}
+
+            <PaymentMethodModal
+                promptModalName={PAYMENT_METHOD_MODAL}
+                modalRef={paymentModalRef}
+                selectedPaymentMethod={paymentMethod}
+                setSelectedPaymentMethod={setPaymentMethod}
+            />
 
         </ScrollView>
     )

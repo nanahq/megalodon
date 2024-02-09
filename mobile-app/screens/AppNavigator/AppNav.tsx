@@ -23,7 +23,7 @@ import * as Location from "expo-location";
 import {_api} from "@api/_request";
 import * as Notifications from "expo-notifications";
 import {fetchHomaPage } from "@store/listings.reducer";
-
+import {RedeemModal} from "@screens/AppNavigator/Screens/modals/Redeem.Modal";
 
 const App = createStackNavigator<AppParamList>()
 
@@ -51,6 +51,10 @@ export interface AppParamList {
         }
     },
 
+    [ModalScreenName.MODAL_REDEEM_SCREEN]: {
+       callback?: () => void
+    },
+
     [key: string]: undefined | object;
 }
 
@@ -64,18 +68,18 @@ Notifications.setNotificationHandler({
 });
 
 
-// if (Device.osName === 'Android') {
-//     void Notifications.setNotificationChannelAsync('default', {
-//         name: 'default',
-//         showBadge: true,
-//         enableLights: true,
-//         enableVibrate: true,
-//         sound: 'default',
-//         importance: Notifications.AndroidImportance.MAX,
-//         vibrationPattern: [0, 250, 250, 250],
-//         lightColor: '#FF231F7C',
-//     });
-// }
+if (Device.osName === 'Android') {
+    void Notifications.setNotificationChannelAsync('default', {
+        name: 'default',
+        showBadge: true,
+        enableLights: true,
+        enableVibrate: true,
+        sound: 'default',
+        importance: Notifications.AndroidImportance.MAX,
+        vibrationPattern: [0, 250, 250, 250],
+        lightColor: '#FF231F7C',
+    });
+}
 
 
 export function AppNavigator(): JSX.Element {
@@ -108,14 +112,14 @@ export function AppNavigator(): JSX.Element {
         }
         try {
 
-            await _api.requestData<Partial<UpdateUserDto>>({
+            await _api.requestData<Partial<UpdateUserDto>, undefined>({
                 method: 'PUT',
                 url: 'user/update',
                 data: {location}
             })
 
         } catch (error: any) {
-            console.error(error)
+            throw error(error)
         }
     }
 
@@ -133,7 +137,7 @@ export function AppNavigator(): JSX.Element {
     const requestPermission = async () => {
         const token = await registerForPushNotificationsAsync(requestPermission)
         const payload = {expoNotificationToken: token} as any
-        await _api.requestData<Partial<UpdateUserDto>>({
+        await _api.requestData<Partial<UpdateUserDto>, undefined>({
             method: 'PUT',
             url: 'user/update',
             data: payload
@@ -170,6 +174,10 @@ export function AppNavigator(): JSX.Element {
                     <App.Screen
                         name={ModalScreenName.MODAL_LISTING_SCREEN}
                         component={ListingModal}
+                    />
+                    <App.Screen
+                        name={ModalScreenName.MODAL_REDEEM_SCREEN}
+                        component={RedeemModal}
                     />
                     <App.Screen
                         name={ModalScreenName.MODAL_ADD_ADDRESS_SCREEN}

@@ -287,7 +287,7 @@ function extractAddress(mapboxResponse: MapboxResponse): string | undefined {
         const primaryFeature = mapboxResponse.features[0];
         if (primaryFeature.place_name) {
             // Remove state and country from the address
-            const addressParts = primaryFeature.place_name.split(',').slice(0, -2).slice(1).join(',').trim();
+            const addressParts = primaryFeature.place_name.split(',').slice(1).join(',').trim();
             return addressParts;
         }
     }

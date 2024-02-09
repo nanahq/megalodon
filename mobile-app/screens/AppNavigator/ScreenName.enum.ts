@@ -12,4 +12,6 @@ export enum ModalScreenName  {
     MODAL_LISTING_SCREEN = 'ModalListingScreen',
     MODAL_ADD_ADDRESS_SCREEN = 'ModalAddAddressScreen',
     MODAL_PAYMENT_SCREEN = 'modalPaymentScreen',
+
+    MODAL_REDEEM_SCREEN = 'MODAL_REDEEM_SCREEN'
 }

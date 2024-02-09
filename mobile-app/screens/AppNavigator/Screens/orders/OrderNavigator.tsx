@@ -9,7 +9,6 @@ import {OrderScreen} from "@screens/AppNavigator/Screens/orders/Orders.Screen";
 import * as Device from "expo-device";
 import {UndeliveredSingleOrderScreen} from "@screens/AppNavigator/Screens/orders/UndeliveredSingleOrder.Screen";
 import {OrderI} from "@nanahq/sticky";
-import {SingleOrderScreen} from "@screens/AppNavigator/Screens/orders/SingleOrder.Screen";
 import {Tracking} from "@screens/AppNavigator/Screens/orders/tracking";
 import {AddReviewScreen} from "@screens/AppNavigator/Screens/orders/Rating.Screen";
 

@@ -31,7 +31,9 @@ const initialState: ProfileState = {
         createdAt: '',
         updatedAt: '',
         isDeleted: false,
-        expoNotificationToken: undefined
+        expoNotificationToken: undefined,
+        paystack_titan: undefined,
+        paystack_customer_id: undefined
     },
     hasFetchedProfile: false,
     updatingProfile: false,
@@ -50,7 +52,7 @@ export const fetchProfile = createAsyncThunk(
 export const updateUserProfile = createAsyncThunk(
     AppActions.UPDATE_PROFILE,
     async (data: Partial<any>, {dispatch}): Promise<ResponseWithStatus> => {
-        const res = (await _api.requestData<Partial<UpdateUserDto>>({
+        const res = (await _api.requestData<Partial<UpdateUserDto>, null>({
             method: 'PUT',
             url: 'user/update',
             data
