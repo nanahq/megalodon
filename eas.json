@@ -10,6 +10,7 @@
     "development-simulator": {
       "developmentClient": true,
       "distribution": "internal",
+      "node": "20.0.0",
       "ios": {
         "simulator": true
       }

@@ -18,6 +18,7 @@ import moment from "moment";
 import * as Notifications from "expo-notifications";
 import {useExpoPushNotification} from "@hooks/useExpoNotification";
 import {mapboxLocationMapper} from "../../../../../../../utils/mapboxLocationMappper";
+import {LoaderComponentScreen} from "@components/commons/LoaderComponent";
 
 
 const MAPBOX_APIKEY = 'pk.eyJ1Ijoic3VyYWphdXdhbCIsImEiOiJjbGxiNHhpNW8wMHBpM2lxb215NnZmN3ZuIn0.a6zWnzIF0KcVZ2AUiDNBDA';
@@ -168,15 +169,11 @@ MapboxGL.setWellKnownTileServer('mapbox');
         return false
     }
 
+
     return (
         <View style={tailwind('flex-1 bg-primary-200 flex flex-col items-center justify-center')}>
              {loading ? (
-                 <View style={tailwind('flex flex-row items-center justify-center flex-1 w-full')}>
-                     <View style={tailwind('flex flex-col items-center')}>
-                         <ActivityIndicator size="large" color={getColor('primary-500')} />
-                         <Text style={tailwind('font-bold text-3xl text-center mt-4')}>Fetching Delivery Information..... it will take 3 seconds</Text>
-                     </View>
-                 </View>
+                 <LoaderComponentScreen />
              ) : (
                  <>
                      <View style={tailwind('w-full flex-1 flex-grow')}>
