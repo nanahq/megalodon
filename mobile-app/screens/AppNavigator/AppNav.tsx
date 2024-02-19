@@ -24,6 +24,7 @@ import {_api} from "@api/_request";
 import * as Notifications from "expo-notifications";
 import {fetchHomaPage } from "@store/listings.reducer";
 import {RedeemModal} from "@screens/AppNavigator/Screens/modals/Redeem.Modal";
+import {useAnalytics} from "@segment/analytics-react-native";
 
 const App = createStackNavigator<AppParamList>()
 
@@ -86,7 +87,7 @@ export function AppNavigator(): JSX.Element {
     const {profile, hasFetchedProfile} = useSelector((state: RootState) => state.profile)
     const isAndroid  = Device.osName === 'Android'
     const dispatch = useAppDispatch()
-
+    const analytics = useAnalytics()
     useEffect(() => {
         dispatch(fetchProfile() as any)
         dispatch(fetchVendors() as any)
@@ -96,6 +97,23 @@ export function AppNavigator(): JSX.Element {
         dispatch(fetchHomaPage({type: "Point", coordinates:[0,0]}) as any)
     }, [])
 
+
+    useEffect(() => {
+        if (profile && profile._id) {
+            void analytics.identify(profile._id, {
+                firstName: profile?.firstName,
+                lastName: profile?.lastName,
+                email: profile.email,
+                phone: profile.phone,
+                location: profile.location?.coordinates,
+                device: {
+                    version: Device.osVersion,
+                    name: Device.osName,
+                    brand: Device.brand
+                }
+            })
+        }
+    }, [profile._id])
 
     const requestLocation = async () => {
         const {status} = await Location.requestForegroundPermissionsAsync();

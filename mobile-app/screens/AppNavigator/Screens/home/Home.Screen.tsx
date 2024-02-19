@@ -14,7 +14,7 @@ import {FlashList} from "@shopify/flash-list";
 import {ExploreSections} from "@screens/AppNavigator/Screens/modals/components/ExploreSections";
 import {useAnalytics} from "@segment/analytics-react-native";
 import {HomeScreenName} from "@screens/AppNavigator/Screens/home/HomeScreenNames.enum";
-import * as Device from 'expo-device'
+
 
 const {height} = Dimensions.get('screen')
 export function HomeScreen (): JSX.Element {
@@ -30,17 +30,6 @@ export function HomeScreen (): JSX.Element {
         }
 
         dispatch(fetchSubscriptions(profile._id))
-        void analytics.identify(profile._id, {
-            firstName: profile?.firstName,
-            lastName: profile?.lastName,
-            email: profile.email,
-            phone: profile.phone,
-            device: {
-                version: Device.osVersion,
-                name: Device.osName,
-                brand: Device.brand
-            }
-        })
         // dispatch(fetchHomaPage(profile.location as any) as any)
 
     }, [hasFetchedProfile, profile._id])

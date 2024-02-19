@@ -10,6 +10,7 @@ import {RootState, useAppSelector} from "@store/index";
 import {BasketNavigator} from "@screens/AppNavigator/Screens/basket/BasketNavigator";
 import {ProfileNavigator} from "@screens/AppNavigator/Screens/profile/ProfileNavigator";
 import {OrderNavigator} from "@screens/AppNavigator/Screens/orders/OrderNavigator";
+import {PromotionNavigator} from "@screens/AppNavigator/Screens/promotions/PromotionNavigator";
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>()
 
@@ -17,6 +18,8 @@ export interface BottomTabParamList {
     Listings: undefined
     Orders: undefined
     Profile: undefined
+
+    Promotions: undefined
 
     [key: string]: undefined | object
 }
@@ -94,7 +97,7 @@ export function BottomTabNavigator ():JSX.Element {
                 }}
             />
             <BottomTab.Screen
-                component={HomeScreen}
+                component={PromotionNavigator}
                 name={AppScreenName.DEALS}
                 options={{
                     tabBarLabel: ({ focused, color }) =>
