@@ -15,10 +15,19 @@ import {BottomSheetModalProvider} from "@gorhom/bottom-sheet";
 import {SafeAreaProvider} from "react-native-safe-area-context";
 import {WebSocketProvider} from "@contexts/SocketProvider";
 import {NetworkMapper} from "@api/network.mapper";
+import {createClient, AnalyticsProvider} from "@segment/analytics-react-native";
+import {AmplitudeSessionPlugin} from "@segment/analytics-react-native-plugin-amplitude-session";
 
 import 'expo-dev-client';
 
 const WEBSOCKET_ENDPOINT = NetworkMapper.PRODUCTION
+
+const segmentClient = createClient({
+    writeKey: "2mQ9kjV6aBMDEJqDrJHzcG5afX5eOPWr",
+    trackAppLifecycleEvents: true,
+});
+
+segmentClient.add({ plugin: new AmplitudeSessionPlugin()});
 
 export default function App() {
   const isLoaded = useCachedResource()
@@ -33,7 +42,7 @@ export default function App() {
         return null;
     }
 
-    
+
 
     const customToast = {
         app_toast_success: (toast: ToastProps) => <AppToast  type="success" toast={toast} />,
@@ -60,7 +69,9 @@ export default function App() {
                            <SafeAreaProvider>
                                <BottomSheetModalProvider>
                                    <ToastProvider renderType={customToast}>
-                                       <MainScreen />
+                                       <AnalyticsProvider client={segmentClient}>
+                                           <MainScreen />
+                                       </AnalyticsProvider>
                                    </ToastProvider>
                                </BottomSheetModalProvider>
                            </SafeAreaProvider>

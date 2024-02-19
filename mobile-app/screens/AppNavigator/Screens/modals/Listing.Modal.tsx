@@ -20,6 +20,8 @@ import { ModalScreenName} from "@screens/AppNavigator/ScreenName.enum";
 import {AppParamList} from "@screens/AppNavigator/AppNav";
 import moment from "moment";
 import FastImage from "react-native-fast-image";
+import {useAnalytics} from "@segment/analytics-react-native";
+
 import {calculateTotalValue} from "../../../../../utils/CalculateCartTotal";
 
 type ListingModalScreenProps = StackScreenProps<AppParamList, ModalScreenName.MODAL_LISTING_SCREEN>
@@ -49,10 +51,11 @@ export const ListingModal: React.FC<ListingModalScreenProps>  = ({navigation, ro
     const toast = useToast();
     const dispatch = useAppDispatch()
     const [quantity, setQuantity] = useState(1);
-
+    const analytics = useAnalytics()
 
 
     const handleIncrease = () => {
+        void analytics.track('CLICK:QUANTITY-INCREASE')
         setQuantity(quantity + 1);
         setCart((prevCart) => ({
             ...prevCart,
@@ -62,6 +65,7 @@ export const ListingModal: React.FC<ListingModalScreenProps>  = ({navigation, ro
     };
 
     const handleDecrease = () => {
+        void analytics.track('CLICK:QUANTITY-DECREASE')
         if (quantity > 1) {
             setQuantity(quantity - 1);
             setCart((prevCart) => ({
@@ -73,20 +77,16 @@ export const ListingModal: React.FC<ListingModalScreenProps>  = ({navigation, ro
     };
 
     const onOptionValueChange = (_selectedOptions: {name: string, price: string, isSelected: boolean }[]) => {
-        // Assuming each option group has a unique identifier like 'groupId'
         const mergedOptions = _selectedOptions.reduce((acc, option) => {
             if (option.isSelected) {
                 const existingOptionIndex = acc.findIndex((existingOption) => existingOption.name === option.name);
 
                 if (existingOptionIndex !== -1) {
-                    // Replace the existing option in the same group
                     acc[existingOptionIndex] = option;
                 } else {
-                    // Add the new option to the array
                     acc.push(option);
                 }
             } else {
-                // Option is unselected, remove it from the array
                 acc = acc.filter((existingOption) => existingOption.name !== option.name);
             }
 
@@ -103,6 +103,9 @@ export const ListingModal: React.FC<ListingModalScreenProps>  = ({navigation, ro
     };
 
 
+    useEffect(() => {
+        void analytics.screen(ModalScreenName.MODAL_LISTING_SCREEN)
+    }, [])
 
     useEffect(() => {
         async function fetchData () {
@@ -196,9 +199,12 @@ export const ListingModal: React.FC<ListingModalScreenProps>  = ({navigation, ro
             cartAvailableDate:  route.params.availableDate ?? undefined
         }))
         navigation.goBack()
+        void analytics.track('CLICK:ADD-TO-CART-LISTING-MODAL')
+
     }
 
     const goToBasket = () => {
+        void analytics.track('CLICK:VIEW-CART-LISTING-MODAL')
         setTimeout(() => {
             navigation.navigate(BasketScreenName.BASKET)
         }, 1000)

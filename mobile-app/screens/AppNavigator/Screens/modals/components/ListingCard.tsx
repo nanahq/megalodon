@@ -8,6 +8,7 @@ import FastImage from "react-native-fast-image";
 import {NavigationProp, useNavigation} from "@react-navigation/native";
 import {ModalScreenName} from "@screens/AppNavigator/ScreenName.enum";
 import {AppParamList} from "@screens/AppNavigator/AppNav";
+import {useAnalytics} from "@segment/analytics-react-native";
 
 const _ListingCard: React.FC<{listing: ListingMenuI}>  = (props)=> {
     const {vendors} = useAppSelector(state => state.vendors)
@@ -17,11 +18,19 @@ const _ListingCard: React.FC<{listing: ListingMenuI}>  = (props)=> {
         return vendors?.find(vendor => vendor._id === props.listing.vendor as any)
     }, [vendors, props.listing.vendor])
 
-    return (
-        <Pressable onPress={() => navigation.navigate(ModalScreenName.MODAL_LISTING_SCREEN, {
+    const analytics = useAnalytics()
+
+    const onPress = () => {
+        void analytics.track('CLICK:LISTING-CARD-HOMEPAGE', {
+            vendor: props.listing._id
+        })
+        navigation.navigate(ModalScreenName.MODAL_LISTING_SCREEN, {
             listing: props.listing,
             isScheduled: true,
-        })} style={[tailwind("w-full mb-4 flex flex-col mr-5"), { width: 300, height: 215 }]}>
+        })
+    }
+    return (
+        <Pressable onPress={onPress} style={[tailwind("w-full mb-4 flex flex-col mr-5"), { width: 300, height: 215 }]}>
             <View style={tailwind("flex flex-col w-full")}>
                 <FastImage source={{ uri: props.listing.photo}} resizeMode={FastImage.resizeMode.cover} style={[tailwind("w-full rounded-lg"), { height: isAndroid ? 150 : 155 }]} />
             </View>

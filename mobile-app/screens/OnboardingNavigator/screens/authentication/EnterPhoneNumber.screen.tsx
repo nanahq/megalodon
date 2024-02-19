@@ -1,6 +1,6 @@
 import {View, Text} from "react-native";
 import {StackScreenProps} from "@react-navigation/stack";
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 
 import {tailwind} from "@tailwind";
 import {GenericTextInput} from "@components/commons/inputs/TextInput";
@@ -12,11 +12,17 @@ import {OnboardingScreenName} from "@screens/OnboardingNavigator/ScreenName.enum
 import {internationalisePhoneNumber} from '@nanahq/sticky'
 import {_api} from "@api/_request";
 import {ShowToast} from "@components/commons/Toast";
+import {useAnalytics} from "@segment/analytics-react-native";
 
 type EnterPhoneNumberScreenProps = StackScreenProps<OnboardingParamsList, OnboardingScreenName.ENTER_MOBILE_PHONE>
 export function EnterPhoneNumberScreen ({navigation}: EnterPhoneNumberScreenProps): JSX.Element {
     const [phoneNumber, setPhoneNumber] = useState<string>('')
     const [loading, setLoading] = useState<boolean>(false)
+    const analytics = useAnalytics()
+
+    useEffect(() => {
+       void analytics.screen(OnboardingScreenName.ENTER_MOBILE_PHONE)
+    }, [])
     async function onContinue(): Promise<void> {
         setLoading(true)
        try {

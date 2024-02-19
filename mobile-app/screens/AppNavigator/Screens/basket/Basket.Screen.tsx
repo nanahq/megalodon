@@ -1,13 +1,22 @@
 import {Image, ScrollView, View, Text} from "react-native";
 import {tailwind} from "@tailwind";
-import React, {memo, useMemo} from "react";
+import React, {memo, useEffect, useMemo} from "react";
 import {RootState, useAppSelector} from "@store/index";
 import {BasketsItem} from "@screens/AppNavigator/Screens/basket/components/BasketsItem";
 import EmptyCart from '@assets/app/emptycart.png'
+import {useAnalytics} from "@segment/analytics-react-native";
+import {BasketScreenName} from "@screens/AppNavigator/Screens/basket/BasketScreenName.enum";
 
  const _BasketScreen: React.FC = () => {
     const cartState = useAppSelector((state: RootState) => state.cart )
     const {vendors} = useAppSelector((state: RootState) => state.vendors )
+     const analytics = useAnalytics()
+
+     useEffect(() => {
+         void analytics.screen(BasketScreenName.BASKET)
+     }, [])
+
+
     const vendor = useMemo(() => {
         return vendors?.find((vendor) => vendor._id === cartState.vendor)
     }, [vendors])

@@ -13,6 +13,7 @@ import {NavigationProp, useNavigation} from "@react-navigation/native";
 import {OrderParamsList} from "@screens/AppNavigator/Screens/orders/OrderNavigator";
 import {OrderScreenName} from "@screens/AppNavigator/Screens/orders/OrderScreenName";
 import * as Device from 'expo-device'
+import {useAnalytics} from "@segment/analytics-react-native";
 
 const {height} = Dimensions.get('screen')
 export const OrderScreen: React.FC = () => {
@@ -21,7 +22,7 @@ export const OrderScreen: React.FC = () => {
     const [fetchingOrders, setFetchingOrders] = useState<boolean>(true)
     const [orders, setOrders] = useState<OrderI[]>([])
     const [view, setView] = useState<OrderStatus>(OrderStatus.PAYMENT_PENDING)
-
+    const analytics = useAnalytics()
 
     const ordersInProgress = useMemo(() => {
         if (orders.length < 1) {
@@ -63,12 +64,19 @@ export const OrderScreen: React.FC = () => {
     }, [fetchingOrders])
 
 
+    useEffect(() => {
+        void analytics.screen(OrderScreenName.ORDERS)
+    }, [])
     if (fetchingOrders) {
         return <LoaderComponentScreen />
     }
 
 
     const onPress = (order: OrderI) => {
+        void analytics.track('CLICK:SINGLE-ORDER', {
+            order: order._id,
+            status: order.orderStatus
+        })
         navigation.navigate(OrderScreenName.UNDELIVERED_SINGLE_ORDER, {
             order
         })

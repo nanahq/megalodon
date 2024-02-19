@@ -14,6 +14,7 @@ import OrderComplete from '@assets/app/order-complete.png'
 import moment from "moment";
 import {DeliveryInfo} from "@screens/AppNavigator/Screens/orders/tracking/components/DeliveryInfo";
 import {GenericButton} from "@components/commons/buttons/GenericButton";
+import {useAnalytics} from "@segment/analytics-react-native";
 
 
 type TrackingProps = StackScreenProps<OrderParamsList, OrderScreenName.TRACK_ORDER>
@@ -26,6 +27,7 @@ const guideline: Record<string, number> =  {
     }
 export const Tracking: React.FC<TrackingProps> = ({navigation, route}) => {
     const {isConnected, socketClient} = useWebSocket()
+    const analytics = useAnalytics()
     // @ts-ignore
     const [activeStep, setActiveStep] = useState<number>(guideline[route.params.order.orderStatus as OrderStatus])
     // const [delivery,setDelivery] = useState()
@@ -33,6 +35,7 @@ export const Tracking: React.FC<TrackingProps> = ({navigation, route}) => {
     const [order, setOrder] = useState<OrderI>(route.params.order)
 
     useEffect(() => {
+        void analytics.screen(OrderScreenName.TRACK_ORDER)
         if (isConnected && socketClient !== undefined) {
            socketClient?.on(SOCKET_MESSAGE.UPDATE_ORDER_STATUS, (message: {userId: string, orderId: string, status: OrderStatus, driver: string, vendorName?: string}) => {
                const isOrder = message.orderId === route.params.order._id

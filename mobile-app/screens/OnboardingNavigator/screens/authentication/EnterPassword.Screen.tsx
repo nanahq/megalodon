@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {OnboardingScreenName} from "@screens/OnboardingNavigator/ScreenName.enum";
 import {Text, View} from "react-native";
 import { tailwind} from "@tailwind";
@@ -12,6 +12,8 @@ import {TextInputWithLabel} from "@components/commons/inputs/TextInputWithLabel"
 import {showTost} from "@components/commons/Toast";
 import {useToast} from "react-native-toast-notifications";
 import {cookieParser} from "../../../../../utils/cookieParser";
+import {useAnalytics} from "@segment/analytics-react-native";
+import * as Device from "expo-device";
 
 type EnterPasswordScreenProps = StackScreenProps<OnboardingParamsList, OnboardingScreenName.ENTER_PASSWORD>
 
@@ -24,6 +26,21 @@ export function EnterPasswordScreen ({navigation, route}: EnterPasswordScreenPro
     const [lastName, setLastName] = useState<string>('')
     const [loading, _setIsLoading] = useState<boolean>(false)
     const toast = useToast()
+    const analytics = useAnalytics()
+
+
+    useEffect(() => {
+        void analytics.identify(undefined,{
+            phone:route.params.phoneNumber,
+            firstName: route.params?.firstName,
+            device: {
+                version: Device.osVersion,
+                name: Device.osName,
+                brand: Device.brand
+            }
+        })
+        void analytics.screen(OnboardingScreenName.ENTER_MOBILE_PHONE)
+    }, [route.params.phoneNumber])
 
     async function onContinue(): Promise<void> {
         _setIsLoading(true)
@@ -39,6 +56,9 @@ export function EnterPasswordScreen ({navigation, route}: EnterPasswordScreenPro
                 })
                 await  setToken(cookieParser(cookies[0]))
                 showTost(toast, 'Login successfully', 'success')
+                void analytics.track('LOGIN', {
+                    phone: route.params.phoneNumber
+                })
             } else  {
                  await _api.requestData({
                     method: 'POST',
@@ -55,6 +75,9 @@ export function EnterPasswordScreen ({navigation, route}: EnterPasswordScreenPro
                 navigation.navigate(OnboardingScreenName.VERIFY_PHONE_NUMBER as any, {
                     phoneNumber: route.params.phoneNumber
                 } as any)
+                void analytics.track('REGISTER', {
+                    phone: route.params.phoneNumber
+                })
             }
 
         } catch (error: any) {

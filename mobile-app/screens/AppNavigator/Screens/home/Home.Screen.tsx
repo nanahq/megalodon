@@ -12,19 +12,35 @@ import {fetchSubscriptions} from "@store/vendors.reducer";
 import {ListingMenuCard} from "@screens/AppNavigator/Screens/modals/components/ListingCard";
 import {FlashList} from "@shopify/flash-list";
 import {ExploreSections} from "@screens/AppNavigator/Screens/modals/components/ExploreSections";
+import {useAnalytics} from "@segment/analytics-react-native";
+import {HomeScreenName} from "@screens/AppNavigator/Screens/home/HomeScreenNames.enum";
+import * as Device from 'expo-device'
 
 const {height} = Dimensions.get('screen')
 export function HomeScreen (): JSX.Element {
     const {hasFetchedProfile, profile} = useAppSelector((state: RootState) => state.profile)
     const { hasFetchedListings, hompage} = useAppSelector(state => state.listings)
     const dispatch = useAppDispatch()
+    const analytics = useAnalytics()
 
     useEffect(() => {
+        void analytics.screen(HomeScreenName.HOME)
         if (!hasFetchedProfile || !profile) {
             return
         }
 
         dispatch(fetchSubscriptions(profile._id))
+        void analytics.identify(profile._id, {
+            firstName: profile?.firstName,
+            lastName: profile?.lastName,
+            email: profile.email,
+            phone: profile.phone,
+            device: {
+                version: Device.osVersion,
+                name: Device.osName,
+                brand: Device.brand
+            }
+        })
         // dispatch(fetchHomaPage(profile.location as any) as any)
 
     }, [hasFetchedProfile, profile._id])
@@ -42,12 +58,18 @@ export function HomeScreen (): JSX.Element {
         return  <ListingMenuCard listing={item} />
     }
 
+
+    const scrollAnalytics = async () => {
+        await analytics.track('SCROLL-HOMEPAGE')
+    }
+
     function RenderItem ({item}: any) {
         return <VendorCard  fullWidth={true as any} height={300} style={tailwind('mb-3')} vendor={item}/>
     }
     return (
            <SafeAreaView style={tailwind('flex-1 bg-white')}>
                <ScrollView
+                   onScrollEndDrag={() => scrollAnalytics()}
                    style={{backgroundColor: 'rgba(230, 230, 230, 0.4)', height,}}
                >
                     <HomeHeader />
@@ -63,6 +85,7 @@ export function HomeScreen (): JSX.Element {
                                showsHorizontalScrollIndicator={false}
                                showsVerticalScrollIndicator={false}
                                estimatedItemSize={10}
+                               onScrollEndDrag={() => void analytics.track('SCROLL-TOP-RATED-VENDORS')}
                            />
                        </HomeSection>
                    )}
@@ -78,6 +101,7 @@ export function HomeScreen (): JSX.Element {
                                showsHorizontalScrollIndicator={false}
                                showsVerticalScrollIndicator={false}
                                estimatedItemSize={10}
+                               onScrollEndDrag={() => void analytics.track('SCROLL-INSTANT-DELIVERY')}
                            />
                        </HomeSection>
                    )}
@@ -92,6 +116,7 @@ export function HomeScreen (): JSX.Element {
                                showsHorizontalScrollIndicator={false}
                                showsVerticalScrollIndicator={false}
                                estimatedItemSize={10}
+                               onScrollEndDrag={() => void analytics.track('SCROLL-HOMEMADE-VENDORS')}
                            />
                        </HomeSection>
                    )}
@@ -106,6 +131,7 @@ export function HomeScreen (): JSX.Element {
                                showsHorizontalScrollIndicator={false}
                                showsVerticalScrollIndicator={false}
                                estimatedItemSize={10}
+                               onScrollEndDrag={() => void analytics.track('SCROLL-SCHEDULED-LISTING')}
                            />
                        </HomeSection>
                    )}

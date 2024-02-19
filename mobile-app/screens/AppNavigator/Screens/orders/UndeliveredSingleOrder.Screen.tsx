@@ -13,6 +13,7 @@ import {GenericButton} from "@components/commons/buttons/GenericButton";
 import {NumericFormat as NumberFormat} from "react-number-format";
 import {ModalScreenName} from "@screens/AppNavigator/ScreenName.enum";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {useAnalytics} from "@segment/analytics-react-native";
 
 export interface TransformedOrderItem {
     listing: ListingMenuI;
@@ -23,6 +24,12 @@ export interface TransformedOrderItem {
 type UndeliveredSingleOrderScreenProps = StackScreenProps<OrderParamsList, OrderScreenName.UNDELIVERED_SINGLE_ORDER>
 export const UndeliveredSingleOrderScreen: React.FC<UndeliveredSingleOrderScreenProps> = ({navigation, route}) => {
     const [rating, setRating] = useState<null | string>(null)
+    const analytics = useAnalytics()
+
+
+    useEffect(() => {
+        void analytics.screen(OrderScreenName.UNDELIVERED_SINGLE_ORDER)
+    }, [])
 
     useEffect(() => {
         navigation.addListener('focus' ,() => {
@@ -125,20 +132,29 @@ export const UndeliveredSingleOrderScreen: React.FC<UndeliveredSingleOrderScreen
                 <View style={tailwind('my-10')}>
                     {route.params.order.orderStatus === OrderStatus.FULFILLED && !rating && (
                         <>
-                            <GenericButton style={tailwind('mt-4')} onPress={() => navigation.navigate(OrderScreenName.ADD_REVIEW, {
-                                order: route.params.order
-                            }) } label="Add A Review" labelColor={tailwind('text-white')} backgroundColor={tailwind('bg-primary-500 bg-opacity-40')} />
+                            <GenericButton style={tailwind('mt-4')} onPress={() => {
+                                void analytics.track('CLICK:ORDER-ADD-REVIEW')
+                                navigation.navigate(OrderScreenName.ADD_REVIEW, {
+                                    order: route.params.order
+                                })
+                            } } label="Add A Review" labelColor={tailwind('text-white')} backgroundColor={tailwind('bg-primary-500 bg-opacity-40')} />
                         </>
                     )}
                     { [OrderStatus.COURIER_PICKUP, OrderStatus.PROCESSED,  OrderStatus.IN_ROUTE].includes(route.params.order.orderStatus) && (
-                        <GenericButton onPress={() => navigation.navigate(OrderScreenName.TRACK_ORDER, {
-                            order: route.params.order
-                        })} label="Track Delivery" labelColor={tailwind('text-white')} backgroundColor={tailwind('bg-primary-500')} />
+                        <GenericButton onPress={() => {
+                            void analytics.track('CLICK:ORDER-TRACK-DELIVERY')
+                            navigation.navigate(OrderScreenName.TRACK_ORDER, {
+                                order: route.params.order
+                            })
+                        }} label="Track Delivery" labelColor={tailwind('text-white')} backgroundColor={tailwind('bg-primary-500')} />
                     )}
                     {route.params.order.orderStatus === OrderStatus.PAYMENT_PENDING && (
-                        <GenericButton onPress={() => navigation.navigate(ModalScreenName.MODAL_PAYMENT_SCREEN, {
-                            order: route.params.order
-                        })} label="Make payment" labelColor={tailwind('text-white')} backgroundColor={tailwind('bg-primary-500')} />
+                        <GenericButton onPress={() => {
+                            void analytics.track('CLICK:ORDER-MAKE-PAYMENT')
+                            navigation.navigate(ModalScreenName.MODAL_PAYMENT_SCREEN, {
+                                order: route.params.order
+                            })
+                        } } label="Make payment" labelColor={tailwind('text-white')} backgroundColor={tailwind('bg-primary-500')} />
                     )}
                 </View>
                 {transformOrder.length > 0 && (

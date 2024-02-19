@@ -14,14 +14,19 @@ import {useToast} from "react-native-toast-notifications";
 import {showTost} from "@components/commons/Toast";
 import {_api} from "@api/_request";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {useAnalytics} from "@segment/analytics-react-native";
 
 type SingleOrderScreenProps = StackScreenProps<OrderParamsList, OrderScreenName.ADD_REVIEW>
 export const AddReviewScreen: React.FC<SingleOrderScreenProps> = ({navigation, route}) => {
     const [rating, setRating] = useState<number>(0)
     const [loading, setLoading] = useState<boolean>(false)
     const [reviewBody, setReviewBody] = useState<string>("")
+    const analytics = useAnalytics()
     const toast = useToast()
     useEffect(() => {
+        void analytics.screen(OrderScreenName.ADD_REVIEW, {
+            order: route.params.order._id
+        })
         navigation.setOptions({
             headerShown: true,
             headerTitle: `Rate your order`,
@@ -35,7 +40,7 @@ export const AddReviewScreen: React.FC<SingleOrderScreenProps> = ({navigation, r
 
     const handleAddReview = async () => {
         if (reviewBody === "" || rating === 0) {
-            showTost(toast, 'Please Add a rating and comment to submit', 'error')
+            showTost(toast, 'Please Add a rating and comment to submit', 'warning')
             return
         }
         const payload = {
@@ -55,6 +60,10 @@ export const AddReviewScreen: React.FC<SingleOrderScreenProps> = ({navigation, r
             showTost(toast, 'Review submitted', 'success')
             setTimeout(() => navigation.goBack(), 1000)
             await AsyncStorage.setItem(route.params.order._id, 'true')
+            void analytics.track('CLICK:ADD-REVIEW', {
+                rating,
+                order: route.params.order._id
+            })
         } catch (error) {
             showTost(toast, 'Failed to add review', 'error')
         } finally {

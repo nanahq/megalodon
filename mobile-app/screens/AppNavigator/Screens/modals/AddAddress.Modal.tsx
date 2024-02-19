@@ -16,11 +16,11 @@ import {NavigationProp, useNavigation} from "@react-navigation/native";
 import {ProfileParamsList} from "@screens/AppNavigator/Screens/profile/ProfileNavigator";
 import {HomeScreenName} from "@screens/AppNavigator/Screens/home/HomeScreenNames.enum";
 import {_api} from "@api/_request";
+import {useAnalytics} from "@segment/analytics-react-native";
+
 import {mapboxLocationMapper} from "../../../../../utils/mapboxLocationMappper";
 
 type AddAddressModalProps = StackScreenProps<AppParamList, ModalScreenName.MODAL_ADD_ADDRESS_SCREEN>
-
-
 interface MapboxFeature {
     id: string;
     type: string;
@@ -70,11 +70,6 @@ export const AddAddressModal: React.FC<AddAddressModalProps> = ({navigation, rou
     })
 
     const [gettingLocation, setGettingLocation] = useState<boolean>(false)
-
-    useEffect(() => {
-        handleUpdateForm('labelId', addressLabels.find(l => l.name.toLowerCase() === 'home')?._id ?? '')
-    }, [addressLabels])
-
     const [errors, setErrors] = useState<any>({
         labelName: false,
         labelId: false,
@@ -84,6 +79,17 @@ export const AddAddressModal: React.FC<AddAddressModalProps> = ({navigation, rou
 
     const toast = useToast()
     const dispatch = useAppDispatch()
+    const analytics = useAnalytics()
+
+    useEffect(() => {
+        void analytics.screen(ModalScreenName.MODAL_ADD_ADDRESS_SCREEN)
+    }, [])
+
+    useEffect(() => {
+        handleUpdateForm('labelId', addressLabels.find(l => l.name.toLowerCase() === 'home')?._id ?? '')
+    }, [addressLabels])
+
+
     const handleUpdateForm = (name: keyof NewAddress , value: any) : void => {
         setErrors({
             labelName: false,
@@ -147,6 +153,7 @@ export const AddAddressModal: React.FC<AddAddressModalProps> = ({navigation, rou
             }
         }, 2000)
 
+        void analytics.track('CLICK:ADD-NEW-ADDRESS')
     }
 
     const requestCurrentLocation = async () => {
@@ -286,9 +293,7 @@ function extractAddress(mapboxResponse: MapboxResponse): string | undefined {
     if (mapboxResponse.features && mapboxResponse.features.length > 0) {
         const primaryFeature = mapboxResponse.features[0];
         if (primaryFeature.place_name) {
-            // Remove state and country from the address
-            const addressParts = primaryFeature.place_name.split(',').slice(1).join(',').trim();
-            return addressParts;
+            return primaryFeature.place_name.split(',').slice(1).join(',').trim();
         }
     }
 

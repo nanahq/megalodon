@@ -36,6 +36,7 @@ import {
 import {LoaderComponent} from "@components/commons/LoaderComponent";
 import {PaymentMethodModal} from "@screens/AppNavigator/Screens/basket/components/payment/PaymentModal";
 import {parseSelectedScheduledDateTime} from "../../../../../utils/DateFormatter";
+import {useAnalytics} from "@segment/analytics-react-native";
 
 export const ADDRESS_MODAL = 'ADDRESS_MODAL'
 export const SCHEDULE_MODAL = 'SCHEDULE_MODAL'
@@ -74,16 +75,24 @@ export const Checkout: React.FC = () => {
     const paymentModalRef = useRef<any>(null)
     const scheduleModalRef = useRef<any>(null)
     const toast = useToast()
+    const analytics = useAnalytics()
+
+
     const openModal = useCallback(() => {
         addressModalRef.current.present()
+       void analytics.track('CLICK:DELIVERY-ADDRESS-MODAL')
     }, [])
 
 
     const openPaymentModal = useCallback(() => {
         paymentModalRef.current.present()
+        void analytics.track('CLICK:PAYMENT-ADDRESS-MODAL')
+
     }, [])
+
     const openScheduleModal =  useCallback(() => {
         scheduleModalRef.current.present()
+        void analytics.track('CLICK:DATA-PICKER-ADDRESS-MODAL')
     }, [])
 
     useEffect(() => {
@@ -137,6 +146,8 @@ export const Checkout: React.FC = () => {
         if (fetchingConstant) {
             void fetchConstants()
         }
+
+        void analytics.screen(BasketScreenName.CHECKOUT)
     }, [])
 
     useEffect(() => {
@@ -162,6 +173,7 @@ export const Checkout: React.FC = () => {
             const v = state.vendors.find( _ =>  _._id === cartState.vendor)
             let _view: VendorOperationType = 'ON_DEMAND'
 
+            // eslint-disable-next-line default-case
             switch (v?.settings.deliveryType) {
                 case 'PRE_AND_INSTANT':
                 case 'ON_DEMAND':
@@ -239,8 +251,13 @@ export const Checkout: React.FC = () => {
            // Reset navigation stack to 'ORDERS' screen
            navigation.reset({
                index: 0,
-               routes: [{ name: OrderScreenName.ORDERS }],
+               routes: [{ name: BasketScreenName.BASKET }],
            });
+
+            void analytics.track('CLICK:ORDER-PLACED', {
+                order: response.data.order._id,
+                vendor: response.data.order.vendor._id,
+            })
        }  catch (error) {
            showTost(toast, 'Failed to place order. Contact support', 'error')
        } finally {
@@ -255,7 +272,6 @@ export const Checkout: React.FC = () => {
             isBlocked = selectedAddress === undefined
         } else  {
             isBlocked = [selectedAddress, deliveryTime ].includes(undefined)
-
         }
         return isBlocked
     }

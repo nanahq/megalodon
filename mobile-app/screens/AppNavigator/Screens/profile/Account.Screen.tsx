@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {StackScreenProps} from "@react-navigation/stack";
 import {ProfileParamsList} from "@screens/AppNavigator/Screens/profile/ProfileNavigator";
 import {ProfileScreenName} from "@screens/AppNavigator/Screens/profile/ProfileScreenName";
@@ -13,6 +13,7 @@ import {useAuthPersistence} from "@contexts/AuthPersistenceProvider";
 import {useToast} from "react-native-toast-notifications";
 import * as Device from 'expo-device';
 import {useSafeAreaInsets} from "react-native-safe-area-context";
+import {useAnalytics} from "@segment/analytics-react-native";
 
 type AccountScreenNavigationProps = StackScreenProps<ProfileParamsList, ProfileScreenName.ACCOUNT>
 
@@ -20,8 +21,15 @@ export const AccountScreen: React.FC<AccountScreenNavigationProps> = ({navigatio
     const {profile} = useAppSelector(state => state.profile)
     const {clearToken} = useAuthPersistence()
     const toast = useToast()
-    const isAndroid = Device.osName === 'Android'
     const {top} = useSafeAreaInsets()
+    const analytics = useAnalytics()
+
+    const isAndroid = Device.osName === 'Android'
+
+
+    useEffect(() => {
+        void analytics.screen(ProfileScreenName.ACCOUNT)
+    }, [])
     async  function onLogoutPress (): Promise<void>{
         showTost(toast, 'Log out success', 'success')
         await clearToken()

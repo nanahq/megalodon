@@ -27,6 +27,7 @@ import FastImage from "react-native-fast-image";
 import moment from 'moment';
 import {NumericFormat as NumberFormat} from "react-number-format";
 import {isRestaurantOpen} from "../../../../../utils/DateFormatter";
+import {useAnalytics} from "@segment/analytics-react-native";
 
 type VendorModalScreenProps = StackScreenProps<AppParamList, ModalScreenName.MODAL_VENDOR_SCREEN>
 
@@ -38,6 +39,8 @@ type VendorModalScreenProps = StackScreenProps<AppParamList, ModalScreenName.MOD
     const [scheduled, setScheduled] = useState<ScheduledListingI[]>([])
     const toast = useToast()
      const dispatch = useAppDispatch()
+    const analytics = useAnalytics()
+
 
     const {cart} = useAppSelector((state: RootState) => state.cart)
     const {subscriptions} = useAppSelector((state: RootState) => state.vendors)
@@ -64,6 +67,10 @@ return
      }, [subscriptions?.length])
 
 
+
+     useEffect(() => {
+         void analytics.screen(ModalScreenName.MODAL_VENDOR_SCREEN)
+     }, [])
 
      const handleSubscriptions = async () => {
         const subStatus = vendorHasSubscription?.userIsSubscribed

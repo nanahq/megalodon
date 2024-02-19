@@ -5,7 +5,7 @@ import {LoaderComponentScreen} from "@components/commons/LoaderComponent";
 import {NavigationProp, useNavigation} from "@react-navigation/native";
 import * as ClipBoard from 'expo-clipboard'
 import {ProfileParamsList} from "@screens/AppNavigator/Screens/profile/ProfileNavigator";
-import React from "react";
+import React, {useEffect} from "react";
 import {IconButton} from "@components/commons/buttons/IconButton";
 import {ProfileAvatar} from "@screens/AppNavigator/Screens/profile/components/ProfileAvatar";
 import {NumericFormat as NumberFormat} from "react-number-format";
@@ -14,16 +14,21 @@ import {ProfileScreenName} from "@screens/AppNavigator/Screens/profile/ProfileSc
 import {useToast} from "react-native-toast-notifications";
 import {showTost} from "@components/commons/Toast";
 import {getInitials} from "../../../../../utils/getInitials";
+import {useAnalytics} from "@segment/analytics-react-native";
 
 export const ProfileScreen = () => {
     const navigation = useNavigation<NavigationProp<ProfileParamsList>>()
     const {profile, hasFetchedProfile} = useAppSelector(state => state.profile)
     const toast = useToast()
+    const analytics = useAnalytics()
     const copy = (text: string): void => {
-        ClipBoard.setStringAsync(String(text))
+        void ClipBoard.setStringAsync(String(text))
         showTost(toast, 'Account number copied', 'success')
     }
 
+    useEffect(() => {
+        void analytics.screen(ProfileScreenName.PROFILE_HOME)
+    }, [])
     if (!hasFetchedProfile) {
         return <LoaderComponentScreen />
     }
@@ -33,9 +38,12 @@ export const ProfileScreen = () => {
                <View style={tailwind('mt-6 mb-3')}>
                    <Text style={tailwind('font-bold text-3xl capitalize')}>Hi {profile?.firstName ?? 'User'}!</Text>
                </View>
-               <Pressable onPress={() => navigation.navigate(ProfileScreenName.ACCOUNT, {
-                   profile
-               })} style={tailwind('flex flex-row items-center justify-between w-full border-b-0.5 border-brand-ash py-4 ')}>
+               <Pressable onPress={() => {
+                   void analytics.track('CLICK:PROFILE-ACCOUNT')
+                   navigation.navigate(ProfileScreenName.ACCOUNT, {
+                       profile
+                   })
+               } } style={tailwind('flex flex-row items-center justify-between w-full border-b-0.5 border-brand-ash py-4 ')}>
                   <View style={tailwind('flex flex-row items-center')}>
                       <ProfileAvatar initials={getInitials(`${profile.firstName} ${profile.lastName}`)} />
                       <View style={tailwind('ml-5')}>
@@ -63,7 +71,7 @@ export const ProfileScreen = () => {
                         </View>
                     </Pressable>
                 </View>
-               <Pressable onPress={() => navigation.navigate(ProfileScreenName.WALLET)} style={tailwind('flex flex-row items-center justify-between w-full border-b-0.5 border-brand-ash py-4')}>
+               <Pressable onPress={() => undefined} style={tailwind('flex flex-row items-center justify-between w-full border-b-0.5 border-brand-ash py-4')}>
                    <View style={tailwind('flex flex-col')}>
                        <Text style={tailwind('text-lg')}>Wallet</Text>
                    </View>
@@ -94,8 +102,14 @@ export const ProfileScreen = () => {
                </ProfileSection>
 
                <ProfileSection heading="Settings">
-                   <ProfileSection.Item onPress={() => navigation.navigate(ProfileScreenName.ACCOUNT)} label="Account" />
-                   <ProfileSection.Item onPress={() => navigation.navigate(ProfileScreenName.ADDRESS_BOOK)} label="My Addresses" />
+                   <ProfileSection.Item onPress={() => {
+                       void analytics.track('CLICK:PROFILE-ACCOUNT')
+                       navigation.navigate(ProfileScreenName.ACCOUNT)
+                   } } label="Account" />
+                   <ProfileSection.Item onPress={() => {
+                       void analytics.track('CLICK:PROFILE-ADDRESS-BOOK')
+                       navigation.navigate(ProfileScreenName.ADDRESS_BOOK)
+                   } } label="My Addresses" />
                </ProfileSection>
         </ScrollView>
     )

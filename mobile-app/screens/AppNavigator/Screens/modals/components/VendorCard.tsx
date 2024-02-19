@@ -10,6 +10,7 @@ import {ModalScreenName} from "@screens/AppNavigator/ScreenName.enum";
 import {AppParamList} from "@screens/AppNavigator/AppNav";
 import {useAppSelector} from "@store/index";
 import FastImage from "react-native-fast-image";
+import {useAnalytics} from "@segment/analytics-react-native";
 
 const _VendorCard: React.FC<{ vendor: VendorUserI, fullWidth?: boolean, style?: StyleProp<ViewStyle>, height?: number}> = (props) => {
     const [travelInfo, setTravelInfo] = useState<DeliveryFeeResult | undefined>(undefined);
@@ -17,6 +18,9 @@ const _VendorCard: React.FC<{ vendor: VendorUserI, fullWidth?: boolean, style?: 
     const [loading, setLoading] = useState<boolean>(true);
     const navigator = useNavigation<NavigationProp<AppParamList>>()
     const [error, setError] = useState<boolean>(false)
+
+    const analytics = useAnalytics()
+
 
     useEffect(() => {
         async function fetchData() {
@@ -29,7 +33,7 @@ const _VendorCard: React.FC<{ vendor: VendorUserI, fullWidth?: boolean, style?: 
                         vendorCoords: props.vendor.location.coordinates ,
                     },
                 });
-                setTravelInfo(() => data);
+                setTravelInfo(() => data as any);
             } catch (error) {
                 setError(() => true)
             } finally {
@@ -43,11 +47,16 @@ const _VendorCard: React.FC<{ vendor: VendorUserI, fullWidth?: boolean, style?: 
     }, [loading, props.vendor.location.coordinates]);
 
 
-    const onPress = () => navigator.navigate(ModalScreenName.MODAL_VENDOR_SCREEN, {
-        vendor: props.vendor,
-        delivery: travelInfo
-    })
+    const onPress = () => {
+        void analytics.track('CLICK:VENDOR-CARD-HOMEPAGE', {
+            vendor: props.vendor._id
+        })
+        navigator.navigate(ModalScreenName.MODAL_VENDOR_SCREEN, {
+            vendor: props.vendor,
+            delivery: travelInfo
+        })
 
+    }
     return (
         <Pressable onPress={onPress} style={[tailwind("w-full mb-1 flex flex-col "), props.style, { width: props.fullWidth ? undefined : 300, height: props.height ? undefined : 250 }]}>
             <View style={tailwind("flex flex-col w-full items-center")}>
