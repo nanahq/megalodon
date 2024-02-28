@@ -6,5 +6,6 @@ export enum ProfileScreenName {
     ACCOUNT = 'AccountScreen',
     EDIT_ACCOUNT = 'EditAccountScreen',
 
-    WALLET = 'WALLET'
+    WALLET = 'WALLET',
+    PRIVACY = 'PRIVACY'
 }

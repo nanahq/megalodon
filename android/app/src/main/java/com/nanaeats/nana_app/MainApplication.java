@@ -1,4 +1,5 @@
 package com.nanaeats.nana_app;
+import com.intercom.reactnative.IntercomModule;
 
 import android.app.Application;
 import android.content.res.Configuration;
@@ -61,6 +62,8 @@ public class MainApplication extends Application implements ReactApplication {
   public void onCreate() {
     super.onCreate();
     SoLoader.init(this, /* native exopackage */ false);
+		IntercomModule.initialize(this, "android_sdk-d16633cb6fb57cd48e32285c163cea24ed0a7269", "onxtiq2a");
+
     if (!BuildConfig.REACT_NATIVE_UNSTABLE_USE_RUNTIME_SCHEDULER_ALWAYS) {
       ReactFeatureFlags.unstable_useRuntimeSchedulerAlways = false;
     }
@@ -68,7 +71,9 @@ public class MainApplication extends Application implements ReactApplication {
       // If you opted-in for the New Architecture, we load the native entry point for this app.
       DefaultNewArchitectureEntryPoint.load();
     }
-    ReactNativeFlipper.initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
+    if (BuildConfig.DEBUG) {
+      ReactNativeFlipper.initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
+    }
     ApplicationLifecycleDispatcher.onApplicationCreate(this);
   }
 

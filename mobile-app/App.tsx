@@ -17,8 +17,10 @@ import {WebSocketProvider} from "@contexts/SocketProvider";
 import {NetworkMapper} from "@api/network.mapper";
 import {createClient, AnalyticsProvider} from "@segment/analytics-react-native";
 import {AmplitudeSessionPlugin} from "@segment/analytics-react-native-plugin-amplitude-session";
+import Intercom from '@intercom/intercom-react-native';
 
 import 'expo-dev-client';
+import {useEffect} from "react";
 
 const WEBSOCKET_ENDPOINT = NetworkMapper.PRODUCTION
 
@@ -33,6 +35,11 @@ export default function App() {
   const isLoaded = useCachedResource()
    const logger = useLogger()
 
+    useEffect(() => {
+        Intercom
+            .loginUnidentifiedUser()
+
+    }, [])
 
 // delay splash screen till cached resources are loaded
     if (!isLoaded) {
@@ -49,6 +56,7 @@ export default function App() {
         app_toast_error: (toast: ToastProps) => <AppToast type="error" toast={toast} />,
         app_toast_warning: (toast: ToastProps) => <AppToast type="warning" toast={toast} />,
     };
+
 
 
     return (

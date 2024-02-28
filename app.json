@@ -4,12 +4,13 @@
     "description": "Order food online and get it delivered in minutes",
     "slug": "nana-app",
     "owner": "nana_logistics",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "jsEngine": "hermes",
     "plugins": [
+      "./plugins/intercom-config-plugin.js",
       [
         "expo-build-properties",
         {
@@ -59,11 +60,13 @@
         "android.permission.ACCESS_COARSE_LOCATION",
         "android.permission.ACCESS_FINE_LOCATION",
         "android.permission.FOREGROUND_SERVICE",
-        "android.permission.POST_NOTIFICATIONS"
+        "android.permission.POST_NOTIFICATIONS",
+        "com.google.android.gms.permission.AD_ID"
       ],
       "package": "com.nanaeats.nana_app",
       "googleServicesFile": "./google-services.json",
-      "useNextNotificationsApi": true
+      "useNextNotificationsApi": true,
+      "versionCode": 2
     },
     "web": {
       "favicon": "./assets/app-config/favicon.png"
@@ -71,7 +74,12 @@
     "extra": {
       "eas": {
         "projectId": "8235481d-016d-4aa1-a436-7cc06ccc1f14"
+      },
+      "INTERCOM": {
+        "iosApiKey": "ios_sdk-35cf6ef8e2b90f88a31a858b52400fa048c791b2",
+        "androidApiKey": "android_sdk-d16633cb6fb57cd48e32285c163cea24ed0a7269",
+        "appId": "onxtiq2a"
       }
     }
-  }
+    }
 }

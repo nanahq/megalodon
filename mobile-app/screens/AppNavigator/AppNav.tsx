@@ -25,6 +25,7 @@ import * as Notifications from "expo-notifications";
 import {fetchHomaPage } from "@store/listings.reducer";
 import {RedeemModal} from "@screens/AppNavigator/Screens/modals/Redeem.Modal";
 import {useAnalytics} from "@segment/analytics-react-native";
+import Intercom from '@intercom/intercom-react-native';
 
 const App = createStackNavigator<AppParamList>()
 
@@ -80,6 +81,12 @@ if (Device.osName === 'Android') {
         vibrationPattern: [0, 250, 250, 250],
         lightColor: '#FF231F7C',
     });
+
+    void Notifications.setNotificationChannelAsync('intercom_chat_replies_channel', {
+        name: 'Intercom Replies Channel',
+        description: 'Channel for intercom replies',
+        importance: Notifications.AndroidImportance.MAX,
+    })
 }
 
 
@@ -88,6 +95,7 @@ export function AppNavigator(): JSX.Element {
     const isAndroid  = Device.osName === 'Android'
     const dispatch = useAppDispatch()
     const analytics = useAnalytics()
+
     useEffect(() => {
         dispatch(fetchProfile() as any)
         dispatch(fetchVendors() as any)
@@ -112,8 +120,17 @@ export function AppNavigator(): JSX.Element {
                     brand: Device.brand
                 }
             })
+
+            void Intercom.updateUser({
+                email: profile.email,
+                userId: profile._id,
+                name: profile.firstName,
+                customAttributes: {
+                    app: 'MAIN_APP'
+                }
+            })
         }
-    }, [profile._id])
+    }, [profile, profile._id])
 
     const requestLocation = async () => {
         const {status} = await Location.requestForegroundPermissionsAsync();

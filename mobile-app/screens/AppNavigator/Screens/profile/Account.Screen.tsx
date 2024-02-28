@@ -86,11 +86,11 @@ export const AccountScreen: React.FC<AccountScreenNavigationProps> = ({navigatio
                         <View style={tailwind('flex flex-col')}>
                             <AccountScreenItem
                                 label="Terms of service"
-                                onPress={() => {}}
+                                onPress={() => navigation.navigate(ProfileScreenName.PRIVACY)}
                             />
                             <AccountScreenItem
                                 label="Privacy policy"
-                                onPress={() => {}}
+                                onPress={() => navigation.navigate(ProfileScreenName.PRIVACY)}
                             />
                         </View>
                     </View>

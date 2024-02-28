@@ -2,7 +2,6 @@ import {Text, View} from 'react-native'
 import {getColor, tailwind} from "@tailwind";
 import {AppScreenName} from "@screens/AppNavigator/ScreenName.enum";
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
-import {HomeScreen} from "@screens/AppNavigator/Screens/home/Home.Screen";
 import  * as Device from 'expo-device'
 import {IconComponent} from "@components/commons/IconComponent";
 import {HomeNavigator} from "@screens/AppNavigator/Screens/home/HomeNavigator";
@@ -11,6 +10,7 @@ import {BasketNavigator} from "@screens/AppNavigator/Screens/basket/BasketNaviga
 import {ProfileNavigator} from "@screens/AppNavigator/Screens/profile/ProfileNavigator";
 import {OrderNavigator} from "@screens/AppNavigator/Screens/orders/OrderNavigator";
 import {PromotionNavigator} from "@screens/AppNavigator/Screens/promotions/PromotionNavigator";
+import Intercom from "@intercom/intercom-react-native";
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>()
 
@@ -99,6 +99,12 @@ export function BottomTabNavigator ():JSX.Element {
             <BottomTab.Screen
                 component={PromotionNavigator}
                 name={AppScreenName.DEALS}
+                listeners={{
+                    tabPress: (event) => {
+                        event.preventDefault();
+                        Intercom.present()
+                    }
+                }}
                 options={{
                     tabBarLabel: ({ focused, color }) =>
                         getTabBarLabel({
