@@ -17,8 +17,8 @@ import LocationTracker from '@assets/app/location-tracker.svg'
 import moment from "moment";
 import * as Notifications from "expo-notifications";
 import {useExpoPushNotification} from "@hooks/useExpoNotification";
-import {mapboxLocationMapper} from "../../../../../../../utils/mapboxLocationMappper";
 import {LoaderComponentScreen} from "@components/commons/LoaderComponent";
+import {mapboxLocationMapper} from "../../../../../../../utils/mapboxLocationMappper";
 
 
 const MAPBOX_APIKEY = 'pk.eyJ1Ijoic3VyYWphdXdhbCIsImEiOiJjbGxiNHhpNW8wMHBpM2lxb215NnZmN3ZuIn0.a6zWnzIF0KcVZ2AUiDNBDA';

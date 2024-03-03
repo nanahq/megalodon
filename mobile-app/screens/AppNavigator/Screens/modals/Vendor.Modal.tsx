@@ -26,8 +26,8 @@ import {fetchSubscriptions} from "@store/vendors.reducer";
 import FastImage from "react-native-fast-image";
 import moment from 'moment';
 import {NumericFormat as NumberFormat} from "react-number-format";
-import {isRestaurantOpen} from "../../../../../utils/DateFormatter";
 import {useAnalytics} from "@segment/analytics-react-native";
+import {isRestaurantOpen} from "../../../../../utils/DateFormatter";
 
 type VendorModalScreenProps = StackScreenProps<AppParamList, ModalScreenName.MODAL_VENDOR_SCREEN>
 
@@ -137,7 +137,7 @@ return
                 headerShown: true,
                 headerTitle: route?.params?.vendor?.businessName,
                 headerBackTitleVisible: false,
-                headerTitleAlign: 'center',
+                headerTitleAlign: 'left',
                 headerTitleStyle: tailwind('text-xl'),
                 headerLeft: () => <ModalCloseIcon onPress={() => navigation.navigate(HomeScreenName.HOME)} />,
             })
@@ -148,7 +148,7 @@ return
      }, [route.params.vendor])
 
      const warnClosed = () => {
-         showTost(toast, `${route.params.vendor.businessName} is closed now. will open tomorrow at ${moment(route.params.vendor.settings?.startTime).format('HH:mm')}`, 'warning')
+         showTost(toast, `${route.params.vendor.businessName} is closed now. opens everyday at ${moment(route.params.vendor.settings?.startTime).format('HH:mm')}`, 'warning')
      }
 
      const onPress = (listing: ListingMenuI) => {
@@ -208,7 +208,7 @@ return
                         <View style={tailwind('absolute bottom-2  left-2 flex flex-row items-center')}>
                             {route.params.vendor.settings.deliveryType !== 'PRE_ORDER' && (
                                 <View style={tailwind('rounded-xl py-1.5 ', {'bg-primary-500 px-4': restaurantOperationStatus, 'bg-gray-100 px-2': !restaurantOperationStatus})}>
-                                    <Text style={tailwind('text-center text-white', {'text-black': !restaurantOperationStatus } )}>{restaurantOperationStatus ? 'Open' : `Closed. opens ${moment(route.params.vendor.settings.startTime).format('hh:mm')} tomorrow`}</Text>
+                                    <Text style={tailwind('text-center text-white', {'text-black': !restaurantOperationStatus } )}>{restaurantOperationStatus ? 'Open' : `Closed`}</Text>
                                 </View>
                             )}
                             <View style={tailwind('rounded-xl py-1.5 bg-gray-100 ml-2 px-4')}>
@@ -229,14 +229,14 @@ return
                     </View>
                     <View style={tailwind('px-4 flex flex-col mt-6')}>
                         <View style={tailwind('flex flex-row items-center w-full justify-between')}>
-                            <Text style={tailwind('w-2/3 p-0 m-0 mb-2 font-bold text-4xl')}>
+                            <Text style={tailwind('w-2/3 p-0 m-0 mb-2 font-bold text-3xl')}>
                                 {route.params?.vendor?.businessName}
                             </Text>
                                 <View style={tailwind('flex flex-row')}>
                                     {vendorHasSubscription?.userIsSubscribed ? (
-                                        <IconButton onPress={handleSubscriptions} disabled={subscribing} iconName="notifications-sharp" iconStyle={tailwind('text-primary-500')} iconType="Ionicons" iconSize={28} />
+                                        <IconButton onPress={handleSubscriptions} disabled={subscribing} iconName="notifications-sharp" iconStyle={tailwind('text-primary-500')} iconType="Ionicons" iconSize={32} />
                                     ) : (
-                                        <IconButton onPress={handleSubscriptions} disabled={subscribing} iconName="notifications-outline"  iconType="Ionicons" iconSize={28} />
+                                        <IconButton onPress={handleSubscriptions} disabled={subscribing} iconName="notifications-outline"  iconType="Ionicons" iconSize={32} />
                                     )}
                                 </View>
                         </View>

@@ -7,15 +7,14 @@ import {AddressBookI} from "@nanahq/sticky";
 const _DeliveryAddressBox: React.FC<{selectedAddress: AddressBookI | undefined,  onPress: () => void}> = (props) => {
     return (
         <View style={tailwind('mt-10')}>
-            <Text style={tailwind('text-black font-bold text-lg mb-2')}>Delivery Address</Text>
+            <Text style={tailwind('text-black mb-2')}>Delivery Address</Text>
             <Pressable onPress={props.onPress} style={tailwind('border-0.5 border-brand-ash py-4 px-2')}>
                 <View style={tailwind('flex flex-row items-center justify-between w-full')}>
-                    <IconComponent iconType="Ionicons" name="location-sharp" style={tailwind('text-primary-500')} size={34} />
+                    <IconComponent iconType="Ionicons" name="location-sharp" style={tailwind('text-black')} size={20} />
                     <View style={tailwind('flex flex-col')}>
-                        <Text style={tailwind('text-lg')}>{props.selectedAddress === undefined ? 'Choose delivery address' : props.selectedAddress.labelName}</Text>
-                        <Text style={tailwind(' text-center text-brand-gray-700 text-sm')}>{props.selectedAddress === undefined ? 'Tap here to continue' : props.selectedAddress.address}</Text>
+                        <Text style={tailwind('')}>{props.selectedAddress === undefined ? 'Choose delivery address' : props.selectedAddress.labelName}</Text>
                     </View>
-                    <IconComponent iconType="Feather" name="chevron-right" size={34} />
+                    <IconComponent iconType="Feather" name="chevron-right" size={20} style={tailwind('text-gray-500')} />
                 </View>
             </Pressable>
         </View>

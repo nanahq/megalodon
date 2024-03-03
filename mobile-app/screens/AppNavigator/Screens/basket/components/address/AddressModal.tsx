@@ -58,14 +58,14 @@ export function AddressBookModal(props: AddressBookModalProps): JSX.Element {
     const {addressBook} = useAppSelector(state => state.addressBook)
     const { dismiss } = useBottomSheetModal();
     const getSnapPoints = (): string[] => {
-        if (props.addressBook.length < 1) {
+        if (props.addressBook.length <= 1) {
             return ["40%"]
         }
-        if (props.addressBook.length < 2) {
-            return ["30%"]
+        if (props.addressBook.length >= 2) {
+            return ["50%"]
         } else if (props.addressBook.length < 6) {
-            const size = props.addressBook.length * 15
-            return [`${size}%`]
+            const size = props.addressBook.length * 20
+            return [`${size > 90 ? 90 : size}%`]
         }
         return ["50%"]
     }
@@ -111,7 +111,7 @@ export function AddressBookModal(props: AddressBookModalProps): JSX.Element {
         >
             <ScrollView style={tailwind('bg-white rounded-t-3xl px-5 pt-10 flex-1')}>
                 <View style={tailwind('flex flex-row w-full justify-between items-center')}>
-                    <Text style={tailwind('font-bold text-3xl')}>Saved Addresses</Text>
+                    <Text style={tailwind('text-2xl')}>Saved Addresses</Text>
                     <ModalCloseIcon buttonStyle={[tailwind('bg-gray-200 rounded-full flex flex-row items-center justify-center p-0 m-0'), {width: 50, height: 50}]} onPress={() => closeModal()} size={22} />
                 </View>
                 {addressBook.length > 0 ? (
@@ -168,7 +168,7 @@ const ModalFooter: React.FC<ModalFooterProps> = ({animatedFooterPosition, onAddN
                onPress={() => onAddNewAddress() }
                label="Add new address"
                backgroundColor={tailwind('bg-black')}
-               labelColor={tailwind('text-white font-medium')}
+               labelColor={tailwind('text-white')}
                />
         </BottomSheetFooter>
 

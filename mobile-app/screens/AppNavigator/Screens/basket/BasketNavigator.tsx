@@ -29,7 +29,7 @@ export function BasketNavigator(): JSX.Element {
                 name={BasketScreenName.BASKET}
                 options={{
                     headerShown: true,
-                    headerTitle: 'Baskets',
+                    headerTitle: 'Basket',
                     headerTitleStyle:tailwind('font-bold text-2xl')
                 }}
             />

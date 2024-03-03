@@ -19,7 +19,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ navigation, route })
             headerShown: true,
             headerTitle: `Payment for order #${route?.params.order.refId}`,
             headerBackTitleVisible: false,
-            headerTitleAlign: 'center',
+            headerTitleAlign: 'left',
             headerTitleStyle: tailwind('text-xl'),
             cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS,
             headerLeft: () => <ModalCloseIcon onPress={handleNavigationBack} />,

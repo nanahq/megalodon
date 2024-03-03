@@ -6,15 +6,24 @@ import {BasketsItem} from "@screens/AppNavigator/Screens/basket/components/Baske
 import EmptyCart from '@assets/app/emptycart.png'
 import {useAnalytics} from "@segment/analytics-react-native";
 import {BasketScreenName} from "@screens/AppNavigator/Screens/basket/BasketScreenName.enum";
+import {useNavigation} from "@react-navigation/native";
+import {ModalCloseIcon} from "@screens/AppNavigator/Screens/modals/components/ModalCloseIcon";
 
  const _BasketScreen: React.FC = () => {
     const cartState = useAppSelector((state: RootState) => state.cart )
     const {vendors} = useAppSelector((state: RootState) => state.vendors )
      const analytics = useAnalytics()
 
+     const navigation = useNavigation()
+
      useEffect(() => {
          void analytics.screen(BasketScreenName.BASKET)
+         navigation.setOptions({
+             headerLeft: () => <ModalCloseIcon onPress={() => navigation.goBack()} />,
+         })
+
      }, [])
+
 
 
     const vendor = useMemo(() => {

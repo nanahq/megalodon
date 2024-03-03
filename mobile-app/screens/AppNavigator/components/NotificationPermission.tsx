@@ -1,7 +1,6 @@
 import * as Device from 'expo-device'
 import * as Notifications from "expo-notifications";
 import Constants from "expo-constants";
-import Intercom from "@intercom/intercom-react-native";
 
 export async function registerForPushNotificationsAsync(callback?: () => void) {
     let token;
@@ -20,9 +19,6 @@ export async function registerForPushNotificationsAsync(callback?: () => void) {
         }
         token = (await Notifications.getExpoPushTokenAsync({ projectId: Constants?.expoConfig?.extra?.eas?.projectId})).data;
 
-        if (existingStatus !== 'granted') {
-            await Intercom.sendTokenToIntercom(token)
-        }
     } else {
         alert('Must use physical device for Push Notifications');
     }

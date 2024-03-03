@@ -34,7 +34,7 @@ export function GenericButton (props: Props): JSX.Element {
             }), style]}
             {...rest}
         >
-            <Text style={[tailwind('font-semibold text-center text-lg py-3.5'), labelColor]}>{label}</Text>
+            <Text style={[tailwind('text-center text-lg py-3.5'), labelColor]}>{label}</Text>
             {props.loading !== undefined && props.loading && <LoaderComponent size='small' style={tailwind('pl-2 text-white')} />}
         </TouchableOpacity>
     )

@@ -26,6 +26,7 @@ import {fetchHomaPage } from "@store/listings.reducer";
 import {RedeemModal} from "@screens/AppNavigator/Screens/modals/Redeem.Modal";
 import {useAnalytics} from "@segment/analytics-react-native";
 import Intercom from '@intercom/intercom-react-native';
+import {PromotionModal} from "@screens/AppNavigator/Screens/modals/Promotion.modal";
 
 const App = createStackNavigator<AppParamList>()
 
@@ -81,12 +82,6 @@ if (Device.osName === 'Android') {
         vibrationPattern: [0, 250, 250, 250],
         lightColor: '#FF231F7C',
     });
-
-    void Notifications.setNotificationChannelAsync('intercom_chat_replies_channel', {
-        name: 'Intercom Replies Channel',
-        description: 'Channel for intercom replies',
-        importance: Notifications.AndroidImportance.MAX,
-    })
 }
 
 
@@ -118,15 +113,6 @@ export function AppNavigator(): JSX.Element {
                     version: Device.osVersion,
                     name: Device.osName,
                     brand: Device.brand
-                }
-            })
-
-            void Intercom.updateUser({
-                email: profile.email,
-                userId: profile._id,
-                name: profile.firstName,
-                customAttributes: {
-                    app: 'MAIN_APP'
                 }
             })
         }
@@ -221,6 +207,10 @@ export function AppNavigator(): JSX.Element {
                     <App.Screen
                         name={ModalScreenName.MODAL_PAYMENT_SCREEN}
                         component={PaymentModal}
+                    />
+                    <App.Screen
+                        name={ModalScreenName.MODAL_PROMO_SCREEN}
+                        component={PromotionModal}
                     />
                 </App.Group>
             </App.Navigator>

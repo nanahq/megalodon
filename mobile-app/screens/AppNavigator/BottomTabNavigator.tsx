@@ -10,7 +10,6 @@ import {BasketNavigator} from "@screens/AppNavigator/Screens/basket/BasketNaviga
 import {ProfileNavigator} from "@screens/AppNavigator/Screens/profile/ProfileNavigator";
 import {OrderNavigator} from "@screens/AppNavigator/Screens/orders/OrderNavigator";
 import {PromotionNavigator} from "@screens/AppNavigator/Screens/promotions/PromotionNavigator";
-import Intercom from "@intercom/intercom-react-native";
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>()
 
@@ -52,7 +51,6 @@ export function BottomTabNavigator ():JSX.Element {
                     "py-6": Device.osName === 'iOS',
                     "pb-8": Device.osName === 'Android'
                 }),
-                // tabBarLabelStyle: tailwind('mt-2'),
                 lazy: true
             }}
         >
@@ -79,6 +77,7 @@ export function BottomTabNavigator ():JSX.Element {
                 component={BasketNavigator}
                 name={AppScreenName.BASKET}
                 options={{
+                    tabBarStyle: {display: 'none'},
                     tabBarLabel: ({ focused, color }) =>
                         getTabBarLabel({
                             focused,
@@ -99,12 +98,6 @@ export function BottomTabNavigator ():JSX.Element {
             <BottomTab.Screen
                 component={PromotionNavigator}
                 name={AppScreenName.DEALS}
-                listeners={{
-                    tabPress: (event) => {
-                        event.preventDefault();
-                        Intercom.present()
-                    }
-                }}
                 options={{
                     tabBarLabel: ({ focused, color }) =>
                         getTabBarLabel({

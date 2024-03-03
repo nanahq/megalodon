@@ -17,10 +17,9 @@ import {WebSocketProvider} from "@contexts/SocketProvider";
 import {NetworkMapper} from "@api/network.mapper";
 import {createClient, AnalyticsProvider} from "@segment/analytics-react-native";
 import {AmplitudeSessionPlugin} from "@segment/analytics-react-native-plugin-amplitude-session";
-import Intercom from '@intercom/intercom-react-native';
 
 import 'expo-dev-client';
-import {useEffect} from "react";
+import {PromoCodeProvider} from "@contexts/PromoCode";
 
 const WEBSOCKET_ENDPOINT = NetworkMapper.PRODUCTION
 
@@ -34,12 +33,6 @@ segmentClient.add({ plugin: new AmplitudeSessionPlugin()});
 export default function App() {
   const isLoaded = useCachedResource()
    const logger = useLogger()
-
-    useEffect(() => {
-        Intercom
-            .loginUnidentifiedUser()
-
-    }, [])
 
 // delay splash screen till cached resources are loaded
     if (!isLoaded) {
@@ -71,19 +64,21 @@ export default function App() {
            >
                <WebSocketProvider socketEndpoint={WEBSOCKET_ENDPOINT}>
                    <StoreProvider>
-                       <GestureHandlerRootView
-                           style={tailwind('flex-1')}
-                       >
-                           <SafeAreaProvider>
-                               <BottomSheetModalProvider>
-                                   <ToastProvider renderType={customToast}>
-                                       <AnalyticsProvider client={segmentClient}>
-                                           <MainScreen />
-                                       </AnalyticsProvider>
-                                   </ToastProvider>
-                               </BottomSheetModalProvider>
-                           </SafeAreaProvider>
-                       </GestureHandlerRootView>
+                      <PromoCodeProvider>
+                          <GestureHandlerRootView
+                              style={tailwind('flex-1')}
+                          >
+                              <SafeAreaProvider>
+                                  <BottomSheetModalProvider>
+                                      <ToastProvider renderType={customToast}>
+                                          <AnalyticsProvider client={segmentClient}>
+                                              <MainScreen />
+                                          </AnalyticsProvider>
+                                      </ToastProvider>
+                                  </BottomSheetModalProvider>
+                              </SafeAreaProvider>
+                          </GestureHandlerRootView>
+                      </PromoCodeProvider>
                    </StoreProvider>
                </WebSocketProvider>
            </AuthPersistenceProvider>

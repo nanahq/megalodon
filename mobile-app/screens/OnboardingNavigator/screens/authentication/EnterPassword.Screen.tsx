@@ -11,9 +11,9 @@ import {useAuthPersistence} from "@contexts/AuthPersistenceProvider";
 import {TextInputWithLabel} from "@components/commons/inputs/TextInputWithLabel";
 import {showTost} from "@components/commons/Toast";
 import {useToast} from "react-native-toast-notifications";
-import {cookieParser} from "../../../../../utils/cookieParser";
 import {useAnalytics} from "@segment/analytics-react-native";
 import * as Device from "expo-device";
+import {cookieParser} from "../../../../../utils/cookieParser";
 
 type EnterPasswordScreenProps = StackScreenProps<OnboardingParamsList, OnboardingScreenName.ENTER_PASSWORD>
 
@@ -125,7 +125,7 @@ export function EnterPasswordScreen ({navigation, route}: EnterPasswordScreenPro
                             </View>
                         </>
                     )}
-                    <TextInputWithLabel secureTextEntry containerStyle={tailwind('my-3 mb-10')}  label="Password" moreInfo="Password should be at least 8 characters" labelTestId="EnterPasswordScreen.TextInput.Label" onChangeText={setPassword} value={password} />
+                    <TextInputWithLabel secureTextEntry containerStyle={tailwind('my-3 mb-10')}  label="Password" placeholder="Enter password" moreInfo="Password should be at least 8 characters" labelTestId="EnterPasswordScreen.TextInput.Label" onChangeText={setPassword} value={password} />
                 </View>
                 <GenericButton
                     loading={loading}

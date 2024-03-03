@@ -1,4 +1,4 @@
-import {Dimensions, View} from "react-native";
+import {Dimensions, RefreshControl, View} from "react-native";
 import React, {useEffect, useMemo, useState} from "react";
 import {OrderI, OrderStatus} from "@nanahq/sticky";
 import {LoaderComponentScreen} from "@components/commons/LoaderComponent";
@@ -14,16 +14,28 @@ import {OrderParamsList} from "@screens/AppNavigator/Screens/orders/OrderNavigat
 import {OrderScreenName} from "@screens/AppNavigator/Screens/orders/OrderScreenName";
 import * as Device from 'expo-device'
 import {useAnalytics} from "@segment/analytics-react-native";
+import {ModalCloseIcon} from "@screens/AppNavigator/Screens/modals/components/ModalCloseIcon";
 
 const {height} = Dimensions.get('screen')
 export const OrderScreen: React.FC = () => {
+
     const isAndroid = Device.osName === 'Android'
     const navigation = useNavigation<NavigationProp<OrderParamsList>>()
-    const [fetchingOrders, setFetchingOrders] = useState<boolean>(true)
+    const [fetchingOrders, setFetchingOrders] = useState<boolean>(false)
     const [orders, setOrders] = useState<OrderI[]>([])
     const [view, setView] = useState<OrderStatus>(OrderStatus.PAYMENT_PENDING)
     const analytics = useAnalytics()
 
+    useEffect(() => {
+        navigation.setOptions({
+            headerShown: true,
+            headerTitle: 'Orders',
+            headerBackTitleVisible: false,
+            headerTitleAlign: 'left',
+            headerTitleStyle: tailwind('text-xl'),
+            headerLeft: () => <ModalCloseIcon onPress={() => navigation.goBack()} />,
+        })
+    }, [])
     const ordersInProgress = useMemo(() => {
         if (orders.length < 1) {
             return []
@@ -42,31 +54,32 @@ export const OrderScreen: React.FC = () => {
 
     const toast  = useToast()
 
+    async function fetchOrder (): Promise<void> {
+        setFetchingOrders(true)
+        try {
+            const data = (await  _api.requestData({
+                method: 'get',
+                url: 'order/orders'
+            })).data as OrderI[]
+
+            setOrders(data)
+        } catch (error) {
+            showTost(toast, 'Can not fetch orders now', 'error')
+        } finally {
+            setFetchingOrders(false)
+        }
+    }
+
     useEffect(() => {
-       async function fetchOrder (): Promise<void> {
-           try {
-               const data = (await  _api.requestData({
-                   method: 'get',
-                   url: 'order/orders'
-               })).data as OrderI[]
-
-               setOrders(data)
-           } catch (error) {
-               showTost(toast, 'Can not fetch orders now', 'error')
-           } finally {
-               setFetchingOrders(false)
-           }
-       }
-
-       if (fetchingOrders) {
-           void fetchOrder()
-       }
-    }, [fetchingOrders])
+        void fetchOrder()
+    }, [])
 
 
     useEffect(() => {
         void analytics.screen(OrderScreenName.ORDERS)
     }, [])
+
+
     if (fetchingOrders) {
         return <LoaderComponentScreen />
     }
@@ -95,6 +108,11 @@ export const OrderScreen: React.FC = () => {
                 <OrderView view={view} onButtonClick={(v) => setView(v as any)} />
                 {view === 'PAYMENT_PENDING' ? (
                     <FlashList
+                        refreshControl={
+                            <RefreshControl
+                            refreshing={fetchingOrders}
+                            onRefresh={ () => fetchOrder()} />
+                        }
                         showsVerticalScrollIndicator={false}
                         contentContainerStyle={tailwind(' bg-white', {'pb-20': isAndroid} )}
                         data={ordersInProgress}
@@ -104,6 +122,11 @@ export const OrderScreen: React.FC = () => {
                     />
                 ) : (
                     <FlashList
+                        refreshControl={
+                            <RefreshControl
+                                refreshing={fetchingOrders}
+                                onRefresh={ () => fetchOrder()} />
+                        }
                         showsVerticalScrollIndicator={false}
                         contentContainerStyle={tailwind(' bg-white', {'pb-20': isAndroid})}
                         data={ordersDelivered}

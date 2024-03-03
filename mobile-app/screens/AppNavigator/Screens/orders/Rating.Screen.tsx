@@ -31,7 +31,7 @@ export const AddReviewScreen: React.FC<SingleOrderScreenProps> = ({navigation, r
             headerShown: true,
             headerTitle: `Rate your order`,
             headerBackTitleVisible: false,
-            headerTitleAlign: 'center',
+            headerTitleAlign: 'left',
             headerTitleStyle: tailwind('text-xl'),
             headerLeft: () => <ModalCloseIcon onPress={() => navigation.goBack()} />,
         })
@@ -81,12 +81,12 @@ export const AddReviewScreen: React.FC<SingleOrderScreenProps> = ({navigation, r
                             style={[tailwind('rounded-full'), {width: 70, aspectRatio: 1}]}
                         />
                        <View style={tailwind('flex flex-col ml-3')}>
-                           <Text style={tailwind('text-lg text-brand-gray-700')}>{orderDate}</Text>
-                           <Text style={tailwind('text-lg')}>{route.params.order.listing[0].name}....</Text>
+                           <Text style={tailwind('text-brand-gray-700')}>{orderDate}</Text>
+                           <Text style={tailwind('')}>{route.params.order.listing[0].name}....</Text>
                        </View>
                     </View>
                     <View>
-                        <Text style={tailwind('text-brand-gray-700 text-lg')}>Delivered</Text>
+                        <Text style={tailwind('text-brand-gray-700')}>Delivered</Text>
                         <NumberFormat
                             prefix='₦'
                             value={route.params.order.orderValuePayable}
@@ -94,7 +94,7 @@ export const AddReviewScreen: React.FC<SingleOrderScreenProps> = ({navigation, r
                             displayType="text"
                             renderText={(value) => (
                                 <Text
-                                    style={tailwind('text-lg')}
+                                    style={tailwind('')}
                                 >
                                     {value}
                                 </Text>
@@ -103,18 +103,18 @@ export const AddReviewScreen: React.FC<SingleOrderScreenProps> = ({navigation, r
                     </View>
                 </View>
                 <View style={tailwind('mt-10')}>
-                    <Text style={tailwind('font-bold text-2xl')}>How was the food?</Text>
+                    <Text style={tailwind('font-bold')}>How was the food?</Text>
                     <View style={tailwind('mt-4 flex flex-col')}>
                         <RatingRow onPress={setRating} currentRating={rating} />
                         <View style={tailwind('flex flex-col mt-10')}>
-                            <Text style={tailwind('text-lg')}>Leave a comment</Text>
+                            <Text style={tailwind('')}>Leave a comment</Text>
                             <TextInput
                                 defaultValue={reviewBody}
                                 onChangeText={value => setReviewBody(value)}
                                 textAlignVertical="top"
                                 multiline
                                 numberOfLines={4}
-                                style={[tailwind('py-4 w-full px-3  bg-primary-200 rounded  text-lg text-black'), {height: 150}]}
+                                style={[tailwind('py-4 w-full px-3  bg-primary-200 rounded text-black'), {height: 150}]}
                                 placeholder='This food is very good!'
                             />
                         </View>

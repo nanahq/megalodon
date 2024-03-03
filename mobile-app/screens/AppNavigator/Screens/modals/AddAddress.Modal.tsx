@@ -106,7 +106,7 @@ export const AddAddressModal: React.FC<AddAddressModalProps> = ({navigation, rou
             headerShown: true,
             headerTitle: 'Add new address',
             headerBackTitleVisible: false,
-            headerTitleAlign: 'center',
+            headerTitleAlign: 'left',
             headerTitleStyle: tailwind('text-xl'),
             headerStyle:  {
                 shadowOpacity: 8,

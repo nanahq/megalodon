@@ -134,7 +134,7 @@ export const ListingModal: React.FC<ListingModalScreenProps>  = ({navigation, ro
             headerShown: true,
             headerTitle: route.params.listing.name,
             headerBackTitleVisible: false,
-            headerTitleAlign: 'center',
+            headerTitleAlign: 'left',
             headerTitleStyle: tailwind('text-xl'),
             headerRight: () => <ShareListingIcon  onPress={() => {}}/>,
             headerLeft: () => <ModalCloseIcon onPress={() => navigation.goBack()} />,

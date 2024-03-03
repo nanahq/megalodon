@@ -45,7 +45,7 @@ export const BasketSingle: React.FC = () => {
             headerShown: true,
             headerTitle: vendor?.businessName,
             headerBackTitleVisible: false,
-            headerTitleAlign: 'center',
+            headerTitleAlign: 'left',
             headerTitleStyle: tailwind('text-xl'),
             headerLeft: () => <ModalCloseIcon onPress={() => navigation.navigate(BasketScreenName.BASKET)} />,
         })

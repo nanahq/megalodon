@@ -10,7 +10,6 @@
     "userInterfaceStyle": "automatic",
     "jsEngine": "hermes",
     "plugins": [
-      "./plugins/intercom-config-plugin.js",
       [
         "expo-build-properties",
         {
@@ -48,7 +47,7 @@
       "icon": "./assets/app-config/Icon-blue-ios1024.png",
       "supportsTablet": false,
       "buildNumber": "1.0.1",
-      "bundleIdentifier": "com.nanaeats.nana-app"
+      "bundleIdentifier": "com.nanaeats.nana.app"
     },
     "android": {
       "icon": "./assets/app-config/Icon-Android-512px.png",
@@ -74,11 +73,6 @@
     "extra": {
       "eas": {
         "projectId": "8235481d-016d-4aa1-a436-7cc06ccc1f14"
-      },
-      "INTERCOM": {
-        "iosApiKey": "ios_sdk-35cf6ef8e2b90f88a31a858b52400fa048c791b2",
-        "androidApiKey": "android_sdk-d16633cb6fb57cd48e32285c163cea24ed0a7269",
-        "appId": "onxtiq2a"
       }
     }
   }

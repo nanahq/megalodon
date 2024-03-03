@@ -13,8 +13,8 @@ import {ProfileSection} from "@screens/AppNavigator/Screens/profile/components/P
 import {ProfileScreenName} from "@screens/AppNavigator/Screens/profile/ProfileScreenName";
 import {useToast} from "react-native-toast-notifications";
 import {showTost} from "@components/commons/Toast";
-import {getInitials} from "../../../../../utils/getInitials";
 import {useAnalytics} from "@segment/analytics-react-native";
+import {getInitials} from "../../../../../utils/getInitials";
 
 export const ProfileScreen = () => {
     const navigation = useNavigation<NavigationProp<ProfileParamsList>>()

@@ -55,7 +55,7 @@ export const UndeliveredSingleOrderScreen: React.FC<UndeliveredSingleOrderScreen
             headerShown: true,
             headerTitle: `Order #${route?.params.order.refId}`,
             headerBackTitleVisible: false,
-            headerTitleAlign: 'center',
+            headerTitleAlign: 'left',
             headerTitleStyle: tailwind('text-xl'),
             headerLeft: () => <ModalCloseIcon onPress={() => navigation.goBack()} />,
             headerStyleInterpolator: HeaderStyleInterpolators.forFade
@@ -84,33 +84,33 @@ export const UndeliveredSingleOrderScreen: React.FC<UndeliveredSingleOrderScreen
         <ScrollView style={tailwind('flex-1 bg-white')}>
             <View style={tailwind('px-4 py-5')}>
                 <View>
-                    <Text style={tailwind('text-lg text-brand-gray-700')}>{moment(route.params.order.createdAt).format('DD MMM YYYY HH:mm')}</Text>
-                    <Text style={tailwind('font-bold text-3xl w-3/4 mt-2')}>{route.params.order.vendor.businessName}</Text>
+                    <Text style={tailwind('text-brand-gray-700')}>{moment(route.params.order.createdAt).format('DD MMM YYYY HH:mm')}</Text>
+                    <Text style={tailwind('font-bold text-xl mt-2')}>{route.params.order.vendor.businessName}</Text>
                 </View>
                 <View style={tailwind('mt-10')}>
                     <View style={tailwind('flex flex-col mb-5')}>
-                        <Text style={tailwind('text-lg font-bold')}>Delivery</Text>
-                        <View style={tailwind('flex flex-row   mt-2 items-center')}>
+                        <Text style={tailwind('font-bold')}>Delivery</Text>
+                        <View style={tailwind('flex flex-row mt-2 items-center')}>
                             <IconComponent iconType="Ionicons" name="ios-location-outline" size={20} />
-                            <Text style={tailwind('text-lg ml-5')}>{route.params.order.deliveryAddress}</Text>
+                            <Text style={tailwind('ml-5')}>{route.params.order.deliveryAddress}</Text>
                         </View>
                     </View>
                     <View style={tailwind('flex flex-col mb-5')}>
-                        <Text style={tailwind('text-lg font-bold')}>Order Status</Text>
-                        <View style={tailwind('flex flex-row   mt-2 items-center')}>
+                        <Text style={tailwind('font-bold')}>Order Status</Text>
+                        <View style={tailwind('flex flex-row mt-2 items-center')}>
                             <IconComponent iconType="Ionicons" name="ios-cart-outline" size={20} />
                             <View>
-                                <Text style={tailwind('text-lg ml-5')}>
+                                <Text style={tailwind('ml-5')}>
                                     {MappedDeliveryStatus[route.params.order.orderStatus]}
                                 </Text>
                                 {[OrderStatus.FULFILLED, OrderStatus.COURIER_PICKUP, OrderStatus.PROCESSED,  OrderStatus.IN_ROUTE].includes(route.params.order.orderStatus) && (
-                                    <Text style={tailwind('text-lg ml-5')}>{ route.params.order.orderStatus === OrderStatus.FULFILLED  ? `Delivered on ${moment(route.params.order.updatedAt).format('DD MMM YYYY HH:mm')}`  : `Delivery by ${moment(route.params.order.orderDeliveryScheduledTime).format('HH:mm Do MMM')}` } </Text>
+                                    <Text style={tailwind('ml-5')}>{ route.params.order.orderStatus === OrderStatus.FULFILLED  ? `Delivered on ${moment(route.params.order.updatedAt).format('DD MMM YYYY HH:mm')}`  : `Delivery by ${moment(route.params.order.orderDeliveryScheduledTime).format('HH:mm Do MMM')}` } </Text>
                                 )}
                             </View>
                         </View>
                     </View>
                     <View style={tailwind('flex flex-col mb-5')}>
-                        <Text style={tailwind('text-lg font-bold')}>Total in Naira</Text>
+                        <Text style={tailwind('font-bold')}>Total in Naira</Text>
                         <View style={tailwind('flex flex-row  mt-2  items-center')}>
                             <IconComponent iconType="Ionicons" name="ios-pricetags-outline" size={20} />
                             <NumberFormat
@@ -120,7 +120,7 @@ export const UndeliveredSingleOrderScreen: React.FC<UndeliveredSingleOrderScreen
                                 displayType="text"
                                 renderText={(value) => (
                                     <Text
-                                        style={tailwind('text-lg ml-5')}
+                                        style={tailwind('ml-5')}
                                     >
                                         {value}
                                     </Text>
@@ -129,15 +129,15 @@ export const UndeliveredSingleOrderScreen: React.FC<UndeliveredSingleOrderScreen
                         </View>
                     </View>
                 </View>
-                <View style={tailwind('my-10')}>
+                <View style={tailwind('mb-5')}>
                     {route.params.order.orderStatus === OrderStatus.FULFILLED && !rating && (
                         <>
-                            <GenericButton style={tailwind('mt-4')} onPress={() => {
+                            <GenericButton style={tailwind('mt-2')} onPress={() => {
                                 void analytics.track('CLICK:ORDER-ADD-REVIEW')
                                 navigation.navigate(OrderScreenName.ADD_REVIEW, {
                                     order: route.params.order
                                 })
-                            } } label="Add A Review" labelColor={tailwind('text-white')} backgroundColor={tailwind('bg-primary-500 bg-opacity-40')} />
+                            } } label="Add A Review" labelColor={tailwind('text-white')} backgroundColor={tailwind('bg-primary-500')} />
                         </>
                     )}
                     { [OrderStatus.COURIER_PICKUP, OrderStatus.PROCESSED,  OrderStatus.IN_ROUTE].includes(route.params.order.orderStatus) && (
@@ -159,7 +159,7 @@ export const UndeliveredSingleOrderScreen: React.FC<UndeliveredSingleOrderScreen
                 </View>
                 {transformOrder.length > 0 && (
                     <View>
-                        <Text style={tailwind('text-2xl font-bold')}>Your order</Text>
+                        <Text style={tailwind('font-bold')}>Your order</Text>
                         <View style={tailwind('flex flex-col w-full mt-2 items-center')}>
                             {transformOrder.map((order, index) => (
                                 <OrderItemRow key={index}>
@@ -213,25 +213,9 @@ export const UndeliveredSingleOrderScreen: React.FC<UndeliveredSingleOrderScreen
                                         )}
                                     />
                                 </OrderItemRow>
-                                <OrderItemRow>
-                                    <Text>Tax (VAT)</Text>
-                                    <NumberFormat
-                                        prefix='₦'
-                                        value={route.params.order.orderBreakDown.vat}
-                                        thousandSeparator
-                                        displayType="text"
-                                        renderText={(value) => (
-                                            <Text
-                                                style={tailwind('')}
-                                            >
-                                                {value}
-                                            </Text>
-                                        )}
-                                    />
-                                </OrderItemRow>
                             </View>
                             <OrderItemRow>
-                                <Text style={tailwind('font-bold text-lg')}>Total</Text>
+                                <Text style={tailwind('font-bold')}>Total</Text>
                                 <NumberFormat
                                     prefix='₦'
                                     value={route.params.order.orderValuePayable}
@@ -239,7 +223,7 @@ export const UndeliveredSingleOrderScreen: React.FC<UndeliveredSingleOrderScreen
                                     displayType="text"
                                     renderText={(value) => (
                                         <Text
-                                            style={tailwind('font-bold text-lg')}
+                                            style={tailwind('font-bold')}
                                         >
                                             {value}
                                         </Text>
@@ -249,20 +233,20 @@ export const UndeliveredSingleOrderScreen: React.FC<UndeliveredSingleOrderScreen
                         </View>
                     </View>
                 )}
-                <View style={tailwind('mt-10')}>
-                    <Text style={tailwind('text-2xl font-bold')}>Order Information</Text>
+                <View style={tailwind('mt-5')}>
+                    <Text style={tailwind('font-bold')}>Order Information</Text>
                     <View>
                         <View style={tailwind('flex my-2 flex-row  items-center w-full')}>
                            <Text>Order RefId</Text>
-                           <Text style={tailwind('font-bold ml-5')}>{route.params.order.refId}</Text>
+                           <Text style={tailwind('font-bold ml-5 text-xs')}>{route.params.order.refId}</Text>
                         </View>
                         <View style={tailwind('flex my-2 flex-row  items-center w-full')}>
                             <Text>Order ID</Text>
-                            <Text style={tailwind('font-bold ml-5')} >{route.params.order._id}</Text>
+                            <Text style={tailwind('font-bold text-xs ml-5')} >{route.params.order._id}</Text>
                         </View>
                         <View style={tailwind('flex my-2 flex-row  items-center w-full')}>
                             <Text>Support</Text>
-                            <Text style={tailwind('font-bold ml-5')}>support@nanaeats.com</Text>
+                            <Text style={tailwind('font-bold ml-5 text-xs')}>support@trynanaapp.com</Text>
                         </View>
                     </View>
                 </View>

@@ -6,7 +6,7 @@ import React from "react";
 export const ModalCloseIcon: React.FC<{onPress: () => void, size?: number,buttonStyle?: StyleProp<ViewStyle>, iconStyle?: StyleProp<TextStyle>}> = (props) => {
     return (
         <Pressable onPress={props.onPress} style={props.buttonStyle}>
-            <IconComponent iconType="AntDesign" name="close" size={props.size ?? 20} style={[tailwind('mx-4 font-medium'), props.iconStyle]}/>
+            <IconComponent iconType="AntDesign" name="arrowleft" size={props.size ?? 34} style={[tailwind('mx-4 font-bold'), props.iconStyle]}/>
         </Pressable>
     )
 }
@@ -14,7 +14,7 @@ export const ModalCloseIcon: React.FC<{onPress: () => void, size?: number,button
 export const ModalBackIcon: React.FC<{onPress: () => void, size?: number,buttonStyle?: StyleProp<ViewStyle>, iconStyle?: StyleProp<TextStyle>}> = (props) => {
     return (
         <Pressable onPress={props.onPress} style={props.buttonStyle}>
-            <IconComponent iconType="AntDesign" name="arrowleft" size={props.size ?? 20} style={[tailwind('mx-4 font-medium'), props.iconStyle]}/>
+            <IconComponent iconType="AntDesign" name="arrowleft" size={props.size ?? 40} style={[tailwind('mx-4 font-bold'), props.iconStyle]}/>
         </Pressable>
     )
 }
