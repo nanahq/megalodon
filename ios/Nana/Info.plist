@@ -28,7 +28,7 @@
         <key>CFBundleURLSchemes</key>
         <array>
           <string>myapp</string>
-          <string>com.nanaeats.nana-app</string>
+          <string>com.nanaeats.nana.app</string>
         </array>
       </dict>
       <dict>

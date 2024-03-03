@@ -321,7 +321,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.nanaeats.nana-app";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.nanaeats.nana.app";
 				PRODUCT_NAME = "Nana";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -348,7 +348,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.nanaeats.nana-app";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.nanaeats.nana.app";
 				PRODUCT_NAME = "Nana";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
