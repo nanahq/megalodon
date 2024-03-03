@@ -1,6 +1,7 @@
 {
   "build": {
     "production": {
+      "node": "20.0.0",
       "channel": "production",
       "env": {
         "EXPO_BUNDLE_IDENTIFIER": "com.nanaeats.nana_app",
@@ -8,6 +9,7 @@
       }
     },
     "preview": {
+      "node": "20.0.0",
       "distribution": "internal",
       "channel": "preview",
       "android": {
@@ -35,7 +37,6 @@
   },
   "cli": {
     "version": ">=2.2.0",
-    "requireCommit": true,
-    "node": "20.0.0"
+    "requireCommit": true
   }
 }
