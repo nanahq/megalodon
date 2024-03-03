@@ -1,5 +1,4 @@
-package com.nanaeats.nana_app;
-import com.intercom.reactnative.IntercomModule;
+package com.nana;
 
 import android.app.Application;
 import android.content.res.Configuration;
@@ -62,8 +61,6 @@ public class MainApplication extends Application implements ReactApplication {
   public void onCreate() {
     super.onCreate();
     SoLoader.init(this, /* native exopackage */ false);
-		IntercomModule.initialize(this, "android_sdk-d16633cb6fb57cd48e32285c163cea24ed0a7269", "onxtiq2a");
-
     if (!BuildConfig.REACT_NATIVE_UNSTABLE_USE_RUNTIME_SCHEDULER_ALWAYS) {
       ReactFeatureFlags.unstable_useRuntimeSchedulerAlways = false;
     }

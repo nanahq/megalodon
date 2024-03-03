@@ -1,6 +1,4 @@
 #import "AppDelegate.h"
-#import <IntercomModule.h>
-#import <UserNotifications/UserNotifications.h>
 
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTLinkingManager.h>
@@ -15,19 +13,7 @@
   // They will be passed down to the ViewController used by React Native.
   self.initialProps = @{};
 
-  [IntercomModule initialize:@"ios_sdk-35cf6ef8e2b90f88a31a858b52400fa048c791b2" withAppId:@"onxtiq2a"];
-
-
-  // START INTERCOM PUSH
-  UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
-  [center requestAuthorizationWithOptions:(UNAuthorizationOptionAlert + UNAuthorizationOptionSound)
-                          completionHandler:^(BOOL granted, NSError *_Nullable error) {
-                          }];
-  [[UIApplication sharedApplication] registerForRemoteNotifications];
-  // END INTERCOM PUSH
-  
-
-	return [super application:application didFinishLaunchingWithOptions:launchOptions];
+  return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }
 
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
@@ -53,8 +39,7 @@
 // Explicitly define remote notification delegates to ensure compatibility with some third-party libraries
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
-  [IntercomModule setDeviceToken:deviceToken];
-	return [super application:application didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
+  return [super application:application didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
 }
 
 // Explicitly define remote notification delegates to ensure compatibility with some third-party libraries

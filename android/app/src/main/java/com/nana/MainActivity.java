@@ -1,4 +1,4 @@
-package com.nanaeats.nana_app;
+package com.nana;
 
 import android.os.Build;
 import android.os.Bundle;

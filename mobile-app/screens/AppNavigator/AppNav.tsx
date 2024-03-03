@@ -25,7 +25,6 @@ import * as Notifications from "expo-notifications";
 import {fetchHomaPage } from "@store/listings.reducer";
 import {RedeemModal} from "@screens/AppNavigator/Screens/modals/Redeem.Modal";
 import {useAnalytics} from "@segment/analytics-react-native";
-import Intercom from '@intercom/intercom-react-native';
 import {PromotionModal} from "@screens/AppNavigator/Screens/modals/Promotion.modal";
 
 const App = createStackNavigator<AppParamList>()
