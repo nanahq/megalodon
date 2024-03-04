@@ -81,8 +81,6 @@ export const Checkout: React.FC = () => {
     const analytics = useAnalytics()
     const {coupon, calculateCoupon} = usePromoCode()
 
-
-
     const openModal = useCallback(() => {
         addressModalRef.current.present()
        void analytics.track('CLICK:DELIVERY-ADDRESS-MODAL')

@@ -39,11 +39,6 @@ jobs:
 
       - run: yarn install --frozen-lockfile
 
-      - run: |
-          git config --global user.email "github-bot@defichain.com"
-          git config --global user.name "defichain-bot"
-          npx standard-version --release-as ${{steps.version.outputs.result}}
-
       - name: EAS Build - iOS & Android
         run: eas build --platform all --non-interactive --clear-cache --wait --profile preview
         env:

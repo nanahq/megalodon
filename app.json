@@ -46,7 +46,6 @@
     "ios": {
       "icon": "./assets/app-config/Icon-blue-ios1024.png",
       "supportsTablet": false,
-      "buildNumber": "1.0.1",
       "bundleIdentifier": "com.nanaeats.nana.app"
     },
     "android": {
@@ -64,8 +63,7 @@
       ],
       "package": "com.nanaeats.nana_app",
       "googleServicesFile": "./google-services.json",
-      "useNextNotificationsApi": true,
-      "versionCode": 490010001
+      "useNextNotificationsApi": true
     },
     "web": {
       "favicon": "./assets/app-config/favicon.png"
