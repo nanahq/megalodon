@@ -89,7 +89,7 @@ packagingOptions {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "com.nana"
+    namespace 'com.nanaeats.nana_app'
     defaultConfig {
         applicationId 'com.nanaeats.nana_app'
         minSdkVersion rootProject.ext.minSdkVersion
