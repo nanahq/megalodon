@@ -31,9 +31,7 @@ MapboxGL.setWellKnownTileServer('mapbox');
     const [currentLocation, setCurrentLocation] = useState<LocationCoordinates | undefined>(undefined);
     const [loading, setLoading] = useState(true);
     const [places, setPlaces] = useState<any>(null);
-
     const {socketClient, isConnected} = useWebSocket()
-
 
      const [remainingTime, setRemainingTime] = useState<number | null>(deliveryInformation !== null ? calculateRemainingTime(deliveryInformation?.travelMeta?.travelTime as any) : null);
      const {schedulePushNotification} = useExpoPushNotification()
@@ -180,9 +178,10 @@ MapboxGL.setWellKnownTileServer('mapbox');
                          <MapboxGL.MapView
                              style={tailwind('flex-1')}
                              id="MapboxMap"
-                             zoomEnabled
+                             zoomEnabled={false}
                              styleURL="mapbox://styles/mapbox/navigation-night-v1"
-                             rotateEnabled
+                             rotateEnabled={false}
+
                          >
                              <MapboxGL.Camera
                                  centerCoordinate={mapboxLocationMapper(currentLocation?.coordinates)}
@@ -190,6 +189,8 @@ MapboxGL.setWellKnownTileServer('mapbox');
                                  animationMode="flyTo"
                                  animationDuration={2000}
                                  pitch={60}
+                                 allowUpdates={true}
+                                 followUserLocation={true}
                              />
                              {places && (
                                  <MapboxGL.ShapeSource id="placesSource" shape={places}>

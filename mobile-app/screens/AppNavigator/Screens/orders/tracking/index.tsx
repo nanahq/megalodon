@@ -30,7 +30,6 @@ export const Tracking: React.FC<TrackingProps> = ({navigation, route}) => {
     const analytics = useAnalytics()
     // @ts-ignore
     const [activeStep, setActiveStep] = useState<number>(guideline[route.params.order.orderStatus as OrderStatus])
-    // const [delivery,setDelivery] = useState()
 
     const [order, setOrder] = useState<OrderI>(route.params.order)
 
