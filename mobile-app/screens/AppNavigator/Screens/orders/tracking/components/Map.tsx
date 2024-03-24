@@ -1,7 +1,6 @@
 import React, {memo, useEffect, useState} from 'react';
-import {View, Text, ActivityIndicator} from 'react-native';
-import {getColor, tailwind} from '@tailwind';
-import { IconComponent } from '@components/commons/IconComponent';
+import {View, Dimensions} from 'react-native';
+import { tailwind} from '@tailwind';
 import {
     DeliveryI,
     LocationCoordinates,
@@ -10,49 +9,39 @@ import {
     SOCKET_MESSAGE,
     TravelDistanceResult
 } from '@nanahq/sticky';
-import { _api } from '@api/_request';
-import MapboxGL from '@rnmapbox/maps';
 import {useWebSocket} from "@contexts/SocketProvider";
-import LocationTracker from '@assets/app/location-tracker.svg'
 import moment from "moment";
 import * as Notifications from "expo-notifications";
 import {useExpoPushNotification} from "@hooks/useExpoNotification";
-import {LoaderComponentScreen} from "@components/commons/LoaderComponent";
+import Mapview, {PROVIDER_GOOGLE} from 'react-native-maps'
 import {mapboxLocationMapper} from "../../../../../../../utils/mapboxLocationMappper";
 
 
-const MAPBOX_APIKEY = 'pk.eyJ1Ijoic3VyYWphdXdhbCIsImEiOiJjbGxiNHhpNW8wMHBpM2lxb215NnZmN3ZuIn0.a6zWnzIF0KcVZ2AUiDNBDA';
-MapboxGL.setAccessToken(MAPBOX_APIKEY);
-MapboxGL.setTelemetryEnabled(false);
-MapboxGL.setWellKnownTileServer('mapbox');
+const SCREEN_HEIGHT = Dimensions.get('window').height
 
- const _Map: React.FC<{ order: OrderI }> = ({ order }) => {
-    const [deliveryInformation, setDeliveryInformation] = useState<DeliveryI | null>(null);
-    const [currentLocation, setCurrentLocation] = useState<LocationCoordinates | undefined>(undefined);
-    const [loading, setLoading] = useState(true);
-    const [places, setPlaces] = useState<any>(null);
+ const _Map: React.FC<{ order: OrderI, delivery: DeliveryI }> = ({ order, delivery }) => {
+    const [ setPlaces] = useState<any>(null);
     const {socketClient, isConnected} = useWebSocket()
 
-     const [remainingTime, setRemainingTime] = useState<number | null>(deliveryInformation !== null ? calculateRemainingTime(deliveryInformation?.travelMeta?.travelTime as any) : null);
+     const [_, setRemainingTime] = useState<number | null>(delivery !== null ? calculateRemainingTime(delivery?.travelMeta?.travelTime as any) : null);
      const {schedulePushNotification} = useExpoPushNotification()
 
      useEffect(() => {
-         if (deliveryInformation?.deliveryTime !== null) {
+         if (delivery?.deliveryTime !== null) {
              const intervalId = setInterval(() => {
-                 setRemainingTime(calculateRemainingTime(deliveryInformation?.travelMeta?.travelTime as any));
+                 setRemainingTime(calculateRemainingTime(delivery?.travelMeta?.travelTime as any));
              }, 1000);
 
              // Cleanup interval on component unmount
              return () => clearInterval(intervalId);
          }
-     }, [deliveryInformation?.deliveryTime]);
+     }, [delivery?.deliveryTime]);
 
      function calculateRemainingTime(targetTime: number): number {
-         const currentTime = moment(deliveryInformation?.order.updatedAt);
-         const endTime = moment(deliveryInformation?.order.updatedAt).add(targetTime, 'minutes');
+         const currentTime = moment(delivery?.order.updatedAt);
+         const endTime = moment(delivery?.order.updatedAt).add(targetTime, 'minutes');
          const duration = moment.duration(endTime.diff(currentTime));
 
-         // Calculate remaining time in minutes
          const remainingMinutes = duration.asMinutes();
 
          return Math.max(0, Math.round(remainingMinutes));
@@ -60,8 +49,7 @@ MapboxGL.setWellKnownTileServer('mapbox');
     useEffect(() => {
         if (socketClient !== undefined && isConnected) {
             socketClient?.on(SOCKET_MESSAGE.DRIVER_LOCATION_UPDATED, (message: { deliveryId: string, location: LocationCoordinates, travelMeta?: TravelDistanceResult}) => {
-                setLoading(false);
-                if (message.deliveryId === deliveryInformation?._id) {
+                if (message.deliveryId === delivery?._id) {
                     setPlaces(() => {
                         return {
                             type: 'FeatureCollection',
@@ -69,19 +57,18 @@ MapboxGL.setWellKnownTileServer('mapbox');
                                 {
                                     type: 'Feature',
                                     properties: {
-                                        description: mapboxLocationMapper(deliveryInformation?.order?.deliveryAddress as any),
+                                        description: mapboxLocationMapper(delivery?.order?.deliveryAddress as any),
                                         icon: 'marker',
 
                                     },
                                     geometry: {
                                         type: 'Point',
-                                        coordinates: mapboxLocationMapper(deliveryInformation.dropOffLocation.coordinates as any),
+                                        coordinates: mapboxLocationMapper(delivery.dropOffLocation.coordinates as any),
                                     },
                                 },
                             ],
                         };
                     });
-                    setCurrentLocation(() => message.location);
                 }
             });
 
@@ -117,47 +104,6 @@ MapboxGL.setWellKnownTileServer('mapbox');
         }
     }, []);
 
-    useEffect(() => {
-        const fetchDeliveryInformation = async (): Promise<void> => {
-            try {
-                const information = (await _api.requestData({
-                    method: 'GET',
-                    url: `delivery/order/${order._id}`,
-                })).data as DeliveryI | null;
-
-                setDeliveryInformation(() => information);
-                setPlaces(() => {
-                    return {
-                        type: 'FeatureCollection',
-                        features: [
-                            {
-                                type: 'Feature',
-                                properties: {
-                                    description: information?.order.deliveryAddress,
-                                },
-                                geometry: {
-                                    type: 'Point',
-                                    coordinates: mapboxLocationMapper(information?.dropOffLocation.coordinates),
-                                },
-                            }
-                        ],
-                    };
-                });
-
-                const hasCurrentCoord = !checkForNullishCoords(information?.currentLocation?.coordinates as any)
-                const current = hasCurrentCoord  ? information?.currentLocation : information?.driver?.location
-                setCurrentLocation(() => current);
-                // eslint-disable-next-line no-useless-catch
-            } catch (error) {
-                throw error
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        void fetchDeliveryInformation();
-
-    }, []);
     function checkForNullishCoords (coord: [number, number] | null): boolean {
         if (coord === null) {
         return true
@@ -168,88 +114,12 @@ MapboxGL.setWellKnownTileServer('mapbox');
     }
 
 
+
     return (
-        <View style={tailwind('flex-1 bg-primary-200 flex flex-col items-center justify-center')}>
-             {loading ? (
-                 <LoaderComponentScreen />
-             ) : (
-                 <>
-                     <View style={tailwind('w-full flex-1 flex-grow')}>
-                         <MapboxGL.MapView
-                             style={tailwind('flex-1')}
-                             id="MapboxMap"
-                             zoomEnabled={false}
-                             styleURL="mapbox://styles/mapbox/navigation-night-v1"
-                             rotateEnabled={false}
-
-                         >
-                             <MapboxGL.Camera
-                                 centerCoordinate={mapboxLocationMapper(currentLocation?.coordinates)}
-                                 zoomLevel={15}
-                                 animationMode="flyTo"
-                                 animationDuration={2000}
-                                 pitch={60}
-                                 allowUpdates={true}
-                                 followUserLocation={true}
-                             />
-                             {places && (
-                                 <MapboxGL.ShapeSource id="placesSource" shape={places}>
-                                     <MapboxGL.SymbolLayer
-                                         id="placesIconLayer"
-                                         style={{
-                                             iconImage: '{icon}-15',
-                                             iconSize: 6,
-                                             iconAllowOverlap: true,
-                                             textField: ['get', 'description'],
-                                             textPadding: 100,
-                                             textColor: '#fff',
-                                             textSize: 18,
-                                             textAnchor: "left"
-                                         }}
-                                     />
-                                 </MapboxGL.ShapeSource>
-                             )}
-                             <MapboxGL.PointAnnotation
-                                 selected
-                                 coordinate={mapboxLocationMapper(currentLocation?.coordinates)}
-                                 id="UserCoords"
-                             >
-                                 <View>
-                                     <LocationTracker width={50} height={50} />
-                                 </View>
-                             </MapboxGL.PointAnnotation>
-
-                             <MapboxGL.PointAnnotation
-                                 selected
-                                 coordinate={mapboxLocationMapper(deliveryInformation?.dropOffLocation.coordinates) ?? mapboxLocationMapper(order.preciseLocation.coordinates)}
-                                 id="VendorCoord"
-                             >
-                                 <View>
-                                     <IconComponent iconType="Ionicons" name="md-location" size={50} style={tailwind('text-white')} />
-                                 </View>
-                             </MapboxGL.PointAnnotation>
-                         </MapboxGL.MapView>
-                     </View>
-                     {deliveryInformation && (
-                         <>
-                             <View style={tailwind('w-full  px-4 py-4 z-50 bg-primary-200 h-1/5')}>
-                                 <View style={tailwind('flex flex-col')}>
-                                     <View style={tailwind('flex w-full  flex-col items-center')}>
-                                         <View style={tailwind('flex flex-col bottom-2 justify-center  items-center rounded-full')}>
-                                             {remainingTime !== null && (
-                                                 <Text style={tailwind('text-black  text-black my-2 text-2xl')}>Arriving in {remainingTime} minutes</Text>
-                                             )}
-                                             <Text style={tailwind('text-black text-center text-black text-lg')}>Done! Your order is ready is been delivered now.</Text>
-                                         </View>
-                                     </View>
-                                 </View>
-
-                             </View>
-
-                         </>
-                     )}
-                 </>
-             )}
+        <View style={tailwind('flex-1 bg-white flex flex-col items-center justify-center')}>
+            <View style={[tailwind('w-full'), {width: '100%', height: SCREEN_HEIGHT / 2}]}>
+                <Mapview style={{width: '100%', height: '100%'}}  provider={PROVIDER_GOOGLE} />
+            </View>
         </View>
     );
 };

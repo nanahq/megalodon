@@ -2,9 +2,10 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AppActions } from "@store/reducers.actions";
 import { Cart } from "@screens/AppNavigator/Screens/modals/Listing.Modal";
+import {VendorI} from "@nanahq/sticky";
 
 export interface CartState {
-    vendor: string | undefined;
+    vendor: VendorI | undefined;
     cart: Cart[] | undefined;
     hasItemsInCart: boolean;
 
@@ -43,7 +44,7 @@ export const deleteCartFromStorage = createAsyncThunk(AppActions.DELETE_CART_FRO
     });
 export const saveCartToStorage = createAsyncThunk(
     AppActions.SAVE_CART_TO_STORAGE,
-    async (cartData: { vendor: string; cart: Cart, cartAvailableDate?: number}) => {
+    async (cartData: { vendor: VendorI; cart: Cart, cartAvailableDate?: number}) => {
             // Read the existing cart data from storage (if any)
             const storedCart = await AsyncStorage.getItem("cart");
             let existingCart: CartState = initialState; // Initialize with the initial state
@@ -54,7 +55,7 @@ export const saveCartToStorage = createAsyncThunk(
 
             const newCart: CartState = { ...existingCart }; // Clone the existing cart
 
-            if (existingCart.vendor === cartData.vendor) {
+            if (existingCart.vendor?._id === cartData.vendor._id) {
                 if (existingCart.cart !== undefined) {
                     newCart.cart = [...existingCart.cart, cartData.cart];
                     newCart.hasItemsInCart = true;
@@ -79,10 +80,10 @@ export const cart = createSlice({
     name: "cart",
     initialState,
     reducers: {
-        addItemToCart: (state, { payload }: PayloadAction<{ vendor: string; cart: Cart }>) => {
+        addItemToCart: (state, { payload }: PayloadAction<{ vendor: VendorI; cart: Cart }>) => {
             const { vendor, cart } = payload;
             if (state.vendor !== undefined) {
-                if (vendor === state.vendor) {
+                if (vendor._id === state.vendor._id) {
                     if (state.cart !== undefined) {
                         state.cart = [...state.cart, cart];
                         state.hasItemsInCart = true;

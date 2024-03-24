@@ -10,6 +10,7 @@ import {BasketNavigator} from "@screens/AppNavigator/Screens/basket/BasketNaviga
 import {ProfileNavigator} from "@screens/AppNavigator/Screens/profile/ProfileNavigator";
 import {OrderNavigator} from "@screens/AppNavigator/Screens/orders/OrderNavigator";
 import {PromotionNavigator} from "@screens/AppNavigator/Screens/promotions/PromotionNavigator";
+import {useSafeAreaInsets} from "react-native-safe-area-context";
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>()
 
@@ -33,6 +34,7 @@ const getTabBarLabel = (props: {
 );
 
 export function BottomTabNavigator ():JSX.Element {
+    const insert = useSafeAreaInsets()
     const {cart}  = useAppSelector((state: RootState) => state.cart)
     return (
         <BottomTab.Navigator
@@ -40,17 +42,10 @@ export function BottomTabNavigator ():JSX.Element {
             screenOptions={{
                 headerShown: false,
                 tabBarLabelPosition: "below-icon",
-                tabBarStyle: tailwind(
-                    "border-t bg-white", {
-                "h-32": Device.osName === 'iOS',
-                "h-28": Device.osName === 'Android'
-            }),
+                tabBarStyle: {height: insert.bottom + 80},
                 tabBarActiveTintColor: '#ffffff',
                 tabBarInactiveTintColor: '#B5B5B5',
-                tabBarItemStyle: tailwind({
-                    "py-6": Device.osName === 'iOS',
-                    "pb-8": Device.osName === 'Android'
-                }),
+                tabBarItemStyle: tailwind("pb-4 pt-1"),
                 lazy: true
             }}
         >
@@ -67,8 +62,8 @@ export function BottomTabNavigator ():JSX.Element {
                         }),
                     tabBarTestID: "BottomTabHome",
                     tabBarIcon: ({ color, focused }) => (
-                        <View style={tailwind('w-10 h-10 flex flex-row items-center justify-center rounded-full', {' bg-primary-500': focused})}>
-                            <IconComponent iconType='AntDesign' name="home"  size={28} color={color}/>
+                        <View style={tailwind('w-10 h-10 flex flex-row items-center justify-center rounded-full', {'text-primary-500': focused})}>
+                            <IconComponent iconType='AntDesign' name="home"  size={28} color={focused ? getColor('primary-500') : color}/>
                         </View>
                     ),
                 }}
@@ -86,8 +81,8 @@ export function BottomTabNavigator ():JSX.Element {
                         }),
                     tabBarTestID: "BottomTabHome",
                     tabBarIcon: ({ color , focused}) => (
-                        <View style={tailwind('relative w-10 h-10 flex flex-row items-center justify-center rounded-full', {'bg-primary-500': focused})}>
-                            <IconComponent iconType='Ionicons' name="ios-cart-outline"  size={28} color={color}/>
+                        <View style={tailwind('relative w-10 h-10 flex flex-row items-center justify-center rounded-full')}>
+                            <IconComponent iconType='Ionicons' name="ios-cart-outline"  size={26} color={focused ? getColor('primary-500') : color}/>
                             {cart !== undefined && (<View style={tailwind('absolute z-50 w-4 h-4 flex justify-center items-center rounded-full bg-black top-0 right-0')}>
                                 <Text style={tailwind('text-xs text-white')}>{cart.length}</Text>
                             </View>)}
@@ -107,8 +102,8 @@ export function BottomTabNavigator ():JSX.Element {
                         }),
                     tabBarTestID: "BottomTabHome",
                     tabBarIcon: ({ color, focused }) => (
-                        <View style={tailwind('w-10 h-10 flex flex-row items-center justify-center rounded-full', {' bg-primary-500': focused})}>
-                            <IconComponent iconType='AntDesign' name="tagso"  size={28} color={color}/>
+                        <View style={tailwind('w-10 h-10 flex flex-row items-center justify-center rounded-full')}>
+                            <IconComponent iconType='AntDesign' name="tagso"  size={26} color={focused ? getColor('primary-500') : color}/>
                         </View>
                     ),
                 }}
@@ -117,6 +112,7 @@ export function BottomTabNavigator ():JSX.Element {
                 component={OrderNavigator}
                 name={AppScreenName.ORDERS}
                 options={{
+                    tabBarStyle: {display: 'none'},
                     tabBarLabel: ({ focused, color }) =>
                         getTabBarLabel({
                             focused,
@@ -125,8 +121,8 @@ export function BottomTabNavigator ():JSX.Element {
                         }),
                     tabBarTestID: "BottomTabHome",
                     tabBarIcon: ({ color, focused }) => (
-                        <View style={tailwind('w-10 h-10 flex flex-row items-center justify-center rounded-full', {' bg-primary-500': focused})}>
-                            <IconComponent iconType='Ionicons' name="fast-food-outline"  size={28} color={color}/>
+                        <View style={tailwind('w-10 h-10 flex flex-row items-center justify-center rounded-full')}>
+                            <IconComponent iconType='Ionicons' name="fast-food-outline"  size={26} color={focused ? getColor('primary-500') : color}/>
                         </View>
                     ),
                 }}
@@ -143,8 +139,8 @@ export function BottomTabNavigator ():JSX.Element {
                         }),
                     tabBarTestID: "BottomTabHome",
                     tabBarIcon: ({ color, focused }) => (
-                        <View style={tailwind('w-10 h-10 flex flex-row items-center justify-center rounded-full', {' bg-primary-500': focused})}>
-                            <IconComponent iconType='AntDesign' name="user"  size={28} color={color}/>
+                        <View style={tailwind('w-10 h-10 flex flex-row items-center justify-center rounded-full')}>
+                            <IconComponent iconType='AntDesign' name="user"  size={26} color={focused ? getColor('primary-500') : color}/>
                         </View>
                     ),
                 }}

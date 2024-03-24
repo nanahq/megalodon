@@ -42,7 +42,7 @@ const initialState: ProfileState = {
 export const fetchProfile = createAsyncThunk(
     AppActions.FETCH_PROFILE,
     async () => {
-        return await _api.requestData<undefined>({
+        return await _api.requestData({
             method: 'get',
             url: 'user/profile'
         })
@@ -52,7 +52,7 @@ export const fetchProfile = createAsyncThunk(
 export const updateUserProfile = createAsyncThunk(
     AppActions.UPDATE_PROFILE,
     async (data: Partial<any>, {dispatch}): Promise<ResponseWithStatus> => {
-        const res = (await _api.requestData<Partial<UpdateUserDto>, null>({
+        const res = (await _api.requestData<Partial<UpdateUserDto>, any>({
             method: 'PUT',
             url: 'user/update',
             data

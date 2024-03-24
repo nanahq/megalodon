@@ -6,12 +6,12 @@ import CakesIcon from '@assets/app/cakes.png'
 import HomemadeIcon from '@assets/app/homemade.png'
 import IceCreamIcon from '@assets/app/icecream.png'
 
-export type CategoryTags = 'Food' | 'Ice Cream' | 'Homemade' | 'Cakes' | 'Chicken' | 'Shawarma'
+export type CategoryTags = 'Food' | 'Ice Cream' | 'Traditional' | 'Cakes' | 'Chicken' | 'Shawarma'
 export const MappedTags: Record<CategoryTags, ImageSourcePropType> = {
     "Cakes": CakesIcon,
     "Ice Cream": IceCreamIcon,
     'Chicken': ChickenIcon,
-    'Homemade': HomemadeIcon,
+    'Traditional': HomemadeIcon,
     'Shawarma': ShawarmaIcon,
     'Food': LunchIcon
 }
@@ -28,5 +28,13 @@ export const TagsWithImages: Array<{name: CategoryTags, icon: ImageSourcePropTyp
     {
         name: 'Shawarma',
         icon: ShawarmaIcon
+    },
+    {
+        name: 'Traditional',
+        icon: HomemadeIcon
+    },
+    {
+        name:'Cakes',
+        icon: CakesIcon
     }
 ]

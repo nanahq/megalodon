@@ -2,21 +2,21 @@ import {Dimensions, ScrollView} from "react-native";
 import React, {useEffect} from "react";
 import {SafeAreaView} from "react-native-safe-area-context";
 import {tailwind} from "@tailwind";
-import {HomeHeader} from "@screens/AppNavigator/Screens/modals/components/Header";
+import {HomeHeader} from "@screens/AppNavigator/Screens/home/components/Header";
 import {CategorySection} from "@screens/AppNavigator/Screens/modals/components/Tags";
-import {HomeSection, HomeSectionVertical} from "@screens/AppNavigator/Screens/modals/components/HomeSection";
+import {HomeSection, HomeSectionVertical} from "@screens/AppNavigator/Screens/home/components/HomeSection";
 import {RootState, useAppDispatch, useAppSelector} from "@store/index";
 import {LoaderComponentScreen} from "@components/commons/LoaderComponent";
 import {VendorCard} from "@screens/AppNavigator/Screens/modals/components/VendorCard";
 import {fetchSubscriptions} from "@store/vendors.reducer";
 import {ListingMenuCard} from "@screens/AppNavigator/Screens/modals/components/ListingCard";
 import {FlashList} from "@shopify/flash-list";
-import {ExploreSections} from "@screens/AppNavigator/Screens/modals/components/ExploreSections";
+import {ExploreSections} from "@screens/AppNavigator/Screens/home/components/ExploreSections";
 import {useAnalytics} from "@segment/analytics-react-native";
 import {HomeScreenName} from "@screens/AppNavigator/Screens/home/HomeScreenNames.enum";
+import {fetchHomaPage} from "@store/listings.reducer";
 
-
-const {height} = Dimensions.get('screen')
+const {height} = Dimensions.get('window')
 export function HomeScreen (): JSX.Element {
     const {hasFetchedProfile, profile} = useAppSelector((state: RootState) => state.profile)
     const { hasFetchedListings, hompage} = useAppSelector(state => state.listings)
@@ -30,7 +30,7 @@ export function HomeScreen (): JSX.Element {
         }
 
         dispatch(fetchSubscriptions(profile._id))
-        // dispatch(fetchHomaPage(profile.location as any) as any)
+        dispatch(fetchHomaPage(profile.location as any) as any)
 
     }, [hasFetchedProfile, profile._id])
 
@@ -53,7 +53,7 @@ export function HomeScreen (): JSX.Element {
     }
 
     function RenderItem ({item}: any) {
-        return <VendorCard  fullWidth={true as any} height={300} style={tailwind('mb-3')} vendor={item}/>
+        return <VendorCard  fullWidth={true as any} height={300} style={tailwind('mb-10')} vendor={item}/>
     }
     return (
            <SafeAreaView style={tailwind('flex-1 bg-white')}>
@@ -78,8 +78,6 @@ export function HomeScreen (): JSX.Element {
                            />
                        </HomeSection>
                    )}
-
-
                    {hompage?.instantDelivery !== undefined && hompage?.instantDelivery.length > 0 && (
                        <HomeSection label="Instant Delivery">
                            <FlashList

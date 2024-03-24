@@ -56,7 +56,7 @@ export const BasketSingle: React.FC = () => {
         void analytics.track('CLICK:CHECKOUT', {
             cartValue: totalCartValue
         })
-        navigation.navigate(BasketScreenName.CHECKOUT)
+        navigation.navigate(BasketScreenName.CHECKOUT, {vendor: cart.vendor})
     }
 
     return (

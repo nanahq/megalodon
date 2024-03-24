@@ -30,7 +30,7 @@ const _ListingCard: React.FC<{listing: ListingMenuI}>  = (props)=> {
         })
     }
     return (
-        <Pressable onPress={onPress} style={[tailwind("w-full mb-4 flex flex-col mr-5"), { width: 300, height: 215 }]}>
+        <Pressable onPress={onPress} style={[tailwind("w-full mb-4 flex flex-col mr-5"), { width: 300, height: 180 }]}>
             <View style={tailwind("flex flex-col w-full")}>
                 <FastImage source={{ uri: props.listing.photo}} resizeMode={FastImage.resizeMode.cover} style={[tailwind("w-full rounded-lg"), { height: isAndroid ? 150 : 155 }]} />
             </View>

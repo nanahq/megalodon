@@ -1,21 +1,21 @@
-import {Image, Pressable, ScrollView, Text, View} from "react-native";
+import { Pressable, ScrollView, Text, View} from "react-native";
 import React, {useEffect, useState} from "react";
 import {ModalCloseIcon} from "@screens/AppNavigator/Screens/modals/components/ModalCloseIcon";
 import {HeaderStyleInterpolators, StackScreenProps} from "@react-navigation/stack";
 import {OrderParamsList} from "@screens/AppNavigator/Screens/orders/OrderNavigator";
 import {OrderScreenName} from "@screens/AppNavigator/Screens/orders/OrderScreenName";
 import {tailwind} from "@tailwind";
-import {OrderI, OrderStatus, SOCKET_MESSAGE} from "@nanahq/sticky";
+import {DeliveryI, OrderI, OrderStatus, SOCKET_MESSAGE} from "@nanahq/sticky";
 import {Map} from "@screens/AppNavigator/Screens/orders/tracking/components/Map";
 import {useWebSocket} from "@contexts/SocketProvider";
 import {StatusBar} from "expo-status-bar";
-import PrepareRestaurant from '@assets/app/restaurant-prepare.png'
-import OrderComplete from '@assets/app/order-complete.png'
-import moment from "moment";
-import {DeliveryInfo} from "@screens/AppNavigator/Screens/orders/tracking/components/DeliveryInfo";
-import {GenericButton} from "@components/commons/buttons/GenericButton";
 import {useAnalytics} from "@segment/analytics-react-native";
-
+import {_api} from "@api/_request";
+import {mapboxLocationMapper} from "../../../../../../utils/mapboxLocationMappper";
+import {LoaderComponentScreen} from "@components/commons/LoaderComponent";
+import {IconComponent} from "@components/commons/IconComponent";
+import {OrderStatusStepper} from "@screens/AppNavigator/Screens/orders/tracking/components/stepper";
+import {DeliveryInfo} from "@screens/AppNavigator/Screens/orders/tracking/components/DeliveryInfo";
 
 type TrackingProps = StackScreenProps<OrderParamsList, OrderScreenName.TRACK_ORDER>
 
@@ -27,9 +27,11 @@ const guideline: Record<string, number> =  {
     }
 export const Tracking: React.FC<TrackingProps> = ({navigation, route}) => {
     const {isConnected, socketClient} = useWebSocket()
+
+    const [fetchingDelivery, setFetchingDelivery] = useState<boolean>(true)
+    const [delivery, setDelivery] = useState<DeliveryI | undefined>(undefined)
+
     const analytics = useAnalytics()
-    // @ts-ignore
-    const [activeStep, setActiveStep] = useState<number>(guideline[route.params.order.orderStatus as OrderStatus])
 
     const [order, setOrder] = useState<OrderI>(route.params.order)
 
@@ -40,8 +42,6 @@ export const Tracking: React.FC<TrackingProps> = ({navigation, route}) => {
                const isOrder = message.orderId === route.params.order._id
                if (isOrder) {
                    setOrder(prev => ({...prev, orderStatus: message.status}))
-                   setActiveStep(() => guideline[message.status] as number)
-
                    switch (message.status) {
                        case OrderStatus.FULFILLED:
                            navigation.setOptions({
@@ -68,20 +68,6 @@ export const Tracking: React.FC<TrackingProps> = ({navigation, route}) => {
         })
     }, [order.orderStatus])
 
-    const text = () => {
-        switch (order.orderStatus ) {
-            case OrderStatus.PROCESSED:
-                return 'Preparing Your Order....'
-
-            case OrderStatus.COURIER_PICKUP:
-                return 'Delivery guy picking up your order'
-            case OrderStatus.COLLECTED:
-                return 'Delivery guy has picked up your order'
-
-            default:
-                return 'Your Food has been delivered. Enjoy Your Order'
-        }
-    }
 
     const getStatusBarStyle = () => {
         switch (order.orderStatus) {
@@ -99,77 +85,67 @@ export const Tracking: React.FC<TrackingProps> = ({navigation, route}) => {
         }
     };
 
+
+    useEffect(() => {
+        const fetchDeliveryInformation = async (): Promise<void> => {
+            try {
+                const information = (await _api.requestData({
+                    method: 'GET',
+                    url: `delivery/order/${order._id}`,
+                })).data as DeliveryI | undefined;
+
+                setDelivery(() => information);
+                // eslint-disable-next-line no-useless-catch
+            } catch (error) {
+                throw error
+            } finally {
+                setFetchingDelivery(false);
+            }
+        };
+
+        void fetchDeliveryInformation();
+
+    }, []);
+
+    if (fetchingDelivery) {
+        return <LoaderComponentScreen />
+    }
+
     return (
-        <View style={tailwind('flex-1')}>
+        <ScrollView style={tailwind('flex-1 bg-white')}>
             {order.orderStatus !== OrderStatus.FULFILLED && (
                 <StatusBar animated={true as any} style={"auto"  as any}  networkActivityIndicatorVisible={false} backgroundColor={getStatusBarStyle()} />
             )}
-            {order.orderStatus !== OrderStatus.IN_ROUTE ? (
-               <ScrollView style={tailwind('flex-1 bg-white pb-6')}>
-                   <View style={tailwind('px-4')}>
-                       <View style={tailwind('my-4')}>
-                           <Text style={tailwind('text-2xl')}>{text()}</Text>
-                           {order.orderStatus !== OrderStatus.FULFILLED && (
-                               <Text style={tailwind('mt-2')}>Latest Arrival by {moment(order.orderType === "PRE_ORDER" ? order.orderDeliveryScheduledTime : order.orderDeliveryScheduledTime).format('HH:mm Do MMM')}</Text>
-                           )}
-                       </View>
-                       <View style={tailwind('flex flex-row')}>
-                           {Array(4).fill(0).map((_, index) => {
-                               return (
-                                   <View key={index} style={[tailwind("flex items-center py-1 rounded-sm mr-2 ", {
-                                       'bg-brand-gray-700': activeStep <= index,
-                                       'bg-primary-500': activeStep > index,
-                                   }), {width: 80}]} />
-                               )
-                           })}
-                       </View>
-                       {order.orderStatus === OrderStatus.FULFILLED && (
-                           <View style={tailwind('mt-5')}>
-                               <Text>
-                                   Our delivery guys and {order.vendor.businessName} worked their magic for you. Take a minute to
-                                   rate, tip, and say thanks.
-                               </Text>
-                           </View>
-                       )}
-                   </View>
-                   <View style={tailwind('mt-5 bg-brand-ash w-full flex flex-row items-center justify-center')}>
-                       {order.orderStatus === OrderStatus.FULFILLED ? (
-                           <Image source={OrderComplete} style={{
-                               width:280,
-                               height:280,
-                           }}  />
-                       ): (
-                           <Image source={PrepareRestaurant} style={{
-                               width:280,
-                               height:280,
-                           }}  />
-                       )}
-                   </View>
-                   <View style={tailwind('px-4 mt-5')}>
-                       {order.orderStatus !== OrderStatus.FULFILLED ? (
-                           <DeliveryInfo heading="Delivery Details">
-                               <DeliveryInfo.Item info={order.deliveryAddress} title="Delivery Address" />
-                               <DeliveryInfo.Item info={order.primaryContact} title="Who should receive this order" />
-                               <DeliveryInfo.Item info={order.orderType === "PRE_ORDER" ? 'Pre-Order' : 'Instant Delivery'} title="Delivery Type" />
-                               <DeliveryInfo.Item info={order.specialNote ?? ''} title="Delivery Instruction" />
-                           </DeliveryInfo>
-                       ) : (
-                           <View style={tailwind('mt-5')}>
-                               <GenericButton
-                                   onPress={() => navigation.navigate(OrderScreenName.ADD_REVIEW, {
-                                       order: order
-                                   })}
-                                   labelColor={tailwind('font-normal text-white')}
-                                   label="Submit a review"
-                                   backgroundColor={tailwind('bg-primary-500')}
-                               />
-                           </View>
-                       )}
-                   </View>
-               </ScrollView>
-            ) : <Map order={order} />}
+            <Map order={order} />
+            {delivery !== undefined && delivery.assignedToDriver && (
+                <View style={tailwind('px-4')}>
+                    <View style={tailwind('flex flex-row item-center w-full justify-between')}>
+                        <View style={tailwind('flex flex-col')}>
+                            <Text style={tailwind('text-xl mb-0.5')}>{`${delivery.driver.firstName} ${delivery.driver.lastName}`}</Text>
+                            <Text style={tailwind('font-normal text-base text-gray-500')}>{delivery.driver.totalTrips} trips made</Text>
+                        </View>
+                        <Pressable style={[tailwind('bg-primary-500 flex flex-row items-center justify-center rounded-full'), {width: 40, height: 40}]}>
+                            <IconComponent iconType="AntDesign" name="phone" size={20} style={tailwind('text-white')}/>
+                        </Pressable>
+                    </View>
+                </View>
+            ) }
+            {delivery !== undefined && (
+                <OrderStatusStepper delivery={delivery} />
+            )}
+            <View style={tailwind('pb-6')}>
+                <View style={tailwind('px-4 mt-5')}>
+                    <Text style={tailwind('font-bold text-lg mb-4')}>Order Summary</Text>
+                    <DeliveryInfo>
+                        <DeliveryInfo.Item info={order.deliveryAddress} title="Delivery Address" />
+                        <DeliveryInfo.Item info={order.primaryContact} title="Who should receive this order" />
+                        <DeliveryInfo.Item info={order.orderType === "PRE_ORDER" ? 'Pre-Order' : 'Instant Delivery'} title="Delivery Type" />
+                        <DeliveryInfo.Item info={order.specialNote ?? ''} title="Delivery Instruction" />
+                    </DeliveryInfo>
+                </View>
+            </View>
 
-        </View>
+        </ScrollView>
     )
 }
 

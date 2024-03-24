@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "704843661343",
-    "project_id": "nana-eats-megaldon",
-    "storage_bucket": "nana-eats-megaldon.appspot.com"
+    "project_number": "1088822341431",
+    "project_id": "nana-eats-1",
+    "storage_bucket": "nana-eats-1.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:704843661343:android:998518132bdbfeac6bd52a",
+        "mobilesdk_app_id": "1:1088822341431:android:2afd7b74f1ec63e8e9f4b2",
         "android_client_info": {
           "package_name": "com.nanaeats.nana_app"
         }
@@ -15,7 +15,26 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyB7QgYT8Sxs4FYnttiaEm5RuBo9jB3VZHY"
+          "current_key": "AIzaSyBSf-SeDEUu4lBGKNfARKkxSC5jkldG8jw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1088822341431:android:008b4f19d9a52104e9f4b2",
+        "android_client_info": {
+          "package_name": "com.nanaeats.nana_vendors"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBSf-SeDEUu4lBGKNfARKkxSC5jkldG8jw"
         }
       ],
       "services": {

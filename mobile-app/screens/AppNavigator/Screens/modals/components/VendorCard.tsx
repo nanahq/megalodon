@@ -22,6 +22,7 @@ const _VendorCard: React.FC<{ vendor: VendorUserI, fullWidth?: boolean, style?: 
     const analytics = useAnalytics()
 
 
+    console.log(props.vendor)
     useEffect(() => {
         async function fetchData() {
             try {
@@ -63,7 +64,7 @@ const _VendorCard: React.FC<{ vendor: VendorUserI, fullWidth?: boolean, style?: 
                 <FastImage
                     source={{ uri: props.vendor.businessImage, priority: FastImage.priority.high }}
                     resizeMode={FastImage.resizeMode.cover}
-                    style={[tailwind("w-full rounded-lg"), { aspectRatio: 16 / 9 }]}
+                    style={[tailwind("w-full rounded-lg"), { aspectRatio: 2 }]}
                 />
             </View>
             <View style={tailwind("p-2")}>
@@ -73,15 +74,23 @@ const _VendorCard: React.FC<{ vendor: VendorUserI, fullWidth?: boolean, style?: 
                         <SkeletonLoader row={1} screen={SkeletonLoaderScreen.VendorDistanceLoader} />
                     </View>
                 )}
-                {!loading && !error && (
-                    <View style={tailwind("flex flex-row items-center")}>
-                        <View style={tailwind("flex flex-row items-center")}>
-                            <Text style={tailwind("text-brand-gray-text-500")}>Delivery from ₦{travelInfo?.fee}</Text>
-                            <IconComponent iconType="MaterialIcons" name="delivery-dining" size={14} style={tailwind('font-medium text-black ml-1')} />
+                <View style={tailwind('flex mt-2 flex-row w-full justify-between items-center')}>
+                    {!loading && !error && (
+                        <View style={tailwind("flex flex-row items-center ")}>
+                            <View style={tailwind("flex flex-row items-center border-r-0.5 pr-1 border-gray-300")}>
+                                <IconComponent iconType="MaterialIcons" name="delivery-dining" size={16} style={tailwind('font-medium text-black mr-1')} />
+                                <Text style={tailwind("text-sm text-black")}>from ₦{travelInfo?.fee}</Text>
+                            </View>
+                            <Text style={tailwind("text-black mx-1 text-sm")}>{10}-{Number(travelInfo?.duration ?? 0) + Number(props?.vendor?.settings?.preparationTime ?? 0)} Min</Text>
                         </View>
-                        <Text style={tailwind("text-brand-gray-text-500 mx-1")}>{10}-{Number(travelInfo?.duration ?? 0) + Number(props?.vendor?.settings?.preparationTime ?? 0)} Minutes</Text>
+                    )}
+                    <View style={tailwind("flex flex-row items-center")}>
+                        <IconComponent iconType="AntDesign" name="star" style={tailwind("w-4 h-4 text-yellow-300")} />
+                        <Text style={tailwind("text-sm font-bold text-gray-900")}>4.95</Text>
+                        <Text
+                            style={tailwind("text-sm font-medium text-gray-900 ml-1")}>(1000)</Text>
                     </View>
-                )}
+                </View>
             </View>
         </Pressable>
     );

@@ -23,13 +23,6 @@
         {
           "locationWhenInUsePermission": "Show current location on map."
         }
-      ],
-      [
-        "@rnmapbox/maps",
-        {
-          "RNMapboxMapsImpl": "mapbox",
-          "RNMapboxMapsDownloadToken": "sk.eyJ1Ijoic3VyYWphdXdhbCIsImEiOiJjbHAwY25wcjEwM2Z1MnFwamc2bDd6Mmx0In0.mvt4AIl-lQDehhIFIdfSrQ"
-        }
       ]
     ],
     "splash": {
@@ -46,7 +39,10 @@
     "ios": {
       "icon": "./assets/app-config/Icon-blue-ios1024.png",
       "supportsTablet": false,
-      "bundleIdentifier": "com.nanaeats.nana.app"
+      "bundleIdentifier": "com.nanaeats.nana.app",
+      "config": {
+        "googleMapsApiKey": "AIzaSyBxd-WGMl-H1BdgKsG2dNBYoQiWXsXc-Y8"
+      }
     },
     "android": {
       "icon": "./assets/app-config/Icon-Android-512px.png",
@@ -63,7 +59,12 @@
       ],
       "package": "com.nanaeats.nana_app",
       "googleServicesFile": "./google-services.json",
-      "useNextNotificationsApi": true
+      "useNextNotificationsApi": true,
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyA4FLTREZvoZ6HQrfoNXm1bgWJksyvLLo4"
+        }
+      }
     },
     "web": {
       "favicon": "./assets/app-config/favicon.png"

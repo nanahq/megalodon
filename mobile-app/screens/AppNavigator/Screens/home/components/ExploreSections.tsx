@@ -9,9 +9,9 @@ import {AppParamList} from "@screens/AppNavigator/AppNav";
 
 export const ExploreSections: React.FC<{vendors: VendorUserI[]}> = (props) => {
     return (
-        <View style={tailwind('bg-white my-5 px-3 py-5')}>
+        <View style={tailwind('bg-white mt-2 px-3 py-1')}>
             <View style={tailwind('mb-2')}>
-                <Text style={tailwind('text-xl text-black')}>Explore</Text>
+                <Text style={tailwind('text-xl text-black')}>Explore Restaurants near you</Text>
             </View>
             <ScrollView horizontal showsHorizontalScrollIndicator={false} >
                 {props.vendors.map(vendor => (

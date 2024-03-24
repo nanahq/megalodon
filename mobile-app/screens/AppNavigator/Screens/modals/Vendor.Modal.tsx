@@ -13,7 +13,7 @@ import {IconComponent} from "@components/commons/IconComponent";
 import {
     ScheduledMenuSection,
     VendorCategorySection
-} from "@screens/AppNavigator/Screens/modals/components/CategorySection";
+} from "@screens/AppNavigator/Screens/home/components/CategorySection";
 import {FlashList} from "@shopify/flash-list";
 import {RootState, useAppDispatch, useAppSelector} from "@store/index";
 import {GenericButton} from "@components/commons/buttons/GenericButton";
@@ -250,11 +250,9 @@ return
                         ) : (
                             <View style={tailwind('flex-1 h-full')}>
                                     <View style={tailwind('flex flex-row items-center')}>
-                                        <IconComponent iconType="Foundation" name="star" size={14} style={tailwind('text-yellow-500')}/>
-                                        <IconComponent iconType="Foundation" name="star" size={14} style={tailwind('text-yellow-500')}/>
-                                        <IconComponent iconType="Foundation" name="star" size={14} style={tailwind('text-yellow-500')}/>
-                                        <IconComponent iconType="Foundation" name="star" size={14} style={tailwind('text-yellow-500')}/>
-                                        <Text  style={tailwind('text-brand-gray-700 text-sm ml-1')}>Excellent</Text>
+                                        <IconComponent iconType="AntDesign" name="star" size={14} style={tailwind('text-yellow-300')}/>
+                                        <IconComponent iconType="AntDesign" name="star" size={14} style={tailwind('text-yellow-300')}/>
+                                        <Text  style={tailwind('text-brand-gray-700 text-sm ml-1')}>100 Reviews</Text>
                                     </View>
                                 <View style={tailwind('flex flex-row items-center w-full')}>
                                     <View style={tailwind('flex flex-row items-center mt-1')}>
