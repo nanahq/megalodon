@@ -9,6 +9,7 @@
     "prepare": "husky install",
     "lint": "eslint . --fix",
     "start": "expo start --clear --dev-client",
+    "expo:upgrade": "expo upgrade",
     "start:android": "expo start --clear --android",
     "start:ios": "expo start --clear --ios",
     "start:web": "expo start --clear --web",
