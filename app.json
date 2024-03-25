@@ -1,0 +1,78 @@
+{
+  "expo": {
+    "name": "Nana",
+    "description": "Order food online and get it delivered in minutes",
+    "slug": "nana-app",
+    "owner": "nana_logistics",
+    "version": "1.0.1",
+    "orientation": "portrait",
+    "scheme": "myapp",
+    "userInterfaceStyle": "automatic",
+    "jsEngine": "hermes",
+    "plugins": [
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "usesCleartextTraffic": true
+          }
+        }
+      ],
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "Show current location on map."
+        }
+      ]
+    ],
+    "splash": {
+      "image": "./assets/app-config/nana-splash.png",
+      "resizeMode": "cover",
+      "backgroundColor": "#00C2E8"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "icon": "./assets/app-config/Icon-blue-ios1024.png",
+      "supportsTablet": false,
+      "bundleIdentifier": "com.nanaeats.nana.app",
+      "config": {
+        "googleMapsApiKey": "AIzaSyBxd-WGMl-H1BdgKsG2dNBYoQiWXsXc-Y8"
+      }
+    },
+    "android": {
+      "icon": "./assets/app-config/Icon-Android-512px.png",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/app-config/Icon-Android-512px.png",
+        "backgroundColor": "#000000"
+      },
+      "permissions": [
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.FOREGROUND_SERVICE",
+        "android.permission.POST_NOTIFICATIONS",
+        "com.google.android.gms.permission.AD_ID"
+      ],
+      "package": "com.nanaeats.nana_app",
+      "googleServicesFile": "./google-services.json",
+      "useNextNotificationsApi": true,
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyA4FLTREZvoZ6HQrfoNXm1bgWJksyvLLo4"
+        }
+      }
+    },
+    "web": {
+      "favicon": "./assets/app-config/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "8235481d-016d-4aa1-a436-7cc06ccc1f14"
+      }
+    }
+  }
+}

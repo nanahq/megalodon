@@ -1,0 +1,56 @@
+{
+  "build": {
+    "production": {
+      "node": "20.0.0",
+      "channel": "production",
+      "autoIncrement": true,
+      "env": {
+        "EXPO_BUNDLE_IDENTIFIER": "com.nanaeats.nana_app",
+        "EXPO_IMAGE_UTILS_NO_SHARP": "1"
+      }
+    },
+    "development": {
+      "node": "20.0.0",
+      "distribution": "internal",
+      "developmentClient": true,
+      "channel": "preview",
+      "android": {
+        "buildType": "apk"
+      },
+      "ios": {
+        "simulator": true
+      }
+    },
+    "preview": {
+      "node": "20.0.0",
+      "distribution": "internal",
+      "channel": "preview",
+      "android": {
+        "buildType": "apk"
+      },
+      "ios": {
+        "simulator": true
+      }
+    },
+    "ios_production": {
+      "extends": "production",
+      "env": {
+        "EXPO_BUNDLE_IDENTIFIER": "com.nanaeats.nana.app"
+      }
+    }
+  },
+  "submit": {
+    "production": {
+      "android": {
+        "serviceAccountKeyPath": "./ANDROID_SERVICE_ACCOUNT.json",
+        "track": "internal",
+        "releaseStatus": "draft"
+      }
+    }
+  },
+  "cli": {
+    "version": ">= 4.1.2",
+    "requireCommit": true,
+    "appVersionSource": "remote"
+  }
+}

@@ -1,0 +1,104 @@
+version: v1
+
+labels:
+  - label: kind/feature
+    sync: true
+    matcher:
+      title: "^feature\\(.+\\): .+"
+
+  - label: kind/feature
+    sync: true
+    matcher:
+      title: "^feat\\(.+\\): .+"
+
+  - label: kind/fix
+    sync: true
+    matcher:
+      title: "^fix\\(.+\\): .+"
+
+  - label: kind/chore
+    sync: true
+    matcher:
+      title: "^chore\\(.+\\): .+"
+
+  - label: kind/refactor
+    sync: true
+    matcher:
+      title: "^refactor\\(.+\\): .+"
+
+  - label: kind/docs
+    sync: true
+    matcher:
+      title: "^docs\\(.+\\): .+"
+
+  - label: kind/dependencies
+    sync: true
+    matcher:
+      title: "^bump(\\(.+\\))?: .+"
+
+  - label: kind/dependencies
+    sync: true
+    matcher:
+      title: "^build(\\(.+\\))?: .+"
+
+  - label: area/workflow
+    sync: true
+    matcher:
+      files: ".github/**"
+
+  - label: area/api
+    sync: true
+    matcher:
+      files: "mobile-app/app/api/**"
+
+  - label: area/assets
+    sync: true
+    matcher:
+      files: "assets/**"
+
+  - label: area/contexts
+    sync: true
+    matcher:
+      files: "mobile-app/contexts/**"
+
+  - label: area/hooks
+    sync: true
+    matcher:
+      files: "mobile-app/hooks/**"
+
+  - label: area/store
+    sync: true
+    matcher:
+      files: "mobile-app/store/**"
+
+  - label: area/translations
+    sync: true
+    matcher:
+      files: "translations/**"
+
+  - label: area/e2e
+    sync: true
+    matcher:
+      files: "cypress/**"
+
+  - label: area/ui-ux
+    sync: true
+    matcher:
+      files:
+        - "mobile-app/screens/**"
+        - "mobile-app/components/**"
+
+checks:
+  - context: "Semantic Pull Request"
+    url: "https://github.com/JellyfishSDK/jellyfish/blob/main/.github/labeler.yml"
+    description:
+      success: Ready for review & merge.
+      failure: "Missing semantic title or label for merge [kind(directory): title]"
+    labels:
+      any:
+        - kind/feature
+        - kind/fix
+        - kind/chore
+        - kind/refactor
+        - kind/docs
+        - kind/dependencies
