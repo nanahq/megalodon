@@ -1,0 +1,67 @@
+{
+  "extends": "expo/tsconfig.base",
+  "exclude": [
+    "node_modules"
+  ],
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "jsx": "react-native",
+    "lib": [
+      "dom",
+      "esnext"
+    ],
+    "moduleResolution": "node",
+    "noEmit": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "strict": true,
+    "baseUrl": "./mobile-app",
+    "paths": {
+      "@api": [
+        "api"
+      ],
+      "@api/*": [
+        "api/*"
+      ],
+      "@assets": [
+        "../assets"
+      ],
+      "@assets/*": [
+        "../assets/*"
+      ],
+      "@constants/*": [
+        "constants/*"
+      ],
+      "@contexts/*": [
+        "contexts/*"
+      ],
+      "@components": [
+        "components"
+      ],
+      "@components/*": [
+        "components/*"
+      ],
+      "@environment": [
+        "../environment"
+      ],
+      "@hooks/*": [
+        "hooks/*"
+      ],
+      "@types/*": [
+        "../types/*"
+      ],
+      "@screens/*": [
+        "screens/*"
+      ],
+      "@store/*": [
+        "store/*"
+      ],
+      "@translations": [
+        "../translations"
+      ],
+      "@tailwind": [
+        "tailwind"
+      ]
+    }
+  }
+}
