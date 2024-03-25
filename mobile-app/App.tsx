@@ -1,3 +1,5 @@
+import 'expo-dev-client';
+
 import * as SplashScreen from 'expo-splash-screen'
 import {MainScreen} from "@screens/Main";
 import {useCachedResource} from "@hooks/useCachedResource";
@@ -17,7 +19,6 @@ import {WebSocketProvider} from "@contexts/SocketProvider";
 import {NetworkMapper} from "@api/network.mapper";
 import {createClient, AnalyticsProvider} from "@segment/analytics-react-native";
 import {AmplitudeSessionPlugin} from "@segment/analytics-react-native-plugin-amplitude-session";
-import 'expo-dev-client';
 import {PromoCodeProvider} from "@contexts/PromoCode";
 
 const WEBSOCKET_ENDPOINT = NetworkMapper.PRODUCTION
