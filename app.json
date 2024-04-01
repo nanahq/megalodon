@@ -23,7 +23,10 @@
         {
           "locationWhenInUsePermission": "Show current location on map."
         }
-      ]
+      ],
+      "expo-font",
+      "expo-localization",
+      "expo-secure-store"
     ],
     "splash": {
       "image": "./assets/app-config/nana-splash.png",
