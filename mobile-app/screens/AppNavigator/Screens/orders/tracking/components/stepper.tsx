@@ -11,8 +11,8 @@ const step: Record<any, any> = {
     [OrderStatus.COLLECTED]: 2,
     [OrderStatus.IN_ROUTE]: 3,
     [OrderStatus.FULFILLED]: 4,
-
 }
+
 const statuses = [
     {
         index: 1,
