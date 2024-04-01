@@ -11,6 +11,7 @@ import {NavigationProp, useNavigation} from "@react-navigation/native";
 import {BasketParamsList} from "@screens/AppNavigator/Screens/basket/BasketNavigator";
 import {BasketScreenName} from "@screens/AppNavigator/Screens/basket/BasketScreenName.enum";
 import FastImage from "react-native-fast-image";
+import {Tags} from "lucide-react-native";
 
 export const BasketsItem: React.FC<{cart: Cart[], vendor: any}> = ({cart, vendor}) => {
     const navigation = useNavigation<NavigationProp<BasketParamsList>>()
@@ -44,7 +45,7 @@ export const BasketsItem: React.FC<{cart: Cart[], vendor: any}> = ({cart, vendor
                         <View style={tailwind("flex flex-row items-center")}>
                             <Text style={tailwind('text-brand-gray-700 text-sm')}>{cart?.length} Items</Text>
                             <View style={tailwind('flex flex-row items-center')}>
-                                <IconComponent iconType='AntDesign' name="tagso"  size={20} color={getColor('green-500')}/>
+                                <Tags  size={20} color={getColor('green-500')}/>
                                 <NumberFormat
                                     prefix="₦"
                                     value={totalCartValue}

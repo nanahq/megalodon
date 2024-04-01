@@ -7,13 +7,13 @@ import React, {PropsWithChildren, useEffect, useMemo, useState} from "react";
 import {ModalCloseIcon} from "@screens/AppNavigator/Screens/modals/components/ModalCloseIcon";
 import {MappedDeliveryStatus} from "@constants/MappedDeliveryStatus";
 import moment from "moment";
-import {IconComponent} from "@components/commons/IconComponent";
 import {ListingMenuI, OrderStatus} from "@nanahq/sticky";
 import {GenericButton} from "@components/commons/buttons/GenericButton";
 import {NumericFormat as NumberFormat} from "react-number-format";
 import {ModalScreenName} from "@screens/AppNavigator/ScreenName.enum";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {useAnalytics} from "@segment/analytics-react-native";
+import {BadgeDollarSign, ShoppingCart} from "lucide-react-native";
 
 export interface TransformedOrderItem {
     listing: ListingMenuI;
@@ -93,14 +93,14 @@ export const UndeliveredSingleOrderScreen: React.FC<UndeliveredSingleOrderScreen
                     <View style={tailwind('flex flex-col mb-5')}>
                         <Text style={tailwind('font-bold')}>Delivery</Text>
                         <View style={tailwind('flex flex-row mt-2 items-center')}>
-                            <IconComponent iconType="Ionicons" name="ios-location-outline" size={20} />
+                            <ShoppingCart color="#000000" size={20} />
                             <Text style={tailwind('ml-5')}>{route.params.order.deliveryAddress}</Text>
                         </View>
                     </View>
                     <View style={tailwind('flex flex-col mb-5')}>
                         <Text style={tailwind('font-bold')}>Order Status</Text>
                         <View style={tailwind('flex flex-row mt-2 items-center')}>
-                            <IconComponent iconType="Ionicons" name="ios-cart-outline" size={20} />
+                            <ShoppingCart color="#000000" size={20} />
                             <View>
                                 <Text style={tailwind('ml-5')}>
                                     {MappedDeliveryStatus[route.params.order.orderStatus]}
@@ -114,7 +114,7 @@ export const UndeliveredSingleOrderScreen: React.FC<UndeliveredSingleOrderScreen
                     <View style={tailwind('flex flex-col mb-5')}>
                         <Text style={tailwind('font-bold')}>Total in Naira</Text>
                         <View style={tailwind('flex flex-row  mt-2  items-center')}>
-                            <IconComponent iconType="Ionicons" name="ios-pricetags-outline" size={20} />
+                            <BadgeDollarSign color="#000000" size={20} />
                             <NumberFormat
                                 prefix='₦'
                                 value={route.params.order.orderValuePayable}
