@@ -12,7 +12,6 @@ import {NumericFormat as NumberFormat} from "react-number-format";
 import {ListingOptionSection} from "@screens/AppNavigator/Screens/modals/components/ListingOptionSection";
 import {SkeletonLoader, SkeletonLoaderScreen} from "@components/commons/SkeletonLoaders/SkeletonLoader";
 import {GenericButton} from "@components/commons/buttons/GenericButton";
-import {IconComponent} from "@components/commons/IconComponent";
 import {RootState, useAppDispatch, useAppSelector} from "@store/index";
 import { saveCartToStorage} from "@store/cart.reducer";
 import {BasketScreenName} from "@screens/AppNavigator/Screens/basket/BasketScreenName.enum";
@@ -23,6 +22,7 @@ import FastImage from "react-native-fast-image";
 import {useAnalytics} from "@segment/analytics-react-native";
 
 import {calculateTotalValue} from "../../../../../utils/CalculateCartTotal";
+import {Minus, Plus} from "lucide-react-native";
 
 type ListingModalScreenProps = StackScreenProps<AppParamList, ModalScreenName.MODAL_LISTING_SCREEN>
 
@@ -243,11 +243,11 @@ export const ListingModal: React.FC<ListingModalScreenProps>  = ({navigation, ro
                            </View>
                            <View style={tailwind('flex-row  items-center')}>
                                <TouchableOpacity disabled={quantity <= 1} onPress={handleDecrease} style={tailwind('bg-white w-8 h-8  rounded border-1.5 border-black flex items-center justify-center')}>
-                                   <IconComponent iconType="AntDesign" name="minus"  size={16}/>
+                                   <Minus color="#000000" size={16}/>
                                </TouchableOpacity>
                                <Text style={tailwind('text-lg font-bold mx-3')}>{quantity}</Text>
                                <TouchableOpacity onPress={handleIncrease} style={tailwind('bg-black w-8 h-8 rounded border-1.5 border-black flex items-center justify-center')}>
-                                   <IconComponent iconType="AntDesign" name="plus" size={16} style={tailwind('text-white')} />
+                                   <Plus color="#ffffff" size={16} style={tailwind('text-white')} />
                                </TouchableOpacity>
                            </View>
                        </View>

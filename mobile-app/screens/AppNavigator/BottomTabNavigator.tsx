@@ -3,7 +3,6 @@ import {getColor, tailwind} from "@tailwind";
 import {AppScreenName} from "@screens/AppNavigator/ScreenName.enum";
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
 import  * as Device from 'expo-device'
-import {IconComponent} from "@components/commons/IconComponent";
 import {HomeNavigator} from "@screens/AppNavigator/Screens/home/HomeNavigator";
 import {RootState, useAppSelector} from "@store/index";
 import {BasketNavigator} from "@screens/AppNavigator/Screens/basket/BasketNavigator";
@@ -11,6 +10,7 @@ import {ProfileNavigator} from "@screens/AppNavigator/Screens/profile/ProfileNav
 import {OrderNavigator} from "@screens/AppNavigator/Screens/orders/OrderNavigator";
 import {PromotionNavigator} from "@screens/AppNavigator/Screens/promotions/PromotionNavigator";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
+import {DiamondPercent, Pizza, ShoppingBasket, History, CircleUser} from "lucide-react-native";
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>()
 
@@ -63,7 +63,7 @@ export function BottomTabNavigator ():JSX.Element {
                     tabBarTestID: "BottomTabHome",
                     tabBarIcon: ({ color, focused }) => (
                         <View style={tailwind('w-10 h-10 flex flex-row items-center justify-center rounded-full', {'text-primary-500': focused})}>
-                            <IconComponent iconType='AntDesign' name="home"  size={28} color={focused ? getColor('primary-500') : color}/>
+                            <Pizza name="home"  size={28} color={focused ? getColor('primary-500') : color}/>
                         </View>
                     ),
                 }}
@@ -82,7 +82,7 @@ export function BottomTabNavigator ():JSX.Element {
                     tabBarTestID: "BottomTabHome",
                     tabBarIcon: ({ color , focused}) => (
                         <View style={tailwind('relative w-10 h-10 flex flex-row items-center justify-center rounded-full')}>
-                            <IconComponent iconType='Ionicons' name="ios-cart-outline"  size={26} color={focused ? getColor('primary-500') : color}/>
+                            <ShoppingBasket size={26} color={focused ? getColor('primary-500') : color}/>
                             {cart !== undefined && (<View style={tailwind('absolute z-50 w-4 h-4 flex justify-center items-center rounded-full bg-black top-0 right-0')}>
                                 <Text style={tailwind('text-xs text-white')}>{cart.length}</Text>
                             </View>)}
@@ -103,7 +103,7 @@ export function BottomTabNavigator ():JSX.Element {
                     tabBarTestID: "BottomTabHome",
                     tabBarIcon: ({ color, focused }) => (
                         <View style={tailwind('w-10 h-10 flex flex-row items-center justify-center rounded-full')}>
-                            <IconComponent iconType='AntDesign' name="tagso"  size={26} color={focused ? getColor('primary-500') : color}/>
+                            <DiamondPercent size={26} color={focused ? getColor('primary-500') : color}/>
                         </View>
                     ),
                 }}
@@ -122,7 +122,7 @@ export function BottomTabNavigator ():JSX.Element {
                     tabBarTestID: "BottomTabHome",
                     tabBarIcon: ({ color, focused }) => (
                         <View style={tailwind('w-10 h-10 flex flex-row items-center justify-center rounded-full')}>
-                            <IconComponent iconType='Ionicons' name="fast-food-outline"  size={26} color={focused ? getColor('primary-500') : color}/>
+                            <History  size={26} color={focused ? getColor('primary-500') : color}/>
                         </View>
                     ),
                 }}
@@ -140,7 +140,7 @@ export function BottomTabNavigator ():JSX.Element {
                     tabBarTestID: "BottomTabHome",
                     tabBarIcon: ({ color, focused }) => (
                         <View style={tailwind('w-10 h-10 flex flex-row items-center justify-center rounded-full')}>
-                            <IconComponent iconType='AntDesign' name="user"  size={26} color={focused ? getColor('primary-500') : color}/>
+                            <CircleUser iconType='AntDesign' name="user"  size={26} color={focused ? getColor('primary-500') : color}/>
                         </View>
                     ),
                 }}

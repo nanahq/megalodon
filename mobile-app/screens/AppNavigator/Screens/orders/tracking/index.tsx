@@ -116,7 +116,7 @@ export const Tracking: React.FC<TrackingProps> = ({navigation, route}) => {
             {order.orderStatus !== OrderStatus.FULFILLED && (
                 <StatusBar animated={true as any} style={"auto"  as any}  networkActivityIndicatorVisible={false} backgroundColor={getStatusBarStyle()} />
             )}
-            {/* {delivery !== undefined && <Map delivery={delivery} order={order} />} */}
+            {delivery !== undefined && <Map delivery={delivery} order={order} />}
             {delivery !== undefined && delivery.assignedToDriver && (
                 <View style={tailwind('px-4')}>
                     <View style={tailwind('flex flex-row item-center w-full justify-between')}>
