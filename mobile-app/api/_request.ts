@@ -41,18 +41,27 @@ interface baseParamProps<T> {
 async function base<T>(param: baseParamProps<T>) {
     const CancelToken = axios.CancelToken;
     const source = CancelToken.source();
+    const cookies = await persistence.getSecure()
+    const baseHeader = {
+        'Cookie': cookies
+    }
+
+
     setTimeout(() => {
         source.cancel();
     }, 50000);
-    return await axios({
+    const axiosInstance =  axios({
         method: param.method,
         baseURL: param.baseUrl ?? config.baseUrl,
         url: param.url,
-        headers: param.headers !== undefined ?  param.headers : config.headers,
+        headers: param.headers !== undefined ?  {...param.headers, ...baseHeader} : {...config.headers, ...baseHeader},
         cancelToken: source.token,
         data: param.data,
+        withCredentials: true,
     })
-      .then(res => {
+
+        return await axiosInstance
+            .then(res => {
             return Promise.resolve({
                 data: res?.data,
                 cookies: res.headers['set-cookie'] ?? []
@@ -76,7 +85,7 @@ async function request<T> (method: Method, url: string): Promise<{data: any, coo
     return await base<T>({method, url})
         .then(res => {
             if ( res.cookies.length > 0) {
-            persistence.setSecure(cookieParser(res.cookies[0]))
+            persistence.setSecure(cookieParser(res.cookies))
            }
            return Promise.resolve<{data: any, cookies: string[]}>(res)
         })

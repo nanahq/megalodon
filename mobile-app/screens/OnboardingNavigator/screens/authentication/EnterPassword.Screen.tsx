@@ -54,7 +54,9 @@ export function EnterPasswordScreen ({navigation, route}: EnterPasswordScreenPro
                         password,
                     }
                 })
-                await  setToken(cookieParser(cookies[0]))
+
+                await  setToken(cookieParser(cookies))
+
                 showTost(toast, 'Login successfully', 'success')
                 void analytics.track('LOGIN', {
                     phone: route.params.phoneNumber

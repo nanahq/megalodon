@@ -1,3 +1,3 @@
-export function cookieParser (cookieString: string): string {
-    return cookieString.split('; ')[0].split('=')[1]
+export function cookieParser(cookies: string[]): string  {
+    return  cookies[0].split(',').find(c => c.includes('Authentication=')) ?? ''
 }

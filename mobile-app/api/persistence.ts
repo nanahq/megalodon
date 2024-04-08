@@ -19,8 +19,10 @@ async function getSecure(): Promise<string | null> {
     return await SecurePersistence.getItemAsync(AUTH_KEY.SECURE_KEY)
 }
 
-async function setSecure(token: string): Promise<void> {
-    return await SecurePersistence.setItemAsync(AUTH_KEY.SECURE_KEY, token)
+async function setSecure(token: string | undefined): Promise<void> {
+    if ( token !== undefined) {
+        await SecurePersistence.setItemAsync(AUTH_KEY.SECURE_KEY, token ?? '')
+    }
 }
 
 async function deleteSecure (): Promise<boolean> {

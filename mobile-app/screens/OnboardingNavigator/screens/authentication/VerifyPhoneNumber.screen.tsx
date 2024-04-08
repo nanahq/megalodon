@@ -43,7 +43,7 @@ export function VerifyPhoneNumberScreen({
                     code,
                 },
             });
-            await setToken(cookieParser(cookies[0]));
+            await setToken(cookieParser(cookies));
         } catch (error: any) {
             showTost(toast,error.message, 'error');
         } finally {
