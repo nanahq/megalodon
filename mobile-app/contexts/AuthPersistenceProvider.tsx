@@ -20,7 +20,7 @@ export function useAuthPersistence(): AuthPersistenceI {
 interface AuthPersistenceProviderI {
     api: {
         get: () => Promise<string | null>;
-        set: (token: string) => Promise<void>;
+        set: (token: string | undefined) => Promise<void>;
         delete: () => Promise<boolean>
     };
 }
@@ -53,7 +53,7 @@ export function AuthPersistenceProvider(
     const management: AuthPersistenceI = {
         isAuthenticated,
         token,
-        async setToken(token: string): Promise<void> {
+        async setToken(token: string | undefined): Promise<void> {
             await api.set(token);
             setToken(await api.get());
             setIsAuthenticated(true)
