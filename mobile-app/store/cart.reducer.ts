@@ -2,10 +2,10 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AppActions } from "@store/reducers.actions";
 import { Cart } from "@screens/AppNavigator/Screens/modals/Listing.Modal";
-import {VendorI} from "@nanahq/sticky";
+import {VendorI, VendorUserI} from "@nanahq/sticky";
 
 export interface CartState {
-    vendor: VendorI | undefined;
+    vendor: VendorUserI | undefined;
     cart: Cart[] | undefined;
     hasItemsInCart: boolean;
 
@@ -39,39 +39,46 @@ export const deleteCartFromStorage = createAsyncThunk(AppActions.DELETE_CART_FRO
            await AsyncStorage.removeItem("cart");
            return true
         } catch (error) {
-            // Handle errors if needed
+            console.error(error)
         }
     });
 export const saveCartToStorage = createAsyncThunk(
     AppActions.SAVE_CART_TO_STORAGE,
-    async (cartData: { vendor: VendorI; cart: Cart, cartAvailableDate?: number}) => {
-            // Read the existing cart data from storage (if any)
+    async (cartData: { vendor: VendorUserI; cart: Cart, cartAvailableDate?: number}) => {
+        // eslint-disable-next-line no-useless-catch
+        try {
+            // Fetch the existing cart from AsyncStorage
             const storedCart = await AsyncStorage.getItem("cart");
-            let existingCart: CartState = initialState; // Initialize with the initial state
+            let existingCart: CartState = initialState;
+
 
             if (storedCart) {
                 existingCart = JSON.parse(storedCart) as CartState;
             }
 
-            const newCart: CartState = { ...existingCart }; // Clone the existing cart
-
+            // Create a new cart object with updated data
+            const newCart: CartState = { ...existingCart};
             if (existingCart.vendor?._id === cartData.vendor._id) {
+                // If the vendor matches, add the cart item to the existing cart
                 if (existingCart.cart !== undefined) {
                     newCart.cart = [...existingCart.cart, cartData.cart];
                     newCart.hasItemsInCart = true;
                     newCart.vendor = cartData.vendor;
-                    newCart.cartItemAvailableDate = cartData.cartAvailableDate
+                    newCart.cartItemAvailableDate = cartData.cartAvailableDate;
                 }
             } else {
                 newCart.vendor = cartData.vendor;
                 newCart.cart = [cartData.cart];
                 newCart.hasItemsInCart = true;
-                newCart.cartItemAvailableDate = cartData.cartAvailableDate
+                newCart.cartItemAvailableDate = cartData.cartAvailableDate;
             }
 
-            // Save the updated cart data to storage
             await AsyncStorage.setItem("cart", JSON.stringify(newCart));
+
             return newCart;
+        } catch (error) {
+            throw error;
+        }
     }
 );
 
@@ -80,32 +87,16 @@ export const cart = createSlice({
     name: "cart",
     initialState,
     reducers: {
-        addItemToCart: (state, { payload }: PayloadAction<{ vendor: VendorI; cart: Cart }>) => {
-            const { vendor, cart } = payload;
-            if (state.vendor !== undefined) {
-                if (vendor._id === state.vendor._id) {
-                    if (state.cart !== undefined) {
-                        state.cart = [...state.cart, cart];
-                        state.hasItemsInCart = true;
-                    }
-                } else {
-                    state.vendor = vendor;
-                    state.cart = [cart];
-                    state.hasItemsInCart = true;
-                }
-            } else {
-                state.vendor = vendor;
-                state.cart = [cart];
-                state.hasItemsInCart = true;
-            }
-        },
+        addItemToCart: () => {
+
+        }
     },
     extraReducers: builder => {
         builder.addCase(
             saveCartToStorage.fulfilled,
             (state, {payload}: PayloadAction<CartState>) => {
-               state.cart = payload.cart
-               state.vendor = payload.vendor
+                state.cart = payload.cart
+                state.vendor = payload.vendor
                 state.hasItemsInCart = payload.hasItemsInCart
                 state.cartItemAvailableDate = payload.cartItemAvailableDate
             }

@@ -43,6 +43,7 @@ type VendorModalScreenProps = StackScreenProps<AppParamList, ModalScreenName.MOD
 
 
     const {cart} = useAppSelector((state: RootState) => state.cart)
+
     const {subscriptions} = useAppSelector((state: RootState) => state.vendors)
     const {profile} = useAppSelector((state: RootState) => state.profile)
     const [subscribing, setSubscribing] = useState<boolean>(false)
@@ -156,6 +157,7 @@ return
              ModalScreenName.MODAL_LISTING_SCREEN,
              {
                  listing,
+                 vendor: route.params.vendor,
                  availableDate: scheduled.find(sc => sc.listing._id === listing._id)?.availableDate,
                  isScheduled: scheduled.some((sc) => sc.listing._id === listing._id)
              }

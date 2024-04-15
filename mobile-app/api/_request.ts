@@ -41,10 +41,6 @@ interface baseParamProps<T> {
 async function base<T>(param: baseParamProps<T>) {
     const CancelToken = axios.CancelToken;
     const source = CancelToken.source();
-    const cookies = await persistence.getSecure()
-    const baseHeader = {
-        'Cookie': cookies
-    }
 
 
     setTimeout(() => {
@@ -54,7 +50,7 @@ async function base<T>(param: baseParamProps<T>) {
         method: param.method,
         baseURL: param.baseUrl ?? config.baseUrl,
         url: param.url,
-        headers: param.headers !== undefined ?  {...param.headers, ...baseHeader} : {...config.headers, ...baseHeader},
+        headers: param.headers !== undefined ?  {...param.headers} : {...config.headers},
         cancelToken: source.token,
         data: param.data,
         withCredentials: true,

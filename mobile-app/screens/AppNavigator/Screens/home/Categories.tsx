@@ -3,8 +3,6 @@ import {tailwind} from "@tailwind";
 
 export const HomepageCategory = () => {
     return (
-        <View style={tailwind('flex flex-1')}>
-
-        </View>
+        <View style={tailwind('flex flex-1')} />
     )
 }
