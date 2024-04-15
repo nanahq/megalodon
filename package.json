@@ -25,7 +25,7 @@
     "@expo/config-plugins": "~7.8.0",
     "@expo/vector-icons": "^14.0.0",
     "@gorhom/bottom-sheet": "^4.4.7",
-    "@nanahq/sticky": "^0.2.8",
+    "@nanahq/sticky": "^0.3.1",
     "@react-native-async-storage/async-storage": "1.21.0",
     "@react-native-community/datetimepicker": "7.6.1",
     "@react-native-community/netinfo": "11.1.0",
