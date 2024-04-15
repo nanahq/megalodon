@@ -27,8 +27,8 @@ function calculateDeltas(point1: [number, number], point2: [number, number]): Re
     const lon2 = toRadians(point2[1]);
 
 
-    const latitudeDelta = (lat2 - lat1) / 2;
-    const longitudeDelta = (lon2 - lon1) / 2;
+    const latitudeDelta = Math.abs((lat2 - lat1) / 2);
+    const longitudeDelta = Math.abs((lon2 - lon1) / 2);
 
     return { latitudeDelta, longitudeDelta, latitude: point1[0], longitude: point1[1] };
 }
