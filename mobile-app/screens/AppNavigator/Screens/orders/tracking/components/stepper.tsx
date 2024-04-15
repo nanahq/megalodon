@@ -1,8 +1,8 @@
 import { Text, View } from "react-native";
 import { tailwind } from "@tailwind";
 import React from "react";
-import { DeliveryI, OrderStatus } from "@nanahq/sticky";
-import { IconComponent } from "@components/commons/IconComponent";
+import {  OrderStatus } from "@nanahq/sticky";
+import {Check, CookingPot, ThumbsUp, Truck} from "lucide-react-native";
 
 const step: Record<any, any> = {
     [OrderStatus.PROCESSED]: 1,
@@ -17,47 +17,35 @@ const statuses = [
     {
         index: 1,
         text: 'Vendor preparing your order',
-        icon: {
-            name: 'flame-outline',
-            type: "Ionicons"
-        },
+        icon: () => <CookingPot size={20} color="#ffffff" />,
         status: [OrderStatus.PROCESSED, OrderStatus.ACCEPTED]
     },
     {
         index: 2,
         text: 'Picking up order from vendor',
-        icon: {
-            name: 'package',
-            type: "Feather"
-        },
+        icon: () => <ThumbsUp size={20} color="#ffffff" /> ,
         status: [OrderStatus.COURIER_PICKUP, OrderStatus.COLLECTED]
     },
     {
         index: 3,
         text: 'Delivery in progress',
-        icon: {
-            name: 'truck',
-            type: "Feather"
-        },
+        icon: () => <Truck size={20} color="#ffffff" /> ,
         status: [OrderStatus.IN_ROUTE]
     },
     {
         index: 4,
         text: 'Order delivered',
-        icon: {
-            name: 'checkcircle',
-            type: "AntDesign"
-        },
+        icon: () => <Check size={20} color="#ffffff" /> ,
         status: [OrderStatus.FULFILLED]
     }
 ]
 
-export const OrderStatusStepper: React.FC<{ delivery: DeliveryI }> = ({ delivery }) => {
+export const OrderStatusStepper: React.FC<{ _status: OrderStatus }> = ({  _status }) => {
     return (
         <View style={tailwind("px-4 mt-10")}>
             <Text style={tailwind('font-bold text-lg mb-4')}>Delivery Progress</Text>
             {statuses.map(({ icon, text, status, index, }: any, i) => {
-                const currentStatus = step[delivery.status as any]
+                const currentStatus = step[_status as any]
                 return (
                     <View
                         key={index}
@@ -67,14 +55,14 @@ export const OrderStatusStepper: React.FC<{ delivery: DeliveryI }> = ({ delivery
                         <View
                             style={[
                                 tailwind("border-2 border-transparent rounded-full flex justify-center items-center mr-3 text-sm w-10 h-10"),
-                                status.includes(delivery.status) || currentStatus > index ? tailwind("bg-primary-500") : tailwind("bg-gray-300"),
+                                status.includes(_status) || currentStatus > index ? tailwind("bg-primary-500") : tailwind("bg-gray-300"),
 
                             ]}
                         >
-                            <IconComponent iconType={icon?.type} name={icon?.name} size={20} color="#ffffff" />
+                            {icon()}
                         </View>
                         <View style={tailwind("flex-1")}>
-                            <Text style={[tailwind("text-lg"), status.includes(delivery.status)  || currentStatus > index ? tailwind("text-primary-500") : tailwind("text-gray-300")]}>
+                            <Text style={[tailwind("text-lg"), status.includes(_status)  || currentStatus > index ? tailwind("text-primary-500") : tailwind("text-gray-300")]}>
                                 {text}
                             </Text>
                         </View>
@@ -83,7 +71,7 @@ export const OrderStatusStepper: React.FC<{ delivery: DeliveryI }> = ({ delivery
                                 style={[
                                     tailwind("w-0.5 absolute left-5 -bottom-10"),
                                     {height: 70},
-                                    status.includes(delivery.status)  || currentStatus > index ? tailwind("bg-primary-500") : tailwind("bg-gray-300")
+                                    status.includes(_status)  || currentStatus > index ? tailwind("bg-primary-500") : tailwind("bg-gray-300")
                                 ]}
                             />
                         )}

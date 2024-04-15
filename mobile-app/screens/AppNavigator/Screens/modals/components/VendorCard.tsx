@@ -20,9 +20,6 @@ const _VendorCard: React.FC<{ vendor: VendorUserI, fullWidth?: boolean, style?: 
     const [error, setError] = useState<boolean>(false)
 
     const analytics = useAnalytics()
-
-
-    console.log(props.vendor)
     useEffect(() => {
         async function fetchData() {
             try {

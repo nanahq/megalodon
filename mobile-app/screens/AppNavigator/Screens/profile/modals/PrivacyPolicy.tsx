@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import { StackScreenProps} from '@react-navigation/stack';
 import { AppParamList } from '@screens/AppNavigator/AppNav';
 import { tailwind } from '@tailwind';

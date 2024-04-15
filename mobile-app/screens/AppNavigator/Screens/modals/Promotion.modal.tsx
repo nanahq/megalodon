@@ -6,7 +6,6 @@ import { tailwind } from '@tailwind';
 import {ModalCloseIcon} from "@screens/AppNavigator/Screens/modals/components/ModalCloseIcon";
 import {useAnalytics} from "@segment/analytics-react-native";
 import {ScrollView, View, Text} from "react-native";
-import {usePromoCode} from "@contexts/PromoCode";
 import {useAppDispatch, useAppSelector} from "@store/index";
 import { GenericTextInputV2} from "@components/commons/inputs/TextInput";
 import {GenericButton} from "@components/commons/buttons/GenericButton";

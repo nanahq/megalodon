@@ -21,8 +21,8 @@ import moment from "moment";
 import FastImage from "react-native-fast-image";
 import {useAnalytics} from "@segment/analytics-react-native";
 
-import {calculateTotalValue} from "../../../../../utils/CalculateCartTotal";
 import {Minus, Plus} from "lucide-react-native";
+import {calculateTotalValue} from "../../../../../utils/CalculateCartTotal";
 
 type ListingModalScreenProps = StackScreenProps<AppParamList, ModalScreenName.MODAL_LISTING_SCREEN>
 
@@ -114,7 +114,6 @@ export const ListingModal: React.FC<ListingModalScreenProps>  = ({navigation, ro
                     method: 'GET',
                     url: `listing/menu/${route.params.listing._id}`
                 })
-
                 setListing(_listing)
             } catch (error) {
                 showTost(toast, 'Something went wrong fetching vendor', 'error')
@@ -194,7 +193,7 @@ export const ListingModal: React.FC<ListingModalScreenProps>  = ({navigation, ro
         }
 
         dispatch(saveCartToStorage({
-            vendor: listing?.vendor  as any,
+            vendor: route.params.vendor  as any,
             cart: _cart,
             cartAvailableDate:  route.params.availableDate ?? undefined
         }))

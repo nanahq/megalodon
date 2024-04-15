@@ -1,11 +1,12 @@
 import React, {createContext, PropsWithChildren, useContext, useEffect, useState,} from "react";
-import {io, Socket} from "socket.io-client";
-import {useAuthPersistence} from "@contexts/AuthPersistenceProvider";
+import {io} from "socket.io-client";
+import {NetworkMapper} from "@api/network.mapper";
 
+export const socket = io(NetworkMapper.PRODUCTION)
 
 interface WebSocketI {
     isConnected: boolean;
-    socketClient: Socket | null;
+    transport: string
 }
 
 export const WebSocketContext = createContext<WebSocketI>(
@@ -19,40 +20,41 @@ export function useWebSocket(): WebSocketI {
 
 
 export function WebSocketProvider(
-    props: PropsWithChildren<{socketEndpoint: string}>
+    props: PropsWithChildren<any>
 ): JSX.Element | null {
-    const [socketClient, setSocketClient] = useState<Socket | null>(null)
-    const [isConnected, setSocketIsConnected] = useState<boolean>(false)
-    const  {isAuthenticated} = useAuthPersistence()
+    const [isConnected, setIsConnected] = useState(false);
+    const [transport, setTransport] = useState('N/A');
+
     useEffect(() => {
-
-        if (!isAuthenticated) {
-            return
+        if (socket.connected) {
+            onConnect();
         }
-        let _socket: Socket;
-
-        if (socketClient === null) {
-            _socket = io(props.socketEndpoint, {
-                transports: ['websocket'],
+        function onConnect() {
+            setIsConnected(true);
+            setTransport(socket.io.engine.transport.name);
+            socket.io.engine.on('upgrade', (transport) => {
+                setTransport(transport.name);
             });
-            setSocketClient(_socket);
-            setSocketIsConnected(true)
         }
+
+        function onDisconnect() {
+            setIsConnected(false);
+            setTransport('N/A');
+        }
+
+        socket.on('connect', onConnect);
+        socket.on('disconnect', onDisconnect);
 
         return () => {
-            if (_socket) {
-                _socket.disconnect();
-                setSocketIsConnected(false)
-            }
+            socket.off('connect', onConnect);
+            socket.off('disconnect', onDisconnect);
         };
-    }, [props.socketEndpoint, isAuthenticated]);
-
-
+    }, []);
 
 
     const state: WebSocketI = {
         isConnected,
-        socketClient
+        transport
     };
 
     return (

@@ -21,7 +21,7 @@ export const BasketSingle: React.FC = () => {
         void analytics.screen(BasketScreenName.SINGLE_BASKET)
     }, [])
     const vendor = useMemo(() => {
-        return vendors.vendors?.find((vendor) => vendor._id === cart.vendor)
+        return vendors.vendors?.find((vendor) => vendor._id === cart.vendor?._id)
     }, [cart, vendors])
 
 

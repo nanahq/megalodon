@@ -51,8 +51,6 @@ export const UndeliveredSingleOrderScreen: React.FC<UndeliveredSingleOrderScreen
 
 
     useEffect(() => {
-        console.log(route?.params.order._id)
-
         navigation.setOptions({
             headerShown: true,
             headerTitle: `Order #${route?.params.order.refId}`,

@@ -27,7 +27,7 @@ import {ModalCloseIcon} from "@screens/AppNavigator/Screens/modals/components/Mo
 
 
     const vendor = useMemo(() => {
-        return vendors?.find((vendor) => vendor._id === cartState.vendor)
+        return vendors?.find((vendor) => vendor._id === cartState.vendor?._id)
     }, [vendors])
     return (
         <ScrollView style={tailwind('flex-1 bg-white')}>

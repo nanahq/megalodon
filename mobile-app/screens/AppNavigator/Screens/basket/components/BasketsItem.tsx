@@ -1,7 +1,6 @@
 import React, {memo, useMemo} from "react";
 import {View, Text, Image} from "react-native";
 import {getColor, tailwind} from "@tailwind";
-import {IconComponent} from "@components/commons/IconComponent";
 import {NumericFormat as NumberFormat} from "react-number-format";
 import {Cart} from "@screens/AppNavigator/Screens/modals/Listing.Modal";
 import {GenericButton} from "@components/commons/buttons/GenericButton";

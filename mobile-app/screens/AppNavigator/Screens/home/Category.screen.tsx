@@ -5,10 +5,8 @@ import {View} from "react-native";
 
 type SingleCategoryScreenProps = StackScreenProps<HomeParamsList, HomeScreenName.SINGLE_CATEGORY>
 
-export const SingleCategoryScreen: React.FC<SingleCategoryScreenProps> = ({route }) => {
+export const SingleCategoryScreen: React.FC<SingleCategoryScreenProps> = () => {
     return (
-        <View>
-
-        </View>
+        <View />
     )
 }

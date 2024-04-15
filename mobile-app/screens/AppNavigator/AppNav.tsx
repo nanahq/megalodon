@@ -2,13 +2,11 @@ import {CardStyleInterpolators, createStackNavigator} from "@react-navigation/st
 import {LinkingOptions, NavigationContainer} from "@react-navigation/native";
 import {AppLinking, BottomTabNavigator} from "@screens/AppNavigator/BottomTabNavigator";
 import * as Linking from "expo-linking"
-import {fetchProfile} from "@store/profile.reducer";
-import {useEffect} from "react";
+import {fetchProfile, updateUserProfile} from "@store/profile.reducer";
+import {useEffect, useRef, useState} from "react";
 import {RootState, useAppDispatch} from "@store/index";
 import {useSelector} from "react-redux";
-import {
-    registerForPushNotificationsAsync
-} from "@screens/AppNavigator/components/NotificationPermission";
+
 import {fetchVendors} from "@store/vendors.reducer";
 import {readCartFromStorage} from "@store/cart.reducer";
 import {fetchAddressBook, fetchAddressLabels} from "@store/AddressBook.reducer";
@@ -22,10 +20,11 @@ import * as Device from 'expo-device'
 import * as Location from "expo-location";
 import {_api} from "@api/_request";
 import * as Notifications from "expo-notifications";
-import {fetchHomaPage } from "@store/listings.reducer";
+import {fetchHomaPage, listings} from "@store/listings.reducer";
 import {RedeemModal} from "@screens/AppNavigator/Screens/modals/Redeem.Modal";
 import {useAnalytics} from "@segment/analytics-react-native";
 import {PromotionModal} from "@screens/AppNavigator/Screens/modals/Promotion.modal";
+import Constants from "expo-constants";
 
 const App = createStackNavigator<AppParamList>()
 
@@ -36,8 +35,9 @@ export interface AppParamList {
     },
 
     [ModalScreenName.MODAL_LISTING_SCREEN]: {
-        listing: ListingMenuI,
-        isScheduled: boolean,
+        listing: ListingMenuI
+        vendor: VendorUserI
+        isScheduled: boolean
         availableDate?: number
     },
 
@@ -84,8 +84,12 @@ if (Device.osName === 'Android') {
 }
 
 
+
 export function AppNavigator(): JSX.Element {
-    const {profile, hasFetchedProfile} = useSelector((state: RootState) => state.profile)
+    const {profile} = useSelector((state: RootState) => state.profile)
+    const [_, setNotification] = useState<Notification | undefined>(undefined);
+    const notificationListener = useRef<any>();
+    const responseListener = useRef<any>();
     const isAndroid  = Device.osName === 'Android'
     const dispatch = useAppDispatch()
     const analytics = useAnalytics()
@@ -145,26 +149,26 @@ export function AppNavigator(): JSX.Element {
 
     useEffect(() => {
         void requestLocation()
-
-        if (hasFetchedProfile && profile.expoNotificationToken === undefined) {
-            void requestPermission()
-        }
     }, [])
 
+    useEffect(() => {
+        registerForPushNotificationsAsync().then((token: any) => {
+            dispatch(updateUserProfile({expoNotificationToken: token}))
+        });
 
+        notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
+            setNotification(() => notification as any);
+        });
 
+        responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+            return response
+        });
 
-    const requestPermission = async () => {
-        const token = await registerForPushNotificationsAsync(requestPermission)
-        const payload = {expoNotificationToken: token} as any
-        await _api.requestData<Partial<UpdateUserDto>, undefined>({
-            method: 'PUT',
-            url: 'user/update',
-            data: payload
-        })
-        dispatch(fetchProfile())
-    }
-
+        return () => {
+            Notifications.removeNotificationSubscription(notificationListener.current);
+            Notifications.removeNotificationSubscription(responseListener.current);
+        };
+    }, []);
     return (
         <NavigationContainer linking={LinkingConfiguration}>
             <App.Navigator screenOptions={{
@@ -228,3 +232,34 @@ const LinkingConfiguration: LinkingOptions<ReactNavigation.RootParamList> = {
             },
     },
 };
+
+async function registerForPushNotificationsAsync() {
+    let token;
+
+    if (Device.osName === 'Android') {
+        await Notifications.setNotificationChannelAsync('default', {
+            name: 'default',
+            importance: Notifications.AndroidImportance.MAX,
+            vibrationPattern: [0, 250, 250, 250],
+            lightColor: '#FF231F7C',
+        });
+    }
+
+    if (Device.isDevice) {
+        const { status: existingStatus } = await Notifications.getPermissionsAsync();
+        let finalStatus = existingStatus;
+        if (existingStatus !== 'granted') {
+            const { status } = await Notifications.requestPermissionsAsync();
+            finalStatus = status;
+        }
+        if (finalStatus !== 'granted') {
+            alert('You must grant permission to receive notifications on your order');
+            return;
+        }
+        token = (await Notifications.getExpoPushTokenAsync({ projectId: Constants?.expoConfig?.extra?.eas?.projectId})).data;
+    } else {
+        alert('Must use physical device for Push Notifications');
+    }
+
+    return token;
+}
