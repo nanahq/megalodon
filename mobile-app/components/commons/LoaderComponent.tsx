@@ -3,12 +3,13 @@ import {getColor, tailwind} from "@tailwind";
 
 interface LoaderComponentProps extends ActivityIndicatorProps {
  containerStyle?: StyleProp<ViewStyle>
+ loaderColor?: string
 }
 export function LoaderComponent (props: LoaderComponentProps): JSX.Element {
     const {containerStyle, ...otherProps} = props
     return (
         <View style={[tailwind(''), containerStyle]}>
-           <ActivityIndicator {...otherProps} color={getColor('primary-500')} />
+           <ActivityIndicator {...otherProps} color={props.loaderColor ? getColor(props.loaderColor) : getColor('primary-500')} />
         </View>
     )
 }

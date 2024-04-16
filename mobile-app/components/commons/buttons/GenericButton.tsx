@@ -31,11 +31,11 @@ export function GenericButton (props: Props): JSX.Element {
             style={[backgroundColor as any, tailwind('rounded-xl', {
                 'bg-brand-gray-700': props.disabled,
                 'flex flex-row justify-center w-full items-center bg-brand-gray-700': props.loading
-            }), style]}
+            }), style, tailwind('bg-primary-100')]}
             {...rest}
         >
             <Text style={[tailwind('text-center text-lg py-3.5'), labelColor]}>{label}</Text>
-            {props.loading !== undefined && props.loading && <LoaderComponent size='small' style={tailwind('pl-2 text-white')} />}
+            {props.loading !== undefined && props.loading && <LoaderComponent loaderColor="white" size='small' style={tailwind('pl-2 text-white')} />}
         </TouchableOpacity>
     )
 }

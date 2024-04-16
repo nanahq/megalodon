@@ -27,7 +27,7 @@ const _VendorCategorySection: React.FC<{category: ListingCategoryI, vendorOperat
                     <VendorMenuCard
                         disabled={props.category.type === 'PRE_ORDER'}
                         menu={listing} key={index}
-                        onPress={() => props.vendorOperationStatus ? props.onPress(listing) : props.warningCallback()}
+                        onPress={() => props.onPress(listing)}
                     />
                 ))}
             </View>

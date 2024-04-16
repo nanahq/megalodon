@@ -75,15 +75,15 @@ const _VendorCard: React.FC<{ vendor: VendorUserI, fullWidth?: boolean, style?: 
                     {!loading && !error && (
                         <View style={tailwind("flex flex-row items-center ")}>
                             <View style={tailwind("flex flex-row items-center border-r-0.5 pr-1 border-gray-300")}>
-                                <IconComponent iconType="MaterialIcons" name="delivery-dining" size={16} style={tailwind('font-medium text-black mr-1')} />
-                                <Text style={tailwind("text-sm text-black")}>from ₦{travelInfo?.fee}</Text>
+                                <IconComponent iconType="MaterialIcons" name="delivery-dining" size={16} style={tailwind('font-medium text-gray-500 mr-1')} />
+                                <Text style={tailwind("text-sm text-gray-500")}>from ₦{travelInfo?.fee}</Text>
                             </View>
-                            <Text style={tailwind("text-black mx-1 text-sm")}>{10}-{Number(travelInfo?.duration ?? 0) + Number(props?.vendor?.settings?.preparationTime ?? 0)} Min</Text>
+                            <Text style={tailwind("text-gray-500 mx-1 text-sm")}>{10}-{Number(travelInfo?.duration ?? 0) + Number(props?.vendor?.settings?.preparationTime ?? 0)} Min</Text>
                         </View>
                     )}
                     <View style={tailwind("flex flex-row items-center")}>
                         <IconComponent iconType="AntDesign" name="star" style={tailwind("w-4 h-4 text-yellow-300")} />
-                        <Text style={tailwind("text-sm font-bold text-gray-900")}>4.95</Text>
+                        <Text style={tailwind("text-sm text-gray-500")}>4.95</Text>
                         <Text
                             style={tailwind("text-sm font-medium text-gray-900 ml-1")}>(1000)</Text>
                     </View>
