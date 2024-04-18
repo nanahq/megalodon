@@ -28,7 +28,7 @@ export function GenericTextInput(props: TextAreaProps): JSX.Element {
             <View style={tailwind('flex-col ')}>
                 <TextInput
                     keyboardType={keyboardPad}
-                    style={[tailwind('py-4 w-full px-3 flex items-center bg-primary-200 rounded  text-xl text-black'),  { textAlignVertical: 'center' }, style]}
+                    style={[tailwind('py-4 w-full px-3 flex items-center  rounded  text-xl text-black'),  { textAlignVertical: 'center' }, style]}
                     placeholderTextColor={placeHolderStyle}
                     defaultValue={props.initialText}
                     {...otherProps}

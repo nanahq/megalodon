@@ -5,19 +5,22 @@ import {ListingCategoryI, LocationCoordinates, ScheduledListingI, UserHomePage} 
 
 export interface ListingsState {
     hompage: UserHomePage | undefined
+
+    categories: ListingCategoryI[] | undefined
     hasFetchedListings: boolean;
 }
 
 const initialState: ListingsState = {
     hompage: undefined,
-    hasFetchedListings: false
+    hasFetchedListings: false,
+    categories: undefined
 };
 
 export const fetchAllScheduledListings = createAsyncThunk(
     AppActions.FETCHED_SCHEDULED_LISTING,
     async () => {
         return await _api.requestData<undefined, ScheduledListingI[]>({
-            method: 'get',
+            method: 'GET',
             url: 'listing/scheduled'
         })
     }
@@ -36,15 +39,13 @@ export const fetchHomaPage = createAsyncThunk(
 
 export const fetchAllCategories = createAsyncThunk(
     AppActions.FETCH_CATEGORY,
-    async (data: LocationCoordinates) => {
-        return await _api.requestData<LocationCoordinates, ListingCategoryI[]>({
-            method: 'POST',
-            url: 'listing/categories',
-            data
+    async () => {
+        return await _api.requestData<undefined, ListingCategoryI[]>({
+            method: 'GET',
+            url: 'listing/categories'
         })
     }
 );
-
 
 export const listings = createSlice({
     name: "listings",
@@ -61,6 +62,12 @@ export const listings = createSlice({
                 }
             )
             .addCase(
+                fetchAllCategories.fulfilled,
+                (state, {payload: {data}}: PayloadAction<{data: ListingCategoryI[]}>) => {
+                    state.categories = data
+                }
+            )
+            .addCase(
                 fetchHomaPage.pending,
                 (state) => {
                     state.hasFetchedListings = false
@@ -72,7 +79,6 @@ export const listings = createSlice({
                     state.hasFetchedListings = false
                 }
             )
-
     }
 });
 

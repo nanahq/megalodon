@@ -20,7 +20,7 @@ import * as Device from 'expo-device'
 import * as Location from "expo-location";
 import {_api} from "@api/_request";
 import * as Notifications from "expo-notifications";
-import {fetchHomaPage, listings} from "@store/listings.reducer";
+import {fetchAllCategories, fetchHomaPage, listings} from "@store/listings.reducer";
 import {RedeemModal} from "@screens/AppNavigator/Screens/modals/Redeem.Modal";
 import {useAnalytics} from "@segment/analytics-react-native";
 import {PromotionModal} from "@screens/AppNavigator/Screens/modals/Promotion.modal";
@@ -100,6 +100,7 @@ export function AppNavigator(): JSX.Element {
         dispatch(readCartFromStorage() as any)
         dispatch(fetchAddressLabels() as any)
         dispatch(fetchAddressBook() as any)
+        dispatch(fetchAllCategories() as any)
         dispatch(fetchHomaPage({type: "Point", coordinates:[0,0]}) as any)
     }, [])
 

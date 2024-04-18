@@ -25,10 +25,10 @@ export const  TextInputWithLabel =  forwardRef<any, TextInputWithLabelProps>(
             labelTestId,
             containerStyle,
             style,
-            placeHolderStyle,
             ...rest
         } = props
 
+        const [inputFocus, setInputFocus] = useState<boolean>(false)
 
         return (
             <View style={[tailwind('flex flex-col'), containerStyle as any]}>
@@ -47,16 +47,24 @@ export const  TextInputWithLabel =  forwardRef<any, TextInputWithLabelProps>(
                     )}
                 </View>
                 <TextInput
+                    returnKeyType='done'
+                    onFocus={() => setInputFocus(true)}
+                    onBlur={() => setInputFocus(false)}
+                    placeholderTextColor={props.placeholderTextColor ?? getColor('brand-gray-800')}
                     ref={ref}
-                    style={[tailwind('py-4 w-full px-3 flex items-center bg-primary-200 rounded  text-xl text-black'), style]}
-                    placeholderTextColor={placeHolderStyle}
+                    style={[tailwind('rounded-lg border-1.5 border-gray-200  flex w-full items-center px-3 py-3 font-medium  text-lg text-brand-black-500', {
+                        'text-base': Device.osName === 'iOS',
+                        'border-1.5 border-primary-100': inputFocus
+                    }), {
+                        height: 50,
+                        lineHeight: 15
+                    } ,style]}
                     {...rest}
                 />
             </View>
         )
     }
 )
-
 export interface ModalTextInputProps extends BottomSheetTextInputProps {
     labelStyle?:StyleProp<TextInputProps>
     containerStyle?:StyleProp<TextInputProps>

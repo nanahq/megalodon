@@ -20,6 +20,7 @@ const _VendorCard: React.FC<{ vendor: VendorUserI, fullWidth?: boolean, style?: 
     const [error, setError] = useState<boolean>(false)
 
     const analytics = useAnalytics()
+
     useEffect(() => {
         async function fetchData() {
             try {
@@ -28,7 +29,7 @@ const _VendorCard: React.FC<{ vendor: VendorUserI, fullWidth?: boolean, style?: 
                     url: "location/delivery-fee",
                     data: {
                         userCoords: userProfile.profile.location?.coordinates,
-                        vendorCoords: props.vendor.location.coordinates ,
+                        vendorCoords: props?.vendor?.location?.coordinates ,
                     },
                 });
                 setTravelInfo(() => data as any);
@@ -56,7 +57,8 @@ const _VendorCard: React.FC<{ vendor: VendorUserI, fullWidth?: boolean, style?: 
 
     }
     return (
-        <Pressable onPress={onPress} style={[tailwind("w-full mb-1 flex flex-col "), props.style, { width: props.fullWidth ? undefined : 300, height: props.height ? undefined : 250 }]}>
+        <Pressable
+            onPress={onPress} style={[tailwind("w-full mb-1 flex flex-col "), props.style, { width: props.fullWidth ? undefined : 300, height: props.height ? undefined : 250 }]}>
             <View style={tailwind("flex flex-col w-full items-center")}>
                 <FastImage
                     source={{ uri: props.vendor.businessImage, priority: FastImage.priority.high }}
@@ -83,9 +85,9 @@ const _VendorCard: React.FC<{ vendor: VendorUserI, fullWidth?: boolean, style?: 
                     )}
                     <View style={tailwind("flex flex-row items-center")}>
                         <IconComponent iconType="AntDesign" name="star" style={tailwind("w-4 h-4 text-yellow-300")} />
-                        <Text style={tailwind("text-sm text-gray-500")}>4.95</Text>
+                        <Text style={tailwind("text-sm text-gray-500")}>{props.vendor.ratings.rating}</Text>
                         <Text
-                            style={tailwind("text-sm font-medium text-gray-900 ml-1")}>(1000)</Text>
+                            style={tailwind("text-sm font-medium text-gray-900 ml-1")}>({props.vendor.ratings.totalReviews})</Text>
                     </View>
                 </View>
             </View>

@@ -11,7 +11,7 @@ export const ExploreSections: React.FC<{vendors: VendorUserI[]}> = (props) => {
     return (
         <View style={tailwind('bg-white mt-2 px-3 py-1')}>
             <View style={tailwind('mb-2')}>
-                <Text style={tailwind('text-xl text-black')}>Explore Restaurants near you</Text>
+                <Text style={tailwind('text-xl text-black')}>Restaurants near you</Text>
             </View>
             <ScrollView horizontal showsHorizontalScrollIndicator={false} >
                 {props.vendors.map(vendor => (
@@ -30,13 +30,13 @@ export const VendorItem: React.FC<{vendor: VendorUserI}> = (props) => {
         delivery: undefined
     })
     return (
-        <Pressable onPress={onPress} style={[tailwind('flex flex-col justify-center items-center ml-2 '), {width: 100}]}>
+        <Pressable onPress={onPress} style={[tailwind('flex flex-col justify-center items-center'), {width: 100}]}>
             <FastImage
                 source={{uri: props.vendor.businessLogo, priority: FastImage.priority.high}}
                 resizeMode={FastImage.resizeMode.cover}
-                style={[tailwind('rounded-full'), {width: 60, height: 60}]}
+                style={[tailwind('rounded-full'), {width: 80, height: 80}]}
             />
-            <Text style={tailwind('text-center text-xs mt-2')}>{props.vendor.businessName}</Text>
+            <Text style={tailwind('text-center text-gray-500 text-sm mt-2')}>{props.vendor.businessName}</Text>
         </Pressable>
     )
 }

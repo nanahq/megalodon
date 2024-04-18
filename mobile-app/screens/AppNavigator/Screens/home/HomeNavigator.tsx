@@ -35,9 +35,6 @@ export function HomeNavigator(): JSX.Element {
             <HomeStack.Screen
                 component={HomepageCategory}
                 name={HomeScreenName.CATEGORIES_SCREEN}
-                options={{
-                    headerShown: false,
-                }}
             />
             <HomeStack.Screen
                 component={SingleCategoryScreen}

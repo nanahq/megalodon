@@ -49,7 +49,7 @@ export const RatingRow: React.FC<RatingRowProps> = (props) => {
                 >
                    <View style={tailwind('flex flex-col items-center')}>
                        <View
-                           style={[tailwind('rounded-full flex flex-row items-center justify-center', {'bg-primary-500': rating.rating === props.currentRating, 'bg-primary-200': rating.rating !== props.currentRating}), {width: 50, height: 50}]}
+                           style={[tailwind('rounded-full flex flex-row items-center justify-center', {'bg-primary-100': rating.rating === props.currentRating, 'bg-primary-200': rating.rating !== props.currentRating}), {width: 50, height: 50}]}
                        >
                            <IconMapper rating={rating.rating} />
                        </View>
