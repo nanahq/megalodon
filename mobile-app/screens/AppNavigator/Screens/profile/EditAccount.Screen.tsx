@@ -5,7 +5,6 @@ import {SafeAreaView, Text, View} from "react-native";
 import {tailwind} from "@tailwind";
 import {IconButton} from "@components/commons/buttons/IconButton";
 import React, {useEffect, useState} from "react";
-import {GenericTextInputV2} from "@components/commons/inputs/TextInput";
 import {GenericButton} from "@components/commons/buttons/GenericButton";
 import {useAppDispatch} from "@store/index";
 import {fetchProfile} from "@store/profile.reducer";
@@ -15,6 +14,7 @@ import {useToast} from "react-native-toast-notifications";
 import {showTost} from "@components/commons/Toast";
 import * as Device from "expo-device";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
+import {TextInputWithLabel} from "@components/commons/inputs/TextInputWithLabel";
 
 type AccountScreenNavigationProps = StackScreenProps<ProfileParamsList, ProfileScreenName.EDIT_ACCOUNT>
 
@@ -82,56 +82,56 @@ export const EditAccountScreen: React.FC<AccountScreenNavigationProps> = ({navig
                         switch (route.params.type) {
                             case "Email":
                                 return (
-                                    <GenericTextInputV2
+                                    <TextInputWithLabel
                                         style={tailwind('text-lg')}
                                         label="Email"
                                         containerStyle={tailwind('mt-2.5 mb-10 mb-6 overflow-hidden')}
                                         textAlign='left'
-                                        keyboardPad='email-address'
+                                        keyboardType='email-address'
                                         testID="EnterPhoneNumberScreen.TextInput"
                                         onChangeText={setValue}
-                                        initialText={value}
+                                        defaultValue={value}
                                     />
                                 );
 
                             case "Phone":
                                 return (
-                                    <GenericTextInputV2
+                                    <TextInputWithLabel
                                         style={tailwind('text-lg')}
                                         label="Phone number"
                                         moreInfo="Contact support to change phone number"
                                         containerStyle={tailwind('mt-2.5 mb-10 mb-6 overflow-hidden')}
                                         textAlign='left'
                                         editable={false}
-                                        keyboardPad='phone-pad'
+                                        keyboardType='phone-pad'
                                         testID="EnterPhoneNumberScreen.TextInput"
                                         onChangeText={setValue}
-                                        initialText={value}
+                                        defaultValue={value}
                                     />
                                 );
 
                             case "Name":
                                 return (
                                     <>
-                                        <GenericTextInputV2
+                                        <TextInputWithLabel
                                             style={tailwind('text-lg')}
                                             label="First Name"
                                             containerStyle={tailwind('mt-2.5 mb-10 mb-6 overflow-hidden')}
                                             textAlign='left'
-                                            keyboardPad='default'
+                                            keyboardType='default'
                                             testID="EnterPhoneNumberScreen.TextInput"
                                             onChangeText={setFirstName}
-                                            initialText={firstName}
+                                            defaultValue={firstName}
                                         />
-                                        <GenericTextInputV2
+                                        <TextInputWithLabel
                                             style={tailwind('text-lg')}
                                             label="Last Name"
                                             containerStyle={tailwind('mt-2.5 mb-10 mb-6 overflow-hidden')}
                                             textAlign='left'
-                                            keyboardPad='default'
+                                            keyboardType='default'
                                             testID="EnterPhoneNumberScreen.TextInput"
                                             onChangeText={setLastName}
-                                            initialText={lastName}
+                                            defaultValue={lastName}
                                         />
                                     </>
                                 );

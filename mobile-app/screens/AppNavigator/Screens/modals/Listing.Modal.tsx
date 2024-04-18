@@ -209,7 +209,7 @@ export const ListingModal: React.FC<ListingModalScreenProps>  = ({navigation, ro
         }, 1000)
     }
     return (
-        <View style={tailwind('flex-1  relative bg-white')}>
+        <View style={tailwind('flex-1 relative bg-white')}>
            <ScrollView style={tailwind('pb-10')}>
                <View style={tailwind('pb-5 mb-3 bg-white')}>
                    <FastImage resizeMode={FastImage.resizeMode.cover} source={{ uri: route.params.listing.photo, priority: FastImage.priority.normal }} style={[tailwind("w-full"), { height: 170 }]} />

@@ -127,7 +127,7 @@ export function EnterPasswordScreen ({navigation, route}: EnterPasswordScreenPro
                             </View>
                         </>
                     )}
-                    <TextInputWithLabel secureTextEntry containerStyle={tailwind('my-3 mb-10')}  label="Password" placeholder="Enter password" moreInfo="Password should be at least 8 characters" labelTestId="EnterPasswordScreen.TextInput.Label" onChangeText={setPassword} value={password} />
+                    <TextInputWithLabel secureTextEntry containerStyle={tailwind('my-3 mb-10')}  label="Password" placeholder="Enter password" moreInfo={route.params.hasAccount ? undefined : "Password should be at least 8 characters"} labelTestId="EnterPasswordScreen.TextInput.Label" onChangeText={setPassword} value={password} />
                 </View>
                 <GenericButton
                     loading={loading}

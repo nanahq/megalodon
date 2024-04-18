@@ -3,7 +3,7 @@ import {StackScreenProps} from "@react-navigation/stack";
 import {useEffect, useState} from 'react'
 
 import {tailwind} from "@tailwind";
-import {GenericTextInput} from "@components/commons/inputs/TextInput";
+import {TextInputWithLabel} from "@components/commons/inputs/TextInputWithLabel";
 import {GenericButton} from "@components/commons/buttons/GenericButton";
 
 import {TermsConditionRow} from "@screens/OnboardingNavigator/screens/components/TermsConditionSection";
@@ -57,13 +57,13 @@ export function EnterPhoneNumberScreen ({navigation}: EnterPhoneNumberScreenProp
             >
                 Enter your mobile number
             </Text>
-            <GenericTextInput
+            <TextInputWithLabel
+                label=""
                 containerStyle={tailwind('mt-2.5 mb-10 mb-6 overflow-hidden')}
                 textAlign='left'
-                keyboardPad='phone-pad'
+                keyboardType='phone-pad'
                 testID="EnterPhoneNumberScreen.TextInput"
                 onChangeText={setPhoneNumber}
-                initialText={phoneNumber}
                 placeholder="091 740 48621"
                 placeHolderStyle="#717171"
             />

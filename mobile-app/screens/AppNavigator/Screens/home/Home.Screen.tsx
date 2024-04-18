@@ -61,9 +61,8 @@ export function HomeScreen (): JSX.Element {
                    onScrollEndDrag={() => scrollAnalytics()}
                    style={{backgroundColor: 'rgba(230, 230, 230, 0.4)', height,}}
                >
-                    <HomeHeader />
                    <CategorySection />
-                   <ExploreSections vendors={hompage?.allVendors.slice(0, 5) ?? []} />
+                   <ExploreSections vendors={hompage?.allVendors.slice(0, 10) ?? []} />
                    {hompage?.mostPopularVendors !== undefined && hompage?.mostPopularVendors.length > 0 && (
                        <HomeSection label="Top Rated Vendors">
                            <FlashList
