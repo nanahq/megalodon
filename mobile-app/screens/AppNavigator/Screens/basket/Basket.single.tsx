@@ -82,7 +82,7 @@ export const BasketSingle: React.FC = () => {
                    </View>
                </View>
            </ScrollView>
-           <GenericButton style={tailwind('absolute bottom-0 w-full self-center mb-2')} onPress={() => onPress()} label="Go to checkout" labelColor={tailwind('font-medium text-white')} backgroundColor={tailwind('bg-black')} testId="" />
+           <GenericButton style={tailwind('absolute bottom-0 w-full self-center mb-10')} onPress={() => onPress()} label="Go to checkout" labelColor={tailwind('font-medium text-white')} backgroundColor={tailwind('bg-black')} testId="" />
        </View>
     )
 }

@@ -3,14 +3,14 @@ import {View, Text, Image} from "react-native";
 import {getColor, tailwind} from "@tailwind";
 import {NumericFormat as NumberFormat} from "react-number-format";
 import {Cart} from "@screens/AppNavigator/Screens/modals/Listing.Modal";
-import {GenericButton} from "@components/commons/buttons/GenericButton";
+import {GenericButton, GenericIconButton} from "@components/commons/buttons/GenericButton";
 import {deleteCartFromStorage, readCartFromStorage} from "@store/cart.reducer";
 import {useAppDispatch} from "@store/index";
 import {NavigationProp, useNavigation} from "@react-navigation/native";
 import {BasketParamsList} from "@screens/AppNavigator/Screens/basket/BasketNavigator";
 import {BasketScreenName} from "@screens/AppNavigator/Screens/basket/BasketScreenName.enum";
+import {Tags, Trash} from "lucide-react-native";
 import FastImage from "react-native-fast-image";
-import {Tags} from "lucide-react-native";
 
 export const BasketsItem: React.FC<{cart: Cart[], vendor: any}> = ({cart, vendor}) => {
     const navigation = useNavigation<NavigationProp<BasketParamsList>>()
@@ -34,24 +34,25 @@ export const BasketsItem: React.FC<{cart: Cart[], vendor: any}> = ({cart, vendor
         dispatch(deleteCartFromStorage())
         dispatch(readCartFromStorage())
     }
+
     return (
         <View style={tailwind('border-0.5 border-brand-gray-700 rounded-lg px-3 py-5 mt-10')}>
             <View style={tailwind('flex flex-row items-start')}>
-                <FastImage source={{uri: vendor?.businessImage}} style={tailwind('rounded-full w-20 h-20')} />
+                <FastImage source={{uri: vendor?.businessLogo}} style={tailwind('rounded-full w-16 h-16')} />
                  <View style={tailwind('w-2/3 ml-5')}>
                     <Text style={tailwind('font-medium text-2xl')}>{vendor?.businessName}</Text>
                     <View>
                         <View style={tailwind("flex flex-row items-center")}>
                             <Text style={tailwind('text-brand-gray-700 text-sm')}>{cart?.length} Items</Text>
                             <View style={tailwind('flex flex-row items-center')}>
-                                <Tags  size={20} color={getColor('green-500')}/>
+                                <Tags  size={20} color={getColor('green-600')}/>
                                 <NumberFormat
                                     prefix="₦"
                                     value={totalCartValue}
                                     thousandSeparator
                                     displayType="text"
                                     renderText={(value) => (
-                                        <Text style={tailwind("text-sm text-brand-black-500")}>{value}</Text>
+                                        <Text style={tailwind("text-sm ml-2 text-brand-black-500")}>{value}</Text>
                                     )}
                                 />
                             </View>
@@ -59,9 +60,14 @@ export const BasketsItem: React.FC<{cart: Cart[], vendor: any}> = ({cart, vendor
                     </View>
                 </View>
             </View>
-            <View style={tailwind('mt-5')}>
-                <GenericButton onPress={() => navigation.navigate(BasketScreenName.SINGLE_BASKET)} label="View to Basket" labelColor={tailwind('text-white font-medium')} backgroundColor={tailwind('bg-black')} testId="" />
-                <GenericButton onPress={() => handleDeleteCartItem()} style={tailwind(' mt-4')} label="Delete from basket" labelColor={tailwind('text-black font-medium')} backgroundColor={tailwind('bg-brand-ash')} testId="" />
+            <View style={tailwind('mt-5 flex flex-row w-full')}>
+                <GenericButton onPress={() => navigation.navigate(BasketScreenName.SINGLE_BASKET)} backgroundColor={tailwind('flex-grow')} label="View to Basket" labelColor={tailwind('text-white')} />
+               <GenericIconButton
+                    backgroundColor={tailwind('ml-2')}
+                   onPress={() => handleDeleteCartItem()}
+               >
+                   <Trash  style={tailwind('w-4 h-4 text-white mx-5')} color="#ffffff" />
+               </GenericIconButton>
             </View>
         </View>
     )
