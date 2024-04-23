@@ -20,10 +20,10 @@ export const BasketSingle: React.FC = () => {
     useEffect(() => {
         void analytics.screen(BasketScreenName.SINGLE_BASKET)
     }, [])
+
     const vendor = useMemo(() => {
         return vendors.vendors?.find((vendor) => vendor._id === cart.vendor?._id)
     }, [cart, vendors])
-
 
     const totalCartValue = useMemo(() => {
         if (cart.cart !== undefined) {

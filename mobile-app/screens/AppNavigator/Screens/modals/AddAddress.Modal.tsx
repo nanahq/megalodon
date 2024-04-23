@@ -204,7 +204,6 @@ export const AddAddressModal: React.FC<AddAddressModalProps> = ({navigation, rou
 
         const address = extractAddress(data)
 
-
         if (address !== undefined) {
             handleUpdateForm('address', address)
         }

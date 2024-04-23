@@ -40,7 +40,6 @@ export const SingleCategoryScreen: React.FC<SingleCategoryScreenProps> = ({route
                 shadowOpacity: 8,
                 shadowRadius: 12,
             },
-
             headerLeft: () => <ModalCloseIcon onPress={() => navigation.goBack()} />,
         })
     }, [])

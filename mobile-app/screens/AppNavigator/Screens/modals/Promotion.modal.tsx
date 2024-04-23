@@ -67,7 +67,7 @@ export const PromotionModal: React.FC<PromotionModalProps> = ({ navigation }) =>
                 showTost(toast, data.message, 'error' )
             }
         } catch (error) {
-            console.log(error)
+            console.error(error)
         } finally {
             setSubmitting(false)
         }

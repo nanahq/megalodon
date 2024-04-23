@@ -24,8 +24,6 @@ import {ModalCloseIcon} from "@screens/AppNavigator/Screens/modals/components/Mo
 
      }, [])
 
-
-
     const vendor = useMemo(() => {
         return vendors?.find((vendor) => vendor._id === cartState.vendor?._id)
     }, [vendors])
@@ -38,7 +36,7 @@ import {ModalCloseIcon} from "@screens/AppNavigator/Screens/modals/components/Mo
                         <View style={tailwind('flex flex-col items-center justify-center')}>
                             <Text style={tailwind('font-bold text-lg  mb-3 text-center')}>Add items to start a basket</Text>
                             <Text style={tailwind('text-brand-gray-700 text-center')}>
-                                Once you add items from a restuarant, your basket will appear here.
+                                Once you add items from a restaurant, your basket will appear here.
                             </Text>
                         </View>
                     </View>
