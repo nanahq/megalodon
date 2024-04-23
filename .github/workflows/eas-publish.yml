@@ -41,3 +41,34 @@ jobs:
         env:
           EAS_PROJECT_ID: ${{ secrets.EAS_PROJECT_ID }}
 
+  eas-release-ios:
+    name: EAS Release IOS
+    environment: EAS Release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+      - uses: actions/setup-node@64ed1c7eab4cce3362f8c340dee64e5eaeef8f7c # v3.6.0
+        with:
+          node-version: 20
+
+      - uses: expo/expo-github-action@4479f0b3692e25169fa71a02c30d6586ec2f5601 # tag=v7.2.0
+        with:
+          eas-version: latest
+          expo-version: latest
+          packager: yarn
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - run: yarn install --frozen-lockfile
+
+
+      - name: EAS Build - IOS
+        run: eas build --platform ios --non-interactive --wait --clear-cache
+        env:
+          EAS_PROJECT_ID: ${{ secrets.EAS_PROJECT_ID }}
+
+      - run: sleep 10s
+
+      - name: EAS Submit - IOS - Submit
+        run: eas submit --platform ios --latest
+        env:
+          EAS_PROJECT_ID: ${{ secrets.EAS_PROJECT_ID }}

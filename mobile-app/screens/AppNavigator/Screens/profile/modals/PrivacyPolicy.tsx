@@ -31,9 +31,6 @@ export const PrivacyPolicy: React.FC<PrivacyPolicyProps> = ({ navigation }) => {
         navigation.goBack();
     };
 
-
-
-
     return (
         <WebView  style={tailwind('flex-1')}
                  source={{ uri: privacyPolicyPage }}

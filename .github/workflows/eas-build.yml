@@ -40,6 +40,6 @@ jobs:
       - run: yarn install --frozen-lockfile
 
       - name: EAS Build - iOS & Android
-        run: eas build --platform all --non-interactive --clear-cache --wait --profile production
+        run: eas build --platform all --non-interactive --clear-cache --wait --profile preview
         env:
           EAS_PROJECT_ID: ${{ secrets.EAS_PROJECT_ID }}

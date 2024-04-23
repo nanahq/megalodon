@@ -7,7 +7,6 @@ import {BasketSingle} from "@screens/AppNavigator/Screens/basket/Basket.single";
 import {Checkout} from "@screens/AppNavigator/Screens/basket/Checkout";
 
 export interface BasketParamsList {
-
     [key: string]: undefined | object;
 }
 const BasketStack = createStackNavigator<BasketParamsList>();
