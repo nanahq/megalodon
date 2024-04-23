@@ -112,20 +112,17 @@ export const AddressBookScreen: React.FC = () => {
                 <View style={tailwind('flex-1 justify-center items-center')}>
                     <View style={[tailwind('m-5 bg-gray-100 rounded-lg p-4 items-center'), {elevation: 0.5}]}>
                         <Text style={tailwind('text-center text-lg mb-4')}>Are you sure you sure you want to delete this address?</Text>
-                        <View style={[tailwind(''), {width: 350}]}>
+                        <View style={tailwind('flex flex-row items-center w-full')}>
                             <GenericButton
-                                loading={loading}
-                                style={tailwind('mb-3')}
                                 label="Delete"
                                 labelColor={tailwind('text-white font-medium py-1')}
-                                backgroundColor={tailwind('bg-red-700')}
+                                backgroundColor={tailwind('px-5')}
                                 onPress={() => deleteAddress()}/>
-
                             <GenericButton
-                                style={tailwind('border-0.5 border-black')}
+                                style={tailwind('mx-3')}
                                 label="Cancel"
-                                labelColor={tailwind('text-black font-medium py-1')}
-                                backgroundColor={tailwind('bg-transparent')}
+                                backgroundColor={tailwind('px-5')}
+                                labelColor={tailwind('text-white font-medium py-1')}
                                 onPress={() => setDeleteModalVisible((prev) => !prev)}/>
                         </View>
                     </View>

@@ -30,13 +30,13 @@ export const VendorItem: React.FC<{vendor: VendorUserI}> = (props) => {
         delivery: undefined
     })
     return (
-        <Pressable onPress={onPress} style={[tailwind('flex flex-col justify-center items-center'), {width: 100}]}>
+        <Pressable onPress={onPress} style={[tailwind('flex flex-col justify-center items-center'), {width: 90}]}>
             <FastImage
                 source={{uri: props.vendor.businessLogo, priority: FastImage.priority.high}}
                 resizeMode={FastImage.resizeMode.cover}
-                style={[tailwind('rounded-full'), {width: 80, height: 80}]}
+                style={[tailwind('rounded-full'), {width: 40, height: 40}]}
             />
-            <Text style={tailwind('text-center text-gray-500 text-sm mt-2')}>{props.vendor.businessName}</Text>
+            <Text style={tailwind('text-center text-gray-500 text-xs mt-2')}>{props.vendor.businessName}</Text>
         </Pressable>
     )
 }
