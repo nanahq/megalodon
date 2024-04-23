@@ -19,7 +19,8 @@
     "react-devtools:open": "react-devtools",
     "translation:missing": "ts-node shared/translations/reporter/index.ts",
     "android": "expo run:android",
-    "ios": "expo run:ios"
+    "ios": "expo run:ios",
+    "release": "standard-version"
   },
   "dependencies": {
     "@expo/config-plugins": "~7.8.0",
