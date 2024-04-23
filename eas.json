@@ -45,6 +45,11 @@
         "serviceAccountKeyPath": "./ANDROID_SERVICE_ACCOUNT.json",
         "track": "internal",
         "releaseStatus": "draft"
+      },
+      "ios": {
+        "appleId": "surajtauwal@gmail.com",
+        "ascAppId": "6499050428",
+        "appleTeamId": "H63XLRDH38"
       }
     }
   },
