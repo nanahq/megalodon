@@ -4,7 +4,7 @@
     "description": "Order food online and get it delivered in minutes",
     "slug": "nana-app",
     "owner": "nana_logistics",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "orientation": "portrait",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
