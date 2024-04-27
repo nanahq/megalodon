@@ -15,6 +15,7 @@ import {showTost} from "@components/commons/Toast";
 import {_api} from "@api/_request";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {useAnalytics} from "@segment/analytics-react-native";
+import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 
 type SingleOrderScreenProps = StackScreenProps<OrderParamsList, OrderScreenName.ADD_REVIEW>
 export const AddReviewScreen: React.FC<SingleOrderScreenProps> = ({navigation, route}) => {
@@ -72,7 +73,7 @@ export const AddReviewScreen: React.FC<SingleOrderScreenProps> = ({navigation, r
     }
     const orderDate = moment(route.params.order.updatedAt).format('dddd Do')
     return (
-        <View style={tailwind('flex-1 bg-white')}>
+        <KeyboardAwareScrollView style={tailwind('flex-1 bg-white')}>
             <View style={tailwind('px-4 flex-grow mt-10')}>
                 <View style={tailwind('flex flex-row items-center w-full justify-between')}>
                     <View style={tailwind('flex flex-row items-center')}>
@@ -125,6 +126,6 @@ export const AddReviewScreen: React.FC<SingleOrderScreenProps> = ({navigation, r
             <View style={tailwind('mb-5 px-4')}>
                 <GenericButton loading={loading} onPress={handleAddReview} label="Submit Rating" labelColor={tailwind('text-white')} backgroundColor={tailwind('bg-primary-500')} />
             </View>
-        </View>
+        </KeyboardAwareScrollView>
     )
 }

@@ -1,4 +1,4 @@
-import React, {memo, useEffect, useRef, useState} from 'react';
+import React, { useEffect, useRef, useState} from 'react';
 import {Animated, Dimensions, StyleSheet, View} from 'react-native';
 import {tailwind} from '@tailwind';
 import {
@@ -17,7 +17,8 @@ import {socket, useWebSocket} from "@contexts/SocketProvider";
 import {useExpoPushNotification} from "@hooks/useExpoNotification";
 import moment from "moment";
 import * as Notifications from 'expo-notifications'
-
+import { Audio } from 'expo-av';
+import {Sound} from "expo-av/build/Audio/Sound";
 function calculateDeltas(point1: [number, number], point2: [number, number]): Region {
     const toRadians = (deg: number) => deg * (Math.PI / 180);
 
@@ -42,16 +43,32 @@ function coordinatedMapper(point1: LocationCoordinates, point2: LocationCoordina
 
 const { height: SCREEN_HEIGHT  } = Dimensions.get("window");
 
-const _Map: React.FC<{ order: OrderI, delivery: DeliveryI }> = ({ order, delivery }) => {
-    const mapRef = useRef<MapView>(null)
-    const [currentDeliveryPosition, setCurrentDeliveryPosition] = useState<LocationCoordinates>(delivery?.driver?.location ?? delivery?.vendor?.location)
-    const [coords] = useState<Array<{ latitude: number, longitude: number }>>(coordinatedMapper(delivery?.pickupLocation, delivery?.dropOffLocation))
-    const { isConnected, transport } = useWebSocket()
-    const [remainingTime, setRemainingTime] = useState<number | null>(delivery !== null ? calculateRemainingTime(delivery?.travelMeta?.travelTime as any) : null);
+export const Map: React.FC<{ order: OrderI, delivery: DeliveryI }> = ({ order, delivery }) => {
+    const mapRef = useRef<MapView | null>(null)
+    const [currentDeliveryPosition, setCurrentDeliveryPosition] = useState<LocationCoordinates>(delivery.driver.location)
+    const [coords, setCoords] = useState<Array<{ latitude: number, longitude: number }>>(coordinatedMapper(delivery.pickupLocation, delivery.dropOffLocation))
+    const { isConnected } = useWebSocket()
+    const [_, setRemainingTime] = useState<number | undefined>(calculateRemainingTime(delivery?.travelMeta?.travelTime ?? 0));
     const { schedulePushNotification } = useExpoPushNotification()
+    const [_sound, setSound] = useState<Sound | null>(null);
+
+    async function playSound() {
+        const { sound } = await Audio.Sound.createAsync( require('../../../../../../../assets/sounds/notification_1.wav')
+        );
+        setSound(sound);
+        await sound.playAsync();
+    }
 
     useEffect(() => {
-        if (delivery?.deliveryTime !== null) {
+        return _sound !== null
+            ? () => {
+                _sound?.unloadAsync();
+            }
+            : undefined;
+    }, [_sound]);
+
+    useEffect(() => {
+        if (delivery?.deliveryTime !== undefined) {
             const intervalId = setInterval(() => {
                 setRemainingTime(calculateRemainingTime(delivery?.travelMeta?.travelTime as any));
             }, 1000);
@@ -70,11 +87,11 @@ const _Map: React.FC<{ order: OrderI, delivery: DeliveryI }> = ({ order, deliver
         return Math.max(0, Math.round(remainingMinutes));
     }
 
-
     useEffect(() => {
         if (isConnected) {
             socket?.on(SOCKET_MESSAGE.DRIVER_LOCATION_UPDATED, (message: { deliveryId: string, location: LocationCoordinates, travelMeta?: TravelDistanceResult }) => {
-                if (message.deliveryId === delivery?._id) {
+             console.log('Socket message delivery room', message.deliveryId.toString() === delivery?._id.toString())
+                if (message.deliveryId.toString() === delivery?._id.toString()) {
                     setCurrentDeliveryPosition(message.location)
                 }
             });
@@ -89,10 +106,9 @@ const _Map: React.FC<{ order: OrderI, delivery: DeliveryI }> = ({ order, deliver
                         },
                         identifier: OrderStatus.IN_ROUTE,
                         content: {
-                            sticky: true,
-                            badge: 2,
+                            sticky: false,
                             title: order.vendor.businessName,
-                            body: 'Your order is on its way',
+                            body: 'Your order is delivered enjoy your meal',
                             sound: 'default',
                             data: {
                                 order
@@ -101,10 +117,8 @@ const _Map: React.FC<{ order: OrderI, delivery: DeliveryI }> = ({ order, deliver
                     }
                     switch (message.status) {
                         case OrderStatus.IN_ROUTE:
-                            void Notifications.getPermissionsAsync()
-                            void schedulePushNotification(notificationPayload)
+                            void playSound()
                             break;
-
                         case OrderStatus.FULFILLED:
                             void Notifications.getPermissionsAsync()
                             void schedulePushNotification(notificationPayload)
@@ -114,20 +128,20 @@ const _Map: React.FC<{ order: OrderI, delivery: DeliveryI }> = ({ order, deliver
                 }
             })
         }
-    }, [isConnected, transport]);
+    }, [isConnected]);
 
     useEffect(() => {
         mapRef.current?.fitToCoordinates(coords, {
             edgePadding:{top:450,right:50,left:50,bottom:350},
             animated:true
         });
-    }, [delivery._id, coords])
-
-    useEffect(() => {
-        mapRef?.current?.animateToRegion(calculateDeltas(delivery?.pickupLocation.coordinates, delivery.dropOffLocation.coordinates))
-
     }, [])
 
+    useEffect(() => {
+        mapRef?.current?.animateToRegion(calculateDeltas(delivery?.pickupLocation?.coordinates ?? [0,0], delivery.dropOffLocation.coordinates))
+    }, [])
+
+    console.log(currentDeliveryPosition)
 
     return (
         <View style={tailwind('flex-1 bg-white flex flex-col  justify-center')}>
@@ -137,7 +151,7 @@ const _Map: React.FC<{ order: OrderI, delivery: DeliveryI }> = ({ order, deliver
                     ref={mapRef}
                     style={{ width: '100%', height: '100%' }}
                     provider={PROVIDER_GOOGLE}
-                    region={calculateDeltas(delivery?.pickupLocation.coordinates, delivery?.assignedToDriver ? currentDeliveryPosition.coordinates : delivery?.pickupLocation.coordinates)}
+                    region={calculateDeltas(delivery.pickupLocation.coordinates,  delivery.dropOffLocation.coordinates)}
                 >
                     <Marker
                         key={delivery._id}
@@ -177,7 +191,6 @@ const _Map: React.FC<{ order: OrderI, delivery: DeliveryI }> = ({ order, deliver
                             </Animated.Text>
                         </Animated.View>
                     </Marker>
-
                     {delivery.assignedToDriver && (
                         <Marker
                             coordinate={{
@@ -201,7 +214,6 @@ const _Map: React.FC<{ order: OrderI, delivery: DeliveryI }> = ({ order, deliver
     );
 };
 
-export const Map = memo(_Map)
 
 const mapStyle = [
     {

@@ -244,7 +244,7 @@ export const Checkout: React.FC = () => {
             },
             primaryContact: userProfile.profile.phone,
             vendor: vendor?._id ?? '',
-            totalOrderValue: Object.values(orderBreakDown).reduce((a, r) => a + r) - (discount ?? 0),
+            totalOrderValue: Object.values(orderBreakDown).reduce((a, r) => a + r),
             quantity: cartState.cart?.map(crt => {
                 return {
                     listing: crt.cartItem._id,
