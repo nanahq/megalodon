@@ -43,6 +43,7 @@ export const Tracking: React.FC<TrackingProps> = ({navigation, route}) => {
                            })
                            break;
                        default:
+                           setDeliveryStatus(message.status)
                    }
                }
            })
@@ -61,34 +62,18 @@ export const Tracking: React.FC<TrackingProps> = ({navigation, route}) => {
         })
     }, [order.orderStatus])
 
-
-    const getStatusBarStyle = () => {
-        switch (order.orderStatus) {
-            case OrderStatus.PROCESSED:
-            case OrderStatus.COURIER_PICKUP:
-            case OrderStatus.COLLECTED:
-
-                return '#00C2E8';
-
-            case OrderStatus.IN_ROUTE:
-                return '#41a550'
-
-            default:
-                return 'dark-content';
-        }
-    };
-
-
     useEffect(() => {
         const fetchDeliveryInformation = async (): Promise<void> => {
             try {
                 const information = (await _api.requestData({
                     method: 'GET',
-                    url: `delivery/order/${order._id}`,
+                    url: `delivery/order/${route.params.order._id}`,
                 })).data as DeliveryI | undefined;
 
-                setDelivery(() => information);
-                setDeliveryStatus(information?.status as any)
+               if(information?._id !== undefined) {
+                   setDelivery(() => information);
+                   setDeliveryStatus(information?.status as any)
+               }
                 // eslint-disable-next-line no-useless-catch
             } catch (error) {
                 throw error
@@ -107,11 +92,11 @@ export const Tracking: React.FC<TrackingProps> = ({navigation, route}) => {
     return (
         <ScrollView style={tailwind('flex-1 bg-white')}>
             {order.orderStatus !== OrderStatus.FULFILLED && (
-                <StatusBar animated={true as any} style={"auto"  as any}  networkActivityIndicatorVisible={false} backgroundColor={getStatusBarStyle()} />
+                <StatusBar animated={true as any} style={"auto"  as any}  networkActivityIndicatorVisible={false} backgroundColor={order.orderStatus === OrderStatus.IN_ROUTE ? '#00C2E8': '#41a550'} />
             )}
             {delivery !== undefined && <Map delivery={delivery} order={order} />}
             {delivery !== undefined && delivery.assignedToDriver && (
-                <View style={tailwind('px-4')}>
+                <View style={tailwind('px-4 my-4')}>
                     <View style={tailwind('flex flex-row item-center w-full justify-between')}>
                         <View style={tailwind('flex flex-col')}>
                             <Text style={tailwind('text-xl mb-0.5')}>{`${delivery.driver.firstName} ${delivery.driver.lastName}`}</Text>
