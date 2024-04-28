@@ -17,8 +17,8 @@ export function DeliveryInfo ({children}: PropsWithChildren<Props>) {
 const DeliveryInfoItem: React.FC<{title: string, info: string}>  = (props) => {
     return (
         <View style={tailwind('flex py-3 flex-col w-full border-b-0.5 border-brand-gray-700 mb-2')}>
-            <Text style={tailwind('text-sm mb-2 text-brand-gray-700')}>{props.title}</Text>
-            <Text>{props.info}</Text>
+            <Text style={tailwind('text-sm mb-2 text-white')}>{props.title}</Text>
+            <Text style={tailwind('text-white')}>{props.info}</Text>
         </View>
     )
 }

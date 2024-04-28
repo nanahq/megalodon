@@ -90,17 +90,20 @@ export const Tracking: React.FC<TrackingProps> = ({navigation, route}) => {
         return <LoaderComponentScreen />
     }
     return (
-        <ScrollView style={tailwind('flex-1 bg-white')}>
+        <ScrollView style={tailwind('flex-1 bg-black')}>
             {order.orderStatus !== OrderStatus.FULFILLED && (
                 <StatusBar animated={true as any} style={"auto"  as any}  networkActivityIndicatorVisible={false} backgroundColor={order.orderStatus === OrderStatus.IN_ROUTE ? '#00C2E8': '#41a550'} />
             )}
             {delivery !== undefined && <Map delivery={delivery} order={order} />}
             {delivery !== undefined && delivery.assignedToDriver && (
-                <View style={tailwind('px-4 my-4')}>
-                    <View style={tailwind('flex flex-row item-center w-full justify-between')}>
+                <View style={tailwind('px-4 my-4 rounded-t-xl')}>
+                    <View style={tailwind('flex flex-row items-center w-full justify-between')}>
                         <View style={tailwind('flex flex-col')}>
-                            <Text style={tailwind('text-xl mb-0.5')}>{`${delivery.driver.firstName} ${delivery.driver.lastName}`}</Text>
-                            <Text style={tailwind('font-normal text-base text-gray-500')}>{delivery.driver.totalTrips} trips made</Text>
+                            <View style={tailwind('flex flex-row items-center')}>
+                                <Text style={tailwind('text-xl text-white mb-0.5 mr-2')}>Driver</Text>
+                                <Text style={tailwind('text-xl text-white mb-0.5')}>{`${delivery.driver.firstName} ${delivery.driver.lastName}`}</Text>
+                            </View>
+                            <Text style={tailwind('font-normal text-white text-base text-gray-500')}>{delivery.driver.totalTrips} trips made</Text>
                         </View>
                         <Pressable style={[tailwind('bg-primary-500 flex flex-row items-center justify-center rounded-full'), {width: 40, height: 40}]}>
                             <IconComponent iconType="AntDesign" name="phone" size={20} style={tailwind('text-white')}/>

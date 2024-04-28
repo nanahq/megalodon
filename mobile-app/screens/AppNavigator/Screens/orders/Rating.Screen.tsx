@@ -123,7 +123,7 @@ export const AddReviewScreen: React.FC<SingleOrderScreenProps> = ({navigation, r
                 </View>
 
             </View>
-            <View style={tailwind('mb-5 px-4')}>
+            <View style={tailwind('mt-10 px-4')}>
                 <GenericButton loading={loading} onPress={handleAddReview} label="Submit Rating" labelColor={tailwind('text-white')} backgroundColor={tailwind('bg-primary-500')} />
             </View>
         </KeyboardAwareScrollView>
