@@ -43,11 +43,6 @@
       "icon": "./assets/app-config/Icon-blue-ios1024.png",
       "supportsTablet": false,
       "bundleIdentifier": "com.nanaeats.nana.app",
-      "infoPlist": {
-        "UIBackgroundModes": [
-          "audio"
-        ]
-      },
       "config": {
         "googleMapsApiKey": "AIzaSyBxd-WGMl-H1BdgKsG2dNBYoQiWXsXc-Y8"
       }
