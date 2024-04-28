@@ -57,3 +57,19 @@ export function CategorySection() {
         </View>
     )
 }
+
+export function HomeScreenCategories (props: {from: number, to: number}) {
+    const navigation = useNavigation<any>()
+    const onPress = (tag: CategoryTags) => {
+        void navigation.navigate(HomeScreenName.SINGLE_CATEGORY, {category: tag})
+    }
+    return (
+        <View style={tailwind('pt-6 py-4 px-4 bg-white')}>
+            <View style={tailwind('flex flex-row flex-wrap')}>
+                {TagsWithImages.slice(props.from, props.to).map((tag, index) => (
+                    <TagItem name={tag.name} key={index + tag.name} icon={tag.icon} onPress={() => onPress(tag.name)} />
+                ))}
+            </View>
+        </View>
+    )
+}
