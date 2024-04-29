@@ -10,6 +10,7 @@ import {useSafeAreaInsets} from "react-native-safe-area-context";
 import {OnboardingCarousel} from "@screens/OnboardingNavigator/screens/components/OnboardingCarosel";
 import OnboardingCover from '@assets/onboarding/COVER_2.png'
 import {OnboardingScreenName} from "@screens/OnboardingNavigator/ScreenName.enum";
+
 export function OnboardingScreen (): JSX.Element {
     const navigator = useNavigation<NavigationProp<OnboardingParamsList>>()
     const logger = useLogger()
