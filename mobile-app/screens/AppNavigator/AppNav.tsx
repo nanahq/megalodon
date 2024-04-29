@@ -20,7 +20,7 @@ import * as Device from 'expo-device'
 import * as Location from "expo-location";
 import {_api} from "@api/_request";
 import * as Notifications from "expo-notifications";
-import {fetchAllCategories, fetchHomaPage, listings} from "@store/listings.reducer";
+import {fetchAllCategories, fetchHomaPage} from "@store/listings.reducer";
 import {RedeemModal} from "@screens/AppNavigator/Screens/modals/Redeem.Modal";
 import {useAnalytics} from "@segment/analytics-react-native";
 import {PromotionModal} from "@screens/AppNavigator/Screens/modals/Promotion.modal";
@@ -87,7 +87,6 @@ if (Device.osName === 'Android') {
 
 export function AppNavigator(): JSX.Element {
     const {profile} = useSelector((state: RootState) => state.profile)
-    const [_, setNotification] = useState<Notification | undefined>(undefined);
     const notificationListener = useRef<any>();
     const responseListener = useRef<any>();
     const isAndroid  = Device.osName === 'Android'
@@ -157,9 +156,6 @@ export function AppNavigator(): JSX.Element {
             dispatch(updateUserProfile({expoNotificationToken: token}))
         });
 
-        notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
-            setNotification(() => notification as any);
-        });
 
         responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
             return response

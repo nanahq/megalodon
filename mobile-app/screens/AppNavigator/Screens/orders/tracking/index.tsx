@@ -70,7 +70,7 @@ export const Tracking: React.FC<TrackingProps> = ({navigation, route}) => {
                     url: `delivery/order/${route.params.order._id}`,
                 })).data as DeliveryI | undefined;
 
-               if(information?._id !== undefined) {
+               if (information?._id !== undefined) {
                    setDelivery(() => information);
                    setDeliveryStatus(information?.status as any)
                }

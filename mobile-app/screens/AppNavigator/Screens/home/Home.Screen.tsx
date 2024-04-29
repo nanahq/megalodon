@@ -2,7 +2,6 @@ import {Dimensions, ScrollView} from "react-native";
 import React, {useEffect} from "react";
 import {SafeAreaView} from "react-native-safe-area-context";
 import {tailwind} from "@tailwind";
-import {HomeHeader} from "@screens/AppNavigator/Screens/home/components/Header";
 import {CategorySection} from "@screens/AppNavigator/Screens/modals/components/Tags";
 import {HomeSection, HomeSectionVertical} from "@screens/AppNavigator/Screens/home/components/HomeSection";
 import {RootState, useAppDispatch, useAppSelector} from "@store/index";

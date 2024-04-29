@@ -19,6 +19,7 @@ import moment from "moment";
 import * as Notifications from 'expo-notifications'
 import {Audio, InterruptionModeAndroid, InterruptionModeIOS} from 'expo-av';
 import {Sound} from "expo-av/build/Audio/Sound";
+
 function calculateDeltas(point1: [number, number], point2: [number, number]): Region {
     const toRadians = (deg: number) => deg * (Math.PI / 180);
 

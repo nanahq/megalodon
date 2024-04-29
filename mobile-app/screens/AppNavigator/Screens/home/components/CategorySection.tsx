@@ -5,7 +5,7 @@ import React, {memo} from "react";
 import FastImage from "react-native-fast-image";
 import {formatRelativeDate} from "../../../../../../utils/DateFormatter";
 
-const _VendorCategorySection: React.FC<{category: ListingCategoryI, vendorOperationStatus: boolean, warningCallback: () => void, onPress: (listing:ListingMenuI) => void}> = (props) => {
+const _VendorCategorySection: React.FC<{category: ListingCategoryI, vendorOperationStatus?: boolean, warningCallback?: () => void, onPress: (listing:ListingMenuI) => void}> = (props) => {
 
      return (
         <View style={tailwind('my-5 flex-1')}>
