@@ -22,8 +22,7 @@
         "expo-location",
         {
           "locationWhenInUsePermission": "Nana requires access to your location to show restaurants/shops near to you and calculate delivery fees and delivery time estimates",
-          "locationAlwaysPermission": "Nana requires access to your location to show restaurants/shops near to you and calculate delivery fees and delivery time estimates",
-          "locationAlwaysAndWhenInUsePermission": "Nana requires access to your location to show restaurants/shops near to you and calculate delivery fees and delivery time estimates"
+          "locationAlwaysPermission": "Nana requires access to your location to show restaurants/shops near to you and calculate delivery fees and delivery time estimates"
         }
       ],
       "expo-font",
