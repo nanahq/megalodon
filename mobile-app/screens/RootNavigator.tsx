@@ -14,7 +14,6 @@ export function RootNavigator (): JSX.Element {
         SplashScreen.hideAsync().catch(logger.error);
     }, []);
 
-
     if (isAuthenticated) {
         return <AppNavigator />
     }
