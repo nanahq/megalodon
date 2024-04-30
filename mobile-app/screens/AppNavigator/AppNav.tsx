@@ -100,9 +100,7 @@ export function AppNavigator(): JSX.Element {
         dispatch(fetchAddressLabels() as any)
         dispatch(fetchAddressBook() as any)
         dispatch(fetchAllCategories() as any)
-        dispatch(fetchHomaPage({type: "Point", coordinates:[0,0]}) as any)
     }, [])
-
 
     useEffect(() => {
         if (profile && profile._id) {

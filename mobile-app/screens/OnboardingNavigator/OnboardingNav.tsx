@@ -13,6 +13,7 @@ import {EnterPasswordScreen} from "@screens/OnboardingNavigator/screens/authenti
 import {VerifyPhoneNumberScreen} from "@screens/OnboardingNavigator/screens/authentication/VerifyPhoneNumber.screen";
 import {OnboardingScreen} from "./screens/Onboarding.screen";
 import {OnboardingScreenName} from "./ScreenName.enum";
+import {GuestAppNavigator} from "@screens/GuestNavigator/AppNav";
 
 export interface OnboardingParamsList {
     [OnboardingScreenName.ENTER_PASSWORD]: {
@@ -75,14 +76,13 @@ export function OnboardingNagivator (): JSX.Element {
                         headerShown: false
                     }}
                 />
-                {/* <OnboardingStack.Screen */}
-                {/*     component={OnboardingScreen} */}
-                {/*     name={OnboardingScreenName.FORGET_PASSWORD} */}
-                {/*     options={{ */}
-                {/*         headerShown: false */}
-                {/*     }} */}
-                {/* /> */}
-
+                <OnboardingStack.Screen
+                    component={GuestAppNavigator}
+                    name={'ONBOARDING_GUEST'}
+                    options={{
+                        headerShown: false
+                    }}
+                />
                 <OnboardingStack.Screen
                     component={VerifyPhoneNumberScreen}
                     name={OnboardingScreenName.VERIFY_PHONE_NUMBER}
