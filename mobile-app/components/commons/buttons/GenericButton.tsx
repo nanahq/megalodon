@@ -64,7 +64,7 @@ export function GenericButtonLink (props: Props): JSX.Element {
             style={[tailwind('underline'), style]}
             {...rest}
         >
-            <Text style={[tailwind('text-center text-lg py-3.5'), props.labelColor as any] }>{label}</Text>
+            <Text style={[tailwind('text-center text-lg py-1'), props.labelColor as any] }>{label}</Text>
             {props.loading !== undefined && props.loading && <LoaderComponent loaderColor="white" size='small' style={tailwind('pl-2 text-white')} />}
         </TouchableOpacity>
     )

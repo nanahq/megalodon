@@ -46,7 +46,7 @@ const { height: SCREEN_HEIGHT  } = Dimensions.get("window");
 
 export const Map: React.FC<{ order: OrderI, delivery: DeliveryI }> = ({ order, delivery }) => {
     const mapRef = useRef<MapView | null>(null)
-    const [currentDeliveryPosition, setCurrentDeliveryPosition] = useState<LocationCoordinates>(delivery.driver.location)
+    const [currentDeliveryPosition, setCurrentDeliveryPosition] = useState<LocationCoordinates>(delivery?.driver?.location ?? [0, 0])
     const { isConnected } = useWebSocket()
     const [_, setRemainingTime] = useState<number | undefined>(calculateRemainingTime(delivery?.travelMeta?.travelTime ?? 0));
     const { schedulePushNotification } = useExpoPushNotification()

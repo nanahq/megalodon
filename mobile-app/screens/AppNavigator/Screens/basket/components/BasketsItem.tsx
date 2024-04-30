@@ -61,7 +61,7 @@ export const BasketsItem: React.FC<{cart: Cart[], vendor: any}> = ({cart, vendor
                 </View>
             </View>
             <View style={tailwind('mt-5 flex flex-row w-full')}>
-                <GenericButton onPress={() => navigation.navigate(BasketScreenName.SINGLE_BASKET)} backgroundColor={tailwind('flex-grow')} label="View to Basket" labelColor={tailwind('text-white')} />
+                <GenericButton onPress={() => navigation.navigate(BasketScreenName.SINGLE_BASKET)} backgroundColor={tailwind('flex-grow')} label="View Basket" labelColor={tailwind('text-white')} />
                <GenericIconButton
                     backgroundColor={tailwind('ml-2')}
                    onPress={() => handleDeleteCartItem()}
