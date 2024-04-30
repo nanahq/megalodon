@@ -12,6 +12,7 @@ import {EditAccountScreen} from "@screens/AppNavigator/Screens/profile/EditAccou
 import {AddressBookScreen} from "@screens/AppNavigator/Screens/profile/AddressBook.Screen";
 import {WalletScreen} from "@screens/AppNavigator/Screens/profile/Wallet.Screen";
 import {PrivacyPolicy} from "@screens/AppNavigator/Screens/profile/modals/PrivacyPolicy";
+import {DeleteAccountScreen} from "@screens/AppNavigator/Screens/profile/DeleteAccount.Screen";
 
 export interface ProfileParamsList {
     [ProfileScreenName.EDIT_ACCOUNT]: {
@@ -83,6 +84,17 @@ export const ProfileNavigator: React.FC = () => {
             <Profile.Screen
                 component={PrivacyPolicy}
                 name={ProfileScreenName.PRIVACY}
+            />
+            <Profile.Screen
+                component={DeleteAccountScreen}
+                name={ProfileScreenName.DELETE_ACCOUNT}
+                options={{
+                    headerShown: true,
+                    presentation: 'modal',
+                    headerTitle: 'Account',
+                    headerTitleAlign: 'center',
+                    headerTitleStyle: tailwind('text-xl'),
+                }}
             />
             <Profile.Screen
                 component={EditAccountScreen}

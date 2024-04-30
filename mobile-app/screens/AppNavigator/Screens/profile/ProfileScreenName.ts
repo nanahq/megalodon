@@ -7,5 +7,7 @@ export enum ProfileScreenName {
     EDIT_ACCOUNT = 'EditAccountScreen',
 
     WALLET = 'WALLET',
+
+    DELETE_ACCOUNT = 'DELETE_ACCOUNT',
     PRIVACY = 'PRIVACY'
 }
