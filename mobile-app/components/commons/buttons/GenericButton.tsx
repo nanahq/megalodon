@@ -51,6 +51,24 @@ export function GenericButton (props: Props): JSX.Element {
     )
 }
 
+export function GenericButtonLink (props: Props): JSX.Element {
+    const {
+        label,
+        style,
+        ...rest
+    } = props
+    const activeOpacity = 0.7
+    return (
+        <TouchableOpacity
+            activeOpacity={activeOpacity}
+            style={[tailwind('underline'), style]}
+            {...rest}
+        >
+            <Text style={[tailwind('text-center text-lg py-3.5'), props.labelColor as any] }>{label}</Text>
+            {props.loading !== undefined && props.loading && <LoaderComponent loaderColor="white" size='small' style={tailwind('pl-2 text-white')} />}
+        </TouchableOpacity>
+    )
+}
 export const GenericIconButton: React.FC<PropsWithChildren<GenericIconButtonProps>> = (props) => {
     const {
         backgroundColor,
