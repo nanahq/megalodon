@@ -21,7 +21,8 @@
       [
         "expo-location",
         {
-          "locationWhenInUsePermission": "Show current location on map."
+          "locationWhenInUsePermission": "Nana requires access to your location to show restaurants/shops nearest to you, calculate delivery fees and delivery time estimates",
+          "locationAlwaysPermission": "Nana requires access to your location to show restaurants/shops nearest to you, calculate delivery fees and delivery time estimates"
         }
       ],
       "expo-font",
