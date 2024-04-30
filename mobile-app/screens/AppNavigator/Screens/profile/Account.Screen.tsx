@@ -86,11 +86,11 @@ export const AccountScreen: React.FC<AccountScreenNavigationProps> = ({navigatio
                         <View style={tailwind('flex flex-col')}>
                             <AccountScreenItem
                                 label="Terms of service"
-                                onPress={() => navigation.navigate(ProfileScreenName.PRIVACY)}
+                                onPress={() => navigation.navigate<any>(ProfileScreenName.PRIVACY)}
                             />
                             <AccountScreenItem
                                 label="Privacy policy"
-                                onPress={() => navigation.navigate(ProfileScreenName.PRIVACY)}
+                                onPress={() => navigation.navigate<any>(ProfileScreenName.PRIVACY)}
                             />
                         </View>
                     </View>
@@ -103,7 +103,7 @@ export const AccountScreen: React.FC<AccountScreenNavigationProps> = ({navigatio
                         <AccountScreenItem
                             labelStyle={tailwind('text-error-600')}
                             label="Delete account"
-                            onPress={() => {}}
+                            onPress={() => navigation.navigate<any>(ProfileScreenName.DELETE_ACCOUNT)}
                         />
                     </View>
                 </View>
