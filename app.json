@@ -69,7 +69,21 @@
         "googleMaps": {
           "apiKey": "AIzaSyA4FLTREZvoZ6HQrfoNXm1bgWJksyvLLo4"
         }
-      }
+      },
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "autoVerify": true,
+          "data": [
+            {
+              "scheme": "https",
+              "host": "trynanaapp.com",
+              "pathPrefix": "/"
+            }
+          ],
+          "category": ["BROWSABLE", "DEFAULT"]
+        }
+      ]
     },
     "web": {
       "favicon": "./assets/app-config/favicon.png"
