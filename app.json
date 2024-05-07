@@ -41,6 +41,7 @@
       "**/*"
     ],
     "ios": {
+      "associatedDomains": ["appLinks:trynanaapp.com"],
       "icon": "./assets/app-config/Icon-blue-ios1024.png",
       "supportsTablet": false,
       "bundleIdentifier": "com.nanaeats.nana.app",
