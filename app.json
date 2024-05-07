@@ -4,7 +4,7 @@
     "description": "Order food online and get it delivered in minutes",
     "slug": "nana-app",
     "owner": "nana_logistics",
-    "version": "1.2.0",
+    "version": "1.2.1",
     "orientation": "portrait",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
@@ -41,7 +41,9 @@
       "**/*"
     ],
     "ios": {
-      "associatedDomains": ["appLinks:trynanaapp.com"],
+      "associatedDomains": [
+        "appLinks:trynanaapp.com"
+      ],
       "icon": "./assets/app-config/Icon-blue-ios1024.png",
       "supportsTablet": false,
       "bundleIdentifier": "com.nanaeats.nana.app",
@@ -81,7 +83,10 @@
               "pathPrefix": "/"
             }
           ],
-          "category": ["BROWSABLE", "DEFAULT"]
+          "category": [
+            "BROWSABLE",
+            "DEFAULT"
+          ]
         }
       ]
     },
