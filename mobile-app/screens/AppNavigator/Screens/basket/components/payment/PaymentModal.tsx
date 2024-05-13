@@ -16,7 +16,6 @@ import {ModalCloseIcon} from "@screens/AppNavigator/Screens/modals/components/Mo
 import {GenericButton} from "@components/commons/buttons/GenericButton";
 import Checkbox from "expo-checkbox";
 import {PaymentMethodI} from "@screens/AppNavigator/Screens/basket/components/payment/PaymentMethodBox";
-// import {NumericFormat as NumberFormat} from "react-number-format";
 import {IconComponent} from "@components/commons/IconComponent";
 
 interface PaymentMethodModalProps {
@@ -44,13 +43,13 @@ const _PaymentMethodModal:React.FC<PaymentMethodModalProps> = (props) => {
     const onValueChange = (name: string) => {
         if (name === 'ONLINE') {
             props?.setSelectedPaymentMethod({
-                name: "ONLINE" ,
+                name: "PAY_ONLINE" ,
                 label: 'Pay Online',
                 useWalletBalance: false
             })
         } else {
             props?.setSelectedPaymentMethod({
-                name: "WALLET" ,
+                name: "PAY_BY_WALLET" ,
                 label: 'Pay with wallet balance',
                 useWalletBalance: false
             })

@@ -251,7 +251,8 @@ export const Checkout: React.FC = () => {
                     quantity: crt.quantity
                 }
             }) ?? [],
-            coupon: coupon ?? undefined
+            coupon: coupon ?? undefined,
+            paymentType: paymentMethod?.name ?? 'PAY_ONLINE'
         }
         try {
             setPlacingOrder(true)
@@ -280,6 +281,7 @@ export const Checkout: React.FC = () => {
                 orderValue: orderBreakDown.orderCost + orderBreakDown.deliveryFee + orderBreakDown.systemFee - (discount ?? 0)
             })
         }  catch (error) {
+            console.error(error)
             showTost(toast, 'Failed to place order. Contact support', 'error')
         } finally {
             setPlacingOrder(false)
@@ -329,7 +331,6 @@ export const Checkout: React.FC = () => {
             <PaymentMethodBox
                 onPress={() => openPaymentModal()}
                 selectedMethod={paymentMethod}
-
             />
 
             <View>
