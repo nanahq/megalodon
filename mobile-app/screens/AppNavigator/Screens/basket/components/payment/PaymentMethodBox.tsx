@@ -4,9 +4,8 @@ import {tailwind} from "@tailwind";
 import {IconComponent} from "@components/commons/IconComponent";
 
 export interface PaymentMethodI {
-    name: "WALLET" | "ONLINE" ,
+    name: "PAY_ONLINE" | "PAY_BY_WALLET" ,
     label: string
-
     useWalletBalance: boolean
 }
 const _PaymentMethodBox: React.FC<{selectedMethod: PaymentMethodI | undefined,  onPress: () => void}> = (props) => {
