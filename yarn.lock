@@ -2680,10 +2680,10 @@
   resolved "https://registry.yarnpkg.com/@leichtgewicht/ip-codec/-/ip-codec-2.0.4.tgz#b2ac626d6cb9c8718ab459166d4bb405b8ffa78b"
   integrity sha512-Hcv+nVC0kZnQ3tD9GVu5xSMR4VVYOteQIr/hwFPVEvPdlXqgGEuRjiheChHgdM+JyqdgNcmzZOX/tnl0JOiI7A==
 
-"@nanahq/sticky@^0.3.1":
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/@nanahq/sticky/-/sticky-0.3.1.tgz#356e98b2e1e4ae21dff28a65b8452df03a14147a"
-  integrity sha512-R7gC73TqiHPyVNNX4fvEgZ2iLeIfoYUjwhcRCn8Mb1+WEMCGjNAZNt5cTff2mDXECrUc7DUbByk4xWrQDAC3Aw==
+"@nanahq/sticky@^0.3.5":
+  version "0.3.5"
+  resolved "https://registry.yarnpkg.com/@nanahq/sticky/-/sticky-0.3.5.tgz#f0bf006f17a0533b812f1c3e8c1220eb51e9f0ff"
+  integrity sha512-WrKGwmWFVxS/p9t0zMEYQBbhpnC0qGGY2GkfF7vKtRIccMxPIrgxCAkKVaQsqRbTK6yumvAuOecckLuVhFsRIw==
 
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
