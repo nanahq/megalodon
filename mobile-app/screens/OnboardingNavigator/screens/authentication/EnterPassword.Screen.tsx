@@ -14,6 +14,7 @@ import {useToast} from "react-native-toast-notifications";
 import {useAnalytics} from "@segment/analytics-react-native";
 import * as Device from "expo-device";
 import {cookieParser} from "../../../../../utils/cookieParser";
+import {SafeAreaView} from "react-native-safe-area-context";
 
 type EnterPasswordScreenProps = StackScreenProps<OnboardingParamsList, OnboardingScreenName.ENTER_PASSWORD>
 
@@ -40,6 +41,11 @@ export function EnterPasswordScreen ({navigation, route}: EnterPasswordScreenPro
             }
         })
         void analytics.screen(OnboardingScreenName.ENTER_MOBILE_PHONE)
+
+        navigation.setOptions({
+            headerLeft: () => <BackButton onPress={() => navigation.goBack()} testID="" />,
+            headerTitle: '',
+        })
     }, [route.params.phoneNumber])
 
     async function onContinue(): Promise<void> {
@@ -62,7 +68,7 @@ export function EnterPasswordScreen ({navigation, route}: EnterPasswordScreenPro
                     phone: route.params.phoneNumber
                 })
             } else  {
-                 await _api.requestData({
+                 const {data} = await _api.requestData<any, {pinId: string, phone: string}>({
                     method: 'POST',
                     url: 'user/register',
                     data: {
@@ -75,7 +81,7 @@ export function EnterPasswordScreen ({navigation, route}: EnterPasswordScreenPro
                 })
                 showTost(toast, 'Account created', 'success')
                 navigation.navigate(OnboardingScreenName.VERIFY_PHONE_NUMBER as any, {
-                    phoneNumber: route.params.phoneNumber
+                    pinId: data.pinId
                 } as any)
                 void analytics.track('REGISTER', {
                     phone: route.params.phoneNumber
@@ -85,7 +91,7 @@ export function EnterPasswordScreen ({navigation, route}: EnterPasswordScreenPro
         } catch (error: any) {
             if (error?.message.toLowerCase().includes("verify")) {
                 navigation.navigate(OnboardingScreenName.VERIFY_PHONE_NUMBER as any, {
-                    phoneNumber: route.params.phoneNumber
+                    pinId: error?.message?.split('Verify phone number-')[1]
                 } as any)
             } else {
                 showTost(toast, typeof error.message !== 'string' ? error.message[0] : error.message, 'error')
@@ -99,15 +105,15 @@ export function EnterPasswordScreen ({navigation, route}: EnterPasswordScreenPro
     const HeaderTextExistingAccount = `Welcome back, ${route?.params?.firstName  ?? 'User'}`
 
     return (
-        <View
+        <SafeAreaView
             testID="OnboardingScreen.EnterPasswordScreen"
-            style={[tailwind('pt-12 flex-1'), {overflow: 'hidden'}]}
+            style={[tailwind('flex-1 bg-white')]}
         >
 
-            <View style={tailwind('pt-5 px-5  flex-grow')}>
+            <View style={tailwind('px-5 flex-grow')}>
                    <Text
                        testID='OnboardingScreen.EnterPasswordScreen.EnterPasswordText'
-                       style={tailwind('font-bold text-2xl mb-5 text-brand-black-500')}
+                       style={tailwind('font-bold text-xl mb-5 text-brand-black-500')}
                    >
                        {route.params.hasAccount ? HeaderTextExistingAccount : 'Sign up for a new account'}
                    </Text>
@@ -134,15 +140,11 @@ export function EnterPasswordScreen ({navigation, route}: EnterPasswordScreenPro
                     onPress={onContinue}
                     labelColor={tailwind('text-white')}
                     label='Continue'
-                    backgroundColor={tailwind('bg-primary-500')}
+                    backgroundColor={tailwind('bg-primary-100')}
                     testId="OnboardingScreen.EnterPasswordScreen.ContinueButton"
                     disabled={password === "" || password.length <= 7 || loading}
                 />
             </View>
-
-            <View style={tailwind( 'px-5 flex-1')}>
-                <BackButton onPress={() => navigation.goBack()}   testID="EnterPasswordScreen.BackButton" />
-            </View>
-        </View>
+        </SafeAreaView>
     )
 }

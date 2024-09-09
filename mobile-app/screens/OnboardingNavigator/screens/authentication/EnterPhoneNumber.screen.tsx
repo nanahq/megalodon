@@ -1,4 +1,4 @@
-import {View, Text} from "react-native";
+import {View, Text, Image} from "react-native";
 import {StackScreenProps} from "@react-navigation/stack";
 import {useEffect, useState} from 'react'
 
@@ -13,6 +13,7 @@ import {internationalisePhoneNumber} from '@nanahq/sticky'
 import {_api} from "@api/_request";
 import {ShowToast} from "@components/commons/Toast";
 import {useAnalytics} from "@segment/analytics-react-native";
+import ImageAvatar from '@assets/onboarding/onboarding-avatar.png'
 
 type EnterPhoneNumberScreenProps = StackScreenProps<OnboardingParamsList, OnboardingScreenName.ENTER_MOBILE_PHONE>
 export function EnterPhoneNumberScreen ({navigation}: EnterPhoneNumberScreenProps): JSX.Element {
@@ -40,6 +41,7 @@ export function EnterPhoneNumberScreen ({navigation}: EnterPhoneNumberScreenProp
                merge: true,
            });
        } catch (error: any) {
+            console.log(error)
           ShowToast('error', error.message)
        } finally {
            setLoading(false)
@@ -48,29 +50,45 @@ export function EnterPhoneNumberScreen ({navigation}: EnterPhoneNumberScreenProp
     return (
         <View
             testID="OnboardingScreen.EnterPhoneNumberScreen"
-            style={tailwind('pt-12 bg-white flex-1 overflow-hidden')}
+            style={tailwind('pt-4 bg-white flex-1 overflow-hidden')}
         >
         <View style={tailwind('pt-10 px-5 bg-white')}>
             <GenericButtonLink
                 style={tailwind('')}
-                labelColor={tailwind('text-gray-700 text-right text-sm mb-2')}
+                labelColor={tailwind('text-gray-300 text-right text-sm mb-10')}
                 onPress={() => navigation.navigate<any>('ONBOARDING_GUEST')}
                 label="Continue as guest"
             />
-            <Text
-                testID='OnboardingScreen.EnterPhoneNumberScreen.EnterPhoneText'
-                style={tailwind('font-bold text-2xl mb-5 text-black')}
-            >
-                Enter your mobile number
-            </Text>
+
+            <View>
+                <Image
+                    style={[{width: 200, height: 200 }]}
+                    source={ImageAvatar}
+                    resizeMode="contain"
+                />
+            </View>
+            <View>
+                <Text
+                    testID='OnboardingScreen.EnterPhoneNumberScreen.EnterPhoneText'
+                    style={tailwind('font-bold text-xl text-black')}
+                >
+                    Get started with Nana
+                </Text>
+                <Text
+                    testID='OnboardingScreen.EnterPhoneNumberScreen.EnterPhoneText'
+                    style={tailwind('font-normal text-gray-400')}
+                >
+                    Login or sign up to get started
+                </Text>
+            </View>
             <TextInputWithLabel
                 label=""
-                containerStyle={tailwind('mt-2.5 mb-10 mb-6 overflow-hidden')}
+                containerStyle={tailwind('mt-2.5 mb-6 overflow-hidden')}
                 textAlign='left'
                 keyboardType='phone-pad'
                 testID="EnterPhoneNumberScreen.TextInput"
                 onChangeText={setPhoneNumber}
-                placeholder="091 740 48621"
+                placeholder="Enter phone number"
                 placeHolderStyle="#717171"
             />
             <GenericButton
@@ -78,7 +96,7 @@ export function EnterPhoneNumberScreen ({navigation}: EnterPhoneNumberScreenProp
                 onPress={onContinue}
                 labelColor={tailwind('text-white')}
                 label='Continue'
-                backgroundColor={tailwind('bg-primary-500')}
+                backgroundColor={tailwind('bg-primary-100')}
                 testId="OnboardingScreen.EnterPhoneNumberScreen.ContinueButton"
                 disabled={phoneNumber === "" || phoneNumber.length < 11}
             />

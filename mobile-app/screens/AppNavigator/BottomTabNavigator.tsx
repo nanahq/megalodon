@@ -1,17 +1,18 @@
-import {Text, View} from 'react-native'
+import {Pressable, Text, View} from 'react-native'
 import {getColor, tailwind} from "@tailwind";
 import {AppScreenName} from "@screens/AppNavigator/ScreenName.enum";
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
 import  * as Device from 'expo-device'
-import {HomeNavigator} from "@screens/AppNavigator/Screens/home/HomeNavigator";
-import {RootState, useAppSelector} from "@store/index";
-import {BasketNavigator} from "@screens/AppNavigator/Screens/basket/BasketNavigator";
-import {ProfileNavigator} from "@screens/AppNavigator/Screens/profile/ProfileNavigator";
 import {OrderNavigator} from "@screens/AppNavigator/Screens/orders/OrderNavigator";
-import {PromotionNavigator} from "@screens/AppNavigator/Screens/promotions/PromotionNavigator";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
-import {DiamondPercent, Pizza, ShoppingBasket, History, CircleUser} from "lucide-react-native";
-
+import {ReceiptText, Home, Salad, Store, PackageOpen, User} from "lucide-react-native";
+import {FoodScreen} from "@screens/AppNavigator/Screens/home/Food.screen";
+import {MartScreen} from "@screens/AppNavigator/Screens/home/Mart.screen";
+import {CourierScreen} from "@screens/AppNavigator/Screens/home/Courier.screen";
+import React from "react";
+import {useNavigation} from "@react-navigation/native";
+import {HomeScreen} from "@screens/AppNavigator/Screens/home/Home.Screen";
+import {CardStyleInterpolators} from "@react-navigation/stack";
 const BottomTab = createBottomTabNavigator<BottomTabParamList>()
 
 export interface BottomTabParamList {
@@ -28,29 +29,47 @@ const getTabBarLabel = (props: {
     color: string;
     title: string;
 }): JSX.Element => (
-    <Text style={{ color: props.focused ? getColor('primary-500') : props.color, ...tailwind("font-medium text-xs", {'mt-2': Device.osName === 'iOS'}) }}>
+    <Text style={{ color: props.focused ? getColor('primary-500') : props.color, ...tailwind("text-xs", {'mt-1': Device.osName === 'iOS'}) }}>
         {props.focused ? props.title : props.title}
     </Text>
 );
 
 export function BottomTabNavigator ():JSX.Element {
     const insert = useSafeAreaInsets()
-    const {cart}  = useAppSelector((state: RootState) => state.cart)
+    const navigation = useNavigation<any>()
+    const isAndroid = Device.osName?.toLowerCase().includes('android')
     return (
         <BottomTab.Navigator
             initialRouteName={AppScreenName.HOME}
             screenOptions={{
-                headerShown: false,
+                cardStyleInterpolator: isAndroid ? CardStyleInterpolators.forRevealFromBottomAndroid : CardStyleInterpolators.forVerticalIOS,
+                headerShown: true,
+                headerBackground: tailwind('bg-white'),
                 tabBarLabelPosition: "below-icon",
                 tabBarStyle: {height: insert.bottom + 80},
                 tabBarActiveTintColor: '#ffffff',
                 tabBarInactiveTintColor: '#B5B5B5',
                 tabBarItemStyle: tailwind("pb-4 pt-1"),
-                lazy: true
+                headerStyle: tailwind('bg-white pt-3'),
+                lazy: true,
+                header: () =>  (
+                    <View style={[tailwind('flex flex-row items-center justify-between px-4 bg-white'), {marginTop: insert.top + (insert.top * 0.2)}]}>
+                        <View>
+                            <Text style={tailwind('text-sm text-gray-500')}>Deliver now</Text>
+                            <Text style={tailwind('text-lg font-bold')}>Kano, Nigeria</Text>
+                        </View>
+                        <Pressable style={tailwind('bg-gray-100 rounded-full p-2.5')} onPress={() => navigation?.navigate(AppScreenName.PROFILE)}>
+                            <User
+                                size={24}
+                                color={getColor('black')}
+                            />
+                        </Pressable>
+                    </View>
+                )
             }}
         >
             <BottomTab.Screen
-                component={HomeNavigator}
+                component={HomeScreen}
                 name={AppScreenName.HOME}
                 options={{
                     tabBarLabel: ({ focused, color }) =>
@@ -63,47 +82,43 @@ export function BottomTabNavigator ():JSX.Element {
                     tabBarTestID: "BottomTabHome",
                     tabBarIcon: ({ color, focused }) => (
                         <View style={tailwind('w-10 h-10 flex flex-row items-center justify-center rounded-full', {'text-primary-500': focused})}>
-                            <Pizza name="home"  size={28} color={focused ? getColor('primary-500') : color}/>
+                            <Home name="home"  size={28} color={focused ? getColor('primary-500') : color}/>
                         </View>
                     ),
                 }}
             />
             <BottomTab.Screen
-                component={BasketNavigator}
-                name={AppScreenName.BASKET}
+                component={FoodScreen}
+                name={AppScreenName.FOOD}
                 options={{
-                    tabBarStyle: {display: 'none'},
                     tabBarLabel: ({ focused, color }) =>
                         getTabBarLabel({
                             focused,
                             color,
-                            title: 'Basket',
+                            title: 'Food',
                         }),
                     tabBarTestID: "BottomTabHome",
                     tabBarIcon: ({ color , focused}) => (
                         <View style={tailwind('relative w-10 h-10 flex flex-row items-center justify-center rounded-full')}>
-                            <ShoppingBasket size={26} color={focused ? getColor('primary-500') : color}/>
-                            {cart !== undefined && (<View style={tailwind('absolute z-50 w-4 h-4 flex justify-center items-center rounded-full bg-black top-0 right-0')}>
-                                <Text style={tailwind('text-xs text-white')}>{cart.length}</Text>
-                            </View>)}
+                            <Salad name="home"  size={28} color={focused ? getColor('primary-500') : color}/>
                         </View>
                     ),
                 }}
             />
             <BottomTab.Screen
-                component={PromotionNavigator}
-                name={AppScreenName.DEALS}
+                component={MartScreen}
+                name={AppScreenName.MART}
                 options={{
                     tabBarLabel: ({ focused, color }) =>
                         getTabBarLabel({
                             focused,
                             color,
-                            title: 'Deals',
+                            title: 'Mart',
                         }),
                     tabBarTestID: "BottomTabHome",
                     tabBarIcon: ({ color, focused }) => (
                         <View style={tailwind('w-10 h-10 flex flex-row items-center justify-center rounded-full')}>
-                            <DiamondPercent size={26} color={focused ? getColor('primary-500') : color}/>
+                            <Store size={26} color={focused ? getColor('primary-500') : color}/>
                         </View>
                     ),
                 }}
@@ -112,6 +127,7 @@ export function BottomTabNavigator ():JSX.Element {
                 component={OrderNavigator}
                 name={AppScreenName.ORDERS}
                 options={{
+                    headerShown: false,
                     tabBarStyle: {display: 'none'},
                     tabBarLabel: ({ focused, color }) =>
                         getTabBarLabel({
@@ -121,26 +137,26 @@ export function BottomTabNavigator ():JSX.Element {
                         }),
                     tabBarTestID: "BottomTabHome",
                     tabBarIcon: ({ color, focused }) => (
-                        <View style={tailwind('w-10 h-10 flex flex-row items-center justify-center rounded-full')}>
-                            <History  size={26} color={focused ? getColor('primary-500') : color}/>
+                        <View style={tailwind('w-10 h-10 flex flex-row items-center justify-center rounded-full', focused && 'bg-primary-100')}>
+                            <ReceiptText  size={26} color={focused ? getColor('primary-500') : color}/>
                         </View>
                     ),
                 }}
             />
             <BottomTab.Screen
-                component={ProfileNavigator}
-                name={AppScreenName.PROFILE}
+                component={CourierScreen}
+                name={AppScreenName.Courier}
                 options={{
                     tabBarLabel: ({ focused, color }) =>
                         getTabBarLabel({
                             focused,
                             color,
-                            title: 'Profile',
+                            title: 'Courier',
                         }),
                     tabBarTestID: "BottomTabHome",
                     tabBarIcon: ({ color, focused }) => (
                         <View style={tailwind('w-10 h-10 flex flex-row items-center justify-center rounded-full')}>
-                            <CircleUser iconType='AntDesign' name="user"  size={26} color={focused ? getColor('primary-500') : color}/>
+                            <PackageOpen size={26} color={focused ? getColor('primary-500') : color}/>
                         </View>
                     ),
                 }}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import { Pressable, Text, View } from "react-native";
 import { tailwind } from "@tailwind";
 import { GenericButton } from "@components/commons/buttons/GenericButton";
@@ -12,6 +12,7 @@ import { showTost} from "@components/commons/Toast";
 import {OnboardingScreenName} from "@screens/OnboardingNavigator/ScreenName.enum";
 import {useToast} from "react-native-toast-notifications";
 import { cookieParser } from "../../../../../utils/cookieParser";
+import {SafeAreaView} from "react-native-safe-area-context";
 
 type VerifyPhoneNumberScreenProps = StackScreenProps<
     OnboardingParamsList,
@@ -30,6 +31,15 @@ export function VerifyPhoneNumberScreen({
     const toast = useToast()
 
 
+    useEffect(() => {
+        navigation.setOptions({
+            headerLeft: () => <BackButton onPress={() => navigation.goBack()} testID="" />,
+            headerTitle: '',
+        })
+    }, [])
+
+
+
 
     async function onContinue(): Promise<void> {
         try {
@@ -39,8 +49,8 @@ export function VerifyPhoneNumberScreen({
                 method: "POST",
                 url: "user/verify",
                 data: {
-                    phone: route?.params?.phoneNumber,
-                    code,
+                    pinId: route?.params?.pinId,
+                    pin: code,
                 },
             });
             await setToken(cookieParser(cookies));
@@ -56,7 +66,7 @@ export function VerifyPhoneNumberScreen({
             setSendingVerification(true)
             await _api.requestData({
                 method: 'GET',
-                url: `user/resend-validation/${route.params.phoneNumber}`
+                url: `user/resend-validation`
             })
 
             showTost(toast, 'Verification code sent successfully', 'success')
@@ -68,21 +78,21 @@ export function VerifyPhoneNumberScreen({
     };
 
     return (
-        <View
+        <SafeAreaView
             testID="OnboardingScreen.VerifyPhoneNumberScreen"
-            style={tailwind("pt-12 flex-1 overflow-hidden")}
+            style={tailwind(" flex-1 bg-white overflow-hidden")}
         >
-            <View style={tailwind("pt-5 px-5")}>
+            <View style={tailwind("px-5")}>
                 <View>
                     <Text
                         testID="OnboardingScreen.VerifyPhoneNumberScreen.EnterCodeText"
-                        style={tailwind("font-bold text-2xl mb-5 text-black")}
+                        style={tailwind("font-bold text-xl mb-5 text-black")}
                     >
                         Enter Verification Code
                     </Text>
                     <Text
                         testID="OnboardingScreen.VerifyPhoneNumberScreen.EnterCodeText.SubText"
-                        style={tailwind("text-sm text-brand-gray-700")}
+                        style={tailwind("text-sm")}
                     >
                         A 6-digit code has been sent to your phone via SMS
                     </Text>
@@ -98,7 +108,7 @@ export function VerifyPhoneNumberScreen({
                 </View>
                 <View style={tailwind("flex flex-row justify-center mt-5 items-center")}>
                     <Text style={tailwind("text-sm text-brand-gray-700")}>Didn't get code?</Text>
-                    <Pressable disabled={resendDisabled} onPress={resendPhoneNumber}>
+                    <Pressable disabled={true} onPress={resendPhoneNumber}>
                         <Text style={tailwind("text-sm text-brand-gray-700 ml-2 font-bold underline")}>
                             {sendingVerification ? 'resending' : 'Resend'}
                         </Text>
@@ -110,14 +120,12 @@ export function VerifyPhoneNumberScreen({
                     onPress={onContinue}
                     labelColor={tailwind("text-white")}
                     label="Verify"
-                    backgroundColor={tailwind("bg-brand-black-500")}
+                    backgroundColor={tailwind("bg-primary-100")}
                     testId="OnboardingScreen.VerifyPhoneNumberScreen.VerifyButton"
                     disabled={code === "" || code.length <= 5}
                 />
             </View>
-            <View style={tailwind("mt-14 pt-3.5 px-5")}>
-                <BackButton onPress={() => navigation.goBack()} testID="VerifyPhoneNumberScreen.BackButton" />
-            </View>
-        </View>
+
+        </SafeAreaView>
     );
 }

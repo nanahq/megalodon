@@ -40,15 +40,18 @@ export function VerificationCodeInput({
                     !hasValue && styles.borderColor,
                     hasValue && styles.borderColorFilled,
                     tailwind({
-                        'bg-primary-200': !hasValue,
-                        'bg-transparent': hasValue
+                        'bg-white': !hasValue,
+                        'bg-black': hasValue
                     }),
                     index === 0 && {marginLeft: 0}
                 ]}
                 testID={`${testID}_${index}`}
             >
                 {hasValue && (
-                    <Text style={tailwind('text-brand-black-500 text-lg font-bold')
+                    <Text style={tailwind(' text-lg font-bold', {
+                        'text-white': hasValue,
+                        'text-black': !hasValue
+                    })
                     }>
                         {symbol}
                     </Text>
@@ -78,11 +81,11 @@ export function VerificationCodeInput({
 const styles = StyleSheet.create({
 
     borderColor: {
-        borderColor: getColor('primary-200'),
+        borderColor: getColor('gray-300'),
     },
 
     borderColorFilled: {
-        borderColor: getColor('brand-blue-500'),
+        borderColor: getColor('bg-black'),
     },
     cell: {
         alignItems: "center",

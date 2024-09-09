@@ -25,6 +25,7 @@ import {RedeemModal} from "@screens/AppNavigator/Screens/modals/Redeem.Modal";
 import {useAnalytics} from "@segment/analytics-react-native";
 import {PromotionModal} from "@screens/AppNavigator/Screens/modals/Promotion.modal";
 import Constants from "expo-constants";
+import {ProfileNavigator} from "@screens/AppNavigator/Screens/profile/ProfileNavigator";
 
 const App = createStackNavigator<AppParamList>()
 
@@ -177,6 +178,8 @@ export function AppNavigator(): JSX.Element {
                 }}>
                     <App.Screen component={BottomTabNavigator} name="App" />
                 </App.Group>
+                <App.Screen component={ProfileNavigator} name="Profile" />
+
                 <App.Group
                     screenOptions={{
                         headerShown: false,
