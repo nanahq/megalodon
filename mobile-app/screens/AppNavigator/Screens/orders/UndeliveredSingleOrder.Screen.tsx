@@ -3,7 +3,7 @@ import {tailwind} from "@tailwind";
 import {HeaderStyleInterpolators, StackScreenProps} from "@react-navigation/stack";
 import {OrderParamsList} from "@screens/AppNavigator/Screens/orders/OrderNavigator";
 import {OrderScreenName} from "@screens/AppNavigator/Screens/orders/OrderScreenName";
-import React, {PropsWithChildren, useEffect, useMemo, useState} from "react";
+import React, {PropsWithChildren, useEffect, useMemo} from "react";
 import {ModalCloseIcon} from "@screens/AppNavigator/Screens/modals/components/ModalCloseIcon";
 import {MappedDeliveryStatus} from "@constants/MappedDeliveryStatus";
 import moment from "moment";
@@ -11,7 +11,6 @@ import {ListingMenuI, OrderStatus} from "@nanahq/sticky";
 import {GenericButton} from "@components/commons/buttons/GenericButton";
 import {NumericFormat as NumberFormat} from "react-number-format";
 import {ModalScreenName} from "@screens/AppNavigator/ScreenName.enum";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import {useAnalytics} from "@segment/analytics-react-native";
 import {BadgeDollarSign, ShoppingCart} from "lucide-react-native";
 
@@ -23,7 +22,6 @@ export interface TransformedOrderItem {
 
 type UndeliveredSingleOrderScreenProps = StackScreenProps<OrderParamsList, OrderScreenName.UNDELIVERED_SINGLE_ORDER>
 export const UndeliveredSingleOrderScreen: React.FC<UndeliveredSingleOrderScreenProps> = ({navigation, route}) => {
-    const [rating, setRating] = useState<null | string>(null)
     const analytics = useAnalytics()
 
 
@@ -31,23 +29,6 @@ export const UndeliveredSingleOrderScreen: React.FC<UndeliveredSingleOrderScreen
     useEffect(() => {
         void analytics.screen(OrderScreenName.UNDELIVERED_SINGLE_ORDER)
     }, [])
-
-    useEffect(() => {
-        navigation.addListener('focus' ,() => {
-            AsyncStorage.getItem(route.params.order._id)
-                .then(_rating => {
-                    setRating(_rating)
-                })
-        })
-
-        return () => navigation.removeListener('focus', () => {
-            AsyncStorage.getItem(route.params.order._id)
-                .then(_rating => {
-                    setRating(_rating)
-                })
-        })
-    }, [])
-
 
 
     useEffect(() => {
@@ -130,7 +111,7 @@ export const UndeliveredSingleOrderScreen: React.FC<UndeliveredSingleOrderScreen
                     </View>
                 </View>
                 <View style={tailwind('mb-5')}>
-                    {route.params.order.orderStatus === OrderStatus.FULFILLED && !rating && (
+                    {route.params.order.orderStatus === OrderStatus.FULFILLED && !route?.params?.order?.review && (
                         <>
                             <GenericButton style={tailwind('mt-2')} onPress={() => {
                                 void analytics.track('CLICK:ORDER-ADD-REVIEW')

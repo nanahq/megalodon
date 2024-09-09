@@ -1,75 +1,33 @@
-import {Dimensions, ImageSourcePropType, Image, View, Text} from "react-native";
+import React from 'react'
+import {Dimensions, ImageSourcePropType, Platform, Image, View, Text} from "react-native";
 import { SwiperFlatList } from "react-native-swiper-flatlist";
-import ImageA from "@assets/onboarding/jollof.jpg";
-import ImageB from "@assets/onboarding/groceries.jpg";
-import ImageC from "@assets/onboarding/icecrream.jpg";
-
+import ImageFood from "@assets/onboarding/onboarding-food.png";
+import ImageGroceries from "@assets/onboarding/onboarding-groceries.png";
+import ImagePackage from "@assets/onboarding/onboarding-package.png";
 import { getColor, tailwind } from "@tailwind";
-import {CarouselPagination} from "@screens/OnboardingNavigator/screens/components/PaginationComponent";
+import {
+    CarouselPagination,
+    CarouselPaginationWithNextButton
+} from "@screens/OnboardingNavigator/screens/components/CarouselPagination";
 
 interface CarouselImage {
     image: ImageSourcePropType;
     title: string;
     subtitle: string;
 }
-
-const slides: JSX.Element[] = [
-    <ImageSlide
-        image={ImageA}
-        key={0}
-        subtitle="DeFiChain Wallet is fully non-custodial. Only you will have access to your fund."
-        title=""
-    />,
-    <ImageSlide
-        image={ImageB}
-        key={1}
-        subtitle="Review your available and locked assets in your portfolio."
-        title="View your assets in one place"
-    />,
-    <ImageSlide
-        image={ImageC}
-        key={2}
-        subtitle="Trade on the DEX and earn rewards from liquidity mining with crypto and dTokens."
-        title="Maximize earning potential"
-    />,
-
-    <ImageSlide
-        image={ImageA}
-        key={3}
-        subtitle="Access financial opportunities with dTokens minted through decentralized vaults."
-        title="Decentralized loans"
-    />,
-    <ImageSlide
-        image={ImageA}
-        key={4}
-        subtitle="Seamless transfers between DeFiChain and MetaChain via generated EVM address."
-        title="EVM compatible"
-    />,
-];
-
-const { width } = Dimensions.get("window");
-
-export function ImageSlide({
-                               image,
-                               title,
-                               subtitle,
-                           }: CarouselImage): JSX.Element {
-    const {width, height} = Dimensions.get('window')
-
+export const ImageSlide: React.FC = ({image, title, subtitle,}: CarouselImage) => {
     return (
-
-
-        <View style={tailwind("flex-1 items-center justify-center px-10")}>
+        <View style={tailwind("flex-1 items-center justify-center bg-white")}>
             <Image
-
+                contentFit="contain"
                 source={image}
-                style={{ width, height: height /2,  objectFit: "cover"}}
+                style={{ width: 306, height: 250 }}
             />
-            <View style={tailwind("items-center justify-center mt-3 mb-2")}>
-                <Text style={tailwind("text-xl font-semibold text-center")}>
+            <View style={tailwind("items-center justify-center mt-7 mb-5")}>
+                <Text style={tailwind("text-xl font-bold text-center")}>
                     {title}
                 </Text>
-                <Text style={tailwind("font-normal text-center mt-2")}>
+                <Text style={tailwind("text-center mt-2")}>
                     {subtitle}
                 </Text>
             </View>
@@ -77,26 +35,47 @@ export function ImageSlide({
     );
 }
 
-export function OnboardingCarousel(): JSX.Element {
+
+
+
+const slides: React.ReactNode[] = [
+    <ImageSlide
+        image={ImageFood}
+        key={0}
+        subtitle="Discover thousands of food menu from your favorite restaurants and homemade vendors."
+        title="Food delivery to your doorstep"
+    />,
+    <ImageSlide
+        image={ImageGroceries}
+        key={1}
+        title="Groceries and Essentials Delivery"
+        subtitle="Shop from your familiar super markets from your phone"
+    />,
+    <ImageSlide
+        image={ImagePackage}
+        key={2}
+        subtitle="Need something to get picked up? Order a delivery service"
+        title="Send or receive and item/parcel"
+    />
+];
+
+const { width } =
+    Platform.OS === "web" ? { width: "375px" } : Dimensions.get("window");
+
+
+export const OnboardingCarousel: React.FC = () => {
     return (
         <SwiperFlatList
-            autoplay
-            autoplayDelay={10}
-            autoplayLoop
-            autoplayLoopKeepAnimation
+            autoplay={false}
             data={slides}
             index={0}
-            paginationActiveColor={
-                getColor("primary-500")
-            }
-            paginationStyleItemActive={tailwind("w-6 h-1.5")}
-            paginationDefaultColor={
-                getColor("gray-500")
-            }
-            paginationStyleItem={tailwind("h-1.5 w-1.5 mx-0.75")}
-            PaginationComponent={CarouselPagination}
+            paginationActiveColor={getColor("black")}
+            paginationStyleItemActive={tailwind("w-20 h-1.5")}
+            paginationDefaultColor={getColor('gray-400')}
+            paginationStyleItem={tailwind("h-1.5 w-20")}
+            PaginationComponent={CarouselPaginationWithNextButton}
             renderItem={({ item }) => (
-                <View style={{ width: Number(width) }}>{item}</View>
+                <View style={[{ width: Number(width) }, tailwind('bg-white px-4')]}>{item}</View>
             )}
             showPagination
         />

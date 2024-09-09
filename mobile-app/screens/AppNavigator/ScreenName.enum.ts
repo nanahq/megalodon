@@ -1,5 +1,8 @@
 export enum AppScreenName {
     HOME=  'Home',
+    FOOD=  'FOOD',
+    MART=  'MART',
+    Courier=  'Courier',
     DEALS ='DEALS',
     ORDERS = 'Orders',
     PROFILE = 'Profile',

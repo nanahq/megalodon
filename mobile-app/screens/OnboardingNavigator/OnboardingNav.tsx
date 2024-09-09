@@ -23,6 +23,7 @@ export interface OnboardingParamsList {
     }
 
     [OnboardingScreenName.VERIFY_PHONE_NUMBER]: {
+        pinId: string,
         phoneNumber: string
     }
 
@@ -73,7 +74,7 @@ export function OnboardingNagivator (): JSX.Element {
                     component={EnterPasswordScreen}
                     name={OnboardingScreenName.ENTER_PASSWORD}
                     options={{
-                        headerShown: false
+                        headerShown: true
                     }}
                 />
                 <OnboardingStack.Screen
@@ -87,7 +88,7 @@ export function OnboardingNagivator (): JSX.Element {
                     component={VerifyPhoneNumberScreen}
                     name={OnboardingScreenName.VERIFY_PHONE_NUMBER}
                     options={{
-                        headerShown: false
+                        headerShown: true
                     }}
                 />
 

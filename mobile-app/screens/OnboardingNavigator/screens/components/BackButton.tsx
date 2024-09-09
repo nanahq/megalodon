@@ -14,11 +14,11 @@ export function BackButton (props: BackButtonProps): JSX.Element {
                <IconButton
                    {...props}
                    testID="EnterPhoneNumberScreen.BackButton"
-                   iconSize={40}
+                   iconSize={30}
                    iconName='arrow-left'
                    iconType='Feather'
                    iconStyle={tailwind('text-black')}
-                   style={tailwind('w-16 h-16 rounded-full bg-primary-200  flex items-center justify-center')}
+                   style={tailwind('')}
                />
        </View>
     )

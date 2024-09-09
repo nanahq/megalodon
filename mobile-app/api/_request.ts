@@ -6,17 +6,8 @@ import {cookieParser} from "../../utils/cookieParser";
 
 type Environment = 'production' | 'development' | string
 export  function getUrl (gateway: APIService): string {
-    const environment: Environment = 'production'
 
-    let url: string
-
-    if (environment === 'development') {
-        url =   `${NetworkMapper.PLAYGROUND}/${ApiRoute[gateway]}/v1`
-    } else  {
-        url =`${NetworkMapper.PRODUCTION}/${ApiRoute[gateway]}/v1`
-    }
-
-    return url
+    return `${process.env.EXPO_PUBLIC_API_URL}/${ApiRoute[gateway]}/v1`
 }
 
 const config = {

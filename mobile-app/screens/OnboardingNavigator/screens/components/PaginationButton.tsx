@@ -1,7 +1,10 @@
 import { tailwind } from "@tailwind";
 import React, { useCallback, useEffect, useState } from "react";
 import { PaginationProps } from "react-native-swiper-flatlist";
-import {Pressable, Text} from "react-native";
+import {Pressable, Text, View} from "react-native";
+import {GenericButton} from "@components/commons/buttons/GenericButton";
+import {useNavigation} from "@react-navigation/native";
+import {OnboardingScreenName} from "@screens/OnboardingNavigator/ScreenName.enum";
 
 interface PaginationButtonProps extends PaginationProps {
     dismissModal: () => void;
@@ -9,13 +12,12 @@ interface PaginationButtonProps extends PaginationProps {
 export function PaginationButton({
                                      paginationIndex = 0,
                                      scrollToIndex,
-                                     dismissModal,
                                      size,
                                  }: PaginationButtonProps): JSX.Element {
 
     const [curIndex, setCurIndex] = useState(paginationIndex);
     const [buttonLabel, setButtonLabel] = useState("Next");
-
+    const navigator = useNavigation<any>()
     const goToNextPage = useCallback(
         (curPage: number) => {
             if (curPage < size) {
@@ -28,7 +30,6 @@ export function PaginationButton({
     const endOfPagination = curIndex === size - 1;
 
     useEffect(() => {
-        // check if user scrolls without pressing button or if animation is replayed
         if (curIndex !== paginationIndex) {
             return setCurIndex(paginationIndex);
         }
@@ -43,25 +44,22 @@ export function PaginationButton({
     }, [curIndex, paginationIndex]);
 
     return (
-        <Pressable
-            onPress={() => {
-                if (endOfPagination) {
-                    return dismissModal();
-                } else {
-                    return goToNextPage(curIndex + 1);
-                }
-            }}
-            style={tailwind("rounded-full text-center py-3.5 px-4 border", {
-                "bg-white": endOfPagination,
-            })}
-            testID={`${buttonLabel}_button`}
-        >
-            <Text
-                style={tailwind("font-semibold-v2 text-center text-base")}
-
-            >
-                {buttonLabel}
-            </Text>
-        </Pressable>
+       <View style={tailwind('flex flex-col w-full')} >
+           <GenericButton
+               backgroundColor={tailwind('bg-primary-100')}
+               labelColor={tailwind('text-white')}
+               label={endOfPagination ? "Get started" : "Next"}
+               onPress={() => {
+                   if (endOfPagination) {
+                       return navigator.navigate(OnboardingScreenName.ENTER_MOBILE_PHONE);
+                   } else {
+                       return goToNextPage(curIndex + 1);
+                   }
+               }}
+           />
+           <Pressable style={tailwind('mt-5 flex flex-row justify-center')}>
+               <Text>Skip</Text>
+           </Pressable>
+       </View>
     );
 }
