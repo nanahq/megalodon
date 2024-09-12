@@ -9,7 +9,7 @@ import {useAppDispatch} from "@store/index";
 import {NavigationProp, useNavigation} from "@react-navigation/native";
 import {BasketParamsList} from "@screens/AppNavigator/Screens/basket/BasketNavigator";
 import {BasketScreenName} from "@screens/AppNavigator/Screens/basket/BasketScreenName.enum";
-import {Tags, Trash} from "lucide-react-native";
+import {Tags, Trash2} from "lucide-react-native";
 import FastImage from "react-native-fast-image";
 
 export const BasketsItem: React.FC<{cart: Cart[], vendor: any}> = ({cart, vendor}) => {
@@ -60,14 +60,9 @@ export const BasketsItem: React.FC<{cart: Cart[], vendor: any}> = ({cart, vendor
                     </View>
                 </View>
             </View>
-            <View style={tailwind('mt-5 flex flex-row w-full')}>
+            <View style={tailwind('mt-5 flex flex-row items-center w-full')}>
                 <GenericButton onPress={() => navigation.navigate(BasketScreenName.SINGLE_BASKET)} backgroundColor={tailwind('flex-grow')} label="View Basket" labelColor={tailwind('text-white')} />
-               <GenericIconButton
-                    backgroundColor={tailwind('ml-2')}
-                   onPress={() => handleDeleteCartItem()}
-               >
-                   <Trash  style={tailwind('w-4 h-4 text-white mx-5')} color="#ffffff" />
-               </GenericIconButton>
+                <Trash2 onPress={handleDeleteCartItem} size={20} style={tailwind('w-4 h-4 text-black mx-5')} />
             </View>
         </View>
     )
@@ -76,31 +71,43 @@ export const BasketsItem: React.FC<{cart: Cart[], vendor: any}> = ({cart, vendor
 
  const _SingleBaskedItem: React.FC<{cart: Cart}> = (props) => {
     return (
-        <View style={tailwind('border-b-0.5 border-brand-gray-700 py-5')}>
+        <View style={tailwind('border-b-0.5 border-primary-50 py-3')}>
             <View style={tailwind('flex flex-row items-start w-full justify-between')}>
-                <View>
-                    <Text style={tailwind('text-gray-600 font-bold text-lg')}>{props.cart.cartItem.name}</Text>
-                    <View style={tailwind('flex flex-row flex-wrap')}>
-                        <Text>Options:: </Text>
-                        {props.cart.options.length > 0 && props.cart.options.map((option, index) => (
-                            <Text key={index} style={tailwind('text-brand-gray-700')}>| {option.name} </Text>
-                        ))}
+                <View style={tailwind('flex flex-row items-start mt-3')}>
+                    <View style={tailwind(' rounded-full bg-primary-50  flex flex-row items-center justify-center w-10 h-10')}>
+                        <Text style={tailwind('text-primary-100')}>{props.cart.quantity}</Text>
+                    </View>
+                    <View style={tailwind('flex flex-col  ml-4')}>
+                        <Text style={tailwind('text-black font-bold')}>{props.cart.cartItem.name}</Text>
+                        <View style={tailwind('flex flex-row flex-wrap mt-2')}>
+                            <Text>Options: </Text>
+                            {props.cart.options.length > 0 && props.cart.options.map((option, index) => (
+                                <Text key={index} style={tailwind('text-gray-600 text-sm')}> [{option.name}  <NumberFormat
+                                    prefix="+₦"
+                                    value={option.price}
+                                    thousandSeparator
+                                    displayType="text"
+                                    renderText={(value) => (
+                                        <Text style={tailwind("text-xs text-gray-600")}>{value}</Text>
+                                    )}
+                                /> ]</Text>
+                            ))}
+                        </View>
+                        <View style={tailwind('flex mt-3 flex-row items-center w-full justify-between')}>
+                            <NumberFormat
+                                prefix="₦"
+                                value={props.cart.totalValue}
+                                thousandSeparator
+                                displayType="text"
+                                renderText={(value) => (
+                                    <Text style={tailwind("text-sm text-primary-100")}>{value}</Text>
+                                )}
+                            />
+                        </View>
                     </View>
                 </View>
-                <Image source={{uri: props.cart.cartItem.photo, cache: 'force-cache'}} style={tailwind('rounded-lg')} height={50} width={50} />
-            </View>
-            <View>
-                <View style={tailwind('flex mt-3 flex-row items-center w-full justify-between')}>
-                    <Text>Quantity: {props.cart.quantity}</Text>
-                    <NumberFormat
-                        prefix="₦"
-                        value={props.cart.totalValue}
-                        thousandSeparator
-                        displayType="text"
-                        renderText={(value) => (
-                            <Text style={tailwind("text-sm text-brand-black-500")}>{value}</Text>
-                        )}
-                    />
+                <View style={tailwind('w-1/5 flex flex-row justify-end')}>
+                    <Image source={{uri: props.cart.cartItem.photo, cache: 'force-cache'}} style={tailwind('rounded-lg')} height={50} width={50} />
                 </View>
             </View>
         </View>

@@ -11,15 +11,15 @@ const _VendorCategorySection: React.FC<{category: ListingCategoryI, vendorOperat
         <View style={tailwind('my-5 flex-1')}>
             <View style={tailwind('flex flex-col')}>
                 <View style={tailwind('flex flex-row items-center')}>
-                    <Text style={tailwind('uppercase font-bold text-black')}>{props.category.name}</Text>
+                    <Text style={tailwind('uppercase font-bold text-black text-xl')}>{props.category.name}</Text>
                     {props.category.type === 'PRE_ORDER' && (
-                        <View style={tailwind('bg-primary-500 py-0.5 px-1 rounded-full ml-2')}>
+                        <View style={tailwind('bg-primary-100 py-0.5 px-1 rounded-full ml-2')}>
                             <Text style={tailwind('text-white text-xs text-center')}>Pre-orders</Text>
                         </View>
                     )}
                 </View>
                 {props.category.type === 'PRE_ORDER' && (
-                    <Text style={tailwind('text-xs text-gray-500 mt-2')}>This menu is only available on a scheduled basis. subscribe to vendor and we will let you know when menu is available</Text>
+                    <Text style={tailwind('text-xs text-gray-500 mt-1')}>This menu is only available on a scheduled basis. subscribe to vendor and we will let you know when menu is available</Text>
                 )}
             </View>
             <View style={tailwind('flex flex-col')}>
@@ -39,11 +39,11 @@ const VendorMenuCard: React.FC<{menu: ListingMenuI, onPress: () => void, disable
      return (
          <Pressable disabled={props.disabled} onPress={props.onPress} style={tailwind('flex flex-row items-center py-4 justify-between')}>
             <View style={tailwind('flex flex-col w-2/3')}>
-                <Text style={tailwind('')}>{props.menu.name}</Text>
-                <Text style={tailwind('text-brand-gray-700 my-2 text-sm')} ellipsizeMode="tail" numberOfLines={3}>{props.menu.desc}</Text>
-                <Text style={tailwind('mt-1 font-bold')}>₦{props.menu.price}</Text>
+                <Text style={tailwind('text-lg')}>{props.menu.name}</Text>
+                <Text style={tailwind('text-brand-gray-700 my-1 text-sm')} ellipsizeMode="tail" numberOfLines={3}>{props.menu.desc}</Text>
+                <Text style={tailwind('text-primary-100')}>₦{props.menu.price}</Text>
             </View>
-             <View style={tailwind('w-1/3 ml-8')}>
+             <View style={tailwind('w-1/3 self-end flex flex-row justify-end')}>
                  <FastImage
                      source={{uri: props.menu.photo, priority: FastImage.priority.high}}
                      style={[tailwind('rounded-lg'), { aspectRatio: 1, width: 80}]}

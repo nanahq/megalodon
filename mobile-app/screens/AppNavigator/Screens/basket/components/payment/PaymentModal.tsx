@@ -17,6 +17,7 @@ import {GenericButton} from "@components/commons/buttons/GenericButton";
 import Checkbox from "expo-checkbox";
 import {PaymentMethodI} from "@screens/AppNavigator/Screens/basket/components/payment/PaymentMethodBox";
 import {IconComponent} from "@components/commons/IconComponent";
+import {CircleX} from "lucide-react-native";
 
 interface PaymentMethodModalProps {
     promptModalName: string
@@ -66,7 +67,7 @@ const _PaymentMethodModal:React.FC<PaymentMethodModalProps> = (props) => {
             enablePanDownToClose
 
             footerComponent={({animatedFooterPosition}) => (
-                <ModalFooter animatedFooterPosition={animatedFooterPosition} scheduleDate={() => {
+                <ModalFooter selectedMethod={props.selectedPaymentMethod?.name} animatedFooterPosition={animatedFooterPosition} scheduleDate={() => {
                     closeModal()
                 }} />
             )}
@@ -93,8 +94,8 @@ const _PaymentMethodModal:React.FC<PaymentMethodModalProps> = (props) => {
         >
             <View style={tailwind('bg-white rounded-t-3xl px-5 pt-10 flex-1')}>
                 <View style={tailwind('flex flex-row w-full justify-between items-center mb-10')}>
-                    <Text style={tailwind('font-bold text-xl')}>Available payment methods</Text>
-                    <ModalCloseIcon onPress={() => closeModal()} size={32} />
+                    <Text style={tailwind('font-bold text-lg')}>Available payment methods</Text>
+                    <CircleX style={tailwind('text-black')} onPress={() => closeModal()} size={32} />
                 </View>
                 <View style={tailwind('flex-col mt-4')}>
                     <TouchableOpacity onPress={() => onValueChange('ONLINE')} style={tailwind("flex flex-row border-0.5 border-gray-200 px-2 items-center justify-between py-3")}>
@@ -107,14 +108,14 @@ const _PaymentMethodModal:React.FC<PaymentMethodModalProps> = (props) => {
                                     size={20}
                                 />
                                <View style={tailwind('flex flex-col')}>
-                                   <Text style={tailwind("ml-2 text-lg text-brand-black-500")}>Pay online</Text>
+                                   <Text style={tailwind("ml-2 text-lg text-black")}>Pay online</Text>
                                    <Text style={tailwind("ml-2 text-xs text-gray-500")}>Using card, bank transfer, ussd</Text>
                                </View>
                             </View>
                         </View>
                         <Checkbox
                             style={[{margin: 8}, tailwind('rounded-full')]}
-                            color={selection === 'ONLINE' ? getColor('brand-black-500') : undefined}
+                            color={selection === 'ONLINE' ? getColor('primary-100') : undefined}
                             value={selection === 'ONLINE'}
                         />
                     </TouchableOpacity>
@@ -133,7 +134,7 @@ const _PaymentMethodModal:React.FC<PaymentMethodModalProps> = (props) => {
                         </View>
                         <Checkbox
                             style={[{margin: 8}, tailwind('rounded-full')]}
-                            color={selection === 'WALLET' ? getColor('brand-black-500') : undefined}
+                            color={selection === 'WALLET' ? getColor('primary-100') : undefined}
                             value={selection === 'WALLET'}
                         />
                     </TouchableOpacity>
@@ -146,7 +147,7 @@ const _PaymentMethodModal:React.FC<PaymentMethodModalProps> = (props) => {
 interface ModalFooterProps extends BottomSheetFooterProps {
     scheduleDate: () => void
 }
-const ModalFooter: React.FC<ModalFooterProps> = ({animatedFooterPosition, scheduleDate}) => {
+const ModalFooter: React.FC<ModalFooterProps> = ({animatedFooterPosition, scheduleDate, selectedMethod}) => {
     const { bottom: bottomSafeArea } = useSafeAreaInsets();
     const isAndroid = Device.osName === 'Android'
 
@@ -159,8 +160,8 @@ const ModalFooter: React.FC<ModalFooterProps> = ({animatedFooterPosition, schedu
             <GenericButton
                 style={tailwind('w-full', {'mb-3': isAndroid})}
                 onPress={() => scheduleDate() }
-                label="Choose payment method"
-                backgroundColor={tailwind('bg-black')}
+                label={selectedMethod?.includes("WALLET") ? "Pay using wallet" : selectedMethod?.includes("ONLINE") ? "Pay online" : "Choose payment method"}
+                backgroundColor={tailwind('bg-primary-100')}
                 labelColor={tailwind('text-white font-medium')}
             />
         </BottomSheetFooter>

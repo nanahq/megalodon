@@ -8,9 +8,9 @@ const _DeliveryAddressBox: React.FC<{selectedAddress: AddressBookI | undefined, 
     return (
         <View style={tailwind('mt-10')}>
             <Text style={tailwind('text-black mb-2')}>Delivery Address</Text>
-            <Pressable onPress={props.onPress} style={tailwind('border-0.5 border-brand-ash py-4 px-2')}>
+            <Pressable onPress={props.onPress} style={tailwind('border-0.5 border-primary-50 py-4 px-2')}>
                 <View style={tailwind('flex flex-row items-center justify-between w-full')}>
-                    <IconComponent iconType="Ionicons" name="location-sharp" style={tailwind('text-black')} size={20} />
+                    <IconComponent iconType="Ionicons" name="location-sharp" style={tailwind('text-primary-100')} size={20} />
                     <View style={tailwind('flex flex-col')}>
                         <Text style={tailwind('')}>{props.selectedAddress === undefined ? 'Choose delivery address' : props.selectedAddress.labelName}</Text>
                     </View>

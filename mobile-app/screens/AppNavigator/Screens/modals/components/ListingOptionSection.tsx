@@ -55,12 +55,12 @@ const _ListingOptionSection: React.FC<{
             <View style={tailwind("flex flex-col px-4")}>
                 <View style={tailwind("flex flex-row items-center w-full justify-between")}>
                     <View>
-                        <Text style={tailwind(" text-2xl")}>{option.name}</Text>
-                        <Text style={tailwind("text-brand-gray-700 text-sm")}>{SelectedText()}</Text>
+                        <Text style={tailwind("text-black font-bold text-lg")}>{option.name}</Text>
+                        <Text style={tailwind("text-gray-600 text-sm")}>{SelectedText()}</Text>
                     </View>
                     {isRequired && (
-                        <View style={tailwind("bg-brand-gray-500 border-0.5 border-brand-gray-700 p-1 rounded-5")}>
-                            <Text style={tailwind("text-black text-sm")}>Required</Text>
+                        <View style={tailwind("bg-primary-100 border-0.5 border-primary-100 px-2 py-1 rounded-lg")}>
+                            <Text style={tailwind("text-white text-sm")}>required</Text>
                         </View>
                     )}
                 </View>
@@ -91,21 +91,21 @@ const CheckBoxes: React.FC<{
 }> = ({ option, onValueChange, isChecked, isRequired }) => {
     return (
         <View style={tailwind("flex flex-row items-center justify-between py-2 border-b-0.5 border-gray-200")}>
-            <View style={tailwind("flex flex-col")}>
-                <Text style={tailwind(" text-lg text-brand-black-500")}>{option.name}</Text>
-                {+option.price ? (
-                    <NumberFormat
-                        prefix="+ ₦"
-                        value={option.price}
-                        thousandSeparator
-                        displayType="text"
-                        renderText={(value) => (
-                            <Text style={tailwind("text-sm text-brand-black-500")}>{value}</Text>
-                        )}
-                    />
-                ):  <Text style={tailwind("text-sm text-brand-black-500")}>Free</Text>}
+            <View style={tailwind("flex flex-row items-center")}>
+                <Checkbox style={[{padding: 5}, tailwind('border-1.5 border-primary-100', {'rounded-full': isRequired})]} color={isChecked ? getColor('primary-100') : undefined} value={isChecked} onValueChange={onValueChange} />
+                <Text style={tailwind("ml-2.5 text-lg text-darkblue-50")}>{option.name}</Text>
             </View>
-            <Checkbox style={[{margin: 8}, tailwind({'rounded-full': isRequired})]} color={isChecked ? getColor('brand-black-500') : undefined} value={isChecked} onValueChange={onValueChange} />
+            {+option.price ? (
+                <NumberFormat
+                    prefix="+ ₦"
+                    value={option.price}
+                    thousandSeparator
+                    displayType="text"
+                    renderText={(value) => (
+                        <Text style={tailwind("text-sm text-gray-400")}>{value}</Text>
+                    )}
+                />
+            ):  <Text style={tailwind("text-sm text-brand-black-500")}>Free</Text>}
         </View>
     );
 };

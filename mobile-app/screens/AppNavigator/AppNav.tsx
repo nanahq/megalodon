@@ -26,12 +26,14 @@ import {useAnalytics} from "@segment/analytics-react-native";
 import {PromotionModal} from "@screens/AppNavigator/Screens/modals/Promotion.modal";
 import Constants from "expo-constants";
 import {ProfileNavigator} from "@screens/AppNavigator/Screens/profile/ProfileNavigator";
+import {BasketNavigator} from "@screens/AppNavigator/Screens/basket/BasketNavigator";
+import {PromotionNavigator} from "@screens/AppNavigator/Screens/promotions/PromotionNavigator";
 
 const App = createStackNavigator<AppParamList>()
 
 export interface AppParamList {
     [ModalScreenName.MODAL_VENDOR_SCREEN]: {
-        vendor: VendorUserI,
+        vendor: any,
         delivery?: DeliveryFeeResult
     },
 
@@ -169,6 +171,7 @@ export function AppNavigator(): JSX.Element {
         <NavigationContainer linking={LinkingConfiguration}>
             <App.Navigator screenOptions={{
                 headerShown: false,
+                headerBackground: "#ffffff"
             }}>
                 <App.Group screenOptions={{
                     cardStyleInterpolator: isAndroid ? CardStyleInterpolators.forRevealFromBottomAndroid : CardStyleInterpolators.forHorizontalIOS,
@@ -177,11 +180,13 @@ export function AppNavigator(): JSX.Element {
                     animationEnabled: true,
                 }}>
                     <App.Screen component={BottomTabNavigator} name="App" />
+                    <App.Screen component={ProfileNavigator} name="Profile" />
+                    <App.Screen component={BasketNavigator} name="Basket" />
                 </App.Group>
-                <App.Screen component={ProfileNavigator} name="Profile" />
 
                 <App.Group
                     screenOptions={{
+                        cardStyleInterpolator: isAndroid ? CardStyleInterpolators.forRevealFromBottomAndroid : CardStyleInterpolators.forHorizontalIOS,
                         headerShown: false,
                         presentation: 'modal',
                         cardShadowEnabled: true,

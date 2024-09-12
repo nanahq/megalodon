@@ -42,7 +42,13 @@ export function GenericButton (props: Props): JSX.Element {
             style={[ tailwind('rounded-lg', {
                 'bg-brand-gray-700': props.disabled,
                 'flex flex-row justify-center w-full items-center bg-brand-gray-700': props.loading
-            }), style, tailwind('bg-primary-100 py-3'), backgroundColor]}
+            }), style, tailwind('bg-primary-100 py-3.5'), backgroundColor, {
+                shadowColor: 'rgba(0,0,0, .4)', // IOS
+                shadowOffset: { height: 1, width: 1 }, // IOS
+                shadowOpacity: 1, // IOS
+                shadowRadius: 1, //IOS
+                elevation: 10, // Android
+            }]}
             {...rest}
         >
             <Text style={[tailwind('text-center '), props.labelColor as any] }>{label} {props.loading !== undefined && props.loading && <LoaderComponent loaderColor="white" size={16} style={tailwind('pl-2 text-white')} />}</Text>

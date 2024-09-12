@@ -11,9 +11,9 @@ const _PromocodeBox: React.FC = () => {
     const {couponFormattedMeta, coupon} = usePromoCode()
     return (
         <View style={tailwind('mt-10')}>
-            <Pressable onPress={() => navigation.navigate(ModalScreenName.MODAL_PROMO_SCREEN)} style={tailwind('border-0.5 border-brand-ash py-4 px-2')}>
+            <Pressable onPress={() => navigation.navigate(ModalScreenName.MODAL_PROMO_SCREEN)} style={tailwind('border-0.5 border-primary-50 py-4 px-2')}>
                 <View style={tailwind('flex flex-row items-center justify-between w-full')}>
-                    <IconComponent iconType="AntDesign" name="tag" style={tailwind('text-black')} size={20} />
+                    <IconComponent iconType="AntDesign" name="tag" style={tailwind('text-primary-100')} size={20} />
                     <View style={tailwind('flex flex-col')}>
                         <Text style={tailwind('')}>{coupon === undefined ? 'Add promo code' : coupon.code}</Text>
                         {couponFormattedMeta !== undefined && (

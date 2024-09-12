@@ -46,8 +46,8 @@ export const BasketSingle: React.FC = () => {
             headerTitle: vendor?.businessName,
             headerBackTitleVisible: false,
             headerTitleAlign: 'left',
-            headerTitleStyle: tailwind('text-xl'),
-            headerLeft: () => <ModalCloseIcon onPress={() => navigation.navigate(BasketScreenName.BASKET)} />,
+            headerTitleStyle: tailwind('text-lg'),
+            headerLeft: () => <ModalCloseIcon size={18} onPress={() => navigation.goBack()} />,
         })
     }, [])
 
@@ -62,8 +62,9 @@ export const BasketSingle: React.FC = () => {
     return (
        <View style={tailwind('flex-1 bg-white relative px-4')}>
            <ScrollView style={tailwind('flex-1 flex-col ')}>
-               <View>
-                   <View style={tailwind('flex flex-col my-3')}>
+               <View style={tailwind('flex flex-col')}>
+                   <Text style={tailwind('text-xl font-bold')}>Order Items</Text>
+                   <View style={tailwind('flex flex-col my-1.5')}>
                        {cart.cart?.map((_cart, index) => (
                            <SingleBaskedItem cart={_cart} key={index + _cart.cartItem._id}/>
                        ))}
@@ -82,7 +83,7 @@ export const BasketSingle: React.FC = () => {
                    </View>
                </View>
            </ScrollView>
-           <GenericButton style={tailwind('absolute bottom-0 w-full self-center mb-10')} onPress={() => onPress()} label="Go to checkout" labelColor={tailwind('font-medium text-white')} backgroundColor={tailwind('bg-black')} testId="" />
+           <GenericButton style={tailwind('absolute bottom-0 w-full self-center mb-10')} onPress={() => onPress()} label="Go to checkout" labelColor={tailwind('font-medium text-white')} backgroundColor={tailwind('bg-primary-100')} testId="" />
        </View>
     )
 }
