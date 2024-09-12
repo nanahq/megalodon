@@ -112,7 +112,7 @@ export const AddAddressModal: React.FC<AddAddressModalProps> = ({navigation, rou
                 shadowOpacity: 8,
                 shadowRadius: 12,
             },
-            headerLeft: () => <ModalCloseIcon onPress={() => profileNavigation.navigate(HomeScreenName.HOME, {})} />,
+            headerLeft: () => <ModalCloseIcon size={22} onPress={() => profileNavigation.goBack()} />,
         })
     }, [])
     const handleAddNewAddress =  async () => {
@@ -166,8 +166,11 @@ export const AddAddressModal: React.FC<AddAddressModalProps> = ({navigation, rou
         })
         const { status } = await Location.requestForegroundPermissionsAsync();
 
+        console.log(status)
         if (status !== 'granted') {
-            showTost(toast, 'Permission denied', 'error')
+            showTost(toast, 'We can not get permission. Please go to settings and give Nana location access', 'error')
+            setGettingLocation(false)
+
             return
         }
         const {coords: {longitude, latitude}} = await Location.getCurrentPositionAsync({
@@ -180,7 +183,6 @@ export const AddAddressModal: React.FC<AddAddressModalProps> = ({navigation, rou
         showTost(toast, 'Precise location added', 'success')
 
         setGettingLocation(false)
-
 
     }
 
@@ -264,13 +266,13 @@ export const AddAddressModal: React.FC<AddAddressModalProps> = ({navigation, rou
                         <View style={tailwind('flex flex-row flex-wrap items-center w-full')}>
                             {addressLabels?.map((label, index) => (
                                 <TouchableOpacity key={index} style={tailwind('w-28  mb-2 flex flex-row items-center justify-center border-brand-gray-400 rounded-sm  border-0.5 py-2 px-1 mr-1 relative', {
-                                    'border-primary-800': label._id === newAddress.labelId
+                                    'border-primary-100': label._id === newAddress.labelId
                                 })} onPress={() => handleUpdateForm('labelId', label._id)}>
                                     <Text >{label.name}</Text>
                                     <View
                                         style={tailwind('rounded-full w-2 h-2 absolute bottom-1 right-1', {
-                                            'bg-primary-500': label._id === newAddress.labelId,
-                                            'border-0.5 border-brand-gray-400': label._id !== newAddress.labelId
+                                            'bg-primary-100': label._id === newAddress.labelId,
+                                            'border-0.5 border-primary-50': label._id !== newAddress.labelId
                                         })}
                                     />
                                 </TouchableOpacity>
@@ -281,7 +283,7 @@ export const AddAddressModal: React.FC<AddAddressModalProps> = ({navigation, rou
                         )}
                     </View>
                 )}
-                <GenericButton loading={addingAddress} onPress={handleAddNewAddress} label="Add address" backgroundColor={tailwind('bg-black')} labelColor={tailwind('text-white font-medium')} />
+                <GenericButton loading={addingAddress} onPress={handleAddNewAddress} label="Add address" backgroundColor={tailwind('bg-primary-100')} labelColor={tailwind('text-white font-medium')} />
             </View>
         </View>
     )

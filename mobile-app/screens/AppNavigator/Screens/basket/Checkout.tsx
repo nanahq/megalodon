@@ -201,8 +201,8 @@ export const Checkout: React.FC = () => {
             headerTitle: 'Delivery Details',
             headerBackTitleVisible: false,
             headerTitleAlign: 'left',
-            headerTitleStyle:tailwind('text-xl'),
-            headerLeft: () => <ModalCloseIcon onPress={() => navigation.navigate(BasketScreenName.SINGLE_BASKET, {})} />,
+            headerTitleStyle:tailwind('text-lg'),
+            headerLeft: () => <ModalCloseIcon size={18} onPress={() => navigation.navigate(BasketScreenName.SINGLE_BASKET, {})} />,
         })
     }, [])
 
@@ -345,7 +345,7 @@ export const Checkout: React.FC = () => {
             </View>
 
             <View style={tailwind('mt-5 mb-10')}>
-                <GenericButton  loading={placingOrder} disabled={check()} onPress={placeOrder} labelColor={tailwind('text-white font-bold')}  label="Place order" backgroundColor={tailwind('bg-black')} />
+                <GenericButton  loading={placingOrder} disabled={check()} onPress={placeOrder} labelColor={tailwind('text-white font-bold')}  label="Place order" backgroundColor={tailwind('bg-primary-100')} />
             </View>
             <AddressBookModal
                 selectedAddressId={selectedAddress?._id}

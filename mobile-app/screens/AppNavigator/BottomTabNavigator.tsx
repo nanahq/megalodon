@@ -13,6 +13,7 @@ import React from "react";
 import {useNavigation} from "@react-navigation/native";
 import {HomeScreen} from "@screens/AppNavigator/Screens/home/Home.Screen";
 import {CardStyleInterpolators} from "@react-navigation/stack";
+import {useAppSelector} from "@store/index";
 const BottomTab = createBottomTabNavigator<BottomTabParamList>()
 
 export interface BottomTabParamList {
@@ -44,13 +45,12 @@ export function BottomTabNavigator ():JSX.Element {
             screenOptions={{
                 cardStyleInterpolator: isAndroid ? CardStyleInterpolators.forRevealFromBottomAndroid : CardStyleInterpolators.forVerticalIOS,
                 headerShown: true,
-                headerBackground: tailwind('bg-white'),
                 tabBarLabelPosition: "below-icon",
                 tabBarStyle: {height: insert.bottom + 80},
                 tabBarActiveTintColor: '#ffffff',
                 tabBarInactiveTintColor: '#B5B5B5',
                 tabBarItemStyle: tailwind("pb-4 pt-1"),
-                headerStyle: tailwind('bg-white pt-3'),
+                headerStyle: tailwind('bg-white'),
                 lazy: true,
                 header: () =>  (
                     <View style={[tailwind('flex flex-row items-center justify-between px-4 bg-white'), {marginTop: insert.top + (insert.top * 0.2)}]}>

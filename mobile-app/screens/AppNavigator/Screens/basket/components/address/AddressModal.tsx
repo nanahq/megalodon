@@ -15,6 +15,7 @@ import {ModalCloseIcon} from "@screens/AppNavigator/Screens/modals/components/Mo
 import {GenericButton} from "@components/commons/buttons/GenericButton";
 import {IconComponent} from "@components/commons/IconComponent";
 import {useAppSelector} from "@store/index";
+import {CircleX} from "lucide-react-native";
 
 
 export const AddressIconMapper: Record<string, any> = {
@@ -105,14 +106,14 @@ export function AddressBookModal(props: AddressBookModalProps): JSX.Element {
             backgroundComponent={(backgroundProps: BottomSheetBackgroundProps) => (
                 <View
                     {...backgroundProps}
-                    style={tailwind('bg-brand-blue-200 rounded-t-xl')}
+                    style={tailwind('bg-primary-50 rounded-t-xl')}
                 />
             )}
         >
             <ScrollView style={tailwind('bg-white rounded-t-3xl px-5 pt-10 flex-1')}>
                 <View style={tailwind('flex flex-row w-full justify-between items-center')}>
-                    <Text style={tailwind('text-2xl')}>Saved Addresses</Text>
-                    <ModalCloseIcon buttonStyle={[tailwind('bg-gray-200 rounded-full flex flex-row items-center justify-center p-0 m-0'), {width: 50, height: 50}]} onPress={() => closeModal()} size={22} />
+                    <Text style={tailwind('text-lg font-bold')}>Saved Addresses</Text>
+                    <CircleX style={[tailwind('text-black')]} onPress={() => closeModal()} size={32} />
                 </View>
                 {addressBook.length > 0 ? (
                     <View style={tailwind('flex flex-col')}>
@@ -128,14 +129,14 @@ export function AddressBookModal(props: AddressBookModalProps): JSX.Element {
                                     style={tailwind('py-3 justify-between flex flex-row items-center border-b-1.5 border-brand-ash')}
                                 >
                                     <View style={tailwind('flex flex-row items-center')}>
-                                        <IconComponent iconType={iconMeta.type} name={iconMeta.name} style={tailwind(' mr-3')} size={30} />
+                                        <IconComponent iconType={iconMeta.type} name={iconMeta.name} style={tailwind(' text-primary-50 mr-3')} size={30} />
                                         <View style={tailwind('flex flex-col')}>
                                             <Text style={tailwind('text-lg capitalize')}>{address.labelName}</Text>
                                             <Text style={tailwind('text-sm text-brand-gray-700')}>{address.address}</Text>
                                         </View>
                                     </View>
                                     {props.selectedAddressId !== undefined && props.selectedAddressId === address._id && (
-                                        <IconComponent iconType="AntDesign" name="check" size={22} style={tailwind('text-primary-500')} />
+                                        <IconComponent iconType="AntDesign" name="check" size={22} style={tailwind('text-primary-100')} />
                                     )}
                                 </TouchableOpacity>
                             )
@@ -167,7 +168,7 @@ const ModalFooter: React.FC<ModalFooterProps> = ({animatedFooterPosition, onAddN
                style={tailwind('w-full', {'mb-3': isAndroid})}
                onPress={() => onAddNewAddress() }
                label="Add new address"
-               backgroundColor={tailwind('bg-black')}
+               backgroundColor={tailwind('bg-primary-100')}
                labelColor={tailwind('text-white')}
                />
         </BottomSheetFooter>

@@ -1,7 +1,7 @@
 import {StackScreenProps} from "@react-navigation/stack";
 import {HomeScreenName} from "@screens/AppNavigator/Screens/home/HomeScreenNames.enum";
-import React, {useCallback, useEffect, useMemo, useState} from "react";
-import {  ListRenderItemInfo, ScrollView, Text, View} from "react-native";
+import React, {useCallback, useEffect, useMemo, useRef, useState} from "react";
+import {ListRenderItemInfo, NativeScrollEvent, NativeSyntheticEvent, ScrollView, Text, View, Animated} from "react-native";
 import {tailwind} from "@tailwind";
 import {ModalCloseIcon} from "@screens/AppNavigator/Screens/modals/components/ModalCloseIcon";
 import {ListingCategoryI, ListingMenuI, ScheduledListingI, VendorReviewOverview} from "@nanahq/sticky";
@@ -28,7 +28,7 @@ import moment from 'moment';
 import {NumericFormat as NumberFormat} from "react-number-format";
 import {useAnalytics} from "@segment/analytics-react-native";
 import {isRestaurantOpen} from "../../../../../utils/DateFormatter";
-
+import {BellRing, Bell, BellDotIcon, AlarmClockCheck, AlarmClockOff} from 'lucide-react-native'
 type VendorModalScreenProps = StackScreenProps<AppParamList, ModalScreenName.MODAL_VENDOR_SCREEN>
 
  export const VendorModal: React.FC<VendorModalScreenProps> = ({navigation, route}) => {
@@ -135,17 +135,13 @@ return
 
         useEffect(() => {
             navigation.setOptions({
-                headerShown: true,
-                headerTitle: route?.params?.vendor?.businessName,
-                headerBackTitleVisible: false,
-                headerTitleAlign: 'left',
-                headerTitleStyle: tailwind('text-xl'),
-                headerLeft: () => <ModalCloseIcon onPress={() => navigation.navigate(HomeScreenName.HOME)} />,
+                headerShown: false,
             })
         }, [])
 
+
      const restaurantOperationStatus = useMemo(() => {
-         return isRestaurantOpen(route.params.vendor.settings?.startTime ?? '', route.params.vendor.settings?.cutoffTime ?? '')
+         return isRestaurantOpen(route.params.vendor.settings?.operations?.startTime ?? '', route.params.vendor.settings?.operations?.cutoffTime ?? '')
      }, [route.params.vendor])
 
      const warnClosed = () => {
@@ -173,11 +169,9 @@ return
      }, [])
 
      const goToBasket = () => {
-         setTimeout(() => {
-             navigation.navigate(AppScreenName.BASKET, {
-                 screen: BasketScreenName.BASKET
-             })
-         }, 1000)
+         navigation.navigate(AppScreenName.BASKET, {
+             screen: BasketScreenName.SINGLE_BASKET
+         })
      }
 
      const getVendorDelivery = (): string => {
@@ -200,29 +194,82 @@ return
      }
 
 
+     const fadeAnim = useRef(new Animated.Value(1)).current; // Animated value for fade
+     const [headerVisible, setHeaderVisible] = useState(true); // Header visibility state
+
+     // Smoothly fade in the header
+     const fadeIn = () => {
+         Animated.timing(fadeAnim, {
+             toValue: 1,
+             duration: 800,
+             useNativeDriver: true,
+         }).start(() => {
+             setHeaderVisible(true)
+             navigation.setOptions({
+                 headerShown: true,
+                 headerTitle: route.params.vendor.businessName,
+                 headerBackTitleVisible: false,
+                 headerTitleAlign: 'left',
+                 headerTitleStyle: tailwind('text-xl'),
+                 headerLeft: () => (
+                     <ModalCloseIcon size={24} onPress={() => navigation.goBack()} />
+                 ),
+             });
+         });
+     };
+
+     const fadeOut = () => {
+         Animated.timing(fadeAnim, {
+             toValue: 0,
+             duration: 800,
+             useNativeDriver: true,
+         }).start(() => {
+             setHeaderVisible(false)
+             navigation.setOptions({
+                 headerShown: false
+             })
+         });
+     };
+
+     const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+         const scrollOffsetY = event.nativeEvent.contentOffset.y;
+
+         if (scrollOffsetY > 20) {
+             if (!headerVisible) {
+                 fadeIn();
+             }
+         } else {
+             if (headerVisible) {
+                 fadeOut();
+
+             }
+         }
+     };
+
 
     return (
         <View style={tailwind('flex-1 bg-white relative')}>
-            <ScrollView style={tailwind('pb-20')}>
+            <ScrollView  scrollEventThrottle={16} onScroll={(event) => handleScroll(event)} style={tailwind('pb-20')}>
                 <View style={tailwind('flex flex-col w-full')}>
                     <View style={tailwind('relative')}>
-                        <FastImage  resizeMode={FastImage.resizeMode.cover} source={{ uri: route.params?.vendor?.businessImage, priority:FastImage.priority.high }} style={[tailwind("w-full"), { height: 170 }]} />
+                        <FastImage  resizeMode={FastImage.resizeMode.cover} source={{ uri: route.params?.vendor?.businessImage, priority:FastImage.priority.high }} style={[tailwind("w-full"), { height: 250 }]} />
+                        <ModalCloseIcon size={24} iconStyle={tailwind('mx-0 m-1.5')} buttonStyle={tailwind('left-2 absolute top-10 bg-gray-200 rounded-full')} onPress={() => navigation.goBack()} />
                         <View style={tailwind('absolute bottom-2  left-2 flex flex-row items-center')}>
                             {route.params.vendor.settings.deliveryType !== 'PRE_ORDER' && (
-                                <View style={tailwind('rounded-xl py-1.5 ', {'bg-primary-500 px-4': restaurantOperationStatus, 'bg-gray-100 px-2': !restaurantOperationStatus})}>
+                                <View style={tailwind('rounded-xl py-1.5 ', {'bg-primary-100 px-4': restaurantOperationStatus, 'bg-gray-100 px-2': !restaurantOperationStatus})}>
                                     <Text style={tailwind('text-center text-white', {'text-black': !restaurantOperationStatus } )}>{restaurantOperationStatus ? 'Open' : `Closed`}</Text>
                                 </View>
                             )}
                             <View style={tailwind('rounded-xl py-1.5 bg-gray-100 ml-2 px-4')}>
                                 <View style={tailwind('flex flex-row items-center')}>
-                                    <Text style={tailwind('text-black')}>Min order:</Text>
+                                    <Text style={tailwind('text-black')}>Min order: </Text>
                                     <NumberFormat
                                         prefix="₦"
-                                        value={route.params.vendor.settings.minOrder}
+                                        value={route.params.vendor.settings?.operations?.minOrder}
                                         thousandSeparator
                                         displayType="text"
                                         renderText={(value) => (
-                                            <Text style={tailwind("text-center text-primary-500")}>{value}</Text>
+                                            <Text style={tailwind("text-center")}>{ value}</Text>
                                         )}
                                     />
                                 </View>
@@ -236,9 +283,9 @@ return
                             </Text>
                                 <View style={tailwind('flex flex-row')}>
                                     {vendorHasSubscription?.userIsSubscribed ? (
-                                        <IconButton onPress={handleSubscriptions} disabled={subscribing} iconName="notifications-sharp" iconStyle={tailwind('text-primary-500')} iconType="Ionicons" iconSize={32} />
+                                        <BellDotIcon onPress={handleSubscriptions} size={20} disabled={subscribing} style={tailwind('text-primary-100')} />
                                     ) : (
-                                        <IconButton onPress={handleSubscriptions} disabled={subscribing} iconName="notifications-outline"  iconType="Ionicons" iconSize={32} />
+                                        <BellRing onPress={handleSubscriptions} size={20} style={tailwind('text-black')} />
                                     )}
                                 </View>
                         </View>
@@ -258,22 +305,22 @@ return
                                     </View>
                                 <View style={tailwind('flex flex-row items-center w-full')}>
                                     <View style={tailwind('flex flex-row items-center mt-1')}>
-                                        <Text style={tailwind('text-brand-gray-700 text-sm')}>Delivery in {route.params.delivery?.duration ?? '20'} Minutes</Text>
+                                        <Text style={tailwind('text-gray-600 text-sm')}>Delivery in {route.params.delivery?.duration ?? '20'} Minutes</Text>
                                     </View>
                                     <View style={tailwind('flex flex-row items-center mt-1 border-l-1.5 ml-5 px-2 border-brand-gray-700')}>
-                                        <Text style={tailwind('text-brand-gray-700 text-sm')}>Accepts {getVendorDelivery()}</Text>
+                                        <Text style={tailwind('text-gray-600 text-sm')}>Accepts {getVendorDelivery()}</Text>
                                     </View>
                                 </View>
-                                <View style={tailwind('flex flex-col w-full')}>
-                                    <View style={tailwind('flex flex-row mt-1  items-center')}>
-                                        <IconComponent iconType="AntDesign" name="clockcircleo" style={tailwind('text-brand-gray-700')} />
-                                        <Text  style={tailwind('text-brand-gray-700 text-sm ml-1')}>Opens</Text>
-                                        <Text style={tailwind('text-brand-gray-700 text-sm ml-2')}>{moment(route.params.vendor.settings?.startTime).format('HH:mm')}</Text>
+                                <View style={tailwind('flex pb-3 flex-row items-center w-full border-b-0.5 border-gray-200')}>
+                                    <View style={tailwind('flex flex-row mt-1  items-center mr-3')}>
+                                        <AlarmClockCheck size={16} style={tailwind('text-gray-600')} />
+                                        <Text  style={tailwind('text-gray-600 text-sm ml-1')}>Opens</Text>
+                                        <Text style={tailwind('text-gray-600 text-sm ml-2')}>{moment(route.params.vendor.settings?.operations?.startTime).format('HH:mm')}</Text>
                                     </View>
                                     <View style={tailwind('flex flex-row mt-1 items-center')}>
-                                        <IconComponent iconType="AntDesign" name="clockcircleo" style={tailwind('text-brand-gray-700')} />
-                                        <Text  style={tailwind('text-brand-gray-700 text-sm ml-1')}>Closes</Text>
-                                        <Text style={tailwind('text-brand-gray-700 text-sm ml-2')}>{moment(route.params.vendor.settings?.cutoffTime).format('HH:mm')}</Text>
+                                        <AlarmClockOff size={16} style={tailwind('text-gray-600')} />
+                                        <Text  style={tailwind('text-gray-600 text-sm ml-1')}>Closes</Text>
+                                        <Text style={tailwind('text-gray-600 text-sm ml-2')}>{moment(route.params.vendor.settings?.operations?.cutoffTime).format('HH:mm')}</Text>
                                     </View>
                                 </View>
                                 {scheduled.length > 0 && (
@@ -296,7 +343,7 @@ return
             </ScrollView>
             {cart !== undefined && (
                 <View style={tailwind('px-4 mb-7')}>
-                    <GenericButton onPress={() => goToBasket() } label={`View basket (${cart?.length})`} labelColor={tailwind('text-white')} backgroundColor={tailwind('bg-black')} testId="" />
+                    <GenericButton onPress={() => goToBasket() } label={`View order (${cart?.length})`} labelColor={tailwind('text-white')} backgroundColor={tailwind('bg-primary-100 py-2.5')} testId="" />
                 </View>
             )}
         </View>

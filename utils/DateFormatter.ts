@@ -47,5 +47,9 @@ export function isRestaurantOpen(openingTime: string, closingTime: string): bool
     const opening = moment(formattedOpening, format)
     const closing = moment(formattedClosing, format)
 
+    console.log({
+        opening,
+        closing
+    })
     return now.isBetween(opening, closing, undefined, '[]');
 }

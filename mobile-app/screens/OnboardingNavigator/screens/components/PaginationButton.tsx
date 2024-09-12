@@ -57,7 +57,7 @@ export function PaginationButton({
                    }
                }}
            />
-           <Pressable style={tailwind('mt-5 flex flex-row justify-center')}>
+           <Pressable onPress={() => navigator.navigate(OnboardingScreenName.ENTER_MOBILE_PHONE)} style={tailwind('mt-5 flex flex-row justify-center')}>
                <Text>Skip</Text>
            </Pressable>
        </View>

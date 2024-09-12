@@ -15,6 +15,7 @@ import {CouponRedeemResponse} from "@nanahq/sticky";
 import {useToast} from "react-native-toast-notifications";
 import {showTost} from "@components/commons/Toast";
 import {fetchProfile} from "@store/profile.reducer";
+import {TextInputWithLabel} from "@components/commons/inputs/TextInputWithLabel";
 
 type PromotionModalProps = StackScreenProps<AppParamList, ModalScreenName.MODAL_PROMO_SCREEN>;
 
@@ -30,12 +31,11 @@ export const PromotionModal: React.FC<PromotionModalProps> = ({ navigation }) =>
         void analytics.screen(ModalScreenName.MODAL_PROMO_SCREEN)
         navigation.setOptions({
             headerShown: true,
-            headerTitle: `Promotion`,
+            headerTitle: `Coupon & Gift cards`,
             headerBackTitleVisible: false,
             headerTitleAlign: 'left',
             headerTitleStyle: tailwind('text-xl'),
-            cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS,
-            headerLeft: () => <ModalCloseIcon onPress={handleNavigationBack} />,
+            headerLeft: () => <ModalCloseIcon size={22} onPress={handleNavigationBack} />,
         });
     }, []);
 
@@ -76,12 +76,12 @@ export const PromotionModal: React.FC<PromotionModalProps> = ({ navigation }) =>
     return (
         <ScrollView style={tailwind('flex-1 bg-white px-5 overflow-hidden')}>
             <View style={tailwind('flex flex-col mt-5')}>
-                <GenericTextInputV2
+                <TextInputWithLabel
                     editable={!submitting}
-                    placeholder="Enter Promo Code"
+                    placeholder="FREEDELIVERY"
                     onChangeText={(value) => setCode(value)}
                     style={tailwind('text-base')}
-                    label="Promo code"
+                    label="Enter Promo code"
                     containerStyle={tailwind('mb-3 overflow-hidden')}
                     textAlign='left'
                     testID="EnterPhoneNumberScreen.TextInput"
@@ -92,7 +92,7 @@ export const PromotionModal: React.FC<PromotionModalProps> = ({ navigation }) =>
                     disabled={code.length < 3}
                     onPress={() => handleSubmitCode()}
                     label="Redeem code"
-                    backgroundColor={tailwind('bg-primary-500')}
+                    backgroundColor={tailwind('bg-primary-100')}
                     labelColor={tailwind('text-white')}
                 />
             </View>

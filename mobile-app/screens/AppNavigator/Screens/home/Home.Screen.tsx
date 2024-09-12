@@ -1,4 +1,4 @@
-import {Dimensions, ScrollView, View, Text, TextInput} from "react-native";
+import {Dimensions, ScrollView, View, Text, TextInput, Pressable} from "react-native";
 import React, {useEffect} from "react";
 import {SafeAreaView} from "react-native-safe-area-context";
 import {tailwind} from "@tailwind";
@@ -17,9 +17,15 @@ import {IconButton} from "@components/commons/buttons/IconButton";
 import {SearchBar} from "@screens/AppNavigator/Screens/home/components/SearchBar";
 import {AdvertComponent, HomepageAdvert} from "@screens/AppNavigator/Screens/home/components/Advert";
 import AdImage from '@assets/ads/free-delivery.png'
+import {ShoppingBasket} from "lucide-react-native";
+import {useNavigation} from "@react-navigation/native";
+import {CartIcon} from "@screens/AppNavigator/Screens/home/components/CartIcon";
 
 const {height} = Dimensions.get('window')
 export function HomeScreen (): JSX.Element {
+    const { hasItemsInCart} = useAppSelector(state => state.cart)
+
+    const navigator = useNavigation<any>()
     const {hasFetchedProfile, profile} = useAppSelector((state: RootState) => state.profile)
     const { hasFetchedListings, hompage} = useAppSelector(state => state.listings)
     const dispatch = useAppDispatch()
@@ -57,7 +63,7 @@ export function HomeScreen (): JSX.Element {
 
     return (
         <View
-            style={tailwind('flex-1 bg-white pt-4 px-5')}
+            style={tailwind('flex-1 relative bg-white pt-4 px-5')}
 
         >
             <ScrollView
@@ -128,7 +134,9 @@ export function HomeScreen (): JSX.Element {
                 )}
 
             </ScrollView>
-
+            {hasItemsInCart && (
+                <CartIcon/>
+            )}
         </View>
 
     )

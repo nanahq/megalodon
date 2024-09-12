@@ -1,9 +1,17 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {ListingMenuI, ListingOption, ListingOptionGroupI} from "@nanahq/sticky";
 import {useToast} from "react-native-toast-notifications";
 import {_api} from "@api/_request";
 import {showTost} from "@components/commons/Toast";
-import { ScrollView, Text, TouchableOpacity, View} from "react-native";
+import {
+    Animated,
+    NativeScrollEvent,
+    NativeSyntheticEvent,
+    ScrollView,
+    Text,
+    TouchableOpacity,
+    View
+} from "react-native";
 import {StackScreenProps} from "@react-navigation/stack";
 import {tailwind} from "@tailwind";
 import {ModalCloseIcon} from "@screens/AppNavigator/Screens/modals/components/ModalCloseIcon";
@@ -129,19 +137,6 @@ export const ListingModal: React.FC<ListingModalScreenProps>  = ({navigation, ro
     }, [route.params.listing._id])
 
     useEffect(() => {
-        navigation.setOptions({
-            headerShown: true,
-            headerTitle: route.params.listing.name,
-            headerBackTitleVisible: false,
-            headerTitleAlign: 'left',
-            headerTitleStyle: tailwind('text-xl'),
-            headerRight: () => <ShareListingIcon  onPress={() => {}}/>,
-            headerLeft: () => <ModalCloseIcon onPress={() => navigation.goBack()} />,
-        })
-    }, [])
-
-
-    useEffect(() => {
         if (listing !== undefined && listing._id ) {
             const requiredOptions: ListingOptionGroupI[] = []
 
@@ -208,17 +203,71 @@ export const ListingModal: React.FC<ListingModalScreenProps>  = ({navigation, ro
             navigation.navigate(BasketScreenName.BASKET)
         }, 1000)
     }
+
+
+    const fadeAnim = useRef(new Animated.Value(1)).current; // Animated value for fade
+    const [headerVisible, setHeaderVisible] = useState(true); // Header visibility state
+
+    // Smoothly fade in the header
+    const fadeIn = () => {
+        Animated.timing(fadeAnim, {
+            toValue: 1,
+            duration: 800,
+            useNativeDriver: true,
+        }).start(() => {
+            setHeaderVisible(true)
+            navigation.setOptions({
+                headerShown: true,
+                headerTitle: route.params.vendor.businessName,
+                headerBackTitleVisible: false,
+                headerTitleAlign: 'left',
+                headerTitleStyle: tailwind('text-xl'),
+                headerLeft: () => (
+                    <ModalCloseIcon size={24} onPress={() => navigation.goBack()} />
+                ),
+            });
+        });
+    };
+
+    const fadeOut = () => {
+        Animated.timing(fadeAnim, {
+            toValue: 0,
+            duration: 800,
+            useNativeDriver: true,
+        }).start(() => {
+            setHeaderVisible(false)
+            navigation.setOptions({
+                headerShown: false
+            })
+        });
+    };
+
+    const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+        const scrollOffsetY = event.nativeEvent.contentOffset.y;
+
+        if (scrollOffsetY > 20) {
+            if (!headerVisible) {
+                fadeIn();
+            }
+        } else {
+            if (headerVisible) {
+                fadeOut();
+
+            }
+        }
+    };
+
+    console.log(route.params.listing)
     return (
         <View style={tailwind('flex-1 relative bg-white')}>
            <ScrollView style={tailwind('pb-10')}>
                <View style={tailwind('pb-5 mb-3 bg-white')}>
-                   <FastImage resizeMode={FastImage.resizeMode.cover} source={{ uri: route.params.listing.photo, priority: FastImage.priority.normal }} style={[tailwind("w-full"), { height: 170 }]} />
-                   <View style={tailwind('px-4 flex flex-col mt-6')}>
+                   <FastImage resizeMode={FastImage.resizeMode.cover} source={{ uri: route.params.listing.photo, priority: FastImage.priority.normal }} style={[tailwind("w-full"), { height: 250 }]} />
+                   <ModalCloseIcon size={24} iconStyle={tailwind('mx-0 m-1.5')} buttonStyle={tailwind('left-2 absolute top-10 bg-gray-200 rounded-full')} onPress={() => navigation.goBack()} />
+                   <View style={tailwind('px-4 flex flex-col mt-2')}>
                        <View style={tailwind('flex flex-row items-center w-full justify-between')}>
                            <View style={tailwind('flex flex-col w-3/4')}>
-                               <Text style={[tailwind('mb-2  text-3xl'), {
-                                   lineHeight: 0
-                               }]}>
+                               <Text style={[tailwind('mb-2 font-bold text-2xl text-darkblue-50')]}>
                                    {route.params.listing.name}
                                </Text>
                                <View style={tailwind('flex flex-row items-center')}>
@@ -229,28 +278,28 @@ export const ListingModal: React.FC<ListingModalScreenProps>  = ({navigation, ro
                                        displayType="text"
                                        renderText={(value) => (
                                            <Text
-                                               style={tailwind('text-2xl font-bold text-black')}
+                                               style={tailwind('font-bold text-lg text-primary-100')}
                                            >
                                                {value}
                                            </Text>
                                        )}
                                    />
-                                   <Text style={tailwind(' ml-2 text-brand-gray-700 text-base')}>
+                                   <Text style={tailwind(' ml-2 text-gray-600 ')}>
                                        {route.params.listing.serving}
                                    </Text>
                                </View>
                            </View>
-                           <View style={tailwind('flex-row  items-center')}>
-                               <TouchableOpacity disabled={quantity <= 1} onPress={handleDecrease} style={tailwind('bg-white w-8 h-8  rounded border-1.5 border-black flex items-center justify-center')}>
-                                   <Minus color="#000000" size={16}/>
+                           <View style={tailwind('flex-row bg-primary-50 py-2.5 px-2 items-center rounded-xl')}>
+                               <TouchableOpacity disabled={quantity <= 1} onPress={handleDecrease} style={tailwind('bg-white w-6 h-6  rounded-full  flex items-center justify-center')}>
+                                   <Minus color="#469ADC" size={12}/>
                                </TouchableOpacity>
-                               <Text style={tailwind('text-lg font-bold mx-3')}>{quantity}</Text>
-                               <TouchableOpacity onPress={handleIncrease} style={tailwind('bg-black w-8 h-8 rounded border-1.5 border-black flex items-center justify-center')}>
-                                   <Plus color="#ffffff" size={16} style={tailwind('text-white')} />
+                               <Text style={tailwind('text-primary-100 mx-3')}>{quantity}</Text>
+                               <TouchableOpacity onPress={handleIncrease} style={tailwind('bg-white w-6 h-6 rounded-full flex items-center justify-center')}>
+                                   <Plus color="#469ADC" size={12}/>
                                </TouchableOpacity>
                            </View>
                        </View>
-                       <Text style={tailwind('mt-3 text-lg text-brand-gray-700')}>
+                       <Text style={tailwind('mt-3 text-darkblue-50')}>
                            {route.params.listing.desc}
                        </Text>
                    </View>
@@ -268,11 +317,11 @@ export const ListingModal: React.FC<ListingModalScreenProps>  = ({navigation, ro
                )}
            </ScrollView>
             {!loading && (
-                <View style={tailwind('px-4 py-2 bg-white pb-10')}>
+                <View style={tailwind('px-4 py-2 border-t-0.5 border-gray-300 bg-white py-6')}>
                     {hasItemsInCart && cart?.length && cartvendor === listing?.vendor._id ? (
-                        <GenericButton onPress={() => goToBasket() } label={`View basket (${cart?.length})`} labelColor={tailwind('text-white')} backgroundColor={tailwind('bg-black')} testId="" />
+                        <GenericButton onPress={() => goToBasket() } label={`View basket (${cart?.length})`} labelColor={tailwind('text-white')} backgroundColor={tailwind('bg-primary-100')} testId="" />
                     ) : (
-                        <GenericButton onPress={() => addToBasket()} label={`Add ${_cart.quantity} to basket ~ ₦${_cart.totalValue.toLocaleString()}`} labelColor={tailwind('text-white')} backgroundColor={tailwind('bg-black')} testId="" />
+                        <GenericButton onPress={() => addToBasket()} label={`Add ${_cart.quantity} to basket ~ ₦${_cart.totalValue.toLocaleString()}`} labelColor={tailwind('text-white')} backgroundColor={tailwind('bg-primary-100')} testId="" />
                     )}
                 </View>
             )}
