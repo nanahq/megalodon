@@ -23,6 +23,8 @@
     "release": "standard-version"
   },
   "dependencies": {
+    "@datadog/mobile-react-native": "^2.4.3",
+    "@datadog/mobile-react-navigation": "^2.4.3",
     "@expo/config-plugins": "^8.0.4",
     "@expo/vector-icons": "^14.0.0",
     "@gorhom/bottom-sheet": "^4.4.7",
