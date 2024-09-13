@@ -27,7 +27,7 @@ import {PromotionModal} from "@screens/AppNavigator/Screens/modals/Promotion.mod
 import Constants from "expo-constants";
 import {ProfileNavigator} from "@screens/AppNavigator/Screens/profile/ProfileNavigator";
 import {BasketNavigator} from "@screens/AppNavigator/Screens/basket/BasketNavigator";
-import {PromotionNavigator} from "@screens/AppNavigator/Screens/promotions/PromotionNavigator";
+import { DdRumReactNavigationTracking } from "@datadog/mobile-react-navigation";
 
 const App = createStackNavigator<AppParamList>()
 
@@ -95,7 +95,7 @@ export function AppNavigator(): JSX.Element {
     const isAndroid  = Device.osName === 'Android'
     const dispatch = useAppDispatch()
     const analytics = useAnalytics()
-
+    const navigationRef = useRef<any>(null)
     useEffect(() => {
         dispatch(fetchProfile() as any)
         dispatch(fetchVendors() as any)
@@ -168,10 +168,14 @@ export function AppNavigator(): JSX.Element {
         };
     }, []);
     return (
-        <NavigationContainer linking={LinkingConfiguration}>
+        <NavigationContainer
+            ref={navigationRef}
+            onReady={() => {
+                DdRumReactNavigationTracking.startTrackingViews(navigationRef.current)
+            }}
+            linking={LinkingConfiguration}>
             <App.Navigator screenOptions={{
-                headerShown: false,
-                headerBackground: "#ffffff"
+                headerShown: false
             }}>
                 <App.Group screenOptions={{
                     cardStyleInterpolator: isAndroid ? CardStyleInterpolators.forRevealFromBottomAndroid : CardStyleInterpolators.forHorizontalIOS,

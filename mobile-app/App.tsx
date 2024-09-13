@@ -20,6 +20,7 @@ import {NetworkMapper} from "@api/network.mapper";
 import {createClient, AnalyticsProvider} from "@segment/analytics-react-native";
 import {AmplitudeSessionPlugin} from "@segment/analytics-react-native-plugin-amplitude-session";
 import {PromoCodeProvider} from "@contexts/PromoCode";
+import Wrapper from "./Wrapper";
 
 const WEBSOCKET_ENDPOINT = NetworkMapper.PRODUCTION
 
@@ -42,46 +43,44 @@ export default function App() {
         return null;
     }
 
-
-
     const customToast = {
         app_toast_success: (toast: ToastProps) => <AppToast  type="success" toast={toast} />,
         app_toast_error: (toast: ToastProps) => <AppToast type="error" toast={toast} />,
         app_toast_warning: (toast: ToastProps) => <AppToast type="warning" toast={toast} />,
     };
-
-
     return (
-    <NativeLoggingProvider>
-       <ErrorBoundary>
-           <AuthPersistenceProvider
-               api={{
-                   get: persistence.getSecure,
-                   set: persistence.setSecure,
-                   delete: persistence.deleteSecure
-               }}
-           >
-               <WebSocketProvider socketEndpoint={WEBSOCKET_ENDPOINT}>
-                   <StoreProvider>
-                      <PromoCodeProvider>
-                          <GestureHandlerRootView
-                              style={tailwind('flex-1')}
-                          >
-                              <SafeAreaProvider>
-                                  <BottomSheetModalProvider>
-                                      <ToastProvider renderType={customToast}>
-                                          <AnalyticsProvider client={segmentClient}>
-                                              <MainScreen />
-                                          </AnalyticsProvider>
-                                      </ToastProvider>
-                                  </BottomSheetModalProvider>
-                              </SafeAreaProvider>
-                          </GestureHandlerRootView>
-                      </PromoCodeProvider>
-                   </StoreProvider>
-               </WebSocketProvider>
-           </AuthPersistenceProvider>
-       </ErrorBoundary>
-    </NativeLoggingProvider>
+    <Wrapper>
+        <NativeLoggingProvider>
+            <ErrorBoundary>
+                <AuthPersistenceProvider
+                    api={{
+                        get: persistence.getSecure,
+                        set: persistence.setSecure,
+                        delete: persistence.deleteSecure
+                    }}
+                >
+                    <WebSocketProvider socketEndpoint={WEBSOCKET_ENDPOINT}>
+                        <StoreProvider>
+                            <PromoCodeProvider>
+                                <GestureHandlerRootView
+                                    style={tailwind('flex-1')}
+                                >
+                                    <SafeAreaProvider>
+                                        <BottomSheetModalProvider>
+                                            <ToastProvider renderType={customToast}>
+                                                <AnalyticsProvider client={segmentClient}>
+                                                    <MainScreen />
+                                                </AnalyticsProvider>
+                                            </ToastProvider>
+                                        </BottomSheetModalProvider>
+                                    </SafeAreaProvider>
+                                </GestureHandlerRootView>
+                            </PromoCodeProvider>
+                        </StoreProvider>
+                    </WebSocketProvider>
+                </AuthPersistenceProvider>
+            </ErrorBoundary>
+        </NativeLoggingProvider>
+    </Wrapper>
   );
 }
