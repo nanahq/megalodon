@@ -257,7 +257,7 @@ export const ListingModal: React.FC<ListingModalScreenProps>  = ({navigation, ro
         }
     };
 
-    console.log(route.params.listing)
+
     return (
         <View style={tailwind('flex-1 relative bg-white')}>
            <ScrollView style={tailwind('pb-10')}>

@@ -13,7 +13,6 @@ import React from "react";
 import {useNavigation} from "@react-navigation/native";
 import {HomeScreen} from "@screens/AppNavigator/Screens/home/Home.Screen";
 import {CardStyleInterpolators} from "@react-navigation/stack";
-import {useAppSelector} from "@store/index";
 const BottomTab = createBottomTabNavigator<BottomTabParamList>()
 
 export interface BottomTabParamList {
@@ -50,22 +49,7 @@ export function BottomTabNavigator ():JSX.Element {
                 tabBarActiveTintColor: '#ffffff',
                 tabBarInactiveTintColor: '#B5B5B5',
                 tabBarItemStyle: tailwind("pb-4 pt-1"),
-                headerStyle: tailwind('bg-white'),
                 lazy: true,
-                header: () =>  (
-                    <View style={[tailwind('flex flex-row items-center justify-between px-4 bg-white'), {marginTop: insert.top + (insert.top * 0.2)}]}>
-                        <View>
-                            <Text style={tailwind('text-sm text-gray-500')}>Deliver now</Text>
-                            <Text style={tailwind('text-lg font-bold')}>Kano, Nigeria</Text>
-                        </View>
-                        <Pressable style={tailwind('bg-gray-100 rounded-full p-2.5')} onPress={() => navigation?.navigate(AppScreenName.PROFILE)}>
-                            <User
-                                size={24}
-                                color={getColor('black')}
-                            />
-                        </Pressable>
-                    </View>
-                )
             }}
         >
             <BottomTab.Screen

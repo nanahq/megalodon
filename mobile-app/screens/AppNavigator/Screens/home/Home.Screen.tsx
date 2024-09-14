@@ -1,7 +1,7 @@
 import {Dimensions, ScrollView, View, Text, TextInput, Pressable} from "react-native";
 import React, {useEffect} from "react";
 import {SafeAreaView} from "react-native-safe-area-context";
-import {tailwind} from "@tailwind";
+import {getColor, tailwind} from "@tailwind";
 import {CategorySection} from "@screens/AppNavigator/Screens/modals/components/Tags";
 import {HomeSection, HomeSectionVertical} from "@screens/AppNavigator/Screens/home/components/HomeSection";
 import {RootState, useAppDispatch, useAppSelector} from "@store/index";
@@ -13,19 +13,17 @@ import {FlashList} from "@shopify/flash-list";
 import {useAnalytics} from "@segment/analytics-react-native";
 import {HomeScreenName} from "@screens/AppNavigator/Screens/home/HomeScreenNames.enum";
 import {fetchHomaPage} from "@store/listings.reducer";
-import {IconButton} from "@components/commons/buttons/IconButton";
 import {SearchBar} from "@screens/AppNavigator/Screens/home/components/SearchBar";
 import {AdvertComponent, HomepageAdvert} from "@screens/AppNavigator/Screens/home/components/Advert";
 import AdImage from '@assets/ads/free-delivery.png'
-import {ShoppingBasket} from "lucide-react-native";
-import {useNavigation} from "@react-navigation/native";
 import {CartIcon} from "@screens/AppNavigator/Screens/home/components/CartIcon";
+import {AppScreenName} from "@screens/AppNavigator/ScreenName.enum";
+import {User} from "lucide-react-native";
 
 const {height} = Dimensions.get('window')
 export function HomeScreen (): JSX.Element {
     const { hasItemsInCart} = useAppSelector(state => state.cart)
 
-    const navigator = useNavigation<any>()
     const {hasFetchedProfile, profile} = useAppSelector((state: RootState) => state.profile)
     const { hasFetchedListings, hompage} = useAppSelector(state => state.listings)
     const dispatch = useAppDispatch()
@@ -71,6 +69,18 @@ export function HomeScreen (): JSX.Element {
                 onScrollEndDrag={() => scrollAnalytics()}
                 style={{height,}}
             >
+                <View style={[tailwind('flex flex-row items-center justify-between px-4 bg-white'), {marginTop: insert.top + (insert.top * 0.2)}]}>
+                    <View>
+                        <Text style={tailwind('text-sm text-gray-500')}>Deliver now</Text>
+                        <Text style={tailwind('text-lg font-bold')}>Kano, Nigeria</Text>
+                    </View>
+                    <Pressable style={tailwind('bg-gray-100 rounded-full p-2.5')} onPress={() => navigation?.navigate(AppScreenName.PROFILE)}>
+                        <User
+                            size={24}
+                            color={getColor('black')}
+                        />
+                    </Pressable>
+                </View>
                 <SearchBar />
                 <CategorySection />
                 <AdvertComponent source={AdImage} />

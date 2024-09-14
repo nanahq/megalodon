@@ -194,62 +194,11 @@ return
      }
 
 
-     const fadeAnim = useRef(new Animated.Value(1)).current; // Animated value for fade
-     const [headerVisible, setHeaderVisible] = useState(true); // Header visibility state
-
-     // Smoothly fade in the header
-     const fadeIn = () => {
-         Animated.timing(fadeAnim, {
-             toValue: 1,
-             duration: 800,
-             useNativeDriver: true,
-         }).start(() => {
-             setHeaderVisible(true)
-             navigation.setOptions({
-                 headerShown: true,
-                 headerTitle: route.params.vendor.businessName,
-                 headerBackTitleVisible: false,
-                 headerTitleAlign: 'left',
-                 headerTitleStyle: tailwind('text-xl'),
-                 headerLeft: () => (
-                     <ModalCloseIcon size={24} onPress={() => navigation.goBack()} />
-                 ),
-             });
-         });
-     };
-
-     const fadeOut = () => {
-         Animated.timing(fadeAnim, {
-             toValue: 0,
-             duration: 800,
-             useNativeDriver: true,
-         }).start(() => {
-             setHeaderVisible(false)
-             navigation.setOptions({
-                 headerShown: false
-             })
-         });
-     };
-
-     const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-         const scrollOffsetY = event.nativeEvent.contentOffset.y;
-
-         if (scrollOffsetY > 20) {
-             if (!headerVisible) {
-                 fadeIn();
-             }
-         } else {
-             if (headerVisible) {
-                 fadeOut();
-
-             }
-         }
-     };
 
 
     return (
         <View style={tailwind('flex-1 bg-white relative')}>
-            <ScrollView  scrollEventThrottle={16} onScroll={(event) => handleScroll(event)} style={tailwind('pb-20')}>
+            <ScrollView style={tailwind('pb-20')}>
                 <View style={tailwind('flex flex-col w-full')}>
                     <View style={tailwind('relative')}>
                         <FastImage  resizeMode={FastImage.resizeMode.cover} source={{ uri: route.params?.vendor?.businessImage, priority:FastImage.priority.high }} style={[tailwind("w-full"), { height: 250 }]} />
