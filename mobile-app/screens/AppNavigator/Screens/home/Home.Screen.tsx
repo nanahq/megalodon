@@ -1,9 +1,9 @@
 import {Dimensions, ScrollView, View, Text, TextInput, Pressable} from "react-native";
 import React, {useEffect} from "react";
-import {SafeAreaView} from "react-native-safe-area-context";
+import {SafeAreaView, useSafeAreaInsets} from "react-native-safe-area-context";
 import {getColor, tailwind} from "@tailwind";
 import {CategorySection} from "@screens/AppNavigator/Screens/modals/components/Tags";
-import {HomeSection, HomeSectionVertical} from "@screens/AppNavigator/Screens/home/components/HomeSection";
+import {HomeSection} from "@screens/AppNavigator/Screens/home/components/HomeSection";
 import {RootState, useAppDispatch, useAppSelector} from "@store/index";
 import {LoaderComponentScreen} from "@components/commons/LoaderComponent";
 import {VendorCard} from "@screens/AppNavigator/Screens/modals/components/VendorCard";
@@ -19,15 +19,17 @@ import AdImage from '@assets/ads/free-delivery.png'
 import {CartIcon} from "@screens/AppNavigator/Screens/home/components/CartIcon";
 import {AppScreenName} from "@screens/AppNavigator/ScreenName.enum";
 import {User} from "lucide-react-native";
+import {useNavigation} from "@react-navigation/native";
 
 const {height} = Dimensions.get('window')
 export function HomeScreen (): JSX.Element {
     const { hasItemsInCart} = useAppSelector(state => state.cart)
-
     const {hasFetchedProfile, profile} = useAppSelector((state: RootState) => state.profile)
     const { hasFetchedListings, hompage} = useAppSelector(state => state.listings)
     const dispatch = useAppDispatch()
     const analytics = useAnalytics()
+    const navigation = useNavigation()
+    const insert = useSafeAreaInsets()
 
     useEffect(() => {
         void analytics.screen(HomeScreenName.HOME)
@@ -69,7 +71,7 @@ export function HomeScreen (): JSX.Element {
                 onScrollEndDrag={() => scrollAnalytics()}
                 style={{height,}}
             >
-                <View style={[tailwind('flex flex-row items-center justify-between px-4 bg-white'), {marginTop: insert.top + (insert.top * 0.2)}]}>
+                <View style={[tailwind('flex flex-row items-center justify-between'), {marginTop: insert.top + (insert.top * 0.2)}]}>
                     <View>
                         <Text style={tailwind('text-sm text-gray-500')}>Deliver now</Text>
                         <Text style={tailwind('text-lg font-bold')}>Kano, Nigeria</Text>
