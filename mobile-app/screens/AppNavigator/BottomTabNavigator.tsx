@@ -43,7 +43,7 @@ export function BottomTabNavigator ():JSX.Element {
             initialRouteName={AppScreenName.HOME}
             screenOptions={{
                 cardStyleInterpolator: isAndroid ? CardStyleInterpolators.forRevealFromBottomAndroid : CardStyleInterpolators.forVerticalIOS,
-                headerShown: true,
+                headerShown: false,
                 tabBarLabelPosition: "below-icon",
                 tabBarStyle: {height: insert.bottom + 80},
                 tabBarActiveTintColor: '#ffffff',

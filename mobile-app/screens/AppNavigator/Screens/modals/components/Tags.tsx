@@ -52,7 +52,7 @@ export function CategorySection() {
                 <Pressable onPress={() => onPress(AppScreenName.FOOD)} style={[tailwind('flex flex-col p-3 bg-gray-100 rounded-xl'), {height: 120, width: (width - 60) / 3}]}>
                     <View style={tailwind('flex flex-col ')}>
                         <Text style={tailwind('font-bold text-brand-black-500 text-lg')}>Food</Text>
-                        <Text style={tailwind('text-gray-500 text-xs')}>450 restaurants</Text>
+                        <Text style={[tailwind('text-gray-500'), {fontSize: 7}]}>450 restaurants</Text>
                         <Image
                             resizeMode="contain"
                             style={[tailwind('self-end mt-2'), {width: 60, height: 43, marginBottom: -12, marginRight: -12}]}
@@ -65,7 +65,7 @@ export function CategorySection() {
                 <Pressable onPress={() => onPress(AppScreenName.MART)} style={[tailwind('flex flex-col p-3 bg-gray-100 rounded-xl'), {height: 120, width: (width - 60) / 3}]}>
                     <View>
                         <Text style={tailwind('font-bold text-brand-black-500 text-lg')}>Mart</Text>
-                        <Text style={tailwind('text-gray-400 text-xs')}>20 super markets</Text>
+                        <Text style={[tailwind('text-gray-500'), {fontSize: 7}]}>20 super markets</Text>
                         <Image
                             source={GroceriesIcon}
                             style={[tailwind('self-end mt-2'), {width: 50, height: 50, marginBottom: -12, marginRight: -12}]}
@@ -78,7 +78,7 @@ export function CategorySection() {
                 <Pressable onPress={() => onPress(AppScreenName.Courier)} style={[tailwind('flex flex-col p-3 bg-gray-100 rounded-xl'), {height: 120, width: (width - 60) / 3}]}>
                     <View>
                         <Text style={tailwind('font-bold text-brand-black-500 text-lg')}>Courier</Text>
-                        <Text style={tailwind('text-gray-400 text-xs')}>30 min delivery</Text>
+                        <Text style={[tailwind('text-gray-500'), {fontSize: 7}]}>30 min delivery</Text>
                         <Image
                             style={[tailwind('self-end mt-2'), {width: 75, height: 50, marginBottom: -12, marginRight: -12}]}
                             source={CourierIcon}

@@ -6,7 +6,7 @@ export function MainScreen (): JSX.Element {
 
     return (
         <SafeAreaProvider>
-            <StatusBar backgroundColor={getColor('white')} />
+            <StatusBar backgroundColor={"transparent"} />
             <RootNavigator />
         </SafeAreaProvider>
     )

@@ -1,7 +1,6 @@
-import {Dimensions, ScrollView, Text, View} from "react-native";
-import {tailwind} from "@tailwind";
-import {SafeAreaView} from "react-native-safe-area-context";
-import {IconButton} from "@components/commons/buttons/IconButton";
+import {Dimensions, Pressable, ScrollView, Text, View} from "react-native";
+import {getColor, tailwind} from "@tailwind";
+import { useSafeAreaInsets} from "react-native-safe-area-context";
 import {SearchBar} from "@screens/AppNavigator/Screens/home/components/SearchBar";
 import React from "react";
 import {AdvertComponent} from "@screens/AppNavigator/Screens/home/components/Advert";
@@ -10,9 +9,14 @@ import {HomeSection, HomeSectionVertical} from "@screens/AppNavigator/Screens/ho
 import {FlashList} from "@shopify/flash-list";
 import {useAppSelector} from "@store/index";
 import {VendorCard, VendorCardFullWidth} from "@screens/AppNavigator/Screens/modals/components/VendorCard";
+import {AppScreenName} from "@screens/AppNavigator/ScreenName.enum";
+import {User} from "lucide-react-native";
+import {useNavigation} from "@react-navigation/native";
 
 export const FoodScreen: React.FC= () => {
     const {height} = Dimensions.get('window')
+    const navigation = useNavigation()
+    const insert = useSafeAreaInsets()
     const { hompage} = useAppSelector(state => state.listings)
 
     function PopularRenderItem({item}: any) {
@@ -26,8 +30,20 @@ export const FoodScreen: React.FC= () => {
         <View style={tailwind('flex-1 bg-white pt-4 px-5')}>
             <ScrollView
                 showsVerticalScrollIndicator={false}
-                style={{height,}}
+                style={{height}}
             >
+                <View style={[tailwind('flex flex-row items-center justify-between '), {marginTop: insert.top + (insert.top * 0.2)}]}>
+                    <View>
+                        <Text style={tailwind('text-sm text-gray-500')}>Deliver now</Text>
+                        <Text style={tailwind('text-lg font-bold')}>Kano, Nigeria</Text>
+                    </View>
+                    <Pressable style={tailwind('bg-gray-100 rounded-full p-2.5')} onPress={() => navigation?.navigate(AppScreenName.PROFILE)}>
+                        <User
+                            size={24}
+                            color={getColor('black')}
+                        />
+                    </Pressable>
+                </View>
             <SearchBar />
             <AdvertComponent source={AdImageFood} />
                 {hompage?.mostPopularVendors !== undefined && hompage?.mostPopularVendors.length > 0 && (

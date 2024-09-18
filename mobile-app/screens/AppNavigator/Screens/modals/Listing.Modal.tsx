@@ -15,7 +15,6 @@ import {
 import {StackScreenProps} from "@react-navigation/stack";
 import {tailwind} from "@tailwind";
 import {ModalCloseIcon} from "@screens/AppNavigator/Screens/modals/components/ModalCloseIcon";
-import {ShareListingIcon} from "@screens/AppNavigator/Screens/modals/components/ShareListingIcon";
 import {NumericFormat as NumberFormat} from "react-number-format";
 import {ListingOptionSection} from "@screens/AppNavigator/Screens/modals/components/ListingOptionSection";
 import {SkeletonLoader, SkeletonLoaderScreen} from "@components/commons/SkeletonLoaders/SkeletonLoader";
@@ -200,62 +199,9 @@ export const ListingModal: React.FC<ListingModalScreenProps>  = ({navigation, ro
     const goToBasket = () => {
         void analytics.track('CLICK:VIEW-CART-LISTING-MODAL')
         setTimeout(() => {
-            navigation.navigate(BasketScreenName.BASKET)
+            navigation.navigate(BasketScreenName.BASKET as any)
         }, 1000)
     }
-
-
-    const fadeAnim = useRef(new Animated.Value(1)).current; // Animated value for fade
-    const [headerVisible, setHeaderVisible] = useState(true); // Header visibility state
-
-    // Smoothly fade in the header
-    const fadeIn = () => {
-        Animated.timing(fadeAnim, {
-            toValue: 1,
-            duration: 800,
-            useNativeDriver: true,
-        }).start(() => {
-            setHeaderVisible(true)
-            navigation.setOptions({
-                headerShown: true,
-                headerTitle: route.params.vendor.businessName,
-                headerBackTitleVisible: false,
-                headerTitleAlign: 'left',
-                headerTitleStyle: tailwind('text-xl'),
-                headerLeft: () => (
-                    <ModalCloseIcon size={24} onPress={() => navigation.goBack()} />
-                ),
-            });
-        });
-    };
-
-    const fadeOut = () => {
-        Animated.timing(fadeAnim, {
-            toValue: 0,
-            duration: 800,
-            useNativeDriver: true,
-        }).start(() => {
-            setHeaderVisible(false)
-            navigation.setOptions({
-                headerShown: false
-            })
-        });
-    };
-
-    const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-        const scrollOffsetY = event.nativeEvent.contentOffset.y;
-
-        if (scrollOffsetY > 20) {
-            if (!headerVisible) {
-                fadeIn();
-            }
-        } else {
-            if (headerVisible) {
-                fadeOut();
-
-            }
-        }
-    };
 
 
     return (
