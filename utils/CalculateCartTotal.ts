@@ -7,7 +7,7 @@ export  const calculateTotalValue = (
 ) => {
     let total = basePrice * quantity;
     for (const option of selectedOptions) {
-        total += parseFloat(option.price);
+        total += (parseFloat(option.price ) * quantity);
     }
     return total;
 };
