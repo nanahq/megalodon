@@ -5,6 +5,8 @@ export enum AppActions {
 
     UPDATE_PROFILE = 'app/updateProfile',
 
+    REMOVE_CART_ITEM = 'app/removeSingleCartItem',
+
     FETCH_VENDORS = 'app/fetchVendors',
     FETCH_HOMEPAGE = 'app/fetchHomePage',
     FETCH_SUBS = 'app/fetchSubscriptions',

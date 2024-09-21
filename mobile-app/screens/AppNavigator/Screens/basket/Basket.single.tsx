@@ -1,5 +1,5 @@
-import {View, Text, ScrollView} from 'react-native'
-import {RootState, useAppSelector} from "@store/index";
+import {View, Text, ScrollView, Animated, TouchableOpacity} from 'react-native'
+import {RootState, useAppDispatch, useAppSelector} from "@store/index";
 import {tailwind} from "@tailwind";
 import {GenericButton} from "@components/commons/buttons/GenericButton";
 import React, {useEffect, useMemo} from "react";
@@ -10,11 +10,16 @@ import {BasketScreenName} from "@screens/AppNavigator/Screens/basket/BasketScree
 import {SingleBaskedItem} from "@screens/AppNavigator/Screens/basket/components/BasketsItem";
 import {NumericFormat as NumberFormat} from "react-number-format";
 import {useAnalytics} from "@segment/analytics-react-native";
+import {CartSwipeable} from "@screens/AppNavigator/Screens/basket/components/Swipable";
+import {Trash2} from 'lucide-react-native'
+import {removeCartItem} from "@store/cart.reducer";
 
 export const BasketSingle: React.FC = () => {
     const navigation = useNavigation<NavigationProp<BasketParamsList>>()
     const vendors = useAppSelector((state: RootState) => state.vendors)
     const cart = useAppSelector((state: RootState) => state.cart)
+    const dispatch = useAppDispatch()
+
     const analytics = useAnalytics()
 
     useEffect(() => {
@@ -59,6 +64,17 @@ export const BasketSingle: React.FC = () => {
         navigation.navigate(BasketScreenName.CHECKOUT, {vendor: cart.vendor})
     }
 
+    const RenderDeleteButton: React.FC<any> = () => {
+        return <TouchableOpacity onPress={() => undefined} style={[tailwind('flex flex-col justify-center p-4'), {height: 50, width: 50}]} >
+               <Trash2 style={tailwind('text-red-600')} size={20} />
+        </TouchableOpacity>
+    }
+
+    const deleteCartItem = (itemId: string): void => {
+        console.log('hit')
+        dispatch(removeCartItem(itemId))
+    }
+
     return (
        <View style={tailwind('flex-1 bg-white relative px-4')}>
            <ScrollView style={tailwind('flex-1 flex-col ')}>
@@ -66,7 +82,13 @@ export const BasketSingle: React.FC = () => {
                    <Text style={tailwind('text-xl font-bold')}>Order Items</Text>
                    <View style={tailwind('flex flex-col my-1.5')}>
                        {cart.cart?.map((_cart, index) => (
-                           <SingleBaskedItem cart={_cart} key={index + _cart.cartItem._id}/>
+                           <CartSwipeable
+                               key={index + _cart.cartItem._id}
+                               renderRightActions={RenderDeleteButton}
+                               deleteCartItem={() => deleteCartItem(_cart.cartItem._id)}
+                           >
+                               <SingleBaskedItem cart={_cart} />
+                           </CartSwipeable>
                        ))}
                    </View>
                    <View style={tailwind('flex flex-row items-center justify-between mb-24 w-full')}>

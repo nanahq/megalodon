@@ -48,7 +48,8 @@
       "env": {
         "EXPO_BUNDLE_IDENTIFIER": "com.nanaeats.nana.app",
         "EXPO_PUBLIC_API_URL": "https://prod-api.trynanaapp.com"
-      }
+      },
+      "channel": "ios_production"
     }
   },
   "submit": {
