@@ -19,6 +19,32 @@ const initialState: CartState = {
     cartItemAvailableDate: undefined
 };
 
+
+export const removeCartItem = createAsyncThunk(AppActions.REMOVE_CART_ITEM,
+    async (cartItemId: string): Promise<any> => {
+        try {
+            const storedCart = await AsyncStorage.getItem("cart");
+            if (!storedCart) {
+                return undefined;
+            }
+
+            const parsedCart = JSON.parse(storedCart) as CartState;
+            const updatedCartItems = parsedCart.cart?.filter(item => item?.cartItem?._id !== cartItemId);
+
+            if (updatedCartItems && updatedCartItems.length > 0) {
+                const updatedCartState = { ...parsedCart, cart: updatedCartItems };
+                await AsyncStorage.setItem("cart", JSON.stringify(updatedCartState));
+                return updatedCartState;
+            } else {
+                await AsyncStorage.removeItem("cart");
+                return undefined;
+            }
+        } catch (error) {
+            console.error("Error removing cart item:", error);
+            return undefined;
+        }
+    });
+
 export const readCartFromStorage = createAsyncThunk(AppActions.READ_CART_FROM_STORAGE,
     async () => {
         try {
@@ -34,7 +60,7 @@ export const readCartFromStorage = createAsyncThunk(AppActions.READ_CART_FROM_ST
     });
 
 export const deleteCartFromStorage = createAsyncThunk(AppActions.DELETE_CART_FROM_STORAGE,
-    async () => {
+    async (): Promise<any> => {
         try {
            await AsyncStorage.removeItem("cart");
            return true
@@ -44,7 +70,7 @@ export const deleteCartFromStorage = createAsyncThunk(AppActions.DELETE_CART_FRO
     });
 export const saveCartToStorage = createAsyncThunk(
     AppActions.SAVE_CART_TO_STORAGE,
-    async (cartData: { vendor: VendorUserI; cart: Cart, cartAvailableDate?: number}) => {
+    async (cartData: { vendor: VendorUserI; cart: Cart, cartAvailableDate?: number}): Promise<any> => {
         // eslint-disable-next-line no-useless-catch
         try {
             // Fetch the existing cart from AsyncStorage
@@ -126,6 +152,22 @@ export const cart = createSlice({
                     state.hasItemsInCart = true
                     state.cartItemAvailableDate = payload.cartItemAvailableDate
 
+                }
+            )
+            .addCase(
+                removeCartItem.fulfilled,
+                (state, {payload}: PayloadAction<CartState | undefined> ) => {
+                    if (!payload) {
+                        state.cart = undefined
+                        state.vendor = undefined
+                        state.hasItemsInCart = false
+                        state.cartItemAvailableDate = undefined
+                        return
+                    }
+                    state.cart = payload.cart
+                    state.vendor = payload.vendor
+                    state.hasItemsInCart = true
+                    state.cartItemAvailableDate = payload.cartItemAvailableDate
                 }
             )
     }
