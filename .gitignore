@@ -56,3 +56,4 @@ yarn-error.*
 # @end expo-cli
 /ios/
 /android/
+ANDROID_SERVICE_ACCOUNT.json
