@@ -51,7 +51,7 @@ export function CategorySection() {
             <View style={tailwind('flex flex-col w-full')}>
                 <Text style={tailwind('mb-3')}>What would you like today?</Text>
                <View style={tailwind('flex flex-row w-full justify-between items-center')}>
-                   <Pressable onPress={() => onPress(AppScreenName.FOOD)} style={[tailwind('flex flex-col p-3 bg-gray-100 rounded-xl'), {height: 100, width: (width - 50) / 2}]}>
+                   <Pressable onPress={() => onPress(AppScreenName.FOOD)} style={[tailwind('flex flex-col p-3 bg-gray-50 rounded-xl'), {height: 100, width: (width - 50) / 2}]}>
                        <View style={tailwind('flex flex-row items-center justify-between')}>
                            <View>
                                <Text style={tailwind('text-brand-black-500 text-lg')}>Order food</Text>
