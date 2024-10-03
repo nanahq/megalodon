@@ -94,7 +94,7 @@ const _PaymentMethodModal:React.FC<PaymentMethodModalProps> = (props) => {
         >
             <View style={tailwind('bg-white rounded-t-3xl px-5 pt-10 flex-1')}>
                 <View style={tailwind('flex flex-row w-full justify-between items-center mb-10')}>
-                    <Text style={tailwind('font-bold text-lg')}>Available payment methods</Text>
+                    <Text style={tailwind('text-xl')}>Available payment methods</Text>
                     <CircleX style={tailwind('text-black')} onPress={() => closeModal()} size={32} />
                 </View>
                 <View style={tailwind('flex-col mt-4')}>

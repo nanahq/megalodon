@@ -9,7 +9,7 @@ import {PropsWithChildren} from "react";
 
 const config = new DatadogProviderConfiguration(
     "pub7666f6b2b52621c78fed7faef7271aee",
-    process.env.EXPO_NODE_ENV,
+    __DEV__ ? 'development' : 'production',
     "cc9bb2b7-ff8e-4add-a419-31fb77ab37c1",
     true,
     true,

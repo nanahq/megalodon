@@ -47,40 +47,49 @@ export function CategorySection() {
 
 
     return (
-        <View style={tailwind('mt-5  bg-white')}>
-            <View style={tailwind('flex flex-row items-center justify-between')}>
-                <Pressable onPress={() => onPress(AppScreenName.FOOD)} style={[tailwind('flex flex-col p-3 bg-gray-100 rounded-xl'), {height: 120, width: (width - 60) / 3}]}>
-                    <View style={tailwind('flex flex-col ')}>
-                        <Text style={tailwind('font-bold text-brand-black-500 text-lg')}>Food</Text>
-                        <Text style={[tailwind('text-gray-500'), {fontSize: 7}]}>450 restaurants</Text>
+        <View style={tailwind('mt-5  w-full bg-white')}>
+            <View style={tailwind('flex flex-col w-full')}>
+                <Text style={tailwind('mb-3')}>What would you like today?</Text>
+               <View style={tailwind('flex flex-row w-full justify-between items-center')}>
+                   <Pressable onPress={() => onPress(AppScreenName.FOOD)} style={[tailwind('flex flex-col p-3 bg-gray-100 rounded-xl'), {height: 100, width: (width - 50) / 2}]}>
+                       <View style={tailwind('flex flex-row items-center justify-between')}>
+                           <View>
+                               <Text style={tailwind('text-brand-black-500 text-lg')}>Order food</Text>
+                               <Text style={[tailwind('text-gray-500'), {fontSize: 10}]}>450 restaurants</Text>
+                           </View>
+                           <Image
+                               resizeMode="contain"
+                               style={[tailwind('self-end mt-2'), {width: 80, height: 80}]}
+                               source={FoodIcon}
+                               width={60}
+                               height={43}
+                           />
+                       </View>
+                   </Pressable>
+                   <Pressable onPress={() => onPress(AppScreenName.MART)} style={[tailwind('flex flex-col p-3 bg-gray-100 rounded-xl'), {height: 100, width: (width - 50) / 2}]}>
+                       <View style={tailwind('flex flex-row items-center justify-between')}>
+                          <View>
+                              <Text style={tailwind('text-brand-black-500 text-lg')}>Supermarket</Text>
+                              <Text style={[tailwind('text-gray-500'), {fontSize: 10}]}>20 super markets</Text>
+                          </View>
+                           <Image
+                               source={GroceriesIcon}
+                               style={[tailwind('self-end mt-2'), {width: 70, height: 70}]}
+                               width={60}
+                               height={60}
+                               resizeMode="contain"
+                           />
+                       </View>
+                   </Pressable>
+               </View>
+                <Pressable onPress={() => onPress(AppScreenName.Courier)} style={[tailwind('flex bg-gray-100 flex-col w-full p-3  rounded-xl mt-3'), {height: 100, width: width - (width /3)}]}>
+                    <View style={tailwind('flex flex-row items-center justify-between')}>
+                        <View>
+                            <Text style={tailwind('text-brand-black-500 text-lg')}>Send/receive package</Text>
+                            <Text style={[tailwind('text-gray-500'), {fontSize: 10}]}>30 min delivery</Text>
+                        </View>
                         <Image
-                            resizeMode="contain"
-                            style={[tailwind('self-end mt-2'), {width: 60, height: 43, marginBottom: -12, marginRight: -12}]}
-                            source={FoodIcon}
-                            width={60}
-                            height={43}
-                        />
-                    </View>
-                </Pressable>
-                <Pressable onPress={() => onPress(AppScreenName.MART)} style={[tailwind('flex flex-col p-3 bg-gray-100 rounded-xl'), {height: 120, width: (width - 60) / 3}]}>
-                    <View>
-                        <Text style={tailwind('font-bold text-brand-black-500 text-lg')}>Mart</Text>
-                        <Text style={[tailwind('text-gray-500'), {fontSize: 7}]}>20 super markets</Text>
-                        <Image
-                            source={GroceriesIcon}
-                            style={[tailwind('self-end mt-2'), {width: 50, height: 50, marginBottom: -12, marginRight: -12}]}
-                            width={60}
-                            height={60}
-                            resizeMode="contain"
-                        />
-                    </View>
-                </Pressable>
-                <Pressable onPress={() => onPress(AppScreenName.Courier)} style={[tailwind('flex flex-col p-3 bg-gray-100 rounded-xl'), {height: 120, width: (width - 60) / 3}]}>
-                    <View>
-                        <Text style={tailwind('font-bold text-brand-black-500 text-lg')}>Courier</Text>
-                        <Text style={[tailwind('text-gray-500'), {fontSize: 7}]}>30 min delivery</Text>
-                        <Image
-                            style={[tailwind('self-end mt-2'), {width: 75, height: 50, marginBottom: -12, marginRight: -12}]}
+                            style={[tailwind('self-end mt-2'), {width: 80, height: 80}]}
                             source={CourierIcon}
                             width={75}
                             height={50}

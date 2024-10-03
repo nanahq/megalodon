@@ -66,18 +66,18 @@ export const UndeliveredSingleOrderScreen: React.FC<UndeliveredSingleOrderScreen
             <View style={tailwind('px-4 py-5')}>
                 <View>
                     <Text style={tailwind('text-brand-gray-700')}>{moment(route.params.order.createdAt).format('DD MMM YYYY HH:mm')}</Text>
-                    <Text style={tailwind('font-bold text-xl mt-2')}>{route.params.order.vendor.businessName}</Text>
+                    <Text style={tailwind('text-2xl mt-2')}>{route.params.order.vendor.businessName}</Text>
                 </View>
-                <View style={tailwind('mt-10')}>
+                <View style={tailwind('mt-5')}>
                     <View style={tailwind('flex flex-col mb-5')}>
-                        <Text style={tailwind('font-bold')}>Delivery</Text>
+                        <Text style={tailwind('text-lg')}>Delivery</Text>
                         <View style={tailwind('flex flex-row mt-2 items-center')}>
                             <ShoppingCart color="#000000" size={20} />
                             <Text style={tailwind('ml-5')}>{route.params.order.deliveryAddress}</Text>
                         </View>
                     </View>
                     <View style={tailwind('flex flex-col mb-5')}>
-                        <Text style={tailwind('font-bold')}>Order Status</Text>
+                        <Text style={tailwind('text-lg')}>Order Status</Text>
                         <View style={tailwind('flex flex-row mt-2 items-center')}>
                             <ShoppingCart color="#000000" size={20} />
                             <View>
@@ -91,7 +91,7 @@ export const UndeliveredSingleOrderScreen: React.FC<UndeliveredSingleOrderScreen
                         </View>
                     </View>
                     <View style={tailwind('flex flex-col mb-5')}>
-                        <Text style={tailwind('font-bold')}>Total in Naira</Text>
+                        <Text style={tailwind('text-lg')}>Total in Naira</Text>
                         <View style={tailwind('flex flex-row  mt-2  items-center')}>
                             <BadgeDollarSign color="#000000" size={20} />
                             <NumberFormat
@@ -118,7 +118,7 @@ export const UndeliveredSingleOrderScreen: React.FC<UndeliveredSingleOrderScreen
                                 navigation.navigate(OrderScreenName.ADD_REVIEW, {
                                     order: route.params.order
                                 })
-                            } } label="Add A Review" labelColor={tailwind('text-white')} backgroundColor={tailwind('bg-primary-500')} />
+                            } } label="Add A Review" labelColor={tailwind('text-white')} backgroundColor={tailwind('bg-primary-100')} />
                         </>
                     )}
                     { [OrderStatus.COURIER_PICKUP, OrderStatus.PROCESSED,  OrderStatus.IN_ROUTE].includes(route.params.order.orderStatus) && (
@@ -127,7 +127,7 @@ export const UndeliveredSingleOrderScreen: React.FC<UndeliveredSingleOrderScreen
                             navigation.navigate(OrderScreenName.TRACK_ORDER, {
                                 order: route.params.order
                             })
-                        }} label="Track Delivery" labelColor={tailwind('text-white')} backgroundColor={tailwind('bg-primary-500')} />
+                        }} label="Track Delivery" labelColor={tailwind('text-white')} backgroundColor={tailwind('bg-primary-100')} />
                     )}
                     {route.params.order.orderStatus === OrderStatus.PAYMENT_PENDING && (
                         <GenericButton onPress={() => {
@@ -135,12 +135,12 @@ export const UndeliveredSingleOrderScreen: React.FC<UndeliveredSingleOrderScreen
                             navigation.navigate(ModalScreenName.MODAL_PAYMENT_SCREEN, {
                                 order: route.params.order
                             })
-                        } } label="Make payment" labelColor={tailwind('text-white')} backgroundColor={tailwind('bg-primary-500')} />
+                        } } label="Make payment" labelColor={tailwind('text-white')} backgroundColor={tailwind('bg-primary-100')} />
                     )}
                 </View>
                 {transformOrder.length > 0 && (
                     <View>
-                        <Text style={tailwind('font-bold')}>Your order</Text>
+                        <Text style={tailwind('text-lg')}>Your order</Text>
                         <View style={tailwind('flex flex-col w-full mt-2 items-center')}>
                             {transformOrder.map((order, index) => (
                                 <OrderItemRow key={index}>
@@ -196,7 +196,7 @@ export const UndeliveredSingleOrderScreen: React.FC<UndeliveredSingleOrderScreen
                                 </OrderItemRow>
                             </View>
                             <OrderItemRow>
-                                <Text style={tailwind('font-bold')}>Total</Text>
+                                <Text style={tailwind('text-lg')}>Total</Text>
                                 <NumberFormat
                                     prefix='₦'
                                     value={route.params.order.orderValuePayable}
@@ -204,7 +204,7 @@ export const UndeliveredSingleOrderScreen: React.FC<UndeliveredSingleOrderScreen
                                     displayType="text"
                                     renderText={(value) => (
                                         <Text
-                                            style={tailwind('font-bold')}
+                                            style={tailwind('text-lg')}
                                         >
                                             {value}
                                         </Text>
@@ -215,19 +215,19 @@ export const UndeliveredSingleOrderScreen: React.FC<UndeliveredSingleOrderScreen
                     </View>
                 )}
                 <View style={tailwind('mt-5')}>
-                    <Text style={tailwind('font-bold')}>Order Information</Text>
+                    <Text style={tailwind('text-lg')}>Order Information</Text>
                     <View>
                         <View style={tailwind('flex my-2 flex-row  items-center w-full')}>
                            <Text>Order RefId</Text>
-                           <Text style={tailwind('font-bold ml-5 text-xs')}>{route.params.order.refId}</Text>
+                           <Text style={tailwind('text-lg ml-5 text-xs')}>{route.params.order.refId}</Text>
                         </View>
                         <View style={tailwind('flex my-2 flex-row  items-center w-full')}>
                             <Text>Order ID</Text>
-                            <Text style={tailwind('font-bold text-xs ml-5')} >{route.params.order._id}</Text>
+                            <Text style={tailwind('text-lg text-xs ml-5')} >{route.params.order._id}</Text>
                         </View>
                         <View style={tailwind('flex my-2 flex-row  items-center w-full')}>
                             <Text>Support</Text>
-                            <Text style={tailwind('font-bold ml-5 text-xs')}>support@trynanaapp.com</Text>
+                            <Text style={tailwind('text-lg ml-5 text-xs')}>support@trynanaapp.com</Text>
                         </View>
                     </View>
                 </View>

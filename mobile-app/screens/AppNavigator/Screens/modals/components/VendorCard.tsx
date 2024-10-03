@@ -100,7 +100,6 @@ const _VendorCardFullWidth:  React.FC<{ vendor: VendorUserI, fullWidth?: boolean
     const [loading, setLoading] = useState<boolean>(true);
     const navigator = useNavigation<NavigationProp<AppParamList>>()
     const [error, setError] = useState<boolean>(false)
-    const {width: screenWidth} = Dimensions.get('window')
     const analytics = useAnalytics()
 
     useEffect(() => {
@@ -140,7 +139,7 @@ const _VendorCardFullWidth:  React.FC<{ vendor: VendorUserI, fullWidth?: boolean
     }
     return (
         <Pressable
-            onPress={onPress} style={[tailwind("w-full flex flex-col "), props.style,]}>
+            onPress={onPress} style={[tailwind("w-full flex flex-col  "), props.style,]}>
             <View style={tailwind("flex flex-col w-full items-center")}>
                 <FastImage
                     source={{ uri: props.vendor.businessImage, priority: FastImage.priority.high }}
@@ -157,12 +156,12 @@ const _VendorCardFullWidth:  React.FC<{ vendor: VendorUserI, fullWidth?: boolean
                 )}
                 <View style={tailwind('flex mt-1 flex-row w-full justify-between items-center')}>
                     {!loading && !error && (
-                        <View style={tailwind("flex flex-row items-center ")}>
-                            <View style={tailwind("flex flex-row items-center border-r-0.5 pr-1 border-gray-300")}>
-                                <IconComponent iconType="MaterialIcons" name="delivery-dining" size={12} style={tailwind('font-medium text-gray-500 mr-1')} />
-                                <Text style={tailwind("text-xs text-gray-500")}>₦{travelInfo?.fee}</Text>
+                        <View style={tailwind("flex flex-col")}>
+                            <View style={tailwind("flex flex-row items-center")}>
+                                <Text style={tailwind("text-sm text-gray-500 mr-1")}>₦{travelInfo?.fee} delivery fee</Text>
+                                <IconComponent iconType="MaterialIcons" name="delivery-dining" size={16} style={tailwind('font-medium text-primary-100 mr-1')} />
                             </View>
-                            <Text style={tailwind("text-gray-500 mx-1 text-xs")}>{Number(travelInfo?.duration ?? 0) + Number(props?.vendor?.settings?.preparationTime ?? 0)} Min</Text>
+                            <Text style={tailwind("mt-1 text-gray-500 text-sm")}>ETA: {Number(travelInfo?.duration ?? 0) + Number(props?.vendor?.settings?.preparationTime ?? 0)} minutes</Text>
                         </View>
                     )}
 

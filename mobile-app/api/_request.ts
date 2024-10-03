@@ -4,6 +4,8 @@ import { showToastStandard } from "@components/commons/Toast";
 import {ApiRoute, APIService, NetworkMapper} from "@api/network.mapper";
 import {cookieParser} from "../../utils/cookieParser";
 
+console.log(process.env)
+
 type Environment = 'production' | 'development' | string
 export  function getUrl (gateway: APIService): string {
 

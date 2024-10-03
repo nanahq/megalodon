@@ -24,7 +24,7 @@ export const FoodScreen: React.FC= () => {
     }
 
     function RenderItem ({item}: any) {
-        return <VendorCardFullWidth  style={tailwind('mb-2')} vendor={item}/>
+        return <VendorCardFullWidth  style={tailwind('mb-5')} vendor={item}/>
     }
     return (
         <View style={tailwind('flex-1 bg-white pt-4 px-5')}>
@@ -32,15 +32,16 @@ export const FoodScreen: React.FC= () => {
                 showsVerticalScrollIndicator={false}
                 style={{height}}
             >
-                <View style={[tailwind('flex flex-row items-center justify-between '), {marginTop: insert.top + (insert.top * 0.2)}]}>
+                <View style={[tailwind('flex flex-row items-center justify-between'), {marginTop: insert.top + (insert.top * 0.2)}]}>
                     <View>
                         <Text style={tailwind('text-sm text-gray-500')}>Deliver now</Text>
-                        <Text style={tailwind('text-lg font-bold')}>Kano, Nigeria</Text>
+                        <Text style={tailwind('text-lg')}>Kano, Nigeria</Text>
                     </View>
-                    <Pressable style={tailwind('bg-gray-100 rounded-full p-2.5')} onPress={() => navigation?.navigate(AppScreenName.PROFILE)}>
+                    <Pressable style={tailwind('bg-gray-100 border-2 border-primary-100 rounded-full p-1')} onPress={() => navigation?.navigate(AppScreenName.PROFILE)}>
                         <User
-                            size={24}
-                            color={getColor('black')}
+                            style={tailwind('')}
+                            size={30}
+                            color={getColor('gray-400')}
                         />
                     </Pressable>
                 </View>
@@ -62,7 +63,6 @@ export const FoodScreen: React.FC= () => {
                 <HomeSectionVertical label="All Restaurants">
                     <FlashList
                         showsVerticalScrollIndicator={false}
-                        contentContainerStyle={tailwind('px-0')}
                         data={hompage?.allVendors as any}
                         renderItem={(props) => <RenderItem {...props} />}
                         keyExtractor={item => item._id}
