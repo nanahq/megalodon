@@ -52,12 +52,7 @@ export const Tracking: React.FC<TrackingProps> = ({navigation, route}) => {
 
     useEffect(() => {
         navigation.setOptions({
-            headerShown: order.orderStatus !== OrderStatus.IN_ROUTE,
-            headerBackTitleVisible: false,
-            headerTitleAlign: 'center',
-            headerTitleStyle: tailwind('text-xl hidden'),
-            headerLeft: () => <ModalCloseIcon onPress={() => navigation.goBack()} />,
-            headerRight: () => <HelpButton />,
+            headerShown: false,
             headerStyleInterpolator: HeaderStyleInterpolators.forFade
         })
     }, [order.orderStatus])
@@ -90,11 +85,14 @@ export const Tracking: React.FC<TrackingProps> = ({navigation, route}) => {
         return <LoaderComponentScreen />
     }
     return (
-        <ScrollView style={tailwind('flex-1 bg-black')}>
+        <ScrollView style={tailwind('flex-1 bg-white relative')}>
             {order.orderStatus !== OrderStatus.FULFILLED && (
                 <StatusBar animated={true as any} style={"auto"  as any}  networkActivityIndicatorVisible={false} backgroundColor={order.orderStatus === OrderStatus.IN_ROUTE ? '#00C2E8': '#41a550'} />
             )}
             {delivery !== undefined && <Map delivery={delivery} order={order} />}
+            {delivery !== undefined && (
+                <OrderStatusStepper _status={deliveryStatus}  order={order} />
+            )}
             {delivery !== undefined && delivery.assignedToDriver && (
                 <View style={tailwind('px-4 my-4 rounded-t-xl')}>
                     <View style={tailwind('flex flex-row items-center w-full justify-between')}>
@@ -111,21 +109,7 @@ export const Tracking: React.FC<TrackingProps> = ({navigation, route}) => {
                     </View>
                 </View>
             ) }
-            {delivery !== undefined && (
-                <OrderStatusStepper _status={deliveryStatus}  />
-            )}
-            <View style={tailwind('pb-6')}>
-                <View style={tailwind('px-4 mt-5')}>
-                    <Text style={tailwind('font-bold text-lg mb-4')}>Order Summary</Text>
-                    <DeliveryInfo>
-                        <DeliveryInfo.Item info={order.deliveryAddress} title="Delivery Address" />
-                        <DeliveryInfo.Item info={order.primaryContact} title="Who should receive this order" />
-                        <DeliveryInfo.Item info={order.orderType === "PRE_ORDER" ? 'Pre-Order' : 'Instant Delivery'} title="Delivery Type" />
-                        {order.specialNote && <DeliveryInfo.Item info={order.specialNote ?? ''} title="Delivery Instruction" />}
-                    </DeliveryInfo>
-                </View>
-            </View>
-
+            <ModalCloseIcon size={20} iconStyle={tailwind('p-0 m-0')} buttonStyle={tailwind('absolute top-16 left-2 p-2.5 bg-white rounded-full')} onPress={() => navigation.goBack()} />
         </ScrollView>
     )
 }

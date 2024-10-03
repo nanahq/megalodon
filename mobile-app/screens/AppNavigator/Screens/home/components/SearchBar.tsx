@@ -11,7 +11,7 @@ export const SearchBar: React.FC<SearchBarProps> = (props) => {
     const [textFocus, setTextFocus] = useState(false)
     return (
         <View style={tailwind('mt-5')}>
-            <View style={tailwind('flex flex-row items-center border-1.5 border-gray-200 bg-gray-200 rounded-3xl px-3 py-2.5', {
+            <View style={tailwind('flex flex-row items-center border-1.5 border-gray-200 bg-white rounded-3xl px-3 py-2.5', {
                 'border-black': textFocus
             })}>
                 <Search size={24} color={getColor('gray-600')} />

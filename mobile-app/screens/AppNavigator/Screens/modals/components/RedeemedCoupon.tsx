@@ -31,19 +31,19 @@ export const RedeemedCoupon: React.FC<{coupon: CouponI, cb?: () => void}> = ({co
     return (
         <View
             style={
-                tailwind('bg-white rounded-lg p-4 my-3 border-0.5 border-gray-300')
+                tailwind('bg-primary-50 rounded-lg p-4 my-3 border-0.5 border-gray-200')
 
             }
         >
           <View style={tailwind('border-b-0.5 my-2 border-gray-300')}>
               <Text style={tailwind(' font-bold text-xl')}>{coupon.code}</Text>
-              <Text style={tailwind( 'text-lg')}>{formattedMessage}</Text>
+              <Text style={tailwind( 'text-lg mt-0.5')}>{formattedMessage}</Text>
           </View>
             <View style={tailwind('flex flex-row justify-between items-center')}>
                 <View>
-                    <Text style={tailwind('')}>Valid till {moment(coupon.validTill).format('MMMM YYYY')}</Text>
+                    <Text style={tailwind('')}>Valid till {moment(coupon.validTill).format('Do MMMM YYYY')}</Text>
                 </View>
-                <GenericButton disabled={selectedCoupon?._id === coupon._id} onPress={() => updateCoupon(coupon, cb)} labelColor={tailwind('py-2 text-base text-white px-5')} label={selectedCoupon?._id === coupon._id ? 'Applied' : 'Apply'} backgroundColor={tailwind('bg-white')} />
+                <GenericButton disabled={selectedCoupon?._id === coupon._id} onPress={() => updateCoupon(coupon, cb)} labelColor={tailwind('text-base text-white')} label={selectedCoupon?._id === coupon._id ? 'Applied' : 'Apply to this order'} backgroundColor={tailwind('bg-primary-100 py-2 px-2')} />
             </View>
         </View>
     )

@@ -97,7 +97,7 @@ export const PromotionModal: React.FC<PromotionModalProps> = ({ navigation }) =>
                 />
             </View>
             <View style={tailwind(' mt-10')}>
-              <Text style={tailwind('text-base mb-4')}>Available credits and promos</Text>
+              <Text style={tailwind('text-lg mb-4')}>Available credits and promos</Text>
                 {profile.coupons !== undefined && profile.coupons.length > 0 && (
                     <View style={tailwind('flex flex-col')}>
                         {profile.coupons.map((_coupon) => (

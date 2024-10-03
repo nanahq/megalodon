@@ -14,8 +14,6 @@ import {VerifyPhoneNumberScreen} from "@screens/OnboardingNavigator/screens/auth
 import {OnboardingScreen} from "./screens/Onboarding.screen";
 import {OnboardingScreenName} from "./ScreenName.enum";
 import {GuestAppNavigator} from "@screens/GuestNavigator/AppNav";
-import {DdRumReactNavigationTracking} from "@datadog/mobile-react-navigation";
-
 export interface OnboardingParamsList {
     [OnboardingScreenName.ENTER_PASSWORD]: {
         phoneNumber: string
@@ -99,9 +97,6 @@ export function OnboardingNagivator (): JSX.Element {
 
     return (
         <NavigationContainer
-            onReady={() => {
-                DdRumReactNavigationTracking.startTrackingViews(navigationRef.current)
-            }}
             linking={LinkingConfiguration}
             ref={navigationRef}
         >

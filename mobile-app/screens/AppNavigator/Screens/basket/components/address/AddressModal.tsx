@@ -112,7 +112,7 @@ export function AddressBookModal(props: AddressBookModalProps): JSX.Element {
         >
             <ScrollView style={tailwind('bg-white rounded-t-3xl px-5 pt-10 flex-1')}>
                 <View style={tailwind('flex flex-row w-full justify-between items-center')}>
-                    <Text style={tailwind('text-lg font-bold')}>Saved Addresses</Text>
+                    <Text style={tailwind('text-xl')}>Saved Addresses</Text>
                     <CircleX style={[tailwind('text-black')]} onPress={() => closeModal()} size={32} />
                 </View>
                 {addressBook.length > 0 ? (
@@ -129,7 +129,7 @@ export function AddressBookModal(props: AddressBookModalProps): JSX.Element {
                                     style={tailwind('py-3 justify-between flex flex-row items-center border-b-1.5 border-brand-ash')}
                                 >
                                     <View style={tailwind('flex flex-row items-center')}>
-                                        <IconComponent iconType={iconMeta.type} name={iconMeta.name} style={tailwind(' text-primary-50 mr-3')} size={30} />
+                                        <IconComponent iconType={iconMeta.type} name={iconMeta.name} style={tailwind(' text-primary-100 mr-3')} size={30} />
                                         <View style={tailwind('flex flex-col')}>
                                             <Text style={tailwind('text-lg capitalize')}>{address.labelName}</Text>
                                             <Text style={tailwind('text-sm text-brand-gray-700')}>{address.address}</Text>
