@@ -193,7 +193,7 @@ export const Checkout: React.FC = () => {
                     break;
             }
             setVendor(() => v)
-            setView(() => _view)
+            setView(() =>cartState.cartItemAvailableDate ? 'PRE_ORDER' : _view)
     }, [ cartState.vendor])
     useEffect(() => {
         navigation.setOptions({
@@ -307,7 +307,7 @@ export const Checkout: React.FC = () => {
 
     return (
         <ScrollView style={tailwind('flex-1 bg-white px-4')}>
-            <CheckoutButton vendorType={vendor?.settings.deliveryType ?? 'ON_DEMAND'} view={view} onButtonClick={setView}  />
+            <CheckoutButton vendorType={cartState.cartItemAvailableDate ? "PRE_ORDER" : vendor?.settings?.operations?.deliveryType ?? 'ON_DEMAND'} view={view} onButtonClick={setView}  />
             <DeliveryAddressBox onPress={() => openModal() } selectedAddress={selectedAddress} />
             { view === 'ON_DEMAND' && selectedAddress !== undefined && deliveryEta !== undefined && vendor !== undefined && (
                 <View style={tailwind('mt-10')}>
@@ -316,7 +316,7 @@ export const Checkout: React.FC = () => {
                         {fetchingDeliveryFee ? (
                             <LoaderComponent size="small" />
                         ) : (
-                            <Text>{Number(deliveryEta.duration) + Number(vendor.settings.preparationTime)} Minutes</Text>
+                            <Text>{Number(deliveryEta.duration) + Number(vendor.settings?.operations?.preparationTime)} Minutes</Text>
                         )}
                     </View>
                 </View>

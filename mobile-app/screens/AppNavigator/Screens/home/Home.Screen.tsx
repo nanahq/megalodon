@@ -57,7 +57,6 @@ export function HomeScreen (): JSX.Element {
         return  <ListingMenuCard listing={item} />
     }
 
-
     const scrollAnalytics = async () => {
         await analytics.track('SCROLL-HOMEPAGE')
     }

@@ -12,6 +12,7 @@ import {VendorCard, VendorCardFullWidth} from "@screens/AppNavigator/Screens/mod
 import {AppScreenName} from "@screens/AppNavigator/ScreenName.enum";
 import {User} from "lucide-react-native";
 import {useNavigation} from "@react-navigation/native";
+import {ListingMenuCard} from "@screens/AppNavigator/Screens/modals/components/ListingCard";
 
 export const FoodScreen: React.FC= () => {
     const {height} = Dimensions.get('window')
@@ -26,6 +27,10 @@ export const FoodScreen: React.FC= () => {
     function RenderItem ({item}: any) {
         return <VendorCardFullWidth  style={tailwind('mb-5')} vendor={item}/>
     }
+    function   ListingRenderItem ({item}: any) {
+        return  <ListingMenuCard listing={item} />
+    }
+
     return (
         <View style={tailwind('flex-1 bg-white pt-4 px-5')}>
             <ScrollView
@@ -47,6 +52,20 @@ export const FoodScreen: React.FC= () => {
                 </View>
             <SearchBar />
             <AdvertComponent source={AdImageFood} />
+                {hompage?.scheduledListingsTomorrow !== undefined && hompage?.scheduledListingsTomorrow.length > 0 && (
+                    <HomeSection label="Pre-orders available tomorrow">
+                        <FlashList
+                            data={hompage.scheduledListingsTomorrow}
+                            renderItem={(props) => <ListingRenderItem {...props} />}
+                            keyExtractor={item => item._id}
+                            horizontal={true as any}
+                            showsHorizontalScrollIndicator={false}
+                            showsVerticalScrollIndicator={false}
+                            estimatedItemSize={10}
+                            onScrollEndDrag={() => void analytics.track('SCROLL-SCHEDULED-LISTING')}
+                        />
+                    </HomeSection>
+                )}
                 {hompage?.mostPopularVendors !== undefined && hompage?.mostPopularVendors.length > 0 && (
                     <HomeSection label="Top Rated Restaurants">
                         <FlashList
