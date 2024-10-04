@@ -44,11 +44,10 @@ interface ScheduleItem {
 
  const _ScheduleDeliveryModal:React.FC<ScheduleDeliveryProps> = (props) => {
     const { dismiss } = useBottomSheetModal();
-    const  operations  = props.vendor?.settings as VendorOperationSetting
+    const  operations  = props.vendor?.settings?.operations as VendorOperationSetting
     const [selectedDate, setSelectedDate] = useState<string >(operations?.startTime ?? '');
     const [selectedTime, setSelectedTime] = useState<string>(operations?.cutoffTime ?? '');
     const [schedule, setSchedule] = useState<ScheduleItem[]>([]);
-
     const startDate = useMemo(() => {
         return props.startDate ?? moment()
     }, [props.startDate])
@@ -69,6 +68,7 @@ interface ScheduleItem {
 
          setSchedule(schedules);
      };
+
 
 
      const generateTimeSlots = (start: string = '', end: string = '', isToday: boolean = false): TimeSlot[] => {
@@ -175,7 +175,7 @@ interface ScheduleItem {
         >
             <View style={tailwind('bg-white rounded-t-3xl px-5 pt-10 flex-1')}>
                 <View style={tailwind('flex flex-row w-full justify-between items-center')}>
-                    <Text style={tailwind('font-bold text-3xl')}>Schedule Delivery</Text>
+                    <Text style={tailwind('text-xl')}>Schedule Delivery</Text>
                     <ModalCloseIcon onPress={() => closeModal()} size={32} />
                 </View>
                 <View style={tailwind('flex-col mt-4')}>
@@ -188,7 +188,7 @@ interface ScheduleItem {
                             <TouchableOpacity
                                 style={[
                                     tailwind('rounded-5 flex flex-row items-center mr-3 justify-center w-full', {
-                                        'border-1.5 border-black': selectedDate === item.date,
+                                        'bg-primary-50 border-1.5 border-primary-100': selectedDate === item.date,
                                         'border-1.5 border-brand-gray-700': selectedDate !== item.date,
                                     }),
                                     {
@@ -220,7 +220,7 @@ interface ScheduleItem {
                                 <Text style={tailwind('text-lg')}>
                                     {`${item.start}-${item.end}`}
                                 </Text>
-                                <Checkbox style={{margin: 8}} color={selectedTime === item.end ? getColor('brand-black-500') : undefined} value={selectedTime === item.end} />
+                                <Checkbox style={{margin: 8, }} color={selectedTime === item.end ? getColor('primary-100') : undefined} value={selectedTime === item.end} />
                             </TouchableOpacity>
                         )}
                     />
@@ -246,8 +246,8 @@ const ModalFooter: React.FC<ModalFooterProps> = ({animatedFooterPosition, schedu
             <GenericButton
                 style={tailwind('w-full', {'mb-3': isAndroid})}
                 onPress={() => scheduleDate() }
-                label="Schedule"
-                backgroundColor={tailwind('bg-black')}
+                label="Choose delivery date"
+                backgroundColor={tailwind('bg-primary-100')}
                 labelColor={tailwind('text-white font-medium')}
             />
         </BottomSheetFooter>

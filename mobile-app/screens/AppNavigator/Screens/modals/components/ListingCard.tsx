@@ -12,6 +12,7 @@ import {useAnalytics} from "@segment/analytics-react-native";
 
 const _ListingCard: React.FC<{listing: ListingMenuI}>  = (props)=> {
     const {vendors} = useAppSelector(state => state.vendors)
+    const {hompage} = useAppSelector(state => state.listings)
     const isAndroid = Device.osName === 'Android'
     const navigation = useNavigation<NavigationProp<AppParamList>>()
     const vendor = useMemo(() => {
@@ -24,15 +25,22 @@ const _ListingCard: React.FC<{listing: ListingMenuI}>  = (props)=> {
         void analytics.track('CLICK:LISTING-CARD-HOMEPAGE', {
             vendor: props.listing._id
         })
+        const today = new Date();
+        const tomorrow = new Date(today);
+        tomorrow.setDate(today.getDate() + 1);
         navigation.navigate(ModalScreenName.MODAL_LISTING_SCREEN, {
             listing: props.listing,
             isScheduled: true,
+            vendor,
+            availableDate: tomorrow.toISOString()
         })
     }
+
     return (
         <Pressable onPress={onPress} style={[tailwind("w-full mb-4 flex flex-col mr-5"), { width: 300, height: 180 }]}>
-            <View style={tailwind("flex flex-col w-full")}>
-                <FastImage source={{ uri: props.listing.photo}} resizeMode={FastImage.resizeMode.cover} style={[tailwind("w-full rounded-lg"), { height: isAndroid ? 150 : 155 }]} />
+            <View style={tailwind("flex relative flex-col w-full")}>
+                <FastImage source={{ uri: props.listing.photo}} resizeMode={FastImage.resizeMode.cover} style={[tailwind("w-full rounded-lg"), { height: isAndroid ? 120 : 125 }]} />
+                <FastImage source={{ uri: vendor?.businessLogo}} resizeMode={FastImage.resizeMode.cover} style={[tailwind("w-full absolute top-2 left-1 rounded-full"), { height: 50, width: 50}]} />
             </View>
             <View style={tailwind("p-2")}>
                 <View style={tailwind('flex flex-row items-center justify-between w-full')}>

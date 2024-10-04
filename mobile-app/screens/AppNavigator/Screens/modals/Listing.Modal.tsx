@@ -4,9 +4,6 @@ import {useToast} from "react-native-toast-notifications";
 import {_api} from "@api/_request";
 import {showTost} from "@components/commons/Toast";
 import {
-    Animated,
-    NativeScrollEvent,
-    NativeSyntheticEvent,
     ScrollView,
     Text,
     TouchableOpacity,
@@ -22,7 +19,7 @@ import {GenericButton} from "@components/commons/buttons/GenericButton";
 import {RootState, useAppDispatch, useAppSelector} from "@store/index";
 import { saveCartToStorage} from "@store/cart.reducer";
 import {BasketScreenName} from "@screens/AppNavigator/Screens/basket/BasketScreenName.enum";
-import { ModalScreenName} from "@screens/AppNavigator/ScreenName.enum";
+import {AppScreenName, ModalScreenName} from "@screens/AppNavigator/ScreenName.enum";
 import {AppParamList} from "@screens/AppNavigator/AppNav";
 import moment from "moment";
 import FastImage from "react-native-fast-image";
@@ -191,7 +188,13 @@ export const ListingModal: React.FC<ListingModalScreenProps>  = ({navigation, ro
             cart: _cart,
             cartAvailableDate:  route.params.availableDate ?? undefined
         }))
-        navigation.goBack()
+        if(route.params.isScheduled) {
+            navigation.navigate(AppScreenName.BASKET, {
+                screen: BasketScreenName.SINGLE_BASKET
+            })
+        } else {
+            navigation.goBack()
+        }
         void analytics.track('CLICK:ADD-TO-CART-LISTING-MODAL')
 
     }

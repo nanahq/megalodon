@@ -77,13 +77,15 @@ export const ScheduledMenuSection = memo(_ScheduledMenuSection)
 const ScheduledMenuCard: React.FC<{menu: ScheduledListingI, onPress: () => void}> = (props) => {
     const chosenDate = formatRelativeDate(props.menu.availableDate)
     return (
-         <Pressable disabled={props.menu.soldOut} onPress={props.onPress} style={[tailwind('mr-4 relative'), {width: 180}]}>
+         <Pressable disabled={props.menu.soldOut} onPress={props.onPress} style={[tailwind('mr-4 relative'), {width: 120}]}>
              <View>
-                 <FastImage source={{uri: props.menu.listing.photo, priority: FastImage.priority.high }} style={[tailwind('rounded'), {aspectRatio: 10/8, width: 160}]}  resizeMode="cover"   />
-                <View style={tailwind('mt-1')}>
+                 <FastImage source={{uri: props.menu.listing.photo, priority: FastImage.priority.high }} style={[tailwind('rounded'), {aspectRatio: 10/8, width: 120}]}  resizeMode="cover"   />
+                 <View style={[tailwind('self-center rounded-lg px-2 py-0.5'), {marginTop: -10, backgroundColor: "#f1cf54"}]}>
+                     <Text style={tailwind('text-xs text-white text-center')}>{props.menu.remainingQuantity} servings left</Text>
+                 </View>
+                <View style={tailwind('mt-1 flex flex-row justify-between items-center')}>
                     <Text style={tailwind('')} numberOfLines={1} ellipsizeMode="tail">{props.menu.listing.name}</Text>
-                    <Text style={tailwind('text-sm')}>{props.menu.remainingQuantity} servings left</Text>
-                    <Text style={tailwind('text-black')}>₦{props.menu.listing.price}</Text>
+                    <Text style={tailwind('text-black text-primary-100')}>₦{props.menu.listing.price}</Text>
                 </View>
              </View>
              {props.menu.soldOut ? (
@@ -91,7 +93,7 @@ const ScheduledMenuCard: React.FC<{menu: ScheduledListingI, onPress: () => void}
                      <Text style={tailwind('text-xs text-white')}>Sold out!</Text>
                  </View>
                  ) : (
-                 <View style={tailwind('bg-purple-400  rounded-r-lg p-1 absolute top-0')}>
+                 <View style={[tailwind('rounded-r-lg p-1 absolute top-0'), {backgroundColor: "#f652a0"}]}>
                      <Text style={tailwind('text-xs text-white')}>Available {chosenDate}</Text>
                  </View>
              )}

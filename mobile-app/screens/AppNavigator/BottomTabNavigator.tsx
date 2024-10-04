@@ -29,7 +29,7 @@ const getTabBarLabel = (props: {
     color: string;
     title: string;
 }): JSX.Element => (
-    <Text style={{ color: props.focused ? getColor('primary-500') : props.color, ...tailwind("text-xs", {'mt-1': Device.osName === 'iOS'}) }}>
+    <Text style={{ color: props.focused ? getColor('primary-100') : props.color, ...tailwind("text-xs", {'mt-1': Device.osName === 'iOS'}) }}>
         {props.focused ? props.title : props.title}
     </Text>
 );
@@ -65,8 +65,8 @@ export function BottomTabNavigator ():JSX.Element {
                         }),
                     tabBarTestID: "BottomTabHome",
                     tabBarIcon: ({ color, focused }) => (
-                        <View style={tailwind('w-10 h-10 flex flex-row items-center justify-center rounded-full', {'text-primary-500': focused})}>
-                            <Home name="home"  size={28} color={focused ? getColor('primary-500') : color}/>
+                        <View style={tailwind('w-10 h-10 flex flex-row items-center justify-center rounded-full', {'text-primary-100': focused})}>
+                            <Home name="home"  size={28} color={focused ? getColor('primary-100') : color}/>
                         </View>
                     ),
                 }}
@@ -84,7 +84,7 @@ export function BottomTabNavigator ():JSX.Element {
                     tabBarTestID: "BottomTabHome",
                     tabBarIcon: ({ color , focused}) => (
                         <View style={tailwind('relative w-10 h-10 flex flex-row items-center justify-center rounded-full')}>
-                            <Salad name="home"  size={28} color={focused ? getColor('primary-500') : color}/>
+                            <Salad name="home"  size={28} color={focused ? getColor('primary-100') : color}/>
                         </View>
                     ),
                 }}
@@ -102,7 +102,7 @@ export function BottomTabNavigator ():JSX.Element {
                     tabBarTestID: "BottomTabHome",
                     tabBarIcon: ({ color, focused }) => (
                         <View style={tailwind('w-10 h-10 flex flex-row items-center justify-center rounded-full')}>
-                            <Store size={26} color={focused ? getColor('primary-500') : color}/>
+                            <Store size={26} color={focused ? getColor('primary-100') : color}/>
                         </View>
                     ),
                 }}
@@ -122,7 +122,7 @@ export function BottomTabNavigator ():JSX.Element {
                     tabBarTestID: "BottomTabHome",
                     tabBarIcon: ({ color, focused }) => (
                         <View style={tailwind('w-10 h-10 flex flex-row items-center justify-center rounded-full', focused && 'bg-primary-100')}>
-                            <ReceiptText  size={26} color={focused ? getColor('primary-500') : color}/>
+                            <ReceiptText  size={26} color={focused ? getColor('primary-100') : color}/>
                         </View>
                     ),
                 }}
@@ -140,7 +140,7 @@ export function BottomTabNavigator ():JSX.Element {
                     tabBarTestID: "BottomTabHome",
                     tabBarIcon: ({ color, focused }) => (
                         <View style={tailwind('w-10 h-10 flex flex-row items-center justify-center rounded-full')}>
-                            <PackageOpen size={26} color={focused ? getColor('primary-500') : color}/>
+                            <PackageOpen size={26} color={focused ? getColor('primary-100') : color}/>
                         </View>
                     ),
                 }}
