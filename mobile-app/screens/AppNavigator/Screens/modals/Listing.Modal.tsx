@@ -216,7 +216,7 @@ export const ListingModal: React.FC<ListingModalScreenProps>  = ({navigation, ro
                    <View style={tailwind('px-4 flex flex-col mt-2')}>
                        <View style={tailwind('flex flex-row items-center w-full justify-between')}>
                            <View style={tailwind('flex flex-col w-3/4')}>
-                               <Text style={[tailwind('mb-2 font-bold text-2xl text-darkblue-50')]}>
+                               <Text style={[tailwind('mb-2 font-bold text-2xl text-nana-text')]}>
                                    {route.params.listing.name}
                                </Text>
                                <View style={tailwind('flex flex-row items-center')}>
@@ -227,13 +227,13 @@ export const ListingModal: React.FC<ListingModalScreenProps>  = ({navigation, ro
                                        displayType="text"
                                        renderText={(value) => (
                                            <Text
-                                               style={tailwind('font-bold text-lg text-primary-100')}
+                                               style={tailwind('font-bold text-primary-100')}
                                            >
                                                {value}
                                            </Text>
                                        )}
                                    />
-                                   <Text style={tailwind(' ml-2 text-gray-600 ')}>
+                                   <Text style={tailwind(' ml-2 text-nana-text')}>
                                        {route.params.listing.serving}
                                    </Text>
                                </View>
@@ -248,7 +248,7 @@ export const ListingModal: React.FC<ListingModalScreenProps>  = ({navigation, ro
                                </TouchableOpacity>
                            </View>
                        </View>
-                       <Text style={tailwind('mt-3 text-darkblue-50')}>
+                       <Text style={tailwind('mt-2 text-nana-text')}>
                            {route.params.listing.desc}
                        </Text>
                    </View>

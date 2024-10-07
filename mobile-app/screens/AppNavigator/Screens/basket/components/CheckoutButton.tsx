@@ -13,10 +13,10 @@ const _CheckoutButton: React.FC<{onButtonClick: (name: VendorOperationType) => v
            <View style={tailwind('bg-gray-100 p-2 rounded-lg')}>
                <View style={tailwind('flex flex-row items-center justify-between w-full')}>
                    <Pressable  disabled={vendorType === 'PRE_ORDER'} onPress={() => onButtonClick("ON_DEMAND")} style={[tailwind('rounded-lg py-2 px-12', {'bg-primary-100 text-white': view === 'ON_DEMAND'}), {width: (screenWidth - 50) / 2}]}>
-                       <Text style={tailwind('text-base', {'text-white': view === 'ON_DEMAND'})}>Deliver Now</Text>
+                       <Text style={tailwind('text-sm text-nana-text text-center', {'text-white': view === 'ON_DEMAND'})}>Deliver Now</Text>
                    </Pressable>
-                   <Pressable disabled={vendorType === 'ON_DEMAND'} onPress={() => onButtonClick("PRE_ORDER")} style={[tailwind('text-lg rounded-lg py-2 px-12', {'bg-primary-100 text-white': view === 'PRE_ORDER'}), {width: (screenWidth - 50) / 2}]}>
-                       <Text style={tailwind('text-base', {'text-white': view === 'PRE_ORDER'})}>Pre Order</Text>
+                   <Pressable disabled={vendorType === 'ON_DEMAND'} onPress={() => onButtonClick("PRE_ORDER")} style={[tailwind(' rounded-lg py-2 px-12', {'bg-primary-100 text-white': view === 'PRE_ORDER'}), {width: (screenWidth - 50) / 2}]}>
+                       <Text style={tailwind('text-sm text-center text-nana-text', {'text-white': view === 'PRE_ORDER'})}>Pre Order</Text>
                    </Pressable>
                </View>
            </View>

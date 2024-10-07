@@ -21,13 +21,11 @@ const _ListingOptionSection: React.FC<{
             let updatedOptions: ListingOption[] = [];
 
             if (isSingleSelection && value) {
-                // If it's a required single selection, unselect all other options in the section
                 updatedOptions = prevSelectedOptions.map((op: any) => ({
                     ...op,
                     isSelected: op.name === name && value,
                 }));
             } else {
-                // Otherwise, toggle the selected option
                 updatedOptions = prevSelectedOptions.map((op: any) =>
                     op.name === name ? { ...op, isSelected: value } : op
                 );
@@ -55,12 +53,12 @@ const _ListingOptionSection: React.FC<{
             <View style={tailwind("flex flex-col px-4")}>
                 <View style={tailwind("flex flex-row items-center w-full justify-between")}>
                     <View>
-                        <Text style={tailwind("text-black font-bold text-lg")}>{option.name}</Text>
-                        <Text style={tailwind("text-gray-600 text-sm")}>{SelectedText()}</Text>
+                        <Text style={tailwind("text-nana-text font-bold")}>{option.name}</Text>
+                        <Text style={tailwind("text-nana-text text-sm")}>{SelectedText()}</Text>
                     </View>
                     {isRequired && (
                         <View style={tailwind("bg-primary-100 border-0.5 border-primary-100 px-2 py-1 rounded-lg")}>
-                            <Text style={tailwind("text-white text-sm")}>required</Text>
+                            <Text style={tailwind("text-white text-xs")}>required</Text>
                         </View>
                     )}
                 </View>

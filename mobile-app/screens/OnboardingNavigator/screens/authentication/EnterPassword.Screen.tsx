@@ -79,6 +79,7 @@ export function EnterPasswordScreen ({navigation, route}: EnterPasswordScreenPro
                         lastName: lastName.toLowerCase()
                     }
                 })
+                console.log({data})
                 showTost(toast, 'Account created', 'success')
                 navigation.navigate(OnboardingScreenName.VERIFY_PHONE_NUMBER as any, {
                     pinId: data.pinId
@@ -87,8 +88,8 @@ export function EnterPasswordScreen ({navigation, route}: EnterPasswordScreenPro
                     phone: route.params.phoneNumber
                 })
             }
-
         } catch (error: any) {
+            console.log({error})
             if (error?.message.toLowerCase().includes("verify")) {
                 navigation.navigate(OnboardingScreenName.VERIFY_PHONE_NUMBER as any, {
                     pinId: error?.message?.split('Verify phone number-')[1]

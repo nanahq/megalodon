@@ -78,8 +78,8 @@ export const BasketSingle: React.FC = () => {
     return (
        <View style={tailwind('flex-1 bg-white relative px-4')}>
            <ScrollView style={tailwind('flex-1 flex-col ')}>
-               <View style={tailwind('flex flex-col')}>
-                   <Text style={tailwind('text-xl font-bold')}>Order Items</Text>
+               <View style={tailwind('flex flex-col mt-4')}>
+                   <Text style={tailwind('text-xl text-nana-text')}>Order Items</Text>
                    <View style={tailwind('flex flex-col my-1.5')}>
                        {cart.cart?.map((_cart, index) => (
                            <CartSwipeable
@@ -92,14 +92,14 @@ export const BasketSingle: React.FC = () => {
                        ))}
                    </View>
                    <View style={tailwind('flex flex-row items-center justify-between mb-24 w-full')}>
-                       <Text style={tailwind('font-bold text-lg')}>Subtotal</Text>
+                       <Text style={tailwind('text-nana-text text-lg')}>Subtotal</Text>
                        <NumberFormat
                            prefix="₦"
                            value={totalCartValue}
                            thousandSeparator
                            displayType="text"
                            renderText={(value) => (
-                               <Text style={tailwind("text-lg font-bold")}>{value}</Text>
+                               <Text style={tailwind("text-nana-text text-lg")}>{value}</Text>
                            )}
                        />
                    </View>
