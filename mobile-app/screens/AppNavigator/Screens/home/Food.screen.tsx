@@ -40,7 +40,7 @@ export const FoodScreen: React.FC= () => {
                 <View style={[tailwind('flex flex-row items-center justify-between'), {marginTop: insert.top + (insert.top * 0.2)}]}>
                     <View>
                         <Text style={tailwind('text-sm text-gray-500')}>Deliver now</Text>
-                        <Text style={tailwind('text-lg')}>Kano, Nigeria</Text>
+                        <Text style={tailwind('')}>Kano, Nigeria</Text>
                     </View>
                     <Pressable style={tailwind('bg-gray-100 border-2 border-primary-100 rounded-full p-1')} onPress={() => navigation?.navigate(AppScreenName.PROFILE)}>
                         <User
