@@ -67,7 +67,7 @@ const _VendorCard: React.FC<{ vendor: VendorUserI, fullWidth?: boolean, style?: 
                 />
             </View>
             <View style={tailwind("p-2")}>
-                <Text style={tailwind("text-lg text-black")}>{props.vendor.businessName}</Text>
+                <Text style={tailwind("text-nana-text")}>{props.vendor.businessName}</Text>
                 {loading && (
                     <View>
                         <SkeletonLoader row={1} screen={SkeletonLoaderScreen.VendorDistanceLoader} />
@@ -78,9 +78,9 @@ const _VendorCard: React.FC<{ vendor: VendorUserI, fullWidth?: boolean, style?: 
                         <View style={tailwind("flex flex-row items-center ")}>
                             <View style={tailwind("flex flex-row items-center border-r-0.5 pr-1 border-gray-300")}>
                                 <IconComponent iconType="MaterialIcons" name="delivery-dining" size={12} style={tailwind('font-medium text-gray-500 mr-1')} />
-                                <Text style={tailwind("text-xs text-gray-500")}>₦{travelInfo?.fee}</Text>
+                                <Text style={tailwind("text-xs text-nana-text")}>₦{travelInfo?.fee}</Text>
                             </View>
-                            <Text style={tailwind("text-gray-500 mx-1 text-xs")}>{Number(travelInfo?.duration ?? 0) + Number(props?.vendor?.settings?.preparationTime ?? 0)} Min</Text>
+                            <Text style={tailwind("text-nana-text mx-1 text-xs")}>{Number(travelInfo?.duration ?? 0) + Number(props?.vendor?.settings?.preparationTime ?? 0)} Min</Text>
                         </View>
                     )}
 
@@ -147,27 +147,27 @@ const _VendorCardFullWidth:  React.FC<{ vendor: VendorUserI, fullWidth?: boolean
                     style={[tailwind("w-full rounded-lg"), { aspectRatio: 2.5 }]}
                 />
             </View>
-            <View style={tailwind("p-1")}>
-                <Text style={tailwind("text-lg text-black")}>{props.vendor.businessName}</Text>
+            <View style={tailwind("p-1 mt-2")}>
+                <Text style={tailwind("text-nana-text text-lg font-bold")}>{props.vendor.businessName}</Text>
                 {loading && (
                     <View>
                         <SkeletonLoader row={1} screen={SkeletonLoaderScreen.VendorDistanceLoader} />
                     </View>
                 )}
-                <View style={tailwind('flex mt-1 flex-row w-full justify-between items-center')}>
+                <View style={tailwind('flex mt-0.5 flex-row w-full justify-between items-center')}>
                     {!loading && !error && (
                         <View style={tailwind("flex flex-col")}>
                             <View style={tailwind("flex flex-row items-center")}>
-                                <Text style={tailwind("text-sm text-gray-500 mr-1")}>₦{travelInfo?.fee} delivery fee</Text>
+                                <Text style={tailwind("text-sm text-nana-text mr-1")}>₦{travelInfo?.fee} delivery fee</Text>
                                 <IconComponent iconType="MaterialIcons" name="delivery-dining" size={16} style={tailwind('font-medium text-primary-100 mr-1')} />
                             </View>
-                            <Text style={tailwind("mt-1 text-gray-500 text-sm")}>ETA: {Number(travelInfo?.duration ?? 0) + Number(props?.vendor?.settings?.preparationTime ?? 0)} minutes</Text>
+                            <Text style={tailwind("mt-1 text-nana-text text-xs")}>ETA: {Number(travelInfo?.duration ?? 0) + Number(props?.vendor?.settings?.preparationTime ?? 0)} minutes</Text>
                         </View>
                     )}
 
                     <View style={tailwind("flex flex-row items-center")}>
                         <IconComponent iconType="AntDesign" name="star" style={tailwind("w-4 h-4 text-yellow-300")} />
-                        <Text style={tailwind("text-xs text-gray-500")}>{props.vendor.ratings.rating}</Text>
+                        <Text style={tailwind("text-xs text-nana-text")}>{props.vendor.ratings.rating}</Text>
                     </View>
                 </View>
             </View>

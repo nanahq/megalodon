@@ -54,8 +54,8 @@ export function CategorySection() {
                    <Pressable onPress={() => onPress(AppScreenName.FOOD)} style={[tailwind('flex flex-col p-3 bg-gray-50 rounded-xl'), {height: 100, width: (width - 50) / 2}]}>
                        <View style={tailwind('flex flex-row items-center justify-between')}>
                            <View>
-                               <Text style={tailwind('text-brand-black-500 text-lg')}>Order food</Text>
-                               <Text style={[tailwind('text-gray-500'), {fontSize: 10}]}>450 restaurants</Text>
+                               <Text style={tailwind('text-nana-text')}>Order food</Text>
+                               <Text style={[tailwind('text-nana-text'), {fontSize: 10}]}>450 restaurants</Text>
                            </View>
                            <Image
                                resizeMode="contain"
@@ -66,11 +66,11 @@ export function CategorySection() {
                            />
                        </View>
                    </Pressable>
-                   <Pressable onPress={() => onPress(AppScreenName.MART)} style={[tailwind('flex flex-col p-3 bg-gray-100 rounded-xl'), {height: 100, width: (width - 50) / 2}]}>
+                   <Pressable onPress={() => onPress(AppScreenName.MART)} style={[tailwind('flex flex-col p-3 bg-gray-50 rounded-xl'), {height: 100, width: (width - 50) / 2}]}>
                        <View style={tailwind('flex flex-row items-center justify-between')}>
                           <View>
-                              <Text style={tailwind('text-brand-black-500 text-lg')}>Supermarket</Text>
-                              <Text style={[tailwind('text-gray-500'), {fontSize: 10}]}>20 super markets</Text>
+                              <Text style={tailwind('text-nana-text')}>Supermarket</Text>
+                              <Text style={[tailwind('text-nana-text'), {fontSize: 10}]}>20 super markets</Text>
                           </View>
                            <Image
                                source={GroceriesIcon}
@@ -82,11 +82,11 @@ export function CategorySection() {
                        </View>
                    </Pressable>
                </View>
-                <Pressable onPress={() => onPress(AppScreenName.Courier)} style={[tailwind('flex bg-gray-100 flex-col w-full p-3  rounded-xl mt-3'), {height: 100, width: width - (width /3)}]}>
+                <Pressable onPress={() => onPress(AppScreenName.Courier)} style={[tailwind('flex bg-gray-50 flex-col w-full p-3  rounded-xl mt-3'), {height: 100, width: width - (width /3)}]}>
                     <View style={tailwind('flex flex-row items-center justify-between')}>
                         <View>
-                            <Text style={tailwind('text-brand-black-500 text-lg')}>Send/receive package</Text>
-                            <Text style={[tailwind('text-gray-500'), {fontSize: 10}]}>30 min delivery</Text>
+                            <Text style={tailwind('text-nana-text')}>Send/receive package</Text>
+                            <Text style={[tailwind('text-nana-text'), {fontSize: 10}]}>30 min delivery</Text>
                         </View>
                         <Image
                             style={[tailwind('self-end mt-2'), {width: 80, height: 80}]}

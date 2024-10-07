@@ -193,9 +193,6 @@ return
         }
      }
 
-
-
-
     return (
         <View style={tailwind('flex-1 bg-white relative')}>
             <ScrollView style={tailwind('pb-20')}>
@@ -227,7 +224,7 @@ return
                     </View>
                     <View style={tailwind('px-4 flex flex-col mt-6')}>
                         <View style={tailwind('flex flex-row items-center w-full justify-between')}>
-                            <Text style={tailwind('w-2/3 p-0 m-0 mb-2 font-bold text-3xl')}>
+                            <Text style={tailwind('w-2/3 p-0 m-0 mb-2 text-nana-text font-bold text-xl')}>
                                 {route.params?.vendor?.businessName}
                             </Text>
                                 <View style={tailwind('flex flex-row')}>
@@ -250,26 +247,26 @@ return
                                     <View style={tailwind('flex flex-row items-center')}>
                                         <IconComponent iconType="AntDesign" name="star" size={14} style={tailwind('text-yellow-300')}/>
                                         <IconComponent iconType="AntDesign" name="star" size={14} style={tailwind('text-yellow-300')}/>
-                                        <Text  style={tailwind('text-brand-gray-700 text-sm ml-1')}>100 Reviews</Text>
+                                        <Text  style={tailwind('text-nana-text text-sm ml-1')}>100 Reviews</Text>
                                     </View>
                                 <View style={tailwind('flex flex-row items-center w-full')}>
                                     <View style={tailwind('flex flex-row items-center mt-1')}>
-                                        <Text style={tailwind('text-gray-600 text-sm')}>Delivery in {route.params.delivery?.duration ?? '20'} Minutes</Text>
+                                        <Text style={tailwind('text-nana-text text-sm')}>Delivery in {route.params.delivery?.duration ?? '20'} Minutes</Text>
                                     </View>
                                     <View style={tailwind('flex flex-row items-center mt-1 border-l-1.5 ml-5 px-2 border-brand-gray-700')}>
-                                        <Text style={tailwind('text-gray-600 text-sm')}>Accepts {getVendorDelivery()}</Text>
+                                        <Text style={tailwind('text-nana-text text-sm')}>Accepts {getVendorDelivery()}</Text>
                                     </View>
                                 </View>
                                 <View style={tailwind('flex pb-3 flex-row items-center w-full border-b-0.5 border-gray-200')}>
                                     <View style={tailwind('flex flex-row mt-1  items-center mr-3')}>
                                         <AlarmClockCheck size={16} style={tailwind('text-gray-600')} />
-                                        <Text  style={tailwind('text-gray-600 text-sm ml-1')}>Opens</Text>
-                                        <Text style={tailwind('text-gray-600 text-sm ml-2')}>{moment(route.params.vendor.settings?.operations?.startTime).format('HH:mm')}</Text>
+                                        <Text  style={tailwind('text-nana-text text-sm ml-1')}>Opens</Text>
+                                        <Text style={tailwind('text-nana-text text-sm ml-2')}>{moment(route.params.vendor.settings?.operations?.startTime).format('HH:mm')}</Text>
                                     </View>
                                     <View style={tailwind('flex flex-row mt-1 items-center')}>
-                                        <AlarmClockOff size={16} style={tailwind('text-gray-600')} />
-                                        <Text  style={tailwind('text-gray-600 text-sm ml-1')}>Closes</Text>
-                                        <Text style={tailwind('text-gray-600 text-sm ml-2')}>{moment(route.params.vendor.settings?.operations?.cutoffTime).format('HH:mm')}</Text>
+                                        <AlarmClockOff size={16} style={tailwind('text-nana-text')} />
+                                        <Text  style={tailwind('text-nana-text text-sm ml-1')}>Closes</Text>
+                                        <Text style={tailwind('text-nana-text text-sm ml-2')}>{moment(route.params.vendor.settings?.operations?.cutoffTime).format('HH:mm')}</Text>
                                     </View>
                                 </View>
                                 {scheduled.length > 0 && (

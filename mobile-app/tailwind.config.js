@@ -55,9 +55,9 @@ module.exports = {
           200: '#DBE1E5',
           500: '#0b1c3a',
         },
-
+        'nana-text': "#4c5270",
         'brand-black': {
-          500: '#1e2327',
+          500: '#4c5270',
         },
         'brand-gray': {
           200: '#E6E6E6',

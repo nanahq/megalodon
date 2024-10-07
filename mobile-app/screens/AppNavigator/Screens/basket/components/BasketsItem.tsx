@@ -74,21 +74,21 @@ export const BasketsItem: React.FC<{cart: Cart[], vendor: any}> = ({cart, vendor
         <View style={tailwind('border-b-0.5 border-primary-50 py-3')}>
             <View style={tailwind('flex flex-row items-start w-full justify-between')}>
                 <View style={tailwind('flex flex-row items-start mt-3')}>
-                    <View style={tailwind(' rounded-full bg-primary-50  flex flex-row items-center justify-center w-10 h-10')}>
+                    <View style={tailwind(' rounded-full bg-primary-50 flex flex-row items-center justify-center w-10 h-10')}>
                         <Text style={tailwind('text-primary-100')}>{props.cart.quantity}</Text>
                     </View>
-                    <View style={tailwind('flex flex-col  ml-4')}>
-                        <Text style={tailwind('text-black font-bold')}>{props.cart.cartItem.name}</Text>
+                    <View style={tailwind('flex flex-col ml-2')}>
+                        <Text style={tailwind('text-nana-text')}>{props.cart.cartItem.name}</Text>
                         <View style={tailwind('flex flex-row flex-wrap mt-2')}>
-                            <Text>Options: </Text>
+                            <Text style={tailwind('text-xs text-nana-text')}>Options:</Text>
                             {props.cart.options.length > 0 && props.cart.options.map((option, index) => (
-                                <Text key={index} style={tailwind('text-gray-600 text-sm')}> [{option.name}  <NumberFormat
+                                <Text key={index} style={tailwind('text-nana-text text-xs')}> [{option.name} <NumberFormat
                                     prefix="+₦"
                                     value={option.price}
                                     thousandSeparator
                                     displayType="text"
                                     renderText={(value) => (
-                                        <Text style={tailwind("text-xs text-gray-600")}>{value}</Text>
+                                        <Text style={tailwind("text-xs text-nana-text")}>{value}</Text>
                                     )}
                                 /> ]</Text>
                             ))}
@@ -100,7 +100,7 @@ export const BasketsItem: React.FC<{cart: Cart[], vendor: any}> = ({cart, vendor
                                 thousandSeparator
                                 displayType="text"
                                 renderText={(value) => (
-                                    <Text style={tailwind("text-sm text-primary-100")}>{value}</Text>
+                                    <Text style={tailwind("text-xs text-primary-100")}>{value}</Text>
                                 )}
                             />
                         </View>

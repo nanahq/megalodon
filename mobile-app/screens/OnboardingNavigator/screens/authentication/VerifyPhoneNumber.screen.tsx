@@ -30,16 +30,12 @@ export function VerifyPhoneNumberScreen({
     const [sendingVerification, setSendingVerification] = useState(false)
     const toast = useToast()
 
-
     useEffect(() => {
         navigation.setOptions({
             headerLeft: () => <BackButton onPress={() => navigation.goBack()} testID="" />,
             headerTitle: '',
         })
     }, [])
-
-
-
 
     async function onContinue(): Promise<void> {
         try {
