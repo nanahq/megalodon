@@ -244,7 +244,7 @@ export const Checkout: React.FC = () => {
             },
             primaryContact: userProfile.profile.phone,
             vendor: vendor?._id ?? '',
-            totalOrderValue: Object.values(orderBreakDown).reduce((a, r) => a + r),
+            totalOrderValue: Object.values({...orderBreakDown, deliveryFee: 0}).reduce((a, r) => a + r),
             quantity: cartState.cart?.map(crt => {
                 return {
                     listing: crt.cartItem._id,
@@ -338,10 +338,10 @@ export const Checkout: React.FC = () => {
             </View>
             <View style={tailwind('flex flex-col mt-5')}>
                 <CheckoutBreakDown label="Order cost" value={orderBreakDown.orderCost} />
-                <CheckoutBreakDown label="Delivery Fee" value={orderBreakDown.deliveryFee} />
+                <CheckoutBreakDown label="Delivery Fee" value={0} />
                 <CheckoutBreakDown label="Service Fee" value={orderBreakDown.systemFee} />
                 {discount && <CheckoutBreakDown label="Discount" value={(-Math.abs(discount).toString())} /> }
-                <CheckoutBreakDown subTotal={true as any} label="Subtotal" value={orderBreakDown.orderCost + orderBreakDown.deliveryFee + orderBreakDown.systemFee - (discount ?? 0)} />
+                <CheckoutBreakDown subTotal={true as any} label="Subtotal" value={orderBreakDown.orderCost + 0 + orderBreakDown.systemFee - (discount ?? 0)} />
             </View>
 
             <View style={tailwind('mt-5 mb-10')}>
