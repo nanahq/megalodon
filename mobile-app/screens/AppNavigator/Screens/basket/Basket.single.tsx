@@ -33,12 +33,7 @@ export const BasketSingle: React.FC = () => {
     const totalCartValue = useMemo(() => {
         if (cart.cart !== undefined) {
             return cart.cart.reduce((total, cartItem) => {
-                const basePrice = Number(cartItem.cartItem.price) * cartItem.quantity;
-                const optionPrice = cartItem.options.reduce((totalOptionsPrice, option) => {
-                    return totalOptionsPrice + Number(option.price);
-                }, 0);
-                const itemTotalValue = basePrice + optionPrice;
-                return total + itemTotalValue;
+                return total + cartItem.totalValue;
             }, 0);
         }
 
@@ -71,7 +66,6 @@ export const BasketSingle: React.FC = () => {
     }
 
     const deleteCartItem = (itemId: string): void => {
-        console.log('hit')
         dispatch(removeCartItem(itemId))
     }
 

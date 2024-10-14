@@ -154,12 +154,7 @@ export const Checkout: React.FC = () => {
     useEffect(() => {
         if (cartState.cart) {
             const totalCartValue = cartState.cart.reduce((total, cartItem) => {
-                const basePrice = Number(cartItem.cartItem.price) * cartItem.quantity;
-                const optionPrice = cartItem.options.reduce((totalOptionsPrice: any, option: any) => {
-                    return totalOptionsPrice + Number(option.price);
-                }, 0);
-                const itemTotalValue = basePrice + optionPrice;
-                return total + itemTotalValue;
+                return total + cartItem.totalValue;
             }, 0);
 
             const systemFee = (totalCartValue / 100) * 10
