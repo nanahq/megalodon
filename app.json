@@ -11,12 +11,6 @@
     "jsEngine": "hermes",
     "plugins": [
       [
-        "onesignal-expo-plugin",
-        {
-          "mode": "production"
-        }
-      ],
-      [
         "expo-build-properties",
         {
           "android": {
@@ -34,7 +28,12 @@
       "expo-font",
       "expo-localization",
       "expo-secure-store",
-      "onesignal-expo-plugin"
+      [
+        "onesignal-expo-plugin",
+        {
+          "mode": "production"
+        }
+      ]
     ],
     "splash": {
       "image": "./assets/app-config/nana-splash.png",
