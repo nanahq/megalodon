@@ -2,8 +2,8 @@ import {CardStyleInterpolators, createStackNavigator} from "@react-navigation/st
 import {LinkingOptions, NavigationContainer} from "@react-navigation/native";
 import {AppLinking, BottomTabNavigator} from "@screens/AppNavigator/BottomTabNavigator";
 import * as Linking from "expo-linking"
-import {fetchProfile, updateUserProfile} from "@store/profile.reducer";
-import {useEffect, useRef, useState} from "react";
+import {fetchProfile} from "@store/profile.reducer";
+import {useEffect, useRef} from "react";
 import {RootState, useAppDispatch} from "@store/index";
 import {useSelector} from "react-redux";
 
@@ -19,15 +19,15 @@ import {PaymentModal} from "@screens/AppNavigator/Screens/modals/Payment.Modal";
 import * as Device from 'expo-device'
 import * as Location from "expo-location";
 import {_api} from "@api/_request";
-import * as Notifications from "expo-notifications";
-import {fetchAllCategories, fetchHomaPage} from "@store/listings.reducer";
+import {fetchAllCategories} from "@store/listings.reducer";
 import {RedeemModal} from "@screens/AppNavigator/Screens/modals/Redeem.Modal";
 import {useAnalytics} from "@segment/analytics-react-native";
 import {PromotionModal} from "@screens/AppNavigator/Screens/modals/Promotion.modal";
-import Constants from "expo-constants";
+
 import {ProfileNavigator} from "@screens/AppNavigator/Screens/profile/ProfileNavigator";
 import {BasketNavigator} from "@screens/AppNavigator/Screens/basket/BasketNavigator";
 import { DdRumReactNavigationTracking } from "@datadog/mobile-react-navigation";
+import {OneSignal} from "react-native-onesignal";
 
 const App = createStackNavigator<AppParamList>()
 
@@ -63,35 +63,10 @@ export interface AppParamList {
     [key: string]: undefined | object;
 }
 
-Notifications.setNotificationHandler({
-    handleNotification: async () => ({
-        shouldShowAlert: true,
-        shouldPlaySound: true,
-        shouldSetBadge: true,
-
-    }),
-});
-
-
-if (Device.osName === 'Android') {
-    void Notifications.setNotificationChannelAsync('default', {
-        name: 'default',
-        showBadge: true,
-        enableLights: true,
-        enableVibrate: true,
-        sound: 'default',
-        importance: Notifications.AndroidImportance.MAX,
-        vibrationPattern: [0, 250, 250, 250],
-        lightColor: '#FF231F7C',
-    });
-}
-
 
 
 export function AppNavigator(): JSX.Element {
     const {profile} = useSelector((state: RootState) => state.profile)
-    const notificationListener = useRef<any>();
-    const responseListener = useRef<any>();
     const isAndroid  = Device.osName === 'Android'
     const dispatch = useAppDispatch()
     const analytics = useAnalytics()
@@ -119,7 +94,11 @@ export function AppNavigator(): JSX.Element {
                     brand: Device.brand
                 }
             })
+            OneSignal.login(profile._id)
+            OneSignal.User.addEmail(profile.email);
+            OneSignal.User.addSms(profile.phone)
         }
+
     }, [profile, profile._id])
 
     const requestLocation = async () => {
@@ -152,21 +131,6 @@ export function AppNavigator(): JSX.Element {
         void requestLocation()
     }, [])
 
-    useEffect(() => {
-        registerForPushNotificationsAsync().then((token: any) => {
-            dispatch(updateUserProfile({expoNotificationToken: token}))
-        });
-
-
-        responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-            return response
-        });
-
-        return () => {
-            Notifications.removeNotificationSubscription(notificationListener.current);
-            Notifications.removeNotificationSubscription(responseListener.current);
-        };
-    }, []);
     return (
         <NavigationContainer
             ref={navigationRef}
@@ -239,34 +203,3 @@ const LinkingConfiguration: LinkingOptions<ReactNavigation.RootParamList> = {
             },
     },
 };
-
-async function registerForPushNotificationsAsync() {
-    let token;
-
-    if (Device.osName === 'Android') {
-        await Notifications.setNotificationChannelAsync('default', {
-            name: 'default',
-            importance: Notifications.AndroidImportance.MAX,
-            vibrationPattern: [0, 250, 250, 250],
-            lightColor: '#FF231F7C',
-        });
-    }
-
-    if (Device.isDevice) {
-        const { status: existingStatus } = await Notifications.getPermissionsAsync();
-        let finalStatus = existingStatus;
-        if (existingStatus !== 'granted') {
-            const { status } = await Notifications.requestPermissionsAsync();
-            finalStatus = status;
-        }
-        if (finalStatus !== 'granted') {
-            alert('You must grant permission to receive notifications on your order');
-            return;
-        }
-        token = (await Notifications.getExpoPushTokenAsync({ projectId: Constants?.expoConfig?.extra?.eas?.projectId})).data;
-    } else {
-        alert('Must use physical device for Push Notifications');
-    }
-
-    return token;
-}

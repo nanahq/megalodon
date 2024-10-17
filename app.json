@@ -11,6 +11,12 @@
     "jsEngine": "hermes",
     "plugins": [
       [
+        "onesignal-expo-plugin",
+        {
+          "mode": "development"
+        }
+      ],
+      [
         "expo-build-properties",
         {
           "android": {
@@ -27,7 +33,8 @@
       ],
       "expo-font",
       "expo-localization",
-      "expo-secure-store"
+      "expo-secure-store",
+      "onesignal-expo-plugin"
     ],
     "splash": {
       "image": "./assets/app-config/nana-splash.png",
@@ -94,6 +101,7 @@
       "favicon": "./assets/app-config/favicon.png"
     },
     "extra": {
+      "oneSignalAppId": "639c55ed-b3da-4238-b6c4-d01f5872f406",
       "eas": {
         "projectId": "8235481d-016d-4aa1-a436-7cc06ccc1f14"
       }

@@ -1,7 +1,6 @@
 import {useEffect, useState} from "react";
 import {Logger} from '@api/logging.util'
 import * as Font from 'expo-font'
-import { MaterialCommunityIcons} from '@expo/vector-icons'
 import NanaOmnesBold from '@assets/fonts/nana-font-bold.otf'
 import NanaOmnesRegular from '@assets/fonts/nana-font.otf'
 /**
@@ -23,7 +22,6 @@ export function useCachedResource (): boolean {
 async function LoadCachedResourceAsync (): Promise<void> {
     try {
         await Font.loadAsync({
-            ...MaterialCommunityIcons.font,
             ThinFont: NanaOmnesRegular,
             LightFont: NanaOmnesRegular,
             RegularFont: NanaOmnesRegular,

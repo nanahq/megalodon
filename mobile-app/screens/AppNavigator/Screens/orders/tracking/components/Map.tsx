@@ -14,9 +14,7 @@ import DeliveryIcon from '@assets/app/delivery.png'
 import HomeIcon from '@assets/app/home.png'
 import MapView, {Marker, PROVIDER_GOOGLE, Region} from 'react-native-maps'
 import {socket, useWebSocket} from "@contexts/SocketProvider";
-import {useExpoPushNotification} from "@hooks/useExpoNotification";
 import moment from "moment";
-import * as Notifications from 'expo-notifications'
 import {Audio, InterruptionModeAndroid, InterruptionModeIOS} from 'expo-av';
 import {Sound} from "expo-av/build/Audio/Sound";
 
@@ -49,7 +47,6 @@ export const Map: React.FC<{ order: OrderI, delivery: DeliveryI }> = ({ order, d
     const [currentDeliveryPosition, setCurrentDeliveryPosition] = useState<LocationCoordinates>(delivery?.driver?.location ?? [0, 0])
     const { isConnected } = useWebSocket()
     const [_, setRemainingTime] = useState<number | undefined>(calculateRemainingTime(delivery?.travelMeta?.travelTime ?? 0));
-    const { schedulePushNotification } = useExpoPushNotification()
     const [_sound, setSound] = useState<Sound | null>(null);
 
     async function playSound() {
@@ -106,34 +103,18 @@ export const Map: React.FC<{ order: OrderI, delivery: DeliveryI }> = ({ order, d
 
             socket?.on(SOCKET_MESSAGE.UPDATE_ORDER_STATUS, (message: { userId: string, orderId: string, status: OrderStatus, driver: string, vendorName?: string }) => {
                 const isOrder = message.orderId === order._id
-                if (isOrder) {
-                    const notificationPayload: Notifications.NotificationRequestInput = {
-                        trigger: {
-                            seconds: 1,
-                            repeats: false
-                        },
-                        identifier: OrderStatus.IN_ROUTE,
-                        content: {
-                            sticky: false,
-                            title: order.vendor.businessName,
-                            body: 'Your order is delivered enjoy your meal',
-                            sound: 'default',
-                            data: {
-                                order
-                            }
-                        }
-                    }
-                    switch (message.status) {
-                        case OrderStatus.IN_ROUTE:
-                            void playSound()
-                            break;
-                        case OrderStatus.FULFILLED:
-                            void Notifications.getPermissionsAsync()
-                            void schedulePushNotification(notificationPayload)
-                            break;
-                        default:
-                    }
-                }
+                // if (isOrder) {
+                //
+                //     switch (message.status) {
+                //         case OrderStatus.IN_ROUTE:
+                //             void playSound()
+                //             break;
+                //         case OrderStatus.FULFILLED:
+                //
+                //             break;
+                //         default:
+                //     }
+                // }
             })
         }
     }, [isConnected]);

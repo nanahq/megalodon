@@ -22,6 +22,14 @@ import {AmplitudeSessionPlugin} from "@segment/analytics-react-native-plugin-amp
 import {PromoCodeProvider} from "@contexts/PromoCode";
 import Wrapper from "./Wrapper";
 
+import { LogLevel, OneSignal } from 'react-native-onesignal';
+import Constants from "expo-constants";
+
+OneSignal.Debug.setLogLevel(LogLevel.Verbose);
+OneSignal.initialize(Constants.expoConfig?.extra?.oneSignalAppId);
+
+OneSignal.Notifications.requestPermission(true);
+
 const WEBSOCKET_ENDPOINT = NetworkMapper.PRODUCTION
 
 const segmentClient = createClient({
