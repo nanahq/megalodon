@@ -24,6 +24,7 @@ import Wrapper from "./Wrapper";
 
 import { LogLevel, OneSignal } from 'react-native-onesignal';
 import Constants from "expo-constants";
+import {LoadingProvider} from "@contexts/loading.provider";
 
 OneSignal.Debug.setLogLevel(LogLevel.Verbose);
 OneSignal.initialize(Constants.expoConfig?.extra?.oneSignalAppId);
@@ -68,23 +69,25 @@ export default function App() {
                     }}
                 >
                     <WebSocketProvider socketEndpoint={WEBSOCKET_ENDPOINT}>
-                        <StoreProvider>
-                            <PromoCodeProvider>
-                                <GestureHandlerRootView
-                                    style={tailwind('flex-1')}
-                                >
-                                    <SafeAreaProvider>
-                                        <BottomSheetModalProvider>
-                                            <ToastProvider renderType={customToast}>
-                                                <AnalyticsProvider client={segmentClient}>
-                                                    <MainScreen />
-                                                </AnalyticsProvider>
-                                            </ToastProvider>
-                                        </BottomSheetModalProvider>
-                                    </SafeAreaProvider>
-                                </GestureHandlerRootView>
-                            </PromoCodeProvider>
-                        </StoreProvider>
+                       <LoadingProvider>
+                           <StoreProvider>
+                               <PromoCodeProvider>
+                                   <GestureHandlerRootView
+                                       style={tailwind('flex-1')}
+                                   >
+                                       <SafeAreaProvider>
+                                           <BottomSheetModalProvider>
+                                               <ToastProvider renderType={customToast}>
+                                                   <AnalyticsProvider client={segmentClient}>
+                                                       <MainScreen />
+                                                   </AnalyticsProvider>
+                                               </ToastProvider>
+                                           </BottomSheetModalProvider>
+                                       </SafeAreaProvider>
+                                   </GestureHandlerRootView>
+                               </PromoCodeProvider>
+                           </StoreProvider>
+                       </LoadingProvider>
                     </WebSocketProvider>
                 </AuthPersistenceProvider>
             </ErrorBoundary>

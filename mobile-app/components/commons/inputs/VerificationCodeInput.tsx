@@ -37,20 +37,20 @@ export function VerificationCodeInput({
                 onLayout={getCellOnLayoutHandler(index)}
                 style={[
                     styles.cell,
-                    !hasValue && styles.borderColor,
-                    hasValue && styles.borderColorFilled,
+                    // !hasValue && styles.borderColor,
+                    // hasValue && styles.borderColorFilled,
                     tailwind({
                         'bg-white': !hasValue,
-                        'bg-black': hasValue
+                        'bg-primary-50': hasValue
                     }),
                     index === 0 && {marginLeft: 0}
                 ]}
                 testID={`${testID}_${index}`}
             >
                 {hasValue && (
-                    <Text style={tailwind(' text-lg font-bold', {
-                        'text-white': hasValue,
-                        'text-black': !hasValue
+                    <Text style={tailwind(' text-lg text-black font-bold', {
+                        // 'text-white': hasValue,
+                        // 'text-black': !hasValue
                     })
                     }>
                         {symbol}
@@ -61,7 +61,7 @@ export function VerificationCodeInput({
     };
 
     return (
-        <View style={tailwind("flex-row justify-center")}>
+        <View style={tailwind("")}>
             <CodeField
                 ref={ref}
                 {...props}

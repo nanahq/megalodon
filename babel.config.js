@@ -15,7 +15,6 @@ module.exports = function (api) {
           '@types': './types',
           '@screens': './mobile-app/screens',
           '@store': './mobile-app/store',
-          '@translations': './translations',
           '@tailwind': './mobile-app/tailwind'
         }
       }

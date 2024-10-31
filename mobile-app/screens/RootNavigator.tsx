@@ -8,11 +8,13 @@ import * as Location from "expo-location";
 import {LocationCoordinates, UpdateUserDto} from "@nanahq/sticky";
 import {PermissionStatus} from "expo-modules-core/src/PermissionsInterface";
 import {_api} from "@api/_request";
+import {useLoading} from "@contexts/loading.provider";
+import {LoaderScreen} from "@components/commons/LoaderScreen";
 
 export function RootNavigator (): JSX.Element {
     const logger = useLogger()
     const {isAuthenticated} =  useAuthPersistence()
-
+    const {isLoadingState} = useLoading()
     useEffect(() => {
         SplashScreen.hideAsync().catch(logger.error);
         void requestLocation()
@@ -44,11 +46,10 @@ export function RootNavigator (): JSX.Element {
             return undefined
         }
     }
-    if (isAuthenticated) {
-        return <AppNavigator />
-    }
 
-    return  (
-        <OnboardingNagivator />
+    return (
+        <>{isAuthenticated ? <AppNavigator /> : <OnboardingNagivator />}
+            {isLoadingState && <LoaderScreen />}
+        </>
     )
 }

@@ -13,6 +13,7 @@ import {OnboardingScreenName} from "@screens/OnboardingNavigator/ScreenName.enum
 import {useToast} from "react-native-toast-notifications";
 import { cookieParser } from "../../../../../utils/cookieParser";
 import {SafeAreaView} from "react-native-safe-area-context";
+import {useLoading} from "@contexts/loading.provider";
 
 type VerifyPhoneNumberScreenProps = StackScreenProps<
     OnboardingParamsList,
@@ -20,13 +21,13 @@ type VerifyPhoneNumberScreenProps = StackScreenProps<
 >;
 
 export function VerifyPhoneNumberScreen({
-                                            navigation,
-                                            route,
+ navigation,
+route,
                                         }: VerifyPhoneNumberScreenProps): JSX.Element {
     const { setToken } = useAuthPersistence();
     const [code, setCode] = useState<string>("");
     const [loading, _setIsLoading] = useState<boolean>(false);
-    const [resendDisabled] = useState<boolean>(false);
+    const {setLoadingState} = useLoading()
     const [sendingVerification, setSendingVerification] = useState(false)
     const toast = useToast()
 
@@ -40,7 +41,7 @@ export function VerifyPhoneNumberScreen({
     async function onContinue(): Promise<void> {
         try {
             _setIsLoading(true);
-
+            setLoadingState(true)
             const { cookies } = await _api.requestData({
                 method: "POST",
                 url: "user/verify",
@@ -53,6 +54,7 @@ export function VerifyPhoneNumberScreen({
         } catch (error: any) {
             showTost(toast,error.message, 'error');
         } finally {
+            setLoadingState(false)
             _setIsLoading(false);
         }
     }
@@ -76,10 +78,9 @@ export function VerifyPhoneNumberScreen({
     return (
         <SafeAreaView
             testID="OnboardingScreen.VerifyPhoneNumberScreen"
-            style={tailwind(" flex-1 bg-white overflow-hidden")}
+            style={tailwind(" flex-1 bg-white w-full px-5 overflow-hidden")}
         >
-            <View style={tailwind("px-5")}>
-                <View>
+                <View style={tailwind('flex flex-col items-center w-full')}>
                     <Text
                         testID="OnboardingScreen.VerifyPhoneNumberScreen.EnterCodeText"
                         style={tailwind("font-bold text-xl mb-5 text-black")}
@@ -120,8 +121,6 @@ export function VerifyPhoneNumberScreen({
                     testId="OnboardingScreen.VerifyPhoneNumberScreen.VerifyButton"
                     disabled={code === "" || code.length <= 5}
                 />
-            </View>
-
         </SafeAreaView>
     );
 }

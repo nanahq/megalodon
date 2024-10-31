@@ -15,6 +15,7 @@ import {useAnalytics} from "@segment/analytics-react-native";
 import * as Device from "expo-device";
 import {cookieParser} from "../../../../../utils/cookieParser";
 import {SafeAreaView} from "react-native-safe-area-context";
+import {useLoading} from "@contexts/loading.provider";
 
 type EnterPasswordScreenProps = StackScreenProps<OnboardingParamsList, OnboardingScreenName.ENTER_PASSWORD>
 
@@ -25,6 +26,7 @@ export function EnterPasswordScreen ({navigation, route}: EnterPasswordScreenPro
     const [email, setEmail] = useState<string>('')
     const [firstName, setFirstName] = useState<string>('')
     const [lastName, setLastName] = useState<string>('')
+    const {setLoadingState} = useLoading()
     const [loading, _setIsLoading] = useState<boolean>(false)
     const toast = useToast()
     const analytics = useAnalytics()
@@ -51,6 +53,7 @@ export function EnterPasswordScreen ({navigation, route}: EnterPasswordScreenPro
     async function onContinue(): Promise<void> {
         _setIsLoading(true)
         try {
+            setLoadingState(true)
             if (route.params.hasAccount) {
                 const { cookies} = await _api.requestData({
                     method: 'POST',
@@ -98,6 +101,7 @@ export function EnterPasswordScreen ({navigation, route}: EnterPasswordScreenPro
                 showTost(toast, typeof error.message !== 'string' ? error.message[0] : error.message, 'error')
             }
         } finally {
+            setLoadingState(false)
             _setIsLoading(false)
         }
 
@@ -121,20 +125,20 @@ export function EnterPasswordScreen ({navigation, route}: EnterPasswordScreenPro
                 <View style={tailwind('flex flex-col')}>
                     {!route.params.hasAccount && (
                         <>
-                            <TextInputWithLabel placeholder="musa@example.com" label="Email" containerStyle={tailwind('my-3')} labelTestId="EnterPasswordScreen.TextInput.Label" onChangeText={setEmail} value={email} />
+                            <TextInputWithLabel placeholder="" label="Email" containerStyle={tailwind('my-3')} labelTestId="EnterPasswordScreen.TextInput.Label" onChangeText={setEmail} value={email} />
                             <View style={tailwind('my-3')}>
                                 <Text
                                     style={tailwind('font-normal text-xs text-brand-gray-700')}>
                                     How will our delivery partners call you?
                                 </Text>
                                 <View style={tailwind('flex flex-row items-center w-full')}>
-                                    <TextInputWithLabel placeholder="Habiba" label="First Name" containerStyle={tailwind(' w-1/2 pr-2')} labelTestId="EnterPasswordScreen.TextInput.Label" onChangeText={setFirstName} value={firstName} />
-                                    <TextInputWithLabel placeholder="Musa" label="Last Name" containerStyle={tailwind('w-1/2 pl-2')} labelTestId="EnterPasswordScreen.TextInput.Label" onChangeText={setLastName} value={lastName} />
+                                    <TextInputWithLabel placeholder="" label="First Name" containerStyle={tailwind(' w-1/2 pr-2')} labelTestId="EnterPasswordScreen.TextInput.Label" onChangeText={setFirstName} value={firstName} />
+                                    <TextInputWithLabel placeholder="" label="Last Name" containerStyle={tailwind('w-1/2 pl-2')} labelTestId="EnterPasswordScreen.TextInput.Label" onChangeText={setLastName} value={lastName} />
                                 </View>
                             </View>
                         </>
                     )}
-                    <TextInputWithLabel secureTextEntry containerStyle={tailwind('my-3 mb-10')}  label="Password" placeholder="Enter password" moreInfo={route.params.hasAccount ? undefined : "Password should be at least 8 characters"} labelTestId="EnterPasswordScreen.TextInput.Label" onChangeText={setPassword} value={password} />
+                    <TextInputWithLabel secureTextEntry containerStyle={tailwind('my-3 mb-10')}  label="Password" placeholder="" moreInfo={route.params.hasAccount ? undefined : "Password should be at least 8 characters"} labelTestId="EnterPasswordScreen.TextInput.Label" onChangeText={setPassword} value={password} />
                 </View>
                 <GenericButton
                     loading={loading}
