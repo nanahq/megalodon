@@ -50,18 +50,11 @@ export function OnboardingNagivator (): JSX.Element {
     function OnboardingStacks (): JSX.Element {
         return (
             <OnboardingStack.Navigator
-                initialRouteName={OnboardingScreenName.ONBOARDING}
+                initialRouteName={OnboardingScreenName.ENTER_MOBILE_PHONE}
                 screenOptions={{
                       headerShown: false
                     }}
             >
-                <OnboardingStack.Screen
-                    component={OnboardingScreen}
-                    name={OnboardingScreenName.ONBOARDING}
-                    options={{
-                        headerShown: false
-                    }}
-                />
                 <OnboardingStack.Screen
                     component={EnterPhoneNumberScreen}
                     name={OnboardingScreenName.ENTER_MOBILE_PHONE}

@@ -28,7 +28,7 @@
     "@expo/config-plugins": "^8.0.4",
     "@expo/vector-icons": "^14.0.0",
     "@gorhom/bottom-sheet": "^4.4.7",
-    "@nanahq/sticky": "^0.3.7",
+    "@nanahq/sticky": "^0.4.1",
     "@react-native-async-storage/async-storage": "1.21.0",
     "@react-native-community/netinfo": "11.1.0",
     "@react-native-community/slider": "4.4.2",
@@ -110,6 +110,7 @@
     "smart-buffer": "^4.2.0",
     "socket.io-client": "4.7.5",
     "stream-browserify": "^3.0.0",
+    "swr": "^2.2.5",
     "tailwind-rn": "^3.0.1",
     "tailwindcss": "^2.2.19"
   },
