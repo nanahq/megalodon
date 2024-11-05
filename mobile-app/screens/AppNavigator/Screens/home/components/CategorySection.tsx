@@ -12,15 +12,15 @@ const _VendorCategorySection: React.FC<{category: ListingCategoryI, vendorOperat
         <View style={tailwind('my-5 flex-1')}>
             <View style={tailwind('flex flex-col')}>
                 <View style={tailwind('flex flex-row items-center')}>
-                    <Text style={tailwind('uppercase  text-nana-text text-lg')}>{props.category.name}</Text>
+                    <Text style={tailwind('font-semibold capitalize text-slate-900 text-lg')}>{props.category.name}</Text>
                     {props.category.type === 'PRE_ORDER' && (
                         <View style={tailwind('bg-primary-100 py-0.5 px-1 rounded-full ml-2')}>
-                            <Text style={tailwind('text-white text-xs text-center')}>Pre-orders</Text>
+                            <Text style={tailwind('text-white font-normal text-center')}>Pre-orders</Text>
                         </View>
                     )}
                 </View>
                 {props.category.type === 'PRE_ORDER' && (
-                    <Text style={tailwind('text-xs text-gray-500 mt-1')}>This menu is only available on a scheduled basis. subscribe to vendor and we will let you know when menu is available</Text>
+                    <Text style={tailwind('text-xs text-slate-600 font-normal mt-1')}>This menu is only available on a scheduled basis. subscribe to vendor and we will let you know when menu is available</Text>
                 )}
             </View>
             <View style={tailwind('flex flex-col')}>
@@ -38,17 +38,17 @@ const _VendorCategorySection: React.FC<{category: ListingCategoryI, vendorOperat
  export const VendorCategorySection = memo(_VendorCategorySection)
 const VendorMenuCard: React.FC<{menu: ListingMenuI, onPress: () => void, disabled: boolean}> = (props) => {
      return (
-         <Pressable disabled={props.disabled} onPress={props.onPress} style={tailwind('flex flex-row items-center py-4 justify-between')}>
+         <Pressable disabled={props.disabled} onPress={props.onPress} style={tailwind('flex flex-row items-center py-4 border-b-0.5 border-slate-200 justify-between')}>
             <View style={tailwind('flex flex-col w-2/3')}>
-                <Text style={tailwind('font-bold text-nana-text')}>{props.menu.name}</Text>
-                <Text style={tailwind('text-nana-text my-1 text-xs')} ellipsizeMode="tail" numberOfLines={3}>{props.menu.desc}</Text>
+                <Text style={tailwind('font-normal text-slate-900 text-base')}>{props.menu.name}</Text>
+                <Text style={tailwind('font-normal text-slate-900 my-1 text-xs')} ellipsizeMode="tail" numberOfLines={3}>{props.menu.desc}</Text>
                 <NumberFormat
                     prefix="₦"
                     value={props.menu.price}
                     thousandSeparator
                     displayType="text"
                     renderText={(value) => (
-                        <Text style={tailwind("text-primary-100")}>{value}</Text>
+                        <Text style={tailwind("text-primary-100 text-base font-medium")}>{value}</Text>
                     )}
                 />
             </View>
@@ -67,9 +67,9 @@ const _ScheduledMenuSection: React.FC<{menu: ScheduledListingI[], onPress: (list
      return (
          <View>
              <View style={tailwind('mb-3 mt-5')}>
-                 <Text style={tailwind('font-bold text-black')}>Order now for Later!</Text>
+                 <Text style={tailwind('font-semibold text-slate-900 text-lg capitalize')}>Available menus</Text>
              </View>
-             <View style={{height: 200}}>
+             <View style={{height: 250}}>
                  <ScrollView
                      horizontal={true as any}
                      showsHorizontalScrollIndicator={false}
@@ -86,25 +86,22 @@ export const ScheduledMenuSection = memo(_ScheduledMenuSection)
 const ScheduledMenuCard: React.FC<{menu: ScheduledListingI, onPress: () => void}> = (props) => {
     const chosenDate = formatRelativeDate(props.menu.availableDate)
     return (
-         <Pressable disabled={props.menu.soldOut} onPress={props.onPress} style={[tailwind('mr-4 relative'), {width: 120}]}>
+         <Pressable disabled={props.menu.soldOut} onPress={props.onPress} style={[tailwind('mr-4 relative'), {width: 150}]}>
              <View>
-                 <FastImage source={{uri: props.menu.listing.photo, priority: FastImage.priority.high }} style={[tailwind('rounded'), {aspectRatio: 10/8, width: 120}]}  resizeMode="cover"   />
-                 <View style={[tailwind('self-center rounded-lg px-2 py-0.5'), {marginTop: -10, backgroundColor: "#f1cf54"}]}>
-                     <Text style={tailwind('text-xs text-white text-center')}>{props.menu.remainingQuantity} servings left</Text>
-                 </View>
-                <View style={tailwind('mt-1 flex flex-row justify-between items-center')}>
-                    <Text style={tailwind('')} numberOfLines={1} ellipsizeMode="tail">{props.menu.listing.name}</Text>
-                    <Text style={tailwind('text-black text-primary-100')}>₦{props.menu.listing.price}</Text>
+                 <FastImage source={{uri: props.menu.listing.photo, priority: FastImage.priority.high }} style={[tailwind('rounded'), {aspectRatio: 1, width: 150}]}  resizeMode="cover"   />
+                <View style={tailwind('mt-1 flex flex-col')}>
+                    <Text style={tailwind('text-slate-900 text-primary-100 text-sm font-normal')}>₦{props.menu.listing.price}</Text>
+                    <Text style={tailwind('text-sm text-slate-900 font-normal')} numberOfLines={1} ellipsizeMode="tail">{props.menu.listing.name}</Text>
                 </View>
              </View>
-             {props.menu.soldOut ? (
+             <View style={tailwind('bg-nana-red  rounded-r-lg p-1 absolute top-0')}>
+                 <Text style={tailwind('text-xs capitalize font-normal text-white')}>{chosenDate}</Text>
+             </View>
+             {props.menu.soldOut && (
                  <View style={tailwind('bg-red-600  rounded-r-lg p-1 absolute top-0')}>
                      <Text style={tailwind('text-xs text-white')}>Sold out!</Text>
                  </View>
-                 ) : (
-                 <View style={[tailwind('rounded-r-lg p-1 absolute top-0'), {backgroundColor: "#f652a0"}]}>
-                     <Text style={tailwind('text-xs text-white')}>Available {chosenDate}</Text>
-                 </View>
+
              )}
          </Pressable>
      )

@@ -1,24 +1,25 @@
-import {View, Text, TouchableOpacity, ActivityIndicator} from "react-native";
+import {View, Text, TouchableOpacity, ActivityIndicator, ScrollView} from "react-native";
 import {getColor, tailwind} from "@tailwind";
 import React, {useEffect, useState} from "react";
 import {ModalCloseIcon} from "@screens/AppNavigator/Screens/modals/components/ModalCloseIcon";
 import {ModalScreenName} from "@screens/AppNavigator/ScreenName.enum";
 import {AppParamList} from "@screens/AppNavigator/AppNav";
 import {StackScreenProps} from "@react-navigation/stack";
-import {RootState, useAppDispatch, useAppSelector} from "@store/index";
 import {TextInputWithLabel} from "@components/commons/inputs/TextInputWithLabel";
 import {GenericButton} from "@components/commons/buttons/GenericButton";
 import * as Location from "expo-location";
 import {showTost} from "@components/commons/Toast";
 import {useToast} from "react-native-toast-notifications";
-import {addAddressBook} from "@store/AddressBook.reducer";
 import {NavigationProp, useNavigation} from "@react-navigation/native";
 import {ProfileParamsList} from "@screens/AppNavigator/Screens/profile/ProfileNavigator";
-import {HomeScreenName} from "@screens/AppNavigator/Screens/home/HomeScreenNames.enum";
 import {_api} from "@api/_request";
 import {useAnalytics} from "@segment/analytics-react-native";
 
 import {mapboxLocationMapper} from "../../../../../utils/mapboxLocationMappper";
+import {useAddress} from "@contexts/address-book.provider";
+import {AddressBookDto} from "@nanahq/sticky";
+import {mutate} from "swr";
+import {useLoading} from "@contexts/loading.provider";
 
 type AddAddressModalProps = StackScreenProps<AppParamList, ModalScreenName.MODAL_ADD_ADDRESS_SCREEN>
 interface MapboxFeature {
@@ -58,14 +59,17 @@ interface NewAddress  {
     coordinates: [number, number]
     address: string;
     labelId: string;
+
+    house_number: string
 }
 export const AddAddressModal: React.FC<AddAddressModalProps> = ({navigation, route}) => {
-    const {addressLabels, addingAddress} = useAppSelector((state: RootState) => state.addressBook)
+    const {addressLabels, addingAddress} = useAddress()
     const profileNavigation = useNavigation<NavigationProp<ProfileParamsList>>()
     const [newAddress, setNewAddress] = useState<NewAddress>({
         labelName: '',
         labelId: '',
         address: '',
+        house_number: '',
         coordinates: [0, 0]
     })
 
@@ -74,12 +78,13 @@ export const AddAddressModal: React.FC<AddAddressModalProps> = ({navigation, rou
         labelName: false,
         labelId: false,
         address: false,
-        coordinates: false
+        coordinates: false,
+        house_number: false,
     })
 
     const toast = useToast()
-    const dispatch = useAppDispatch()
     const analytics = useAnalytics()
+    const {setLoadingState} = useLoading()
 
     useEffect(() => {
         void analytics.screen(ModalScreenName.MODAL_ADD_ADDRESS_SCREEN)
@@ -95,7 +100,8 @@ export const AddAddressModal: React.FC<AddAddressModalProps> = ({navigation, rou
             labelName: false,
             labelId: false,
             address: false,
-            coordinates: false
+            coordinates: false,
+            house_number: false
         })
         setNewAddress((prevState) => ({...prevState, [name]: value}))
     }
@@ -106,13 +112,9 @@ export const AddAddressModal: React.FC<AddAddressModalProps> = ({navigation, rou
             headerShown: true,
             headerTitle: 'Add new address',
             headerBackTitleVisible: false,
-            headerTitleAlign: 'left',
-            headerTitleStyle: tailwind('text-xl'),
-            headerStyle:  {
-                shadowOpacity: 8,
-                shadowRadius: 12,
-            },
-            headerLeft: () => <ModalCloseIcon size={22} onPress={() => profileNavigation.goBack()} />,
+            headerTitleAlign: 'center',
+            headerTitleStyle: tailwind('text-2xl font-bold  text-slate-900'),
+            headerLeft: () => <ModalCloseIcon size={18} onPress={() => profileNavigation.goBack()} />,
         })
     }, [])
     const handleAddNewAddress =  async () => {
@@ -120,7 +122,8 @@ export const AddAddressModal: React.FC<AddAddressModalProps> = ({navigation, rou
             labelName: false,
             labelId: false,
             address: false,
-            coordinates: false
+            coordinates: false,
+            house_number: false
         })
 
         if (newAddress.address === ''){
@@ -128,6 +131,10 @@ export const AddAddressModal: React.FC<AddAddressModalProps> = ({navigation, rou
             return
         }
 
+        if (newAddress.house_number === ''){
+            setErrors((prevState: any) => ({...prevState, address: 'Please add an identifier. Example Street name, gate color or estate name'}))
+            return
+        }
         if (newAddress.labelId === ''){
             setErrors((prevState: any) => ({...prevState, labelId: 'Choose address type'}))
             return
@@ -143,17 +150,32 @@ export const AddAddressModal: React.FC<AddAddressModalProps> = ({navigation, rou
             return
         }
 
-        const {coordinates, ...rest} = newAddress
+        const {coordinates, house_number, ...rest} = newAddress
 
-        dispatch(addAddressBook({...rest, location: {coordinates}}))
+        console.log({...rest, location: {coordinates}})
+        try {
+            setLoadingState(true)
+            await _api.requestData<AddressBookDto>({
+                method: 'post',
+                url: 'address-books',
+                data: {...rest, location: {coordinates}}
+            } as any)
+            setTimeout(() => {
+                if (route?.params?.callback !== undefined) {
+                    route?.params?.callback()
+                }
+            }, 2000)
 
-        setTimeout(() => {
-            if (route?.params?.callback !== undefined) {
-                route?.params?.callback()
-            }
-        }, 2000)
+            void analytics.track('CLICK:ADD-NEW-ADDRESS')
+            void mutate('address-books')
+            showTost(toast, 'Address saved!', 'success')
+        } catch (error) {
+            console.log(error)
+            showTost(toast, 'Failed to save address', 'error')
+        } finally {
+            setLoadingState(false)
+        }
 
-        void analytics.track('CLICK:ADD-NEW-ADDRESS')
     }
 
     const requestCurrentLocation = async () => {
@@ -162,11 +184,11 @@ export const AddAddressModal: React.FC<AddAddressModalProps> = ({navigation, rou
             labelName: false,
             labelId: false,
             address: false,
-            coordinates: false
+            coordinates: false,
+            house_number: false
         })
         const { status } = await Location.requestForegroundPermissionsAsync();
 
-        console.log(status)
         if (status !== 'granted') {
             showTost(toast, 'We can not get permission. Please go to settings and give Nana location access', 'error')
             setGettingLocation(false)
@@ -191,8 +213,7 @@ export const AddAddressModal: React.FC<AddAddressModalProps> = ({navigation, rou
     }, [newAddress.coordinates])
 
     const fetchDeliveryMeta = async () => {
-
-        const MAPBOX_TOKEN = 'pk.eyJ1Ijoic3VyYWphdXdhbCIsImEiOiJjbGxiNHhpNW8wMHBpM2lxb215NnZmN3ZuIn0.a6zWnzIF0KcVZ2AUiDNBDA'
+        const MAPBOX_TOKEN =  process.env.EXPO_PUBLIC_MAPBOX_TOKEN ??  "pk.eyJ1Ijoic3VyYWphdXdhbCIsImEiOiJjbTJ6d3Y3ZDkwZml2MmtzNzZ4ODNkejc1In0.gQYN5B1HIFdJhpwv3Hyeqw"
 
         const coords = mapboxLocationMapper(newAddress.coordinates, true)
 
@@ -211,7 +232,7 @@ export const AddAddressModal: React.FC<AddAddressModalProps> = ({navigation, rou
         }
     }
     return (
-        <View style={tailwind('flex-1 bg-white px-4 pt-4 relative')}>
+        <ScrollView style={tailwind('flex-1 h-full bg-white px-4 pt-4 relative')}>
             <View>
                 <View style={tailwind('mb-6')}>
                     <TextInputWithLabel
@@ -226,6 +247,22 @@ export const AddAddressModal: React.FC<AddAddressModalProps> = ({navigation, rou
                     />
                     {errors.labelName !== false && (
                         <Text style={tailwind('text-red-500 mt-1')}>{errors.labelName}</Text>
+                    )}
+                </View>
+                <View style={tailwind('mb-6')}>
+                    <TextInputWithLabel
+                        editable={true}
+                        label="Address identifier"
+                        moreInfo="House number, estate name or street name. Any identifier to help us locate this address"
+                        containerStyle={tailwind('mt-2.5 overflow-hidden')}
+                        textAlign='left'
+                        onChangeText={(value) => handleUpdateForm('house_number', value) }
+                        value={`${newAddress.house_number}`}
+                        placeholder="Gidan su ummi, Layin mallam musa, Al- wa'a estate ETC"
+                        placeHolderStyle="#717171"
+                    />
+                    {errors.address !== false && (
+                        <Text style={tailwind('text-red-500 mt-1')}>{errors.hous}</Text>
                     )}
                 </View>
                 <View style={tailwind('flex flex-col mt-5')}>
@@ -285,7 +322,7 @@ export const AddAddressModal: React.FC<AddAddressModalProps> = ({navigation, rou
                 )}
                 <GenericButton loading={addingAddress} onPress={handleAddNewAddress} label="Add address" backgroundColor={tailwind('bg-primary-100')} labelColor={tailwind('text-white font-medium')} />
             </View>
-        </View>
+        </ScrollView>
     )
 }
 
@@ -298,5 +335,5 @@ function extractAddress(mapboxResponse: MapboxResponse): string | undefined {
         }
     }
 
-    return undefined;
+    return undefined as any;
 }

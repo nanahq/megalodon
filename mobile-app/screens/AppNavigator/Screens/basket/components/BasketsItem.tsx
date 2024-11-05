@@ -43,7 +43,7 @@ export const BasketsItem: React.FC<{cart: Cart[], vendor: any}> = ({cart, vendor
                     <Text style={tailwind('font-medium text-2xl')}>{vendor?.businessName}</Text>
                     <View>
                         <View style={tailwind("flex flex-row items-center")}>
-                            <Text style={tailwind('text-brand-gray-700 text-sm')}>{cart?.length} Items</Text>
+                            <Text style={tailwind('text-sltate-900 text-sm')}>{cart?.length} Items</Text>
                             <View style={tailwind('flex flex-row items-center')}>
                                 <Tags  size={20} color={getColor('green-600')}/>
                                 <NumberFormat
@@ -52,7 +52,7 @@ export const BasketsItem: React.FC<{cart: Cart[], vendor: any}> = ({cart, vendor
                                     thousandSeparator
                                     displayType="text"
                                     renderText={(value) => (
-                                        <Text style={tailwind("text-sm ml-2 text-brand-black-500")}>{value}</Text>
+                                        <Text style={tailwind("text-sm ml-2 text-slate-900 font-normal")}>{value}</Text>
                                     )}
                                 />
                             </View>
@@ -75,24 +75,26 @@ export const BasketsItem: React.FC<{cart: Cart[], vendor: any}> = ({cart, vendor
             <View style={tailwind('flex flex-row items-start w-full justify-between')}>
                 <View style={tailwind('flex flex-row items-start mt-3')}>
                     <View style={tailwind(' rounded-full bg-primary-50 flex flex-row items-center justify-center w-10 h-10')}>
-                        <Text style={tailwind('text-primary-100')}>{props.cart.quantity}</Text>
+                        <Text style={tailwind('text-primary-100 font-normal text-base')}>{props.cart.quantity}</Text>
                     </View>
                     <View style={tailwind('flex flex-col ml-2')}>
-                        <Text style={tailwind('text-nana-text')}>{props.cart.cartItem.name}</Text>
-                        <View style={tailwind('flex flex-row flex-wrap mt-2')}>
-                            <Text style={tailwind('text-xs text-nana-text')}>Options:</Text>
-                            {props.cart.options.length > 0 && props.cart.options.map((option, index) => (
-                                <Text key={index} style={tailwind('text-nana-text text-xs')}> [{option.name} <NumberFormat
-                                    prefix="+₦"
-                                    value={option.price}
-                                    thousandSeparator
-                                    displayType="text"
-                                    renderText={(value) => (
-                                        <Text style={tailwind("text-xs text-nana-text")}>{value}</Text>
-                                    )}
-                                /> ]</Text>
-                            ))}
+                        <Text style={tailwind('text-slate-900 font-normal text-base')}>{props.cart.cartItem.name}</Text>
+                        {props.cart.options.length > 0 && (
+                          <View style={tailwind('flex flex-row flex-wrap mt-2')}>
+                              <Text style={tailwind('text-xs font-normal text-slate-900')}>Options:</Text>
+                              { props.cart.options.map((option, index) => (
+                                  <Text key={index} style={tailwind('text-slate-900 font-normal text-xs')}> [{option.name} <NumberFormat
+                                      prefix="+₦"
+                                      value={option.price}
+                                      thousandSeparator
+                                      displayType="text"
+                                      renderText={(value) => (
+                                          <Text style={tailwind("text-xs font-normal text-slate-900")}>{value}</Text>
+                                      )}
+                                  /> ]</Text>
+                              ))}
                         </View>
+                        )}
                         <View style={tailwind('flex mt-3 flex-row items-center w-full justify-between')}>
                             <NumberFormat
                                 prefix="₦"
@@ -100,7 +102,7 @@ export const BasketsItem: React.FC<{cart: Cart[], vendor: any}> = ({cart, vendor
                                 thousandSeparator
                                 displayType="text"
                                 renderText={(value) => (
-                                    <Text style={tailwind("text-xs text-primary-100")}>{value}</Text>
+                                    <Text style={tailwind("text-xs font-normal text-primary-100")}>{value}</Text>
                                 )}
                             />
                         </View>

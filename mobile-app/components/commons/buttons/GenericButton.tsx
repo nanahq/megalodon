@@ -40,9 +40,8 @@ export function GenericButton (props: Props): JSX.Element {
         <TouchableOpacity
             activeOpacity={activeOpacity}
             style={[ tailwind('rounded-2xl', {
-                'bg-brand-gray-700': props.disabled,
-                'flex flex-row justify-center w-full items-center bg-brand-gray-700': props.loading
-            }), style, tailwind('bg-primary-100 py-4'), backgroundColor, {
+                'bg-gray-700': props.disabled || props.loading,
+            }), style, tailwind('bg-primary-100 py-3'), backgroundColor, {
                 shadowColor: 'rgba(0,0,0, .4)', // IOS
                 shadowOffset: { height: 1, width: 1 }, // IOS
                 shadowOpacity: 1, // IOS
@@ -51,7 +50,7 @@ export function GenericButton (props: Props): JSX.Element {
             }]}
             {...rest}
         >
-            <Text style={[tailwind('text-center text-base '), props.labelColor as any] }>{label} {props.loading !== undefined && props.loading && <LoaderComponent loaderColor="white" size={16} style={tailwind('pl-2 text-white')} />}</Text>
+            <Text style={[tailwind('text-center text-lg font-semibold'), props.labelColor as any] }>{label} {props.loading !== undefined && props.loading && <LoaderComponent loaderColor="white" size={16} style={tailwind('pl-2 text-white')} />}</Text>
         </TouchableOpacity>
     )
 }

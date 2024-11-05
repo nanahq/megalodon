@@ -1,41 +1,40 @@
-import React, { useEffect, useState } from 'react';
-import {CardStyleInterpolators, StackScreenProps} from '@react-navigation/stack';
+import React, { useEffect } from 'react';
+import { StackScreenProps} from '@react-navigation/stack';
 import { AppParamList } from '@screens/AppNavigator/AppNav';
 import { ModalScreenName} from '@screens/AppNavigator/ScreenName.enum';
 import { tailwind } from '@tailwind';
 import {ModalCloseIcon} from "@screens/AppNavigator/Screens/modals/components/ModalCloseIcon";
 import { WebView } from 'react-native-webview';
-import {LoaderComponentScreen} from "@components/commons/LoaderComponent";
 import {useAnalytics} from "@segment/analytics-react-native";
+import {View} from "react-native";
 
 type PaymentModalProps = StackScreenProps<AppParamList, ModalScreenName.MODAL_PAYMENT_SCREEN>;
 
 export const PaymentModal: React.FC<PaymentModalProps> = ({ navigation, route }) => {
-    const [paymentUrl] = useState<string | undefined>(route.params.meta?.authorization_url)
     const analytics = useAnalytics()
     useEffect(() => {
         void analytics.screen(ModalScreenName.MODAL_PAYMENT_SCREEN)
         navigation.setOptions({
             headerShown: true,
-            headerTitle: `Payment for order #${route?.params.order.refId}`,
+            headerTitle: `Payment for your order`,
             headerBackTitleVisible: false,
-            headerTitleAlign: 'left',
-            headerTitleStyle: tailwind('text-xl'),
-            cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS,
-            headerLeft: () => <ModalCloseIcon onPress={handleNavigationBack} />,
+            headerTitleAlign: 'center',
+            headerTitleStyle: tailwind('text-2xl font-bold  text-slate-900'),
+            headerLeft: () => <ModalCloseIcon size={18} onPress={handleNavigationBack} />,
         });
     }, []);
+
     const handleNavigationBack = () => {
         navigation.goBack();
     };
 
-    if ( paymentUrl === undefined) {
-        return <LoaderComponentScreen />
-    }
 
     return (
-        <WebView style={tailwind('flex-1')}
-         source={{ uri: paymentUrl }}
-        />
+        <View style={tailwind('h-full flex-1 bg-white')}>
+            <WebView
+                style={tailwind('flex-1')}
+                source={{ uri: route.params?.meta?.authorization_url ?? 'https://trynanaapp.com' }}
+            />
+        </View>
     );
 };

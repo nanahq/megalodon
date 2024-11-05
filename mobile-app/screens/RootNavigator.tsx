@@ -4,12 +4,14 @@ import * as SplashScreen from "expo-splash-screen";
 import {useLogger} from "@contexts/NativeLoggingProvider";
 import {useEffect} from "react";
 import {OnboardingNagivator} from "./OnboardingNavigator/OnboardingNav";
-import * as Location from "expo-location";
-import {LocationCoordinates, UpdateUserDto} from "@nanahq/sticky";
-import {PermissionStatus} from "expo-modules-core/src/PermissionsInterface";
-import {_api} from "@api/_request";
 import {useLoading} from "@contexts/loading.provider";
 import {LoaderScreen} from "@components/commons/LoaderScreen";
+import {ProfileProvider} from "@contexts/profile.provider";
+import {ListingsProvider} from "@contexts/listing.provider";
+import {LocationProvider} from "@contexts/location.provider";
+import {CartProvider} from "@contexts/cart.provider";
+import {OrdersProvider} from "@contexts/orders.provider";
+import {AddressProvider} from "@contexts/address-book.provider";
 
 export function RootNavigator (): JSX.Element {
     const logger = useLogger()
@@ -17,38 +19,24 @@ export function RootNavigator (): JSX.Element {
     const {isLoadingState} = useLoading()
     useEffect(() => {
         SplashScreen.hideAsync().catch(logger.error);
-        void requestLocation()
     }, []);
 
-    const requestLocation = async () => {
-        const { status } = await Location.requestForegroundPermissionsAsync();
-
-
-        if (status !== PermissionStatus.GRANTED) {
-            return
-        }
-        const {coords: {longitude, latitude}} = await Location.getCurrentPositionAsync({
-            accuracy: 6
-        });
-
-        const location: LocationCoordinates = {
-            type: 'Point',
-            coordinates: [latitude, longitude]
-        }
-
-        try {
-            await _api.requestData<Partial<UpdateUserDto>>({
-                method: 'PUT',
-                url: 'user/update',
-                data: {location}
-            })
-        } catch (error: any) {
-            return undefined
-        }
-    }
-
     return (
-        <>{isAuthenticated ? <AppNavigator /> : <OnboardingNagivator />}
+        <>{isAuthenticated ? (
+            <CartProvider>
+            <LocationProvider>
+            <ProfileProvider>
+                <OrdersProvider>
+                    <AddressProvider>
+                <ListingsProvider>
+                    <AppNavigator />
+                </ListingsProvider>
+                    </AddressProvider>
+                </OrdersProvider>
+            </ProfileProvider>
+            </LocationProvider>
+            </CartProvider>
+        ) : <OnboardingNagivator />}
             {isLoadingState && <LoaderScreen />}
         </>
     )

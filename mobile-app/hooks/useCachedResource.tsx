@@ -1,8 +1,10 @@
 import {useEffect, useState} from "react";
 import {Logger} from '@api/logging.util'
 import * as Font from 'expo-font'
-import NanaOmnesBold from '@assets/fonts/nana-font-bold.otf'
-import NanaOmnesRegular from '@assets/fonts/nana-font.otf'
+import fontLight from '@assets/fonts/nana-new-font-light.ttf'
+import fontRegular from '@assets/fonts/nana-new-font-regular.ttf'
+import fontSemi from '@assets/fonts/nana-new-font-semi.ttf'
+import fontBold from '@assets/fonts/nana-new-font-bold.ttf'
 /**
  * Delaying splash screen to load additional resources prior to rendering the app
  * @return boolean when loading complete
@@ -22,12 +24,11 @@ export function useCachedResource (): boolean {
 async function LoadCachedResourceAsync (): Promise<void> {
     try {
         await Font.loadAsync({
-            ThinFont: NanaOmnesRegular,
-            LightFont: NanaOmnesRegular,
-            RegularFont: NanaOmnesRegular,
-            MediumFont: NanaOmnesRegular,
-            SemiBoldFont: NanaOmnesBold,
-            BoldFont: NanaOmnesBold
+            ThinFont: fontLight,
+            RegularFont: fontRegular,
+            MediumFont: fontSemi,
+            SemiBoldFont: fontSemi,
+            BoldFont: fontBold
         })
     } catch (error) {
         Logger.error(error)

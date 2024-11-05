@@ -1,6 +1,6 @@
 import React, {memo, RefObject, useCallback, useEffect, useMemo, useState} from "react";
 import {getColor, tailwind} from "@tailwind";
-import {FlatList, Text, TouchableOpacity, View,} from "react-native";
+import {FlatList, Pressable, Text, TouchableOpacity, View,} from "react-native";
 import * as Device from 'expo-device'
 import {
     BottomSheetBackdropProps,
@@ -13,11 +13,11 @@ import {
 import {BottomSheetModalMethods} from "@gorhom/bottom-sheet/lib/typescript/types";
 import {VendorOperationSetting, VendorUserI} from "@nanahq/sticky";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
-import {ModalCloseIcon} from "@screens/AppNavigator/Screens/modals/components/ModalCloseIcon";
 import {GenericButton} from "@components/commons/buttons/GenericButton";
 import moment from 'moment'
 import Checkbox from "expo-checkbox";
 import {formatRelativeDate} from "../../../../../../../utils/DateFormatter";
+import {CircleX} from "lucide-react-native";
 
 type ScheduleDeliveryProps =   {
     promptModalName: string
@@ -42,8 +42,21 @@ interface ScheduleItem {
     timeSlots: TimeSlot[];
 }
 
- const _ScheduleDeliveryModal:React.FC<ScheduleDeliveryProps> = (props) => {
+const CustomBackdrop = ({ animatedIndex, style, ...props }: BottomSheetBackdropProps) => {
     const { dismiss } = useBottomSheetModal();
+    return (
+        <Pressable
+            onPress={() => dismiss()}
+            style={[
+                style,
+                tailwind("absolute inset-0 bg-black bg-opacity-60")
+            ]}
+            {...props}
+        />
+    );
+};
+
+ const _ScheduleDeliveryModal:React.FC<ScheduleDeliveryProps> = (props) => {
     const  operations  = props.vendor?.settings?.operations as VendorOperationSetting
     const [selectedDate, setSelectedDate] = useState<string >(operations?.startTime ?? '');
     const [selectedTime, setSelectedTime] = useState<string>(operations?.cutoffTime ?? '');
@@ -121,62 +134,64 @@ interface ScheduleItem {
         setSelectedTime(time);
     };
 
-    const getSnapPoints = (): string[] => {
-        if (Device.osName === "iOS") {
-            return ["80%"];
-        } else if (Device.osName === "Android") {
-            return ["80%"];
-        }
-        return [];
-    }
+     const { dismiss } = useBottomSheetModal();
 
-    const closeModal = useCallback(() => {
-        dismiss(props.promptModalName);
-    }, []);
+     const getSnapPoints = (): string[] => {
+         return ["90%"]
+     }
 
+     const closeModal = useCallback(() => {
+         dismiss(props.promptModalName);
+         props.onDismiss?.();
+     }, [props.promptModalName, props.onDismiss]);
 
 
     return (
         <BottomSheetModal
-            enableContentPanningGesture
+            enableContentPanningGesture={true}
+            enableHandlePanningGesture={true}
+            enablePanDownToClose={true}
+            handleHeight={20}
+            enableDismissOnClose={true}
+            handleComponent={() => <View style={tailwind('flex flex-row justify-center w-full')}>
+                <View style={tailwind('h-1 w-28 bg-gray-400 rounded-full')} />
+            </View>}
             onDismiss={props.onDismiss}
-            enableHandlePanningGesture
-            handleComponent={EmptyHandleComponent}
-            enablePanDownToClose
+            index={0}
             footerComponent={({animatedFooterPosition}) => (
-                <ModalFooter animatedFooterPosition={animatedFooterPosition} scheduleDate={() => {
-                    props.onScheduleSet({
-                        time: selectedTime,
-                        date: selectedDate
-                    })
-                    closeModal()
-                }} />
+                <ModalFooter
+                    animatedFooterPosition={animatedFooterPosition}
+                    scheduleDate={() => {
+                        props.onScheduleSet({
+                            time: selectedTime,
+                            date: selectedDate
+                        })
+                        closeModal()
+                    }}
+                />
             )}
             onChange={(index) => {
-                if (index === 1) {
+                if (index === -1) {
                     closeModal()
                 }
             }}
             name={props.promptModalName}
             ref={props.modalRef}
             snapPoints={getSnapPoints()}
-            backdropComponent={(backdropProps: BottomSheetBackdropProps) => (
-                <View
-                    {...backdropProps}
-                    style={[backdropProps.style, tailwind("bg-black bg-opacity-60")]}
-                />
-            )}
+            backdropComponent={CustomBackdrop}
             backgroundComponent={(backgroundProps: BottomSheetBackgroundProps) => (
                 <View
                     {...backgroundProps}
-                    style={tailwind('bg-brand-blue-200 rounded-t-xl')}
+                    style={tailwind('bg-primary-50 rounded-t-xl')}
                 />
             )}
         >
             <View style={tailwind('bg-white rounded-t-3xl px-5 pt-10 flex-1')}>
                 <View style={tailwind('flex flex-row w-full justify-between items-center')}>
-                    <Text style={tailwind('text-xl')}>Schedule Delivery</Text>
-                    <ModalCloseIcon onPress={() => closeModal()} size={32} />
+                    <Text style={tailwind('text-lg font-semibold text-slate-900')}>Schedule delivery</Text>
+                    <TouchableOpacity onPress={closeModal}>
+                        <CircleX style={[tailwind('text-gray-400')]} size={32} />
+                    </TouchableOpacity>
                 </View>
                 <View style={tailwind('flex-col mt-4')}>
                     <FlatList
@@ -187,9 +202,9 @@ interface ScheduleItem {
                         renderItem={({ item }) => (
                             <TouchableOpacity
                                 style={[
-                                    tailwind('rounded-5 flex flex-row items-center mr-3 justify-center w-full', {
+                                    tailwind('rounded-5 flex flex-row items-center mr-3 mb-5 justify-center w-full', {
                                         'bg-primary-50 border-1.5 border-primary-100': selectedDate === item.date,
-                                        'border-1.5 border-brand-gray-700': selectedDate !== item.date,
+                                        'border-1.5 border-gray-400': selectedDate !== item.date,
                                     }),
                                     {
                                         width: 150,
@@ -198,9 +213,9 @@ interface ScheduleItem {
                                 ]}
                                 onPress={() => selectDate(item.date)}
                             >
-                                <Text style={tailwind('text-lg capitalize', {
-                                    'text-black': selectedDate === item.date,
-                                    'text-brand-gray-700': selectedDate !== item.date,
+                                <Text style={tailwind('text-base font-normal', {
+                                    'text-slate-900': selectedDate === item.date,
+                                    'text-slate-500': selectedDate !== item.date,
                                 })}>
                                     {item.date}
                                 </Text>
@@ -208,16 +223,16 @@ interface ScheduleItem {
                         )}
                     />
                     <FlatList
-                        style={[tailwind('mt-4'), {maxHeight: 400}]}
+                        style={[tailwind('mt-5 pb-80')]}
                         data={schedule.find((item) => item.date === selectedDate)?.timeSlots || []}
                         showsVerticalScrollIndicator={true as any}
                         keyExtractor={(item) => item.start}
                         renderItem={({ item }) => (
                             <TouchableOpacity
-                                style={tailwind('flex flex-row items-center justify-between w-full py-2.5 my-1')}
+                                style={tailwind('flex flex-row items-center justify-between w-full py-1 my-1')}
                                 onPress={() => selectTime(item.end)}
                             >
-                                <Text style={tailwind('text-lg')}>
+                                <Text style={tailwind('text-base font-normal')}>
                                     {`${item.start}-${item.end}`}
                                 </Text>
                                 <Checkbox style={{margin: 8, }} color={selectedTime === item.end ? getColor('primary-100') : undefined} value={selectedTime === item.end} />

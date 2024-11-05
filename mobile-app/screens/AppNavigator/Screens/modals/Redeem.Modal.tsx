@@ -18,8 +18,8 @@ export const RedeemModal: React.FC<RedeemModalProps> = () => {
             headerShown: true,
             headerTitle: 'Redeem Gift Card',
             headerBackTitleVisible: false,
-            headerTitleAlign: 'left',
-            headerTitleStyle: tailwind('text-xl'),
+            headerTitleAlign: 'center',
+            headerTitleStyle: tailwind('text-2xl font-bold  text-slate-900'),
             headerStyle:  {
                 shadowOpacity: 8,
                 shadowRadius: 12,

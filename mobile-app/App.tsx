@@ -25,14 +25,17 @@ import Wrapper from "./Wrapper";
 import { LogLevel, OneSignal } from 'react-native-onesignal';
 import Constants from "expo-constants";
 import {LoadingProvider} from "@contexts/loading.provider";
+import {getSocketUrl} from "@api/_request";
+import {io} from "socket.io-client";
 
 OneSignal.Debug.setLogLevel(LogLevel.Verbose);
 OneSignal.initialize(Constants.expoConfig?.extra?.oneSignalAppId);
 
 OneSignal.Notifications.requestPermission(true);
 
-const WEBSOCKET_ENDPOINT = NetworkMapper.PRODUCTION
+export const socket = io(`${process.env.EXPO_PUBLIC_API_URL}`, {transports: ["websocket"]})
 
+console.log(socket)
 const segmentClient = createClient({
     writeKey: "2mQ9kjV6aBMDEJqDrJHzcG5afX5eOPWr",
     trackAppLifecycleEvents: true,
@@ -68,7 +71,6 @@ export default function App() {
                         delete: persistence.deleteSecure
                     }}
                 >
-                    <WebSocketProvider socketEndpoint={WEBSOCKET_ENDPOINT}>
                        <LoadingProvider>
                            <StoreProvider>
                                <PromoCodeProvider>
@@ -88,7 +90,6 @@ export default function App() {
                                </PromoCodeProvider>
                            </StoreProvider>
                        </LoadingProvider>
-                    </WebSocketProvider>
                 </AuthPersistenceProvider>
             </ErrorBoundary>
         </NativeLoggingProvider>

@@ -53,7 +53,7 @@ export const RatingRow: React.FC<RatingRowProps> = (props) => {
                        >
                            <IconMapper rating={rating.rating} />
                        </View>
-                       <Text style={tailwind('text-center text-brand-gray-700 mt-2')}>{rating.label}</Text>
+                       <Text style={tailwind('text-center text-slate-900 text-sm font-normal mt-2')}>{rating.label}</Text>
                    </View>
                 </Pressable>
             ))}

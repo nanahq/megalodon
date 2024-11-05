@@ -12,13 +12,15 @@ export const SearchBar: React.FC<SearchBarProps> = (props) => {
     return (
         <View style={tailwind('mt-5')}>
             <View style={tailwind('flex flex-row items-center border-1.5 border-gray-200 bg-white rounded-3xl px-3 py-2.5', {
-                'border-black': textFocus
+                'border-slate-600': textFocus
             })}>
-                <Search size={24} color={getColor('gray-600')} />
+                <Search size={24} color={getColor('slate-600')} />
                 <TextInput
                     onFocus={() => setTextFocus(true)}
                     onBlur={() => setTextFocus(false)}
-                    style={tailwind('text-base ml-2')}
+                    onPressOut={() => setTextFocus(false)}
+                    style={tailwind('text-base ml-2 font-normal')}
+                    placeholderTextColor={getColor('slate-600')}
                     placeholder="Search for food, groceries, mart etc"
                 />
             </View>

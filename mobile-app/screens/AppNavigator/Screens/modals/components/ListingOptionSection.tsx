@@ -51,14 +51,14 @@ const _ListingOptionSection: React.FC<{
     return (
         <View style={tailwind("bg-white py-4 mt-3")}>
             <View style={tailwind("flex flex-col px-4")}>
-                <View style={tailwind("flex flex-row items-center w-full justify-between")}>
+                <View style={tailwind("flex flex-row mb-2 items-center w-full justify-between")}>
                     <View>
-                        <Text style={tailwind("text-nana-text font-bold")}>{option.name}</Text>
-                        <Text style={tailwind("text-nana-text text-sm")}>{SelectedText()}</Text>
+                        <Text style={tailwind("text-slate-900 text-base font-medium")}>{option.name}</Text>
+                        <Text style={tailwind("text-slate-900 font-normal text-base")}>{SelectedText()}</Text>
                     </View>
                     {isRequired && (
                         <View style={tailwind("bg-primary-100 border-0.5 border-primary-100 px-2 py-1 rounded-lg")}>
-                            <Text style={tailwind("text-white text-xs")}>required</Text>
+                            <Text style={tailwind("text-white font-normal text-sm")}>required</Text>
                         </View>
                     )}
                 </View>
@@ -91,7 +91,7 @@ const CheckBoxes: React.FC<{
         <View style={tailwind("flex flex-row items-center justify-between py-2 border-b-0.5 border-gray-200")}>
             <View style={tailwind("flex flex-row items-center")}>
                 <Checkbox style={[{padding: 5}, tailwind('border-1.5 border-primary-100', {'rounded-full': isRequired})]} color={isChecked ? getColor('primary-100') : undefined} value={isChecked} onValueChange={onValueChange} />
-                <Text style={tailwind("ml-2.5 text-lg text-darkblue-50")}>{option.name}</Text>
+                <Text style={tailwind("ml-2.5 text-base font-normal text-slate-600")}>{option.name}</Text>
             </View>
             {+option.price ? (
                 <NumberFormat
@@ -100,10 +100,10 @@ const CheckBoxes: React.FC<{
                     thousandSeparator
                     displayType="text"
                     renderText={(value) => (
-                        <Text style={tailwind("text-sm text-gray-400")}>{value}</Text>
+                        <Text style={tailwind("text-sm font-normal text-slate-600")}>{value}</Text>
                     )}
                 />
-            ):  <Text style={tailwind("text-sm text-brand-black-500")}>Free</Text>}
+            ):  <Text style={tailwind("text-sm font-normal text-slate-900")}>Free</Text>}
         </View>
     );
 };

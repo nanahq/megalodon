@@ -44,10 +44,9 @@ const statuses = [
 export const OrderStatusStepper: React.FC<{ _status: OrderStatus, order: OrderI }> = ({ order,  _status }) => {
     return (
         <View style={tailwind("px-4 mt-3")}>
-            <Text style={tailwind('text-xl  font-bold mb-2')}>Headed your way</Text>
+            <Text style={tailwind('text-2xl text-slate-900  font-bold mb-2')}>Headed your way</Text>
             <View style={tailwind('flex mb-8 flex-row items-center justify-between')}>
-                <Text style={tailwind('text-gray-400')}>Arriving at: <Text style={tailwind('text-black')}>{moment(order.orderDeliveryScheduledTime).format('HH:mm Do MMM') }</Text></Text>
-                <Text>Pin: 4501</Text>
+                <Text style={tailwind('text-slate-900 text-sm font-normal')}>Arriving at: <Text style={tailwind('text-black')}>{moment(order.orderDeliveryScheduledTime).format('HH:mm Do MMM') }</Text></Text>
             </View>
             <View style={tailwind('flex flex-row items-center justify-between')}>
             {statuses.map(({ icon, text, status, index, }: any, i) => {
@@ -68,7 +67,7 @@ export const OrderStatusStepper: React.FC<{ _status: OrderStatus, order: OrderI 
                             {icon()}
                         </View>
                         <View style={tailwind("")}>
-                            <Text style={[tailwind("text-sm text-center"), status.includes(_status)  || currentStatus > index ? tailwind("text-primary-100") : tailwind("text-gray-300")]}>
+                            <Text style={[tailwind("text-sm text-center font-normal"), status.includes(_status)  || currentStatus > index ? tailwind("text-primary-100") : tailwind("text-gray-300")]}>
                                 {text}
                             </Text>
                         </View>

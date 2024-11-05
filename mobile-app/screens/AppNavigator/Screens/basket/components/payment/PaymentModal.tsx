@@ -1,6 +1,6 @@
 import React, {memo, RefObject, useCallback, useState} from "react";
 import {getColor, tailwind} from "@tailwind";
-import {Text, TouchableOpacity, View,} from "react-native";
+import {Pressable, Text, TouchableOpacity, View,} from "react-native";
 import * as Device from 'expo-device'
 import {
     BottomSheetBackdropProps,
@@ -12,12 +12,26 @@ import {
 } from "@gorhom/bottom-sheet";
 import {BottomSheetModalMethods} from "@gorhom/bottom-sheet/lib/typescript/types";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
-import {ModalCloseIcon} from "@screens/AppNavigator/Screens/modals/components/ModalCloseIcon";
 import {GenericButton} from "@components/commons/buttons/GenericButton";
 import Checkbox from "expo-checkbox";
 import {PaymentMethodI} from "@screens/AppNavigator/Screens/basket/components/payment/PaymentMethodBox";
 import {IconComponent} from "@components/commons/IconComponent";
-import {CircleX} from "lucide-react-native";
+import {CircleX, CreditCard, Wallet} from "lucide-react-native";
+
+const CustomBackdrop = ({ animatedIndex, style, ...props }: BottomSheetBackdropProps) => {
+    const { dismiss } = useBottomSheetModal();
+    return (
+        <Pressable
+            onPress={() => dismiss()}
+            style={[
+                style,
+                tailwind("absolute inset-0 bg-black bg-opacity-60")
+            ]}
+            {...props}
+        />
+    );
+};
+
 
 interface PaymentMethodModalProps {
     promptModalName: string
@@ -33,7 +47,7 @@ const _PaymentMethodModal:React.FC<PaymentMethodModalProps> = (props) => {
     const [selection, setSelection] = useState<string | undefined>(props.selectedPaymentMethod?.name)
     const { dismiss } = useBottomSheetModal();
     const getSnapPoints = (): string[] => {
-        return ["50%", "70%"];
+        return ["50%"];
     }
 
     const closeModal = useCallback(() => {
@@ -60,58 +74,57 @@ const _PaymentMethodModal:React.FC<PaymentMethodModalProps> = (props) => {
 
     return (
         <BottomSheetModal
-            enableContentPanningGesture
-            onDismiss={props.onDismiss}
-            enableHandlePanningGesture
-            handleComponent={EmptyHandleComponent}
-            enablePanDownToClose
-
             footerComponent={({animatedFooterPosition}) => (
                 <ModalFooter selectedMethod={props.selectedPaymentMethod?.name} animatedFooterPosition={animatedFooterPosition} scheduleDate={() => {
                     closeModal()
                 }} />
             )}
+            enableContentPanningGesture={true}
+            enableHandlePanningGesture={true}
+            enablePanDownToClose={true}
+            handleHeight={20}
+            enableDismissOnClose={true}
+            handleComponent={() => <View style={tailwind('flex flex-row justify-center w-full')}>
+                <View style={tailwind('h-1 w-28 bg-gray-400 rounded-full')} />
+            </View>}
+            onDismiss={props.onDismiss}
+            index={0}
             onChange={(index) => {
-                if (index === 1) {
+                if (index === -1) {
                     closeModal()
                 }
             }}
             name={props.promptModalName}
             ref={props.modalRef}
             snapPoints={getSnapPoints()}
-            backdropComponent={(backdropProps: BottomSheetBackdropProps) => (
-                <View
-                    {...backdropProps}
-                    style={[backdropProps.style, tailwind("bg-black bg-opacity-60")]}
-                />
-            )}
+            backdropComponent={CustomBackdrop}
             backgroundComponent={(backgroundProps: BottomSheetBackgroundProps) => (
                 <View
                     {...backgroundProps}
-                    style={tailwind('bg-brand-blue-200 rounded-t-xl')}
+                    style={tailwind('bg-primary-50 rounded-t-xl')}
                 />
             )}
         >
             <View style={tailwind('bg-white rounded-t-3xl px-5 pt-10 flex-1')}>
-                <View style={tailwind('flex flex-row w-full justify-between items-center mb-10')}>
-                    <Text style={tailwind('text-xl')}>Available payment methods</Text>
-                    <CircleX style={tailwind('text-black')} onPress={() => closeModal()} size={32} />
+                <View style={tailwind('flex flex-row w-full justify-between items-center')}>
+                    <Text style={tailwind('text-lg font-semibold text-slate-900')}>How do you want to pay?</Text>
+                    <TouchableOpacity onPress={closeModal}>
+                        <CircleX style={[tailwind('text-gray-400')]} size={32} />
+                    </TouchableOpacity>
                 </View>
                 <View style={tailwind('flex-col mt-4')}>
-                    <TouchableOpacity onPress={() => onValueChange('ONLINE')} style={tailwind("flex flex-row border-0.5 border-gray-200 px-2 items-center justify-between py-3")}>
+                    <TouchableOpacity onPress={() => onValueChange('ONLINE')} style={tailwind("flex flex-row mb-2 px-2 items-center justify-between py-3")}>
                         <View style={tailwind("flex flex-col")}>
                             <View style={tailwind('flex flex-row items-center')}>
-                                <IconComponent
-                                    iconType="AntDesign"
-                                    name="creditcard"
-                                    style={tailwind('text-brand-black-500')}
-                                    size={20}
-                                />
-                               <View style={tailwind('flex flex-col')}>
-                                   <Text style={tailwind("ml-2 text-lg text-black")}>Pay online</Text>
-                                   <Text style={tailwind("ml-2 text-xs text-gray-500")}>Using card, bank transfer, ussd</Text>
-                               </View>
+                                <View style={tailwind('flex flex-row items-center')}>
+                                    <CreditCard
+                                        style={tailwind('text-slate-900')}
+                                        size={20}
+                                    />
+                                    <Text style={tailwind("ml-2 text-slate-900 text-base font-normal")}>Pay online</Text>
+                                </View>
                             </View>
+                            <Text style={tailwind("text-slate-500 text-sm font-normal")}>Using card, bank transfer, ussd</Text>
                         </View>
                         <Checkbox
                             style={[{margin: 8}, tailwind('rounded-full')]}
@@ -119,18 +132,16 @@ const _PaymentMethodModal:React.FC<PaymentMethodModalProps> = (props) => {
                             value={selection === 'ONLINE'}
                         />
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => onValueChange('WALLET')} disabled={true as any} style={tailwind("flex flex-row border-0.5 border-gray-200 px-2 items-center justify-between py-3 mt-2")}>
+                    <TouchableOpacity onPress={() => onValueChange('WALLET')} disabled={true as any} style={tailwind("flex flex-row  items-center justify-between py-3 mt-2")}>
                         <View style={tailwind("flex flex-col")}>
                             <View style={tailwind('flex flex-row items-center')}>
-                                <IconComponent
-                                    iconType="AntDesign"
-                                    name="wallet"
-                                    style={tailwind('text-brand-black-500')}
+                                <Wallet
+                                    style={tailwind('text-slate-900')}
                                     size={20}
                                 />
-                                <Text style={tailwind("ml-2 text-lg text-gray-500")}>Pay with wallet balance</Text>
+                                <Text style={tailwind("ml-2 text-slate-900 text-base font-normal")}>Pay with wallet balance</Text>
                             </View>
-                            <Text style={tailwind('text-warning-500 text-xs')}>Coming soon</Text>
+                            <Text style={tailwind('text-nana-yellow text-sm font-normal')}>Coming soon</Text>
                         </View>
                         <Checkbox
                             style={[{margin: 8}, tailwind('rounded-full')]}

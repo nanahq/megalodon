@@ -9,7 +9,7 @@ export function formatRelativeDate(rawDate: number | string | moment.Moment) {
     } else if (date.isSame(tomorrow, 'day')) {
         return 'tomorrow';
     } else {
-        return date.format('dddd');
+        return date.format('dddd Do');
     }
 }
 

@@ -35,13 +35,13 @@ export const  TextInputWithLabel =  forwardRef<any, TextInputWithLabelProps>(
                 <View style={tailwind('flex flex-col mb-2.5 w-full ')}>
                     <Text
                         testID={labelTestId}
-                        style={[tailwind('font-medium text-sm text-brand-black-500'), labelStyle]}>
+                        style={[tailwind('font-normal text-sm text-slate-900'), labelStyle]}>
                         {label}
                     </Text>
                     {moreInfo !== undefined && (
                         <Text
                             testID={labelTestId}
-                            style={[tailwind('font-normal text-xs text-brand-gray-700'), labelStyle]}>
+                            style={[tailwind('font-normal text-xs text-slate-500'), labelStyle]}>
                             {moreInfo}
                         </Text>
                     )}
@@ -52,12 +52,10 @@ export const  TextInputWithLabel =  forwardRef<any, TextInputWithLabelProps>(
                     onBlur={() => setInputFocus(false)}
                     placeholderTextColor={props.placeholderTextColor ?? getColor('brand-gray-800')}
                     ref={ref}
-                    style={[tailwind('rounded-lg border-1.5 border-gray-200  flex w-full items-center px-3 py-3 font-medium  text-lg text-brand-black-500', {
-                        'text-base': Device.osName === 'iOS',
+                    style={[tailwind('rounded-lg border-1.5 border-gray-200 font-normal  flex w-full items-center px-3 py-3 text-slate-900 text-base ', {
                         'border-1.5 border-primary-100': inputFocus
                     }), {
-                        height: 50,
-                        lineHeight: 15
+
                     } ,style]}
                     {...rest}
                 />
