@@ -78,7 +78,7 @@ export function GenericTextInputV2(props: TextAreaPropsV2): JSX.Element {
                         </Text>
                         {moreInfo !== undefined && (
                             <Text
-                                style={tailwind('font-normal text-xs text-brand-gray-700')}>
+                                style={tailwind('font-normal text-xs text-slate-600')}>
                                 {moreInfo}
                             </Text>
                         )}

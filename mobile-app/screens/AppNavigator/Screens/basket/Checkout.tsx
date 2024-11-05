@@ -22,7 +22,6 @@ import {ModalScreenName} from "@screens/AppNavigator/ScreenName.enum";
 import {AppParamList} from "@screens/AppNavigator/AppNav";
 import {ScheduleDeliveryModal} from "@screens/AppNavigator/Screens/basket/components/schedule/ScheduleModal";
 import {ScheduleDeliveryBox} from "@screens/AppNavigator/Screens/basket/components/schedule/ScheduleDeliveryBox";
-import {GenericButton} from "@components/commons/buttons/GenericButton";
 import {useToast} from "react-native-toast-notifications";
 import {showTost} from "@components/commons/Toast";
 import {_api} from "@api/_request";
@@ -39,22 +38,34 @@ import {usePromoCode} from "@contexts/PromoCode";
 import {PromocodeBox} from "@screens/AppNavigator/Screens/basket/components/payment/PromocodeBox";
 import {fetchProfile} from "@store/profile.reducer";
 import {parseSelectedScheduledDateTime} from "../../../../../utils/DateFormatter";
+import {SlideToOrderButton, SlideToOrderRef} from "@components/commons/buttons/SliderButton";
+import {useLoading} from "@contexts/loading.provider";
+import {useCart} from "@contexts/cart.provider";
+import {mutate} from "swr";
+import {useProfile} from "@contexts/profile.provider";
+import {AdditionalInfoModal} from "@screens/AppNavigator/Screens/basket/components/AdditionalInforModal";
+import {useAddress} from "@contexts/address-book.provider";
 
 export const ADDRESS_MODAL = 'ADDRESS_MODAL'
+
+export const ADDITIONAL_INFO_MODAL_SERVICE_FEE = 'ADDITIONAL_INFO_MODAL_SERVICE_FEE'
 export const SCHEDULE_MODAL = 'SCHEDULE_MODAL'
 
 export const PAYMENT_METHOD_MODAL = 'PAYMENT_METHOD_MODAL'
 export const Checkout: React.FC = () => {
-
-    // App state
     const [view, setView] = useState<VendorOperationType>("ON_DEMAND")
-    const [vendor, setVendor] = useState<VendorUserI | undefined>(undefined)
+    const slideToOrderRef = useRef<SlideToOrderRef | null>(null);
+    const [vendor, setVendor] = useState<any | undefined>(undefined)
     const [selectedAddress, setSelectedAddress] = useState<any | undefined>(undefined)
     const [isThirdParty] = useState<boolean>(false)
+    const {setLoadingState} = useLoading()
     const [deliveryTime, setDeliveryItem] = useState<{time: string, date: string} | undefined>(undefined)
     const [fetchingConstant, setFetchingConstants] = useState<boolean>(true)
     const [deliveryEta, setDeliveryEta] = useState<DeliveryFeeResult | undefined>(undefined)
-    const [placingOrder, setPlacingOrder] = useState<boolean>(false)
+    const [_, setPlacingOrder] = useState<boolean>(false)
+
+    const [confirmOrder, setConfirmOrder] = useState(false)
+
     const [orderBreakDown, setOrderBreakdown] = useState<OrderBreakDown>({
         deliveryFee: 0,
         vat: 0,
@@ -67,13 +78,13 @@ export const Checkout: React.FC = () => {
     const [fetchingDeliveryFee, setFetchingDeliveryFee] = useState<boolean>(false)
     const {updateCoupon} = usePromoCode()
     // App store
-    const cartState = useAppSelector((state: RootState) => state.cart)
-    const userProfile = useAppSelector((state: RootState) => state.profile)
-    const dispatch = useAppDispatch()
-    const {addressBook, addressLabels} = useAppSelector((state: RootState) => state.addressBook)
+    const {cart, deleteCart} = useCart()
+    const {profile} = useProfile()
+    const {addressBook, addressLabels} = useAddress()
     const navigation = useNavigation<NavigationProp<BasketParamsList>>()
     const modalNavigation = useNavigation<NavigationProp<AppParamList>>()
     const addressModalRef = useRef<any>(null)
+    const serviceFeeAdditionalInfoModalRef = useRef<any>(null)
     const paymentModalRef = useRef<any>(null)
     const scheduleModalRef = useRef<any>(null)
     const toast = useToast()
@@ -127,7 +138,7 @@ export const Checkout: React.FC = () => {
         }
 
         void fetchDeliveryFee()
-    }, [selectedAddress?._id, userProfile.profile, vendor])
+    }, [selectedAddress?._id, profile._id, vendor])
 
 
     useEffect(() => {
@@ -152,8 +163,8 @@ export const Checkout: React.FC = () => {
     }, [])
 
     useEffect(() => {
-        if (cartState.cart) {
-            const totalCartValue = cartState.cart.reduce((total, cartItem) => {
+        if (cart.cart) {
+            const totalCartValue = cart.cart.reduce((total, cartItem) => {
                 return total + cartItem.totalValue;
             }, 0);
 
@@ -171,13 +182,12 @@ export const Checkout: React.FC = () => {
             setOrderBreakdown((prev) => ({...prev, orderCost: totalCartValue, systemFee: serviceFeePayable}))
         }
 
-    }, [cartState.cart, fetchingConstant])
+    }, [cart.cart, fetchingConstant])
 
     useEffect(() => {
-            const v = cartState.vendor
+            const v = cart.vendor
             let _view: VendorOperationType = 'ON_DEMAND'
 
-            // eslint-disable-next-line default-case
             switch (v?.settings.deliveryType) {
                 case 'PRE_AND_INSTANT':
                 case 'ON_DEMAND':
@@ -188,16 +198,17 @@ export const Checkout: React.FC = () => {
                     break;
             }
             setVendor(() => v)
-            setView(() =>cartState.cartItemAvailableDate ? 'PRE_ORDER' : _view)
-    }, [ cartState.vendor])
+            setView(() =>cart.cartItemAvailableDate ? 'PRE_ORDER' : _view)
+    }, [ cart.vendor])
+
     useEffect(() => {
         navigation.setOptions({
             headerShown: true,
             headerTitle: 'Delivery Details',
             headerBackTitleVisible: false,
-            headerTitleAlign: 'left',
-            headerTitleStyle:tailwind('text-lg'),
-            headerLeft: () => <ModalCloseIcon size={18} onPress={() => navigation.navigate(BasketScreenName.SINGLE_BASKET, {})} />,
+            headerTitleAlign: 'center',
+            headerTitleStyle:tailwind(' text-slate-900 text-2xl font-bold'),
+            headerLeft: () => <ModalCloseIcon size={18} onPress={() => navigation.navigate(BasketScreenName.SINGLE_BASKET as any)} />,
         })
     }, [])
 
@@ -213,17 +224,58 @@ export const Checkout: React.FC = () => {
         }
     }, [coupon])
 
+    const check = (): { isBlocked: boolean, type: "ADDRESS"  | "DELIVERY_TIME" | "PAYMENT_METHOD" | "NONE"} => {
+        if(!Boolean(selectedAddress?._id)) {
+            setConfirmOrder(false)
+            showTost(toast, 'Please choose a delivery address', 'error')
+            return {
+                isBlocked: true,
+                type: "ADDRESS"
+            }
+        }
+
+        if(view === "PRE_ORDER" && deliveryTime === undefined) {
+            setConfirmOrder(false)
+            showTost(toast, 'Please choose a delivery time', 'error')
+            return {
+                isBlocked: true,
+                type: "DELIVERY_TIME"
+            }
+        }
+
+        if(paymentMethod === undefined) {
+            setConfirmOrder(false)
+            showTost(toast, 'Please choose payment method time', 'error')
+            return {
+                isBlocked: true,
+                type: "PAYMENT_METHOD"
+            }
+        }
+
+        return {isBlocked: false, type: "NONE"}
+    }
+
+
+    useEffect(() => {
+        if(confirmOrder) {
+            void placeOrder()
+        }
+    }, [confirmOrder])
     const placeOrder = async () => {
-        if (selectedAddress === undefined ){
+        const {isBlocked} = check()
+
+        if(isBlocked) {
+            slideToOrderRef.current?.reset()
             return
         }
+
         const payload = {
-            user: '',
+            user: profile._id,
             deliveryAddress: selectedAddress?.address ?? '',
-            listing: cartState.cart?.map(crt => crt.cartItem._id) ?? [],
+            listing: cart.cart?.map(crt => crt.cartItem._id) ?? [],
             isThirdParty: isThirdParty,
             orderType: view === 'ON_DEMAND' ? OrderTypes.INSTANT : OrderTypes.PRE,
-            options: cartState.cart?.map(crt => {
+            options: cart.cart?.map(crt => {
                 const options = crt.options.map((op) => op.name)
                 return {
                     listing: crt.cartItem._id,
@@ -237,10 +289,10 @@ export const Checkout: React.FC = () => {
                 type: 'Point',
                 coordinates: selectedAddress?.location?.coordinates
             },
-            primaryContact: userProfile.profile.phone,
+            primaryContact: profile?.phone,
             vendor: vendor?._id ?? '',
-            totalOrderValue: Object.values({...orderBreakDown, deliveryFee: 0}).reduce((a, r) => a + r),
-            quantity: cartState.cart?.map(crt => {
+            totalOrderValue: Object.values({...orderBreakDown}).reduce((a, r) => a + r),
+            quantity: cart.cart?.map(crt => {
                 return {
                     listing: crt.cartItem._id,
                     quantity: crt.quantity
@@ -251,20 +303,19 @@ export const Checkout: React.FC = () => {
         }
         try {
             setPlacingOrder(true)
+            setLoadingState(true)
             const response = (await _api.requestData<any, {data: {order: OrderI, paymentMeta: {authorization_url: string, reference: string}}}>({
                 method:'POST',
                 url: 'order/create',
                 data: payload
             })).data
 
-            dispatch(deleteCartFromStorage())
 
-            navigation.navigate(ModalScreenName.MODAL_PAYMENT_SCREEN, {
+            navigation.navigate(ModalScreenName.MODAL_PAYMENT_SCREEN as any, {
                 order: response.data.order,
                 meta: response.data.paymentMeta
-            })
+            } as any)
 
-            // Reset navigation stack to 'ORDERS' screen
             navigation.reset({
                 index: 0,
                 routes: [{ name: BasketScreenName.BASKET }],
@@ -275,43 +326,33 @@ export const Checkout: React.FC = () => {
                 vendor: response.data.order.vendor._id,
                 orderValue: orderBreakDown.orderCost + orderBreakDown.deliveryFee + orderBreakDown.systemFee - (discount ?? 0)
             })
+
+            await deleteCart()
         }  catch (error) {
             console.error(error)
             showTost(toast, 'Failed to place order. Contact support', 'error')
         } finally {
+            slideToOrderRef.current?.reset()
+            setLoadingState(false)
             setPlacingOrder(false)
             updateCoupon(undefined)
-            dispatch(fetchProfile())
+            void mutate('user/profile')
         }
     }
 
-    const check = (): boolean => {
-        let isBlocked: boolean
-
-        if (view === 'ON_DEMAND') {
-            isBlocked = selectedAddress === undefined
-        } else  {
-            isBlocked = [selectedAddress, deliveryTime ].includes(undefined)
-        }
-
-        if (paymentMethod === undefined) {
-            return true
-        }
-        return isBlocked
-    }
 
     return (
         <ScrollView style={tailwind('flex-1 bg-white px-4')}>
-            <CheckoutButton vendorType={cartState.cartItemAvailableDate ? "PRE_ORDER" : vendor?.settings?.operations?.deliveryType ?? 'ON_DEMAND'} view={view} onButtonClick={setView}  />
+            <CheckoutButton vendorType={cart.cartItemAvailableDate ? "PRE_ORDER" : vendor?.settings?.operations?.deliveryType ?? 'ON_DEMAND'} view={view} onButtonClick={setView}  />
             <DeliveryAddressBox onPress={() => openModal() } selectedAddress={selectedAddress} />
             { view === 'ON_DEMAND' && selectedAddress !== undefined && deliveryEta !== undefined && vendor !== undefined && (
-                <View style={tailwind('mt-10')}>
-                    <View style={tailwind('flex flex-row items-center w-full justify-between')}>
-                        <Text>Delivery Food with be with you in</Text>
+                <View style={tailwind('mt-3')}>
+                    <View style={tailwind('flex flex-row items-center w-full')}>
+                        <Text style={tailwind('font-normal text-slate-500 text-sm')}>Delivery in</Text>
                         {fetchingDeliveryFee ? (
                             <LoaderComponent size="small" />
                         ) : (
-                            <Text>{Number(deliveryEta.duration) + Number(vendor.settings?.operations?.preparationTime)} Minutes</Text>
+                            <Text style={tailwind('text-sm text-slate-500 ml-2 font-normal')}>{Number(deliveryEta.duration) + Number(vendor.settings?.operations?.preparationTime)} Minutes</Text>
                         )}
                     </View>
                 </View>
@@ -333,14 +374,19 @@ export const Checkout: React.FC = () => {
             </View>
             <View style={tailwind('flex flex-col mt-5')}>
                 <CheckoutBreakDown label="Order cost" value={orderBreakDown.orderCost} />
-                <CheckoutBreakDown label="Delivery Fee" value={0} />
-                <CheckoutBreakDown label="Service Fee" value={orderBreakDown.systemFee} />
+                <CheckoutBreakDown label="Delivery Fee" value={orderBreakDown.deliveryFee} />
+                <CheckoutBreakDown label="Service Fee" onPress={() => serviceFeeAdditionalInfoModalRef?.current?.present()} value={orderBreakDown.systemFee} />
                 {discount && <CheckoutBreakDown label="Discount" value={(-Math.abs(discount).toString())} /> }
-                <CheckoutBreakDown subTotal={true as any} label="Subtotal" value={orderBreakDown.orderCost + 0 + orderBreakDown.systemFee - (discount ?? 0)} />
+                <CheckoutBreakDown subTotal={true as any} label="Subtotal" value={orderBreakDown.orderCost + orderBreakDown.deliveryFee + orderBreakDown.systemFee - (discount ?? 0)} />
             </View>
 
             <View style={tailwind('mt-5 mb-10')}>
-                <GenericButton  loading={placingOrder} disabled={check()} onPress={placeOrder} labelColor={tailwind('text-white font-bold')}  label="Place order" backgroundColor={tailwind('bg-primary-100')} />
+                <SlideToOrderButton
+                    ref={slideToOrderRef}
+                    totalAmount={`₦${(orderBreakDown.orderCost + orderBreakDown.deliveryFee + orderBreakDown.systemFee - (discount ?? 0)).toLocaleString('en-NG')}`}
+                    onOrderComplete={() => setConfirmOrder(true)}
+                />
+                {/* <GenericButton  loading={placingOrder} disabled={check()} onPress={placeOrder} labelColor={tailwind('text-white font-bold')}  label="Place order" backgroundColor={tailwind('bg-primary-100')} /> */}
             </View>
             <AddressBookModal
                 selectedAddressId={selectedAddress?._id}
@@ -348,7 +394,7 @@ export const Checkout: React.FC = () => {
                 addressBook={addressBook}
                 modalRef={addressModalRef}
                 addressLabel={addressLabels}
-                onAddNewAddress={() => modalNavigation.navigate(ModalScreenName.MODAL_ADD_ADDRESS_SCREEN, {callback: () => navigation.navigate(BasketScreenName.CHECKOUT) })}
+                onAddNewAddress={() => modalNavigation.navigate(ModalScreenName.MODAL_ADD_ADDRESS_SCREEN as any, {callback: () => navigation.navigate(BasketScreenName.CHECKOUT as any)} as any)}
                 promptModalName={ADDRESS_MODAL}
             />
             {vendor !== undefined && (
@@ -357,8 +403,8 @@ export const Checkout: React.FC = () => {
                     modalRef={scheduleModalRef}
                     vendor={vendor as any}
                     onScheduleSet={setDeliveryItem}
-                    startDate={cartState.cartItemAvailableDate}
-                    endDate={cartState.cartItemAvailableDate}
+                    startDate={cart.cartItemAvailableDate}
+                    endDate={cart.cartItemAvailableDate}
                 />
             )}
 
@@ -368,6 +414,16 @@ export const Checkout: React.FC = () => {
                 selectedPaymentMethod={paymentMethod}
                 setSelectedPaymentMethod={setPaymentMethod}
             />
+            <AdditionalInfoModal
+                modalRef={serviceFeeAdditionalInfoModalRef}
+                promptModalName={ADDITIONAL_INFO_MODAL_SERVICE_FEE}
+
+            >
+                <View style={tailwind('flex flex-col mb-5')}>
+                    <Text style={tailwind('text-base font-bold text-slate-500 mb-3')}>Service fee</Text>
+                    <Text style={tailwind('text-sm font-normal text-slate-500')}>10% of your total order capped at N500. This fee goes towards maintaining the platform nd payment processing cost ensuring you get reliable service</Text>
+                </View>
+            </AdditionalInfoModal>
         </ScrollView>
     )
 }

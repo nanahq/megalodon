@@ -16,12 +16,15 @@ import {_api} from "@api/_request";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {useAnalytics} from "@segment/analytics-react-native";
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
+import {useLoading} from "@contexts/loading.provider";
+import {mutate} from "swr";
 
 type SingleOrderScreenProps = StackScreenProps<OrderParamsList, OrderScreenName.ADD_REVIEW>
 export const AddReviewScreen: React.FC<SingleOrderScreenProps> = ({navigation, route}) => {
     const [rating, setRating] = useState<number>(0)
     const [loading, setLoading] = useState<boolean>(false)
     const [reviewBody, setReviewBody] = useState<string>("")
+    const {setLoadingState} = useLoading()
     const analytics = useAnalytics()
     const toast = useToast()
     useEffect(() => {
@@ -32,8 +35,8 @@ export const AddReviewScreen: React.FC<SingleOrderScreenProps> = ({navigation, r
             headerShown: true,
             headerTitle: `Rate your order`,
             headerBackTitleVisible: false,
-            headerTitleAlign: 'left',
-            headerTitleStyle: tailwind('text-xl'),
+            headerTitleAlign: 'center',
+            headerTitleStyle: tailwind('text-2xl font-bold  text-slate-900'),
             headerLeft: () => <ModalCloseIcon onPress={() => navigation.goBack()} />,
         })
     }, [])
@@ -52,6 +55,7 @@ export const AddReviewScreen: React.FC<SingleOrderScreenProps> = ({navigation, r
             reviewStars: rating
         }
         try {
+            setLoadingState(true)
             setLoading(true)
             await _api.requestData({
                 method: "POST",
@@ -65,9 +69,11 @@ export const AddReviewScreen: React.FC<SingleOrderScreenProps> = ({navigation, r
                 rating,
                 order: route.params.order._id
             })
+            void mutate('order/orders')
         } catch (error) {
             showTost(toast, 'Failed to add review', 'error')
         } finally {
+            setLoadingState(false)
             setLoading(false)
         }
     }
@@ -82,12 +88,12 @@ export const AddReviewScreen: React.FC<SingleOrderScreenProps> = ({navigation, r
                             style={[tailwind('rounded-full'), {width: 70, aspectRatio: 1}]}
                         />
                        <View style={tailwind('flex flex-col ml-3')}>
-                           <Text style={tailwind('text-brand-gray-700')}>{orderDate}</Text>
-                           <Text style={tailwind('')}>{route.params.order.listing[0].name}....</Text>
+                           <Text style={tailwind('text-slate-600 font-normal text-sm')}>{orderDate}</Text>
+                           <Text style={tailwind('font-normal text-base text-slate-900')}>{route.params.order.listing[0].name}....</Text>
                        </View>
                     </View>
                     <View>
-                        <Text style={tailwind('text-brand-gray-700')}>Delivered</Text>
+                        <Text style={tailwind('text-slate-600 font-normal text-sm')}>Delivered</Text>
                         <NumberFormat
                             prefix='₦'
                             value={route.params.order.orderValuePayable}
@@ -95,7 +101,7 @@ export const AddReviewScreen: React.FC<SingleOrderScreenProps> = ({navigation, r
                             displayType="text"
                             renderText={(value) => (
                                 <Text
-                                    style={tailwind('')}
+                                    style={tailwind('text-slate-900 font-normal text-base')}
                                 >
                                     {value}
                                 </Text>
@@ -104,19 +110,19 @@ export const AddReviewScreen: React.FC<SingleOrderScreenProps> = ({navigation, r
                     </View>
                 </View>
                 <View style={tailwind('mt-10')}>
-                    <Text style={tailwind('font-bold')}>How was the food?</Text>
+                    <Text style={tailwind('font-medium text-base text-slate-900')}>How was the food?</Text>
                     <View style={tailwind('mt-4 flex flex-col')}>
                         <RatingRow onPress={setRating} currentRating={rating} />
                         <View style={tailwind('flex flex-col mt-10')}>
-                            <Text style={tailwind('')}>Leave a comment</Text>
+                            <Text style={tailwind('text-sm text-slate-900 font-normal')}>Leave a comment</Text>
                             <TextInput
                                 defaultValue={reviewBody}
                                 onChangeText={value => setReviewBody(value)}
                                 textAlignVertical="top"
                                 multiline
                                 numberOfLines={4}
-                                style={[tailwind('py-4 w-full px-3  bg-primary-200 rounded text-black'), {height: 150}]}
-                                placeholder='This food is very good!'
+                                style={[tailwind('py-4 w-full px-3  bg-primary-200 rounded text-slate-900 text-sm font-normal'), {height: 150}]}
+                                placeholder='Delicious food'
                             />
                         </View>
                     </View>
@@ -124,7 +130,7 @@ export const AddReviewScreen: React.FC<SingleOrderScreenProps> = ({navigation, r
 
             </View>
             <View style={tailwind('mt-10 px-4')}>
-                <GenericButton loading={loading} onPress={handleAddReview} label="Submit Rating" labelColor={tailwind('text-white')} backgroundColor={tailwind('bg-primary-500')} />
+                <GenericButton loading={loading} onPress={handleAddReview} label="Submit Rating" labelColor={tailwind('text-white')} />
             </View>
         </KeyboardAwareScrollView>
     )

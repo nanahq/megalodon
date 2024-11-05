@@ -5,140 +5,217 @@ import {
     DeliveryI,
     LocationCoordinates,
     OrderI,
-    OrderStatus,
     SOCKET_MESSAGE,
     TravelDistanceResult
 } from '@nanahq/sticky';
-import RestaurantIcon from '@assets/app/restaurant-1.png'
-import DeliveryIcon from '@assets/app/delivery.png'
+import DeliveryIcon from '@assets/app/delivery-icon.png'
 import HomeIcon from '@assets/app/home.png'
-import MapView, {Marker, PROVIDER_GOOGLE, Region} from 'react-native-maps'
-import {socket, useWebSocket} from "@contexts/SocketProvider";
-import moment from "moment";
-import {Audio, InterruptionModeAndroid, InterruptionModeIOS} from 'expo-av';
+import MapView, { Marker, PROVIDER_GOOGLE, Region, Polyline } from 'react-native-maps'
 import {Sound} from "expo-av/build/Audio/Sound";
-
-function calculateDeltas(point1: [number, number], point2: [number, number]): Region {
-    const toRadians = (deg: number) => deg * (Math.PI / 180);
-
-    const lat1 = toRadians(point1[0]);
-    const lat2 = toRadians(point1[1]);
-    const lon1 = toRadians(point2[0]);
-    const lon2 = toRadians(point2[1]);
+import {socket} from "../../../../../../App";
 
 
-    const latitudeDelta = Math.abs((lat2 - lat1) / 2);
-    const longitudeDelta = Math.abs((lon2 - lon1) / 2);
+const mapStyle = [
+    {
+        elementType: "geometry",
+        stylers: [{ color: "#f5f5f5" }]
+    },
+    {
+        elementType: "labels.icon",
+        stylers: [{ visibility: "off" }]
+    },
+    {
+        elementType: "labels.text.fill",
+        stylers: [{ color: "#666666" }]
+    },
+    {
+        elementType: "labels.text.stroke",
+        stylers: [{ color: "#ffffff" }]
+    },
+    {
+        featureType: "administrative",
+        elementType: "geometry",
+        stylers: [{ color: "#e0e0e0" }]
+    },
+    {
+        featureType: "poi",
+        stylers: [{ visibility: "off" }]
+    },
+    {
+        featureType: "road",
+        elementType: "geometry.fill",
+        stylers: [{ color: "#ffffff" }]
+    },
+    {
+        featureType: "road",
+        elementType: "labels.text.fill",
+        stylers: [{ color: "#999999" }]
+    },
+    {
+        featureType: "road.highway",
+        elementType: "geometry",
+        stylers: [{ color: "#ffffff" }]
+    },
+    {
+        featureType: "water",
+        elementType: "geometry",
+        stylers: [{ color: "#e9e9e9" }]
+    }
+];
 
-    return { latitudeDelta, longitudeDelta, latitude: point1[0], longitude: point1[1] };
+const style = StyleSheet.create({
+    markerWrap: {
+        // alignItems: "center",
+        // justifyContent: "center",
+        // backgroundColor: '#000000AA',
+        // borderRadius: 2,
+        // padding: 4,
+    },
+    marker: {
+        width: 30,
+        height: 30,
+        // tintColor: '#fff'
+    },
+    deliveryMarker: {
+        width: 40,
+        height: 40,
+        // backgroundColor: '#000',
+        // borderRadius: 20,
+        // borderWidth: 3,
+        // borderColor: '#fff',
+        // shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+    },
+    deliveryIcon: {
+        width: 30,
+        height: 30,
+        // tintColor: '#fff'
+    }
+});
+
+const DEFAULT_LOCATION = {
+    type: "Point",
+    coordinates: [0, 0]
+};
+
+export function calculateDeltas(point1: [number, number], point2: [number, number]): Region {
+    const latitudeDelta = Math.abs(point2[0] - point1[0]) * 2;
+    const longitudeDelta = Math.abs(point2[1] - point1[1]) * 2;
+
+    return {
+        latitude: (point1[0] + point2[0]) / 2,
+        longitude: (point1[1] + point2[1]) / 2,
+        latitudeDelta: Math.max(latitudeDelta, 0.02),
+        longitudeDelta: Math.max(longitudeDelta, 0.02),
+    };
 }
 
-function coordinatedMapper(point1: LocationCoordinates, point2: LocationCoordinates): Array<{ latitude: number, longitude: number }> {
+export function coordinatedMapper(point1: LocationCoordinates, point2: LocationCoordinates): Array<{ latitude: number, longitude: number }> {
+    if (!point1?.coordinates || !point2?.coordinates) {
+        return [];
+    }
     return [
         { latitude: point1.coordinates[0], longitude: point1.coordinates[1] },
         { latitude: point2.coordinates[0], longitude: point2.coordinates[1] },
     ]
 }
 
-const { height: SCREEN_HEIGHT  } = Dimensions.get("window");
+const { height: SCREEN_HEIGHT } = Dimensions.get("window");
 
 export const Map: React.FC<{ order: OrderI, delivery: DeliveryI }> = ({ order, delivery }) => {
-    const mapRef = useRef<MapView | null>(null)
-    const [currentDeliveryPosition, setCurrentDeliveryPosition] = useState<LocationCoordinates>(delivery?.driver?.location ?? [0, 0])
-    const { isConnected } = useWebSocket()
-    const [_, setRemainingTime] = useState<number | undefined>(calculateRemainingTime(delivery?.travelMeta?.travelTime ?? 0));
-    const [_sound, setSound] = useState<Sound | null>(null);
+    const mapRef = useRef<MapView | null>(null);
+    const markerAnimation = useRef(new Animated.Value(0)).current;
+    const initialLocation = {type: 'Point', coordinates: [delivery?.driver?.location.coordinates[1], delivery?.driver?.location.coordinates[0]]} as any || DEFAULT_LOCATION as LocationCoordinates;
+    const [currentDeliveryPosition, setCurrentDeliveryPosition] = useState<LocationCoordinates>(initialLocation);
+    const [prevDeliveryPosition, setPrevDeliveryPosition] = useState<LocationCoordinates>(initialLocation);
+    const [_sound] = useState<Sound | null>(null);
 
-    async function playSound() {
-        const { sound } = await Audio.Sound.createAsync( require('../../../../../../../assets/sounds/notification_1.wav')
-        );
-        setSound(sound);
-        console.log('Playing sound')
-        await sound.playAsync();
-    }
+    const animateMarker = (newLocation: LocationCoordinates) => {
+        console.log(newLocation)
+        if (!newLocation?.coordinates) return;
 
-    useEffect(() => {
-        void Audio.setAudioModeAsync({
-            playsInSilentModeIOS: true,
-            staysActiveInBackground: true,
-            interruptionModeIOS: InterruptionModeIOS.DuckOthers,
-            interruptionModeAndroid: InterruptionModeAndroid.DuckOthers,
-            shouldDuckAndroid: true,
-            playThroughEarpieceAndroid: true,
-        });
-        return _sound !== null
-            ? () => {
-                _sound?.unloadAsync();
-            }
-            : undefined;
-    }, []);
+        setPrevDeliveryPosition(currentDeliveryPosition);
+        setCurrentDeliveryPosition(newLocation);
+
+        markerAnimation.setValue(0);
+        Animated.timing(markerAnimation, {
+            toValue: 1,
+            duration: 2000,
+            useNativeDriver: true,
+        }).start();
+    };
 
     useEffect(() => {
-        if (delivery?.deliveryTime !== undefined) {
-            const intervalId = setInterval(() => {
-                setRemainingTime(calculateRemainingTime(delivery?.travelMeta?.travelTime as any));
-            }, 1000);
-            return () => clearInterval(intervalId);
-        }
-    }, [delivery?.deliveryTime]);
-
-
-    function calculateRemainingTime(targetTime: number): number {
-        const currentTime = moment(delivery?.order?.updatedAt);
-        const endTime = moment(delivery?.order?.updatedAt).add(targetTime, 'minutes');
-        const duration = moment.duration(endTime.diff(currentTime));
-
-        const remainingMinutes = duration.asMinutes();
-
-        return Math.max(0, Math.round(remainingMinutes));
-    }
-
-    useEffect(() => {
-        if (isConnected) {
+        if (socket.connected) {
+            socket.on('connect', () => {
+                console.log('connected!')
+            })
             socket?.on(SOCKET_MESSAGE.DRIVER_LOCATION_UPDATED, (message: { deliveryId: string, location: LocationCoordinates, travelMeta?: TravelDistanceResult }) => {
-                if (message.deliveryId.toString() === delivery?._id.toString()) {
-                    setCurrentDeliveryPosition(message.location)
+
+                if (message.deliveryId.toString() === delivery?._id.toString() && message.location) {
+                    animateMarker(message.location);
                 }
             });
-
-            socket?.on(SOCKET_MESSAGE.UPDATE_ORDER_STATUS, (message: { userId: string, orderId: string, status: OrderStatus, driver: string, vendorName?: string }) => {
-                const isOrder = message.orderId === order._id
-                // if (isOrder) {
-                //
-                //     switch (message.status) {
-                //         case OrderStatus.IN_ROUTE:
-                //             void playSound()
-                //             break;
-                //         case OrderStatus.FULFILLED:
-                //
-                //             break;
-                //         default:
-                //     }
-                // }
-            })
         }
-    }, [isConnected]);
+    }, [socket.connected]);
 
     useEffect(() => {
-        mapRef.current?.fitToCoordinates(coordinatedMapper(delivery.pickupLocation, delivery.dropOffLocation), {
-            edgePadding:{top:450,right:50,left:50,bottom:350},
-            animated:true
-        });
-    }, [])
+        const coordinates = coordinatedMapper(delivery.pickupLocation, delivery.dropOffLocation);
+        if (coordinates.length > 0) {
+            mapRef.current?.fitToCoordinates(coordinates, {
+                edgePadding: { top: 100, right: 100, left: 100, bottom: 100 },
+                animated: true
+            });
+        }
+    }, [delivery]);
 
-    useEffect(() => {
-        mapRef?.current?.animateToRegion(calculateDeltas(delivery.pickupLocation.coordinates, delivery.dropOffLocation.coordinates))
-    }, [])
+    const interpolatedLatitude = markerAnimation.interpolate({
+        inputRange: [0, 1],
+        outputRange: [
+            prevDeliveryPosition?.coordinates?.[0] || 0,
+            currentDeliveryPosition?.coordinates?.[0] || 0
+        ]
+    });
+
+    const interpolatedLongitude = markerAnimation.interpolate({
+        inputRange: [0, 1],
+        outputRange: [
+            prevDeliveryPosition?.coordinates?.[1] || 0,
+            currentDeliveryPosition?.coordinates?.[1] || 0
+        ]
+    });
+
+    if (!delivery?.pickupLocation?.coordinates || !delivery?.dropOffLocation?.coordinates) {
+        return null;
+    }
+
     return (
-        <View style={tailwind('flex-1 bg-white flex flex-col  justify-center')}>
+        <View style={tailwind('flex-1 bg-white flex flex-col justify-center')}>
             <View style={[tailwind('w-full'), { width: '100%', height: SCREEN_HEIGHT / 2 }]}>
                 <MapView
                     customMapStyle={mapStyle}
                     ref={mapRef}
                     style={{ width: '100%', height: '100%' }}
                     provider={PROVIDER_GOOGLE}
-                    region={calculateDeltas(delivery.pickupLocation.coordinates,  delivery.dropOffLocation.coordinates)}
+                    initialRegion={calculateDeltas(
+                        delivery.pickupLocation.coordinates,
+                        delivery.dropOffLocation.coordinates
+                    )}
                 >
+                    <Polyline
+                        coordinates={coordinatedMapper(delivery.dropOffLocation, delivery?.assignedToDriver ? currentDeliveryPosition : delivery.dropOffLocation)}
+                        strokeColor="#000"
+
+                        strokeWidth={3}
+                        lineDashPattern={[1]}
+                    />
+
                     <Marker
                         key={delivery._id}
                         coordinate={{
@@ -146,17 +223,16 @@ export const Map: React.FC<{ order: OrderI, delivery: DeliveryI }> = ({ order, d
                             longitude: delivery.pickupLocation.coordinates[1],
                         }}
                     >
-                        <Animated.View style={style.markerWrap}>
+                        <View style={style.markerWrap}>
                             <Animated.Image
-                                source={RestaurantIcon}
+                                source={{uri: order.vendor.businessLogo}}
                                 style={style.marker}
                                 resizeMode="cover"
-
                             />
-                            <Animated.Text style={[tailwind('text-white'), {fontSize: 10}]}>
+                            <Animated.Text style={[tailwind('text-slate-900 text-base font-normal'), {fontSize: 10}]}>
                                 {order.vendor.businessName}
                             </Animated.Text>
-                        </Animated.View>
+                        </View>
                     </Marker>
 
                     <Marker
@@ -165,275 +241,43 @@ export const Map: React.FC<{ order: OrderI, delivery: DeliveryI }> = ({ order, d
                             longitude: delivery.dropOffLocation.coordinates[1],
                         }}
                     >
-                        <Animated.View style={style.markerWrap}>
+                        <View style={style.markerWrap}>
                             <Animated.Image
                                 source={HomeIcon}
                                 style={style.marker}
                                 resizeMode="cover"
-
                             />
-                            <Animated.Text style={[tailwind('text-white '), {fontSize: 10}]}>
-                                Delivery Address
+                            <Animated.Text style={[tailwind('text-slate-900 text-base font-normal'), {fontSize: 10}]}>
+                                Delivery address
                             </Animated.Text>
-                        </Animated.View>
+                        </View>
                     </Marker>
-                    {delivery.assignedToDriver && (
-                        <Marker
+
+                    {delivery.assignedToDriver && currentDeliveryPosition?.coordinates && (
+                        <Marker.Animated
                             coordinate={{
-                                latitude: currentDeliveryPosition.coordinates[0],
-                                longitude: currentDeliveryPosition.coordinates[1],
+                                latitude: interpolatedLatitude,
+                                longitude: interpolatedLongitude,
                             }}
                         >
-                            <Animated.View style={style.markerWrap}>
+                            <View style={style.deliveryMarker}>
                                 <Animated.Image
                                     source={DeliveryIcon}
-                                    style={style.marker}
+                                    style={[style.deliveryIcon, {
+                                        transform: [{
+                                            rotate: markerAnimation.interpolate({
+                                                inputRange: [0, 1],
+                                                outputRange: ['0deg', '360deg']
+                                            })
+                                        }]
+                                    } as any]}
                                     resizeMode="cover"
-
                                 />
-                            </Animated.View>
-                        </Marker>
+                            </View>
+                        </Marker.Animated>
                     )}
                 </MapView>
             </View>
         </View>
     );
 };
-
-
-const mapStyle = [
-    {
-        elementType: "geometry",
-        stylers: [
-            {
-                color: "#212121",
-            },
-        ],
-    },
-    {
-        elementType: "geometry.fill",
-        stylers: [
-            {
-                saturation: -5,
-            },
-            {
-                lightness: -5,
-            },
-        ],
-    },
-    {
-        elementType: "labels.icon",
-        stylers: [
-            {
-                visibility: "off",
-            },
-        ],
-    },
-    {
-        elementType: "labels.text.fill",
-        stylers: [
-            {
-                color: "#757575",
-            },
-        ],
-    },
-    {
-        elementType: "labels.text.stroke",
-        stylers: [
-            {
-                color: "#212121",
-            },
-        ],
-    },
-    {
-        featureType: "administrative",
-        elementType: "geometry",
-        stylers: [
-            {
-                color: "#757575",
-            },
-        ],
-    },
-    {
-        featureType: "administrative.country",
-        elementType: "labels.text.fill",
-        stylers: [
-            {
-                color: "#9E9E9E",
-            },
-        ],
-    },
-    {
-        featureType: "administrative.land_parcel",
-        stylers: [
-            {
-                visibility: "off",
-            },
-        ],
-    },
-    {
-        featureType: "administrative.locality",
-        elementType: "labels.text.fill",
-        stylers: [
-            {
-                color: "#BDBDBD",
-            },
-        ],
-    },
-    {
-        featureType: "poi",
-        elementType: "labels.text.fill",
-        stylers: [
-            {
-                color: "#757575",
-            },
-        ],
-    },
-    {
-        featureType: "poi.business",
-        stylers: [
-            {
-                visibility: "off",
-            },
-        ],
-    },
-    {
-        featureType: "poi.park",
-        elementType: "geometry",
-        stylers: [
-            {
-                color: "#181818",
-            },
-        ],
-    },
-    {
-        featureType: "poi.park",
-        elementType: "labels.text",
-        stylers: [
-            {
-                visibility: "off",
-            },
-        ],
-    },
-    {
-        featureType: "poi.park",
-        elementType: "labels.text.fill",
-        stylers: [
-            {
-                color: "#616161",
-            },
-        ],
-    },
-    {
-        featureType: "poi.park",
-        elementType: "labels.text.stroke",
-        stylers: [
-            {
-                color: "#1B1B1B",
-            },
-        ],
-    },
-    {
-        featureType: "road",
-        elementType: "geometry",
-        stylers: [
-            {
-                visibility: "on", // Changed from "off" to "on"
-            },
-        ],
-    },
-    {
-        featureType: "road",
-        elementType: "geometry.fill",
-        stylers: [
-            {
-                color: "#2C2C2C",
-            },
-        ],
-    },
-    {
-        featureType: "road",
-        elementType: "labels.text.fill",
-        stylers: [
-            {
-                color: "#8A8A8A",
-            },
-        ],
-    },
-    {
-        featureType: "road.arterial",
-        elementType: "geometry",
-        stylers: [
-            {
-                color: "#373737",
-            },
-        ],
-    },
-    {
-        featureType: "road.highway",
-        elementType: "geometry",
-        stylers: [
-            {
-                color: "#3C3C3C",
-            },
-        ],
-    },
-    {
-        featureType: "road.highway.controlled_access",
-        elementType: "geometry",
-        stylers: [
-            {
-                color: "#4E4E4E",
-            },
-        ],
-    },
-    {
-        featureType: "road.local",
-        elementType: "labels.text.fill",
-        stylers: [
-            {
-                color: "#616161",
-            },
-        ],
-    },
-    {
-        featureType: "transit",
-        elementType: "labels.text.fill",
-        stylers: [
-            {
-                color: "#757575",
-            },
-        ],
-    },
-    {
-        featureType: "water",
-        elementType: "geometry",
-        stylers: [
-            {
-                color: "#000000",
-            },
-        ],
-    },
-    {
-        featureType: "water",
-        elementType: "labels.text.fill",
-        stylers: [
-            {
-                color: "#3D3D3D",
-            },
-        ],
-    },
-];
-
-const style = StyleSheet.create({
-    marker: {
-        height: 30,
-        width: 30,
-    },
-    markerWrap: {
-        alignItems: "center",
-        height:50,
-        justifyContent: "center",
-        width:50,
-    }
-})

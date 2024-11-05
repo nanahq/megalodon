@@ -4,10 +4,13 @@ import {HomeScreenName} from "@screens/AppNavigator/Screens/home/HomeScreenNames
 import * as Device from 'expo-device'
 import {HomepageCategory} from "@screens/AppNavigator/Screens/home/Categories";
 import {SingleCategoryScreen} from "@screens/AppNavigator/Screens/home/Category.screen";
+import {VendorUserI, UserHomePage} from "@nanahq/sticky";
+import {HomepageSectionScreen} from "@screens/AppNavigator/Screens/home/components/Section";
 
 export interface HomeParamsList {
-    [HomeScreenName.SINGLE_CATEGORY]: {
-        category: string
+    [HomeScreenName.CATEGORIES_SCREEN]: {
+        heading: string,
+        items: VendorUserI[]
     }
     [key: string]: undefined | object;
 }
@@ -33,7 +36,7 @@ export function HomeNavigator(): JSX.Element {
             />
 
             <HomeStack.Screen
-                component={HomepageCategory}
+                component={HomepageSectionScreen}
                 name={HomeScreenName.CATEGORIES_SCREEN}
             />
             <HomeStack.Screen

@@ -5,19 +5,20 @@ import {IconComponent} from "@components/commons/IconComponent";
 import {useNavigation} from "@react-navigation/native";
 import {ModalScreenName} from "@screens/AppNavigator/ScreenName.enum";
 import {usePromoCode} from "@contexts/PromoCode";
+import {TicketPercent} from "lucide-react-native";
 
 const _PromocodeBox: React.FC = () => {
     const navigation = useNavigation<any>()
     const {couponFormattedMeta, coupon} = usePromoCode()
     return (
         <View style={tailwind('mt-10')}>
-            <Pressable onPress={() => navigation.navigate(ModalScreenName.MODAL_PROMO_SCREEN)} style={tailwind('border-0.5 border-primary-50 py-4 px-2')}>
+            <Pressable onPress={() => navigation.navigate(ModalScreenName.MODAL_PROMO_SCREEN)} style={tailwind('border-0.5 border-slate-200 py-4 px-2')}>
                 <View style={tailwind('flex flex-row items-center justify-between w-full')}>
-                    <IconComponent iconType="AntDesign" name="tag" style={tailwind('text-primary-100')} size={20} />
+                    <TicketPercent  style={tailwind('text-primary-100')} size={20} />
                     <View style={tailwind('flex flex-col')}>
-                        <Text style={tailwind('')}>{coupon === undefined ? 'Add promo code' : coupon.code}</Text>
+                        <Text style={tailwind('text-base text-slate-900 font-normal')}>{coupon === undefined ? 'Redeem discount code' : coupon.code}</Text>
                         {couponFormattedMeta !== undefined && (
-                            <Text style={tailwind(' text-center text-brand-gray-700 text-sm')}>{couponFormattedMeta}</Text>
+                            <Text style={tailwind('text-base text-slate-900 font-normal')}>{couponFormattedMeta}</Text>
                         )}
                     </View>
                     <IconComponent iconType="Feather" name="chevron-right" size={20} style={tailwind('text-gray-500')} />

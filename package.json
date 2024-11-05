@@ -75,6 +75,7 @@
     "react-content-loader": "^6.2.1",
     "react-devtools": "^4.28.0",
     "react-dom": "18.2.0",
+    "react-google-autocomplete": "^2.7.3",
     "react-hook-form": "^7.45.4",
     "react-native": "0.73.6",
     "react-native-confirmation-code-field": "^7.3.1",

@@ -28,6 +28,12 @@ import {ProfileNavigator} from "@screens/AppNavigator/Screens/profile/ProfileNav
 import {BasketNavigator} from "@screens/AppNavigator/Screens/basket/BasketNavigator";
 import { DdRumReactNavigationTracking } from "@datadog/mobile-react-navigation";
 import {OneSignal} from "react-native-onesignal";
+import {useProfile} from "@contexts/profile.provider";
+import {useLocation} from "@contexts/location.provider";
+import {LocationPermission} from "@screens/AppNavigator/components/LocationPersmission";
+import {NotfoundLocation} from "@screens/AppNavigator/components/NotfoundLocation";
+import Constants from "expo-constants";
+import {useCart} from "@contexts/cart.provider";
 
 const App = createStackNavigator<AppParamList>()
 
@@ -66,22 +72,21 @@ export interface AppParamList {
 
 
 export function AppNavigator(): JSX.Element {
-    const {profile} = useSelector((state: RootState) => state.profile)
+    const {profile, fetched} = useProfile()
     const isAndroid  = Device.osName === 'Android'
+    const {locationPermission} = useLocation()
+    const {readCart} = useCart()
     const dispatch = useAppDispatch()
     const analytics = useAnalytics()
     const navigationRef = useRef<any>(null)
     useEffect(() => {
-        dispatch(fetchProfile() as any)
-        dispatch(fetchVendors() as any)
-        dispatch(readCartFromStorage() as any)
+        void readCart()
         dispatch(fetchAddressLabels() as any)
         dispatch(fetchAddressBook() as any)
-        dispatch(fetchAllCategories() as any)
     }, [])
 
     useEffect(() => {
-        if (profile && profile._id) {
+        if (fetched && profile?._id) {
             void analytics.identify(profile._id, {
                 firstName: profile?.firstName,
                 lastName: profile?.lastName,
@@ -97,39 +102,16 @@ export function AppNavigator(): JSX.Element {
             OneSignal.login(profile._id)
             OneSignal.User.addEmail(profile.email);
             OneSignal.User.addSms(profile.phone)
+            OneSignal.User.addTag('app_version', String(Constants.expoConfig?.version ?? ''))
         }
 
-    }, [profile, profile._id])
+    }, [profile])
 
-    const requestLocation = async () => {
-        const {status} = await Location.requestForegroundPermissionsAsync();
 
-        if (status !== 'granted' ) {
-            return
-        }
-        const {coords: {longitude, latitude}} = await Location.getCurrentPositionAsync({
-            accuracy: 6
-        });
-        const location: LocationCoordinates = {
-            type: 'Point',
-            coordinates: [latitude, longitude]
-        }
-        try {
-
-            await _api.requestData<Partial<UpdateUserDto>, undefined>({
-                method: 'PUT',
-                url: 'user/update',
-                data: {location}
-            })
-
-        } catch (error: any) {
-            throw error(error)
-        }
+    if(locationPermission !== Location.PermissionStatus.GRANTED) {
+        return <LocationPermission />
     }
 
-    useEffect(() => {
-        void requestLocation()
-    }, [])
 
     return (
         <NavigationContainer
@@ -179,12 +161,12 @@ export function AppNavigator(): JSX.Element {
                         component={AddAddressModal}
                     />
                     <App.Screen
-                        name={ModalScreenName.MODAL_PAYMENT_SCREEN}
-                        component={PaymentModal}
-                    />
-                    <App.Screen
                         name={ModalScreenName.MODAL_PROMO_SCREEN}
                         component={PromotionModal}
+                    />
+                    <App.Screen
+                        name={ModalScreenName.MODAL_PAYMENT_SCREEN}
+                        component={PaymentModal}
                     />
                 </App.Group>
             </App.Navigator>

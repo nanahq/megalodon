@@ -29,7 +29,7 @@ export function BasketNavigator(): JSX.Element {
                 options={{
                     headerShown: true,
                     headerTitle: 'Basket',
-                    headerTitleStyle:tailwind('font-bold text-2xl')
+                    headerTitleStyle:tailwind('font-bold text-slate-900 text-2xl')
                 }}
             />
 

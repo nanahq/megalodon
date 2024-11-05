@@ -3,14 +3,21 @@ import {persistence} from "@api/persistence";
 import { showToastStandard } from "@components/commons/Toast";
 import {ApiRoute, APIService, NetworkMapper} from "@api/network.mapper";
 import {cookieParser} from "../../utils/cookieParser";
-
-console.log(process.env)
+import {clearOnAuthError} from "@store/common";
+import {io} from "socket.io-client";
 
 type Environment = 'production' | 'development' | string
 export  function getUrl (gateway: APIService): string {
 
     return `${process.env.EXPO_PUBLIC_API_URL}/${ApiRoute[gateway]}/v1`
 }
+
+export const getSocketUrl  = () => {
+    return `${process.env.EXPO_PUBLIC_API_URL}`
+}
+
+
+
 
 const config = {
     baseUrl: getUrl('API_GATEWAY'),
@@ -58,7 +65,7 @@ async function base<T>(param: baseParamProps<T>) {
         })
         .catch((err: any) => {
             if (err.message.includes('401')) {
-
+                // clearOnAuthError()
                 return Promise.reject(err.response?.data);
             }
             if (err.response) {

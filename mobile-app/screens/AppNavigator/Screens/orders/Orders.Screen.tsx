@@ -15,64 +15,50 @@ import {OrderScreenName} from "@screens/AppNavigator/Screens/orders/OrderScreenN
 import * as Device from 'expo-device'
 import {useAnalytics} from "@segment/analytics-react-native";
 import {ModalCloseIcon} from "@screens/AppNavigator/Screens/modals/components/ModalCloseIcon";
+import {useLocation} from "@contexts/location.provider";
+import {NotfoundLocation} from "@screens/AppNavigator/components/NotfoundLocation";
+import {useOrders} from "@contexts/orders.provider";
+import {mutate} from "swr";
 
 const {height} = Dimensions.get('screen')
 export const OrderScreen: React.FC = () => {
-
     const isAndroid = Device.osName === 'Android'
     const navigation = useNavigation<NavigationProp<OrderParamsList>>()
-    const [fetchingOrders, setFetchingOrders] = useState<boolean>(false)
-    const [orders, setOrders] = useState<OrderI[]>([])
     const [view, setView] = useState<OrderStatus>(OrderStatus.PAYMENT_PENDING)
     const analytics = useAnalytics()
+    const {orders} = useOrders()
+
+    const {isWithinSupportedCities} = useLocation()
+
+    if(!isWithinSupportedCities) {
+        return <NotfoundLocation />
+    }
 
     useEffect(() => {
         navigation.setOptions({
             headerShown: true,
             headerTitle: 'Orders',
             headerBackTitleVisible: false,
-            headerTitleAlign: 'left',
-            headerTitleStyle: tailwind('text-xl'),
+            headerTitleAlign: 'center',
+            headerTitleStyle: tailwind('font-bold text-2xl'),
             headerLeft: () => <ModalCloseIcon onPress={() => navigation.goBack()} />,
         })
     }, [])
     const ordersInProgress = useMemo(() => {
-        if (orders.length < 1) {
+        if (orders?.length < 1) {
             return []
         }
-        return orders.filter(order => order.orderStatus !== OrderStatus.FULFILLED)
-    }, [orders, fetchingOrders])
+        return orders?.filter(order => order.orderStatus !== OrderStatus.FULFILLED) ?? []
+    }, [orders])
 
 
     const ordersDelivered = useMemo(() => {
 
-        if (orders.length < 1) {
+        if (orders?.length < 1) {
             return []
         }
-        return orders.filter(order => order.orderStatus === OrderStatus.FULFILLED)
-    }, [orders, fetchingOrders])
-
-    const toast  = useToast()
-
-    async function fetchOrder (): Promise<void> {
-        setFetchingOrders(true)
-        try {
-            const data = (await  _api.requestData({
-                method: 'get',
-                url: 'order/orders'
-            })).data as OrderI[]
-
-            setOrders(data)
-        } catch (error) {
-            showTost(toast, 'Can not fetch orders now', 'error')
-        } finally {
-            setFetchingOrders(false)
-        }
-    }
-
-    useEffect(() => {
-        void fetchOrder()
-    }, [])
+        return orders?.filter(order => order.orderStatus === OrderStatus.FULFILLED) ?? []
+    }, [orders])
 
 
     useEffect(() => {
@@ -80,19 +66,14 @@ export const OrderScreen: React.FC = () => {
     }, [])
 
 
-    if (fetchingOrders) {
-        return <LoaderComponentScreen />
-    }
-
-
     const onPress = (order: OrderI) => {
         void analytics.track('CLICK:SINGLE-ORDER', {
             order: order._id,
             status: order.orderStatus
         })
-        navigation.navigate(OrderScreenName.UNDELIVERED_SINGLE_ORDER, {
+        navigation.navigate(OrderScreenName.UNDELIVERED_SINGLE_ORDER as any, {
             order
-        })
+        } as any)
     }
 
     function PendingRenderItem({item}: any) {
@@ -102,17 +83,12 @@ export const OrderScreen: React.FC = () => {
 
     return (
         <View style={tailwind('flex-1 bg-white px-4')}>
-            <View style={[tailwind('mt-4 pb-20'), {
-                height: height - 150
+            <View style={[tailwind('mt-2'), {
+                height: "100%"
             }]}>
                 <OrderView view={view} onButtonClick={(v) => setView(v as any)} />
                 {view === 'PAYMENT_PENDING' ? (
                     <FlashList
-                        refreshControl={
-                            <RefreshControl
-                            refreshing={fetchingOrders}
-                            onRefresh={ () => fetchOrder()} />
-                        }
                         showsVerticalScrollIndicator={false}
                         contentContainerStyle={tailwind(' bg-white', {'pb-20': isAndroid} )}
                         data={ordersInProgress}
@@ -122,11 +98,6 @@ export const OrderScreen: React.FC = () => {
                     />
                 ) : (
                     <FlashList
-                        refreshControl={
-                            <RefreshControl
-                                refreshing={fetchingOrders}
-                                onRefresh={ () => fetchOrder()} />
-                        }
                         showsVerticalScrollIndicator={false}
                         contentContainerStyle={tailwind(' bg-white', {'pb-20': isAndroid})}
                         data={ordersDelivered}

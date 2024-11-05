@@ -21,8 +21,8 @@ export function LocationAnimation (): JSX.Element {
                 autoPlay
                 loop
             />
-            <Text style={tailwind('text-center text-brand-gray-800 text-2xl font-bold')}>Share Location</Text>
-            <Text style={tailwind('text-center text-brand-gray-700 text-lg font-normal')}>
+            <Text style={tailwind('text-center text-slate-900 text-3xl mb-3 font-bold')}>Allow location access</Text>
+            <Text style={tailwind('text-center font-normal text-slate-900 px-5')}>
                 To get your food to you faster and discover restaurants nearby, please enable location sharing.
             </Text>
         </View>

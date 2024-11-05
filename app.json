@@ -6,7 +6,7 @@
     "owner": "nana_logistics",
     "version": "1.9.0",
     "orientation": "portrait",
-    "scheme": "myapp",
+    "scheme": "nanaDelivery",
     "userInterfaceStyle": "automatic",
     "jsEngine": "hermes",
     "plugins": [

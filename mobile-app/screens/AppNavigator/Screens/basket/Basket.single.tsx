@@ -1,5 +1,4 @@
-import {View, Text, ScrollView, Animated, TouchableOpacity} from 'react-native'
-import {RootState, useAppDispatch, useAppSelector} from "@store/index";
+import {View, Text, ScrollView, TouchableOpacity} from 'react-native'
 import {tailwind} from "@tailwind";
 import {GenericButton} from "@components/commons/buttons/GenericButton";
 import React, {useEffect, useMemo} from "react";
@@ -12,13 +11,11 @@ import {NumericFormat as NumberFormat} from "react-number-format";
 import {useAnalytics} from "@segment/analytics-react-native";
 import {CartSwipeable} from "@screens/AppNavigator/Screens/basket/components/Swipable";
 import {Trash2} from 'lucide-react-native'
-import {removeCartItem} from "@store/cart.reducer";
+import {useCart} from "@contexts/cart.provider";
 
 export const BasketSingle: React.FC = () => {
     const navigation = useNavigation<NavigationProp<BasketParamsList>>()
-    const vendors = useAppSelector((state: RootState) => state.vendors)
-    const cart = useAppSelector((state: RootState) => state.cart)
-    const dispatch = useAppDispatch()
+    const {cart, removeCartItem} = useCart()
 
     const analytics = useAnalytics()
 
@@ -26,14 +23,10 @@ export const BasketSingle: React.FC = () => {
         void analytics.screen(BasketScreenName.SINGLE_BASKET)
     }, [])
 
-    const vendor = useMemo(() => {
-        return vendors.vendors?.find((vendor) => vendor._id === cart.vendor?._id)
-    }, [cart, vendors])
-
     const totalCartValue = useMemo(() => {
         if (cart.cart !== undefined) {
             return cart.cart.reduce((total, cartItem) => {
-                return total + cartItem.totalValue;
+                return total + Number(cartItem.totalValue);
             }, 0);
         }
 
@@ -43,10 +36,10 @@ export const BasketSingle: React.FC = () => {
     useEffect(() => {
         navigation.setOptions({
             headerShown: true,
-            headerTitle: vendor?.businessName,
+            headerTitle: "Basket",
             headerBackTitleVisible: false,
-            headerTitleAlign: 'left',
-            headerTitleStyle: tailwind('text-lg'),
+            headerTitleAlign: 'center',
+            headerTitleStyle: tailwind('text-2xl font-bold text-slate-900'),
             headerLeft: () => <ModalCloseIcon size={18} onPress={() => navigation.goBack()} />,
         })
     }, [])
@@ -56,7 +49,7 @@ export const BasketSingle: React.FC = () => {
         void analytics.track('CLICK:CHECKOUT', {
             cartValue: totalCartValue
         })
-        navigation.navigate(BasketScreenName.CHECKOUT, {vendor: cart.vendor})
+        navigation.navigate(BasketScreenName.CHECKOUT as any, {vendor: cart.vendor} as any)
     }
 
     const RenderDeleteButton: React.FC<any> = () => {
@@ -65,35 +58,33 @@ export const BasketSingle: React.FC = () => {
         </TouchableOpacity>
     }
 
-    const deleteCartItem = (itemId: string): void => {
-        dispatch(removeCartItem(itemId))
-    }
+    const deleteCartItem = (itemId: string): void => void removeCartItem(itemId)
 
     return (
        <View style={tailwind('flex-1 bg-white relative px-4')}>
            <ScrollView style={tailwind('flex-1 flex-col ')}>
                <View style={tailwind('flex flex-col mt-4')}>
-                   <Text style={tailwind('text-xl text-nana-text')}>Order Items</Text>
+                   <Text style={tailwind('text-lg text-slate-900 font-semibold')}>Order Items</Text>
                    <View style={tailwind('flex flex-col my-1.5')}>
                        {cart.cart?.map((_cart, index) => (
                            <CartSwipeable
-                               key={index + _cart.cartItem._id}
+                               key={`${_cart.cartItem._id}-${index}`}
                                renderRightActions={RenderDeleteButton}
-                               deleteCartItem={() => deleteCartItem(_cart.cartItem._id)}
+                               deleteCartItem={() => deleteCartItem(`${_cart.cartItem._id}-${index}`)}
                            >
                                <SingleBaskedItem cart={_cart} />
                            </CartSwipeable>
                        ))}
                    </View>
                    <View style={tailwind('flex flex-row items-center justify-between mb-24 w-full')}>
-                       <Text style={tailwind('text-nana-text text-lg')}>Subtotal</Text>
+                       <Text style={tailwind('text-slate-900 font-bold text-lg')}>Subtotal</Text>
                        <NumberFormat
                            prefix="₦"
                            value={totalCartValue}
                            thousandSeparator
                            displayType="text"
                            renderText={(value) => (
-                               <Text style={tailwind("text-nana-text text-lg")}>{value}</Text>
+                               <Text style={tailwind("text-slate-900 font-bold text-lg")}>{value}</Text>
                            )}
                        />
                    </View>

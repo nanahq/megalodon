@@ -1,29 +1,27 @@
 import React, {useEffect, useState} from 'react';
-import {CardStyleInterpolators, StackScreenProps} from '@react-navigation/stack';
+import { StackScreenProps} from '@react-navigation/stack';
 import { AppParamList } from '@screens/AppNavigator/AppNav';
 import { ModalScreenName} from '@screens/AppNavigator/ScreenName.enum';
 import { tailwind } from '@tailwind';
 import {ModalCloseIcon} from "@screens/AppNavigator/Screens/modals/components/ModalCloseIcon";
 import {useAnalytics} from "@segment/analytics-react-native";
 import {ScrollView, View, Text} from "react-native";
-import {useAppDispatch, useAppSelector} from "@store/index";
-import { GenericTextInputV2} from "@components/commons/inputs/TextInput";
 import {GenericButton} from "@components/commons/buttons/GenericButton";
 import {RedeemedCoupon} from "@screens/AppNavigator/Screens/modals/components/RedeemedCoupon";
 import {_api} from "@api/_request";
 import {CouponRedeemResponse} from "@nanahq/sticky";
 import {useToast} from "react-native-toast-notifications";
 import {showTost} from "@components/commons/Toast";
-import {fetchProfile} from "@store/profile.reducer";
 import {TextInputWithLabel} from "@components/commons/inputs/TextInputWithLabel";
+import {useProfile} from "@contexts/profile.provider";
+import {mutate} from "swr";
 
 type PromotionModalProps = StackScreenProps<AppParamList, ModalScreenName.MODAL_PROMO_SCREEN>;
 
 export const PromotionModal: React.FC<PromotionModalProps> = ({ navigation }) => {
     const [code, setCode] = useState<string>("")
     const [submitting, setSubmitting] = useState<boolean>(false)
-    const {profile} = useAppSelector((state) => state.profile)
-    const dispatch = useAppDispatch()
+    const {profile} = useProfile()
     const toast = useToast()
     const analytics = useAnalytics()
 
@@ -33,9 +31,9 @@ export const PromotionModal: React.FC<PromotionModalProps> = ({ navigation }) =>
             headerShown: true,
             headerTitle: `Coupon & Gift cards`,
             headerBackTitleVisible: false,
-            headerTitleAlign: 'left',
-            headerTitleStyle: tailwind('text-xl'),
-            headerLeft: () => <ModalCloseIcon size={22} onPress={handleNavigationBack} />,
+            headerTitleAlign: 'center',
+            headerTitleStyle: tailwind('text-2xl font-bold  text-slate-900'),
+            headerLeft: () => <ModalCloseIcon size={18} onPress={handleNavigationBack} />,
         });
     }, []);
 
@@ -59,7 +57,7 @@ export const PromotionModal: React.FC<PromotionModalProps> = ({ navigation }) =>
              }
          })
             if (data.status === 'OK'){
-                dispatch(fetchProfile())
+               void mutate("user/profile")
                 showTost(toast, 'Coupon redeemed!', 'success')
                 setCode('')
                 void analytics.track('EVENT:REDEEM-COUPON')
@@ -80,7 +78,7 @@ export const PromotionModal: React.FC<PromotionModalProps> = ({ navigation }) =>
                     editable={!submitting}
                     placeholder="FREEDELIVERY"
                     onChangeText={(value) => setCode(value)}
-                    style={tailwind('text-base')}
+                    style={tailwind('text-base font-normal')}
                     label="Enter Promo code"
                     containerStyle={tailwind('mb-3 overflow-hidden')}
                     textAlign='left'
@@ -97,7 +95,7 @@ export const PromotionModal: React.FC<PromotionModalProps> = ({ navigation }) =>
                 />
             </View>
             <View style={tailwind(' mt-10')}>
-              <Text style={tailwind('text-lg mb-4')}>Available credits and promos</Text>
+              <Text style={tailwind('text-base font-medium mb-4')}>Available credits and promos</Text>
                 {profile.coupons !== undefined && profile.coupons.length > 0 && (
                     <View style={tailwind('flex flex-col')}>
                         {profile.coupons.map((_coupon) => (
