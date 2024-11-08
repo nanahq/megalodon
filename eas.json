@@ -8,7 +8,9 @@
         "EXPO_BUNDLE_IDENTIFIER": "com.nanaeats.nana_app",
         "EXPO_IMAGE_UTILS_NO_SHARP": "1",
         "EXPO_PUBLIC_API_URL": "https://prod-api.trynanaapp.com",
-        "EXPO_NODE_ENV": "production"
+        "EXPO_NODE_ENV": "production",
+        "EXPO_PUBLIC_MAPBOX_TOKEN":"pk.eyJ1Ijoic3VyYWphdXdhbCIsImEiOiJjbTJ6d3Y3ZDkwZml2MmtzNzZ4ODNkejc1In0.gQYN5B1HIFdJhpwv3Hyeqw"
+
       }
     },
     "development": {
@@ -24,8 +26,8 @@
       },
       "env": {
         "EXPO_PUBLIC_API_URL": "https://staging-api.trynanaapp.com",
-        "EXPO_NODE_ENV": "development"
-
+        "EXPO_NODE_ENV": "development",
+        "EXPO_PUBLIC_MAPBOX_TOKEN":"pk.eyJ1Ijoic3VyYWphdXdhbCIsImEiOiJjbTJ6d3Y3ZDkwZml2MmtzNzZ4ODNkejc1In0.gQYN5B1HIFdJhpwv3Hyeqw"
       }
     },
     "preview": {
@@ -40,7 +42,8 @@
       },
       "env": {
         "EXPO_PUBLIC_API_URL": "https://staging-api.trynanaapp.com",
-        "EXPO_NODE_ENV": "staging"
+        "EXPO_NODE_ENV": "staging",
+        "EXPO_PUBLIC_MAPBOX_TOKEN":"pk.eyJ1Ijoic3VyYWphdXdhbCIsImEiOiJjbTJ6d3Y3ZDkwZml2MmtzNzZ4ODNkejc1In0.gQYN5B1HIFdJhpwv3Hyeqw"
       }
     },
     "ios_production": {
