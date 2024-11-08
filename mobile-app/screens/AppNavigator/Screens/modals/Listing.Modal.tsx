@@ -16,8 +16,6 @@ import {NumericFormat as NumberFormat} from "react-number-format";
 import {ListingOptionSection} from "@screens/AppNavigator/Screens/modals/components/ListingOptionSection";
 import {SkeletonLoader, SkeletonLoaderScreen} from "@components/commons/SkeletonLoaders/SkeletonLoader";
 import {GenericButton} from "@components/commons/buttons/GenericButton";
-import {RootState, useAppDispatch, useAppSelector} from "@store/index";
-import { saveCartToStorage} from "@store/cart.reducer";
 import {BasketScreenName} from "@screens/AppNavigator/Screens/basket/BasketScreenName.enum";
 import {AppScreenName, ModalScreenName} from "@screens/AppNavigator/ScreenName.enum";
 import {AppParamList} from "@screens/AppNavigator/AppNav";
@@ -54,7 +52,6 @@ export const ListingModal: React.FC<ListingModalScreenProps>  = ({navigation, ro
     const [selectedOptions, setSelectedOptions] = useState<ListingOption[]>([]);
     const [haveSelectedAllRequiredOptions, setRequiredOptions] = useState<boolean>(false)
     const toast = useToast();
-    const dispatch = useAppDispatch()
     const [quantity, setQuantity] = useState(1);
     const analytics = useAnalytics()
 

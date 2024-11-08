@@ -3,18 +3,18 @@ import {ListingMenuI} from "@nanahq/sticky";
 import { Pressable, Text, View} from "react-native";
 import {tailwind} from "@tailwind";
 import * as Device from "expo-device";
-import {useAppSelector} from "@store/index";
 import FastImage from "react-native-fast-image";
 import {NavigationProp, useNavigation} from "@react-navigation/native";
 import {ModalScreenName} from "@screens/AppNavigator/ScreenName.enum";
 import {AppParamList} from "@screens/AppNavigator/AppNav";
 import {useAnalytics} from "@segment/analytics-react-native";
+import {useVendor} from "@contexts/vendor.provider";
 
 const _ListingCard: React.FC<{listing: ListingMenuI}>  = (props)=> {
-    const {vendors} = useAppSelector(state => state.vendors)
-    const {hompage} = useAppSelector(state => state.listings)
+    const {vendors} = useVendor()
     const isAndroid = Device.osName === 'Android'
     const navigation = useNavigation<NavigationProp<AppParamList>>()
+
     const vendor = useMemo(() => {
         return vendors?.find(vendor => vendor._id === props.listing.vendor as any)
     }, [vendors, props.listing.vendor])

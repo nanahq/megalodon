@@ -3,18 +3,10 @@ import {View, Text, Image} from "react-native";
 import {getColor, tailwind} from "@tailwind";
 import {NumericFormat as NumberFormat} from "react-number-format";
 import {Cart} from "@screens/AppNavigator/Screens/modals/Listing.Modal";
-import {GenericButton, GenericIconButton} from "@components/commons/buttons/GenericButton";
-import {deleteCartFromStorage, readCartFromStorage} from "@store/cart.reducer";
-import {useAppDispatch} from "@store/index";
-import {NavigationProp, useNavigation} from "@react-navigation/native";
-import {BasketParamsList} from "@screens/AppNavigator/Screens/basket/BasketNavigator";
-import {BasketScreenName} from "@screens/AppNavigator/Screens/basket/BasketScreenName.enum";
-import {Tags, Trash2} from "lucide-react-native";
+import {Tags} from "lucide-react-native";
 import FastImage from "react-native-fast-image";
 
 export const BasketsItem: React.FC<{cart: Cart[], vendor: any}> = ({cart, vendor}) => {
-    const navigation = useNavigation<NavigationProp<BasketParamsList>>()
-    const dispatch = useAppDispatch()
     const totalCartValue = useMemo(() => {
         if (cart !== undefined) {
             return cart.reduce((total, cartItem) => {
@@ -30,10 +22,6 @@ export const BasketsItem: React.FC<{cart: Cart[], vendor: any}> = ({cart, vendor
         return 0
     }, [cart])
 
-    const handleDeleteCartItem = (): void => {
-        dispatch(deleteCartFromStorage())
-        dispatch(readCartFromStorage())
-    }
 
     return (
         <View style={tailwind('border-0.5 border-brand-gray-700 rounded-lg px-3 py-5 mt-10')}>
@@ -60,10 +48,7 @@ export const BasketsItem: React.FC<{cart: Cart[], vendor: any}> = ({cart, vendor
                     </View>
                 </View>
             </View>
-            <View style={tailwind('mt-5 flex flex-row items-center w-full')}>
-                <GenericButton onPress={() => navigation.navigate(BasketScreenName.SINGLE_BASKET)} backgroundColor={tailwind('flex-grow')} label="View Basket" labelColor={tailwind('text-white')} />
-                <Trash2 onPress={handleDeleteCartItem} size={20} style={tailwind('w-4 h-4 text-black mx-5')} />
-            </View>
+
         </View>
     )
 }

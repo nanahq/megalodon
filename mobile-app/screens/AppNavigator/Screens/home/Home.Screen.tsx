@@ -1,9 +1,8 @@
 import {Dimensions, ScrollView, View, Text, Pressable} from "react-native";
 import React, {useEffect} from "react";
-import {SafeAreaView, useSafeAreaInsets} from "react-native-safe-area-context";
+import {SafeAreaView} from "react-native-safe-area-context";
 import {getColor, tailwind} from "@tailwind";
 import {HomeSection, HomeSectionVertical} from "@screens/AppNavigator/Screens/home/components/HomeSection";
-import { useAppSelector} from "@store/index";
 import {VendorCard, VendorCardFullWidth} from "@screens/AppNavigator/Screens/modals/components/VendorCard";
 import {ListingMenuCard} from "@screens/AppNavigator/Screens/modals/components/ListingCard";
 import {FlashList} from "@shopify/flash-list";
@@ -12,7 +11,6 @@ import {SearchBar} from "@screens/AppNavigator/Screens/home/SearchBar";
 import {CartIcon} from "@screens/AppNavigator/Screens/home/components/CartIcon";
 import {useNavigation} from "@react-navigation/native";
 import {StatusBar} from "expo-status-bar";
-import {useProfile} from "@contexts/profile.provider";
 import {useListings} from "@contexts/listing.provider";
 import {NotfoundLocation} from "@screens/AppNavigator/components/NotfoundLocation";
 import {useLocation} from "@contexts/location.provider";
@@ -21,7 +19,7 @@ import {HomeScreenName} from "@screens/AppNavigator/Screens/home/HomeScreenNames
 import {VendorUserI} from "@nanahq/sticky";
 import {useCart} from "@contexts/cart.provider";
 import {AppScreenName} from "@screens/AppNavigator/ScreenName.enum";
-const {height, width} = Dimensions.get('window')
+const {height} = Dimensions.get('window')
 export function HomeScreen (): JSX.Element {
     const {isWithinSupportedCities, currentCity} = useLocation()
     const { cart } = useCart()
@@ -30,15 +28,11 @@ export function HomeScreen (): JSX.Element {
     const analytics = useAnalytics()
     useEffect(() => {
         void analytics.screen(HomeScreenName.HOME)
-
-
     }, [])
-
 
     function PopularRenderItem({item}: any) {
         return <VendorCard style={tailwind('mr-2.5')} vendor={item} height={300}  />
     }
-
     function RenderItem ({item}: any) {
         return <VendorCardFullWidth  style={tailwind('mb-5')} vendor={item}/>
     }

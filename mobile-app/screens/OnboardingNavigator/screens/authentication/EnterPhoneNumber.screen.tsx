@@ -59,6 +59,7 @@ export function EnterPhoneNumberScreen ({navigation}: EnterPhoneNumberScreenProp
             <View style={tailwind('flex h-full w-full flex-col items-between justify-between')}>
                 <View>
                     <GenericButtonLink
+                        disabled={true}
                         style={tailwind('')}
                         labelColor={tailwind('text-gray-300 text-right text-sm mb-2')}
                         onPress={() => navigation.navigate<any>('ONBOARDING_GUEST')}

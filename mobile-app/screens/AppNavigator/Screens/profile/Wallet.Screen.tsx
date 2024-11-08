@@ -1,7 +1,6 @@
 import {Pressable, Text, View} from "react-native";
 import {tailwind} from "@tailwind";
 import {useToast} from "react-native-toast-notifications";
-import { useAppSelector} from "@store/index";
 import {NavigationProp, useNavigation} from "@react-navigation/native";
 import {AppParamList} from "@screens/AppNavigator/AppNav";
 import React, {useCallback, useEffect, useRef} from "react";
@@ -12,11 +11,12 @@ import * as ClipBoard from "expo-clipboard";
 import {showTost} from "@components/commons/Toast";
 import {IconComponent} from "@components/commons/IconComponent";
 import {AddMoneyModal} from "@screens/AppNavigator/Screens/profile/components/AddMoneyModal";
+import {useProfile} from "@contexts/profile.provider";
 
 
 const ADD_MONEY_MODAL = 'ADD_MONEY_MODAL'
 export const WalletScreen = () => {
-    const {profile} = useAppSelector(state => state.profile)
+    const {profile} = useProfile()
     const toast = useToast()
     const modalRef = useRef<any>()
 

@@ -15,8 +15,8 @@ import {AddressBookI, AddressLabelI} from "@nanahq/sticky";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
 import {GenericButton} from "@components/commons/buttons/GenericButton";
 import {IconComponent} from "@components/commons/IconComponent";
-import {useAppSelector} from "@store/index";
 import {CircleX} from "lucide-react-native";
+import {useAddress} from "@contexts/address-book.provider";
 
 // AddressIconMapper remains the same
 export const AddressIconMapper: Record<string, any> = {
@@ -64,7 +64,7 @@ const CustomBackdrop = ({ animatedIndex, style, ...props }: BottomSheetBackdropP
 };
 
 export function AddressBookModal(props: AddressBookModalProps): JSX.Element {
-    const {addressBook} = useAppSelector(state => state.addressBook)
+    const {addressBook} = useAddress()
     const { dismiss } = useBottomSheetModal();
 
     const getSnapPoints = (): string[] => {

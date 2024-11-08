@@ -11,9 +11,7 @@ import {useRef} from "react";
 import {EnterPhoneNumberScreen} from "@screens/OnboardingNavigator/screens/authentication/EnterPhoneNumber.screen";
 import {EnterPasswordScreen} from "@screens/OnboardingNavigator/screens/authentication/EnterPassword.Screen";
 import {VerifyPhoneNumberScreen} from "@screens/OnboardingNavigator/screens/authentication/VerifyPhoneNumber.screen";
-import {OnboardingScreen} from "./screens/Onboarding.screen";
 import {OnboardingScreenName} from "./ScreenName.enum";
-import {GuestAppNavigator} from "@screens/GuestNavigator/AppNav";
 export interface OnboardingParamsList {
     [OnboardingScreenName.ENTER_PASSWORD]: {
         phoneNumber: string

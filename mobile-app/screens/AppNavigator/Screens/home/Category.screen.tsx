@@ -3,7 +3,6 @@ import {HomeParamsList} from "@screens/AppNavigator/Screens/home/HomeNavigator";
 import {HomeScreenName} from "@screens/AppNavigator/Screens/home/HomeScreenNames.enum";
 import {Text, TextInput, View} from "react-native";
 import React, {useEffect, useMemo, useRef, useState} from "react";
-import {useAppSelector} from "@store/index";
 import {VendorI} from "@nanahq/sticky";
 import {tailwind} from "@tailwind";
 import {ModalCloseIcon} from "@screens/AppNavigator/Screens/modals/components/ModalCloseIcon";
@@ -11,11 +10,12 @@ import {Search} from 'lucide-react-native'
 import * as Device from "expo-device";
 import Animation from "@assets/animations/lottie-no-result.json";
 import Lottie from "lottie-react-native";
+import {useListings} from "@contexts/listing.provider";
 
 type SingleCategoryScreenProps = StackScreenProps<HomeParamsList, HomeScreenName.SINGLE_CATEGORY>
 
 export const SingleCategoryScreen: React.FC<SingleCategoryScreenProps> = ({route, navigation}) => {
-    const categories = useAppSelector(root => root.listings?.categories)
+    const {categories} = useListings()
     const inputRef = useRef<TextInput>(null)
     const animationRef = useRef<any>(null)
     const [isFocused, setIsFocused] = useState(false)
