@@ -12,6 +12,7 @@ import {LocationProvider} from "@contexts/location.provider";
 import {CartProvider} from "@contexts/cart.provider";
 import {OrdersProvider} from "@contexts/orders.provider";
 import {AddressProvider} from "@contexts/address-book.provider";
+import {VendorProvider} from "@contexts/vendor.provider";
 
 export function RootNavigator (): JSX.Element {
     const logger = useLogger()
@@ -27,11 +28,13 @@ export function RootNavigator (): JSX.Element {
             <LocationProvider>
             <ProfileProvider>
                 <OrdersProvider>
+                    <VendorProvider>
                     <AddressProvider>
                 <ListingsProvider>
                     <AppNavigator />
                 </ListingsProvider>
                     </AddressProvider>
+                    </VendorProvider>
                 </OrdersProvider>
             </ProfileProvider>
             </LocationProvider>

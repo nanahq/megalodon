@@ -7,11 +7,8 @@ import {AdvertComponent} from "@screens/AppNavigator/Screens/home/components/Adv
 import AdImageFood from "@assets/ads/cravings.png";
 import {HomeSection, HomeSectionVertical} from "@screens/AppNavigator/Screens/home/components/HomeSection";
 import {FlashList} from "@shopify/flash-list";
-import {useAppSelector} from "@store/index";
 import {VendorCard, VendorCardFullWidth} from "@screens/AppNavigator/Screens/modals/components/VendorCard";
-import {AppScreenName} from "@screens/AppNavigator/ScreenName.enum";
-import {MapPin, User} from "lucide-react-native";
-import {useNavigation} from "@react-navigation/native";
+import {MapPin} from "lucide-react-native";
 import {ListingMenuCard} from "@screens/AppNavigator/Screens/modals/components/ListingCard";
 import {NotfoundLocation} from "@screens/AppNavigator/components/NotfoundLocation";
 import {useLocation} from "@contexts/location.provider";

@@ -1,5 +1,4 @@
 import 'expo-dev-client';
-
 import * as SplashScreen from 'expo-splash-screen'
 import {MainScreen} from "@screens/Main";
 import {useCachedResource} from "@hooks/useCachedResource";
@@ -12,30 +11,23 @@ import ErrorBoundary from "@screens/ErrorBoundary/ErrorBoundary";
 import {ToastProps} from "react-native-toast-notifications/lib/typescript/toast";
 import {AppToast} from "@components/commons/AppToast";
 import {ToastProvider} from "react-native-toast-notifications";
-import {StoreProvider} from "@store/StoreProvider";
 import {BottomSheetModalProvider} from "@gorhom/bottom-sheet";
 import {SafeAreaProvider} from "react-native-safe-area-context";
-import {WebSocketProvider} from "@contexts/SocketProvider";
-import {NetworkMapper} from "@api/network.mapper";
 import {createClient, AnalyticsProvider} from "@segment/analytics-react-native";
 import {AmplitudeSessionPlugin} from "@segment/analytics-react-native-plugin-amplitude-session";
 import {PromoCodeProvider} from "@contexts/PromoCode";
 import Wrapper from "./Wrapper";
-
 import { LogLevel, OneSignal } from 'react-native-onesignal';
 import Constants from "expo-constants";
 import {LoadingProvider} from "@contexts/loading.provider";
-import {getSocketUrl} from "@api/_request";
 import {io} from "socket.io-client";
 
 OneSignal.Debug.setLogLevel(LogLevel.Verbose);
 OneSignal.initialize(Constants.expoConfig?.extra?.oneSignalAppId);
-
-OneSignal.Notifications.requestPermission(true);
+void OneSignal.Notifications.requestPermission(true);
 
 export const socket = io(`${process.env.EXPO_PUBLIC_API_URL}`, {transports: ["websocket"]})
 
-console.log(socket)
 const segmentClient = createClient({
     writeKey: "2mQ9kjV6aBMDEJqDrJHzcG5afX5eOPWr",
     trackAppLifecycleEvents: true,
@@ -47,7 +39,6 @@ export default function App() {
   const isLoaded = useCachedResource()
    const logger = useLogger()
 
-// delay splash screen till cached resources are loaded
     if (!isLoaded) {
         setTimeout(() => {
             SplashScreen.preventAutoHideAsync().catch(logger.error);
@@ -60,6 +51,7 @@ export default function App() {
         app_toast_error: (toast: ToastProps) => <AppToast type="error" toast={toast} />,
         app_toast_warning: (toast: ToastProps) => <AppToast type="warning" toast={toast} />,
     };
+
     return (
     <Wrapper>
         <NativeLoggingProvider>
@@ -72,7 +64,6 @@ export default function App() {
                     }}
                 >
                        <LoadingProvider>
-                           <StoreProvider>
                                <PromoCodeProvider>
                                    <GestureHandlerRootView
                                        style={tailwind('flex-1')}
@@ -88,7 +79,6 @@ export default function App() {
                                        </SafeAreaProvider>
                                    </GestureHandlerRootView>
                                </PromoCodeProvider>
-                           </StoreProvider>
                        </LoadingProvider>
                 </AuthPersistenceProvider>
             </ErrorBoundary>

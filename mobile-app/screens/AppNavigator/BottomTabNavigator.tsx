@@ -5,13 +5,12 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import * as Device from 'expo-device';
 import { OrderNavigator } from "@screens/AppNavigator/Screens/orders/OrderNavigator";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { ReceiptText, Home, Salad, Store, PackageOpen, User } from "lucide-react-native";
+import { ReceiptText, Home, Salad, Store, PackageOpen } from "lucide-react-native";
 import { FoodScreen } from "@screens/AppNavigator/Screens/home/Food.screen";
 import { MartScreen } from "@screens/AppNavigator/Screens/home/Mart.screen";
 import { CourierScreen } from "@screens/AppNavigator/Screens/home/Courier.screen";
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
-import { HomeScreen } from "@screens/AppNavigator/Screens/home/Home.Screen";
 import { CardStyleInterpolators } from "@react-navigation/stack";
 import {HomeNavigator} from "@screens/AppNavigator/Screens/home/HomeNavigator";
 

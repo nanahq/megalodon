@@ -2,11 +2,8 @@ import {Pressable, ScrollView, Text, View, Modal} from "react-native";
 import { IconComponent } from "@components/commons/IconComponent";
 import React, {useEffect, useState} from "react";
 import { AddressIconMapper } from "@screens/AppNavigator/Screens/basket/components/address/AddressModal";
-import {useAppDispatch, useAppSelector} from "@store/index";
 import { tailwind } from "@tailwind";
-import { LoaderComponentScreen } from "@components/commons/LoaderComponent";
 import { GenericButton } from "@components/commons/buttons/GenericButton";
-import {AddressBookState, fetchAddressBook} from "@store/AddressBook.reducer";
 import {useToast} from "react-native-toast-notifications";
 import {showTost} from "@components/commons/Toast";
 import {_api} from "@api/_request";
@@ -24,7 +21,6 @@ export const AddressBookScreen: React.FC = () => {
     const [addressId, setAddressId] = useState<string | undefined>(undefined)
     const {setLoadingState} = useLoading()
     const toast = useToast()
-    const dispatch = useAppDispatch()
     const navigation = useNavigation<NavigationProp<AppParamList>>()
 
     useEffect(() => {
@@ -48,7 +44,6 @@ export const AddressBookScreen: React.FC = () => {
                 url: `/address-books/${addressId}`
             })
             showTost(toast, 'address deleted', 'success')
-            dispatch(fetchAddressBook())
         } catch (error) {
             showTost(toast, 'failed to delete address', 'error')
         } finally {

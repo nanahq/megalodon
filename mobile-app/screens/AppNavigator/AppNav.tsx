@@ -1,29 +1,19 @@
+import * as Device from 'expo-device'
+import * as Location from "expo-location";
 import {CardStyleInterpolators, createStackNavigator} from "@react-navigation/stack";
 import {LinkingOptions, NavigationContainer} from "@react-navigation/native";
-import {AppLinking, BottomTabNavigator} from "@screens/AppNavigator/BottomTabNavigator";
+import {BottomTabNavigator, linking} from "@screens/AppNavigator/BottomTabNavigator";
 import * as Linking from "expo-linking"
-import {fetchProfile} from "@store/profile.reducer";
 import {useEffect, useRef} from "react";
-import {RootState, useAppDispatch} from "@store/index";
-import {useSelector} from "react-redux";
-
-import {fetchVendors} from "@store/vendors.reducer";
-import {readCartFromStorage} from "@store/cart.reducer";
-import {fetchAddressBook, fetchAddressLabels} from "@store/AddressBook.reducer";
 import {ModalScreenName} from "@screens/AppNavigator/ScreenName.enum";
-import {DeliveryFeeResult, ListingMenuI, LocationCoordinates, OrderI, UpdateUserDto, VendorUserI} from "@nanahq/sticky";
+import {DeliveryFeeResult, ListingMenuI, OrderI, VendorUserI} from "@nanahq/sticky";
 import {VendorModal} from "@screens/AppNavigator/Screens/modals/Vendor.Modal";
 import {ListingModal} from "@screens/AppNavigator/Screens/modals/Listing.Modal";
 import {AddAddressModal} from "@screens/AppNavigator/Screens/modals/AddAddress.Modal";
 import {PaymentModal} from "@screens/AppNavigator/Screens/modals/Payment.Modal";
-import * as Device from 'expo-device'
-import * as Location from "expo-location";
-import {_api} from "@api/_request";
-import {fetchAllCategories} from "@store/listings.reducer";
 import {RedeemModal} from "@screens/AppNavigator/Screens/modals/Redeem.Modal";
 import {useAnalytics} from "@segment/analytics-react-native";
 import {PromotionModal} from "@screens/AppNavigator/Screens/modals/Promotion.modal";
-
 import {ProfileNavigator} from "@screens/AppNavigator/Screens/profile/ProfileNavigator";
 import {BasketNavigator} from "@screens/AppNavigator/Screens/basket/BasketNavigator";
 import { DdRumReactNavigationTracking } from "@datadog/mobile-react-navigation";
@@ -31,7 +21,6 @@ import {OneSignal} from "react-native-onesignal";
 import {useProfile} from "@contexts/profile.provider";
 import {useLocation} from "@contexts/location.provider";
 import {LocationPermission} from "@screens/AppNavigator/components/LocationPersmission";
-import {NotfoundLocation} from "@screens/AppNavigator/components/NotfoundLocation";
 import Constants from "expo-constants";
 import {useCart} from "@contexts/cart.provider";
 
@@ -69,20 +58,16 @@ export interface AppParamList {
     [key: string]: undefined | object;
 }
 
-
-
 export function AppNavigator(): JSX.Element {
     const {profile, fetched} = useProfile()
     const isAndroid  = Device.osName === 'Android'
     const {locationPermission} = useLocation()
     const {readCart} = useCart()
-    const dispatch = useAppDispatch()
     const analytics = useAnalytics()
     const navigationRef = useRef<any>(null)
+
     useEffect(() => {
         void readCart()
-        dispatch(fetchAddressLabels() as any)
-        dispatch(fetchAddressBook() as any)
     }, [])
 
     useEffect(() => {
@@ -119,7 +104,7 @@ export function AppNavigator(): JSX.Element {
             onReady={() => {
                 DdRumReactNavigationTracking.startTrackingViews(navigationRef.current)
             }}
-            linking={LinkingConfiguration}>
+            linking={linking}>
             <App.Navigator screenOptions={{
                 headerShown: false
             }}>
@@ -173,15 +158,3 @@ export function AppNavigator(): JSX.Element {
         </NavigationContainer>
     );
 }
-
-const LinkingConfiguration: LinkingOptions<ReactNavigation.RootParamList> = {
-    prefixes: [Linking.createURL("/")],
-    config: {
-        screens: {
-            App: {
-                path: "app",
-                screens: AppLinking,
-            },
-            },
-    },
-};

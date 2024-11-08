@@ -31,7 +31,7 @@ interface PaymentMethodModalProps {
 const _AdditionalInfoModal:React.FC<PropsWithChildren<{   modalRef: RefObject<BottomSheetModalMethods>, promptModalName: string, onDismiss?: () => void}>> = (props) => {
     const { dismiss } = useBottomSheetModal();
     const getSnapPoints = (): string[] => {
-        return ["15%"];
+        return ["25%"];
     }
 
     const closeModal = useCallback(() => {
@@ -65,7 +65,7 @@ const _AdditionalInfoModal:React.FC<PropsWithChildren<{   modalRef: RefObject<Bo
                 />
             )}
         >
-            <View style={tailwind('bg-white rounded-t-3xl p-5 flex-1')}>
+            <View style={tailwind('bg-white rounded-t-3xl px-5 py-8 flex-1')}>
                 {props.children}
             </View>
         </BottomSheetModal>

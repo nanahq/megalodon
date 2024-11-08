@@ -6,8 +6,6 @@ import {tailwind} from "@tailwind";
 import {IconButton} from "@components/commons/buttons/IconButton";
 import React, {useEffect, useState} from "react";
 import {GenericButton} from "@components/commons/buttons/GenericButton";
-import {useAppDispatch} from "@store/index";
-import {fetchProfile} from "@store/profile.reducer";
 import {UpdateUserDto, UserI} from "@nanahq/sticky";
 import {_api} from "@api/_request";
 import {useToast} from "react-native-toast-notifications";
@@ -15,6 +13,7 @@ import {showTost} from "@components/commons/Toast";
 import * as Device from "expo-device";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
 import {TextInputWithLabel} from "@components/commons/inputs/TextInputWithLabel";
+import {mutate} from "swr";
 
 type AccountScreenNavigationProps = StackScreenProps<ProfileParamsList, ProfileScreenName.EDIT_ACCOUNT>
 
@@ -27,7 +26,6 @@ export const EditAccountScreen: React.FC<AccountScreenNavigationProps> = ({navig
     const isAndroid = Device.osName === 'Android'
     const {top} = useSafeAreaInsets()
 
-    const dispatch =useAppDispatch()
     const toast = useToast()
     useEffect(() => {
         setValue(route.params.value);
@@ -56,7 +54,7 @@ export const EditAccountScreen: React.FC<AccountScreenNavigationProps> = ({navig
                 url: 'user/update',
                 data: payload
             })
-            dispatch(fetchProfile())
+            void mutate('user/profile')
             showTost(toast, `${route.params.type} has been updated!`, 'success')
         } catch (error) {
             showTost(toast, `Failed to update${route.params.type}`, 'error')

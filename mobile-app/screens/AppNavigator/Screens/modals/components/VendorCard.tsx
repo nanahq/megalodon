@@ -8,7 +8,6 @@ import {IconComponent} from "@components/commons/IconComponent";
 import {NavigationProp, useNavigation} from "@react-navigation/native";
 import {ModalScreenName} from "@screens/AppNavigator/ScreenName.enum";
 import {AppParamList} from "@screens/AppNavigator/AppNav";
-import {useAppSelector} from "@store/index";
 import FastImage from "react-native-fast-image";
 import {useAnalytics} from "@segment/analytics-react-native";
 import {useProfile} from "@contexts/profile.provider";

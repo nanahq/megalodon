@@ -4,7 +4,6 @@ import {ModalBackIcon} from "@screens/AppNavigator/Screens/modals/components/Mod
 import {NavigationProp, useNavigation} from "@react-navigation/native";
 import {AppParamList} from "@screens/AppNavigator/AppNav";
 import {tailwind} from "@tailwind";
-import {useAppSelector} from "@store/index";
 import {TextInputWithLabel} from "@components/commons/inputs/TextInputWithLabel";
 import {GenericButton} from "@components/commons/buttons/GenericButton";
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
@@ -12,10 +11,11 @@ import {useToast} from "react-native-toast-notifications";
 import {showTost} from "@components/commons/Toast";
 import {_api} from "@api/_request";
 import {clearOnAuthError} from "@store/common";
+import {useProfile} from "@contexts/profile.provider";
 
 export const DeleteAccountScreen = () => {
     const navigation = useNavigation<NavigationProp<AppParamList>>()
-    const {profile} = useAppSelector(state => state.profile)
+    const {profile} = useProfile()
     const [loading, setLoading] = useState(false)
     const toast = useToast()
     const [reason, setReason] = useState()

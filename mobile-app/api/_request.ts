@@ -4,7 +4,6 @@ import { showToastStandard } from "@components/commons/Toast";
 import {ApiRoute, APIService, NetworkMapper} from "@api/network.mapper";
 import {cookieParser} from "../../utils/cookieParser";
 import {clearOnAuthError} from "@store/common";
-import {io} from "socket.io-client";
 
 type Environment = 'production' | 'development' | string
 export  function getUrl (gateway: APIService): string {
@@ -65,7 +64,7 @@ async function base<T>(param: baseParamProps<T>) {
         })
         .catch((err: any) => {
             if (err.message.includes('401')) {
-                // clearOnAuthError()
+                clearOnAuthError()
                 return Promise.reject(err.response?.data);
             }
             if (err.response) {

@@ -14,7 +14,6 @@ import {
     VendorOperationType,
     VendorUserI,
 } from "@nanahq/sticky";
-import {RootState, useAppDispatch, useAppSelector} from "@store/index";
 import {CheckoutBreakDown} from "@screens/AppNavigator/Screens/basket/components/CheckoutBreakDown";
 import {DeliveryAddressBox} from "@screens/AppNavigator/Screens/basket/components/address/DeliveryAddressBox";
 import {AddressBookModal} from "@screens/AppNavigator/Screens/basket/components/address/AddressModal";
@@ -25,7 +24,6 @@ import {ScheduleDeliveryBox} from "@screens/AppNavigator/Screens/basket/componen
 import {useToast} from "react-native-toast-notifications";
 import {showTost} from "@components/commons/Toast";
 import {_api} from "@api/_request";
-import {deleteCartFromStorage} from "@store/cart.reducer";
 import moment from "moment";
 import {
     PaymentMethodBox,
@@ -36,7 +34,6 @@ import {PaymentMethodModal} from "@screens/AppNavigator/Screens/basket/component
 import {useAnalytics} from "@segment/analytics-react-native";
 import {usePromoCode} from "@contexts/PromoCode";
 import {PromocodeBox} from "@screens/AppNavigator/Screens/basket/components/payment/PromocodeBox";
-import {fetchProfile} from "@store/profile.reducer";
 import {parseSelectedScheduledDateTime} from "../../../../../utils/DateFormatter";
 import {SlideToOrderButton, SlideToOrderRef} from "@components/commons/buttons/SliderButton";
 import {useLoading} from "@contexts/loading.provider";
@@ -421,7 +418,7 @@ export const Checkout: React.FC = () => {
             >
                 <View style={tailwind('flex flex-col mb-5')}>
                     <Text style={tailwind('text-base font-bold text-slate-500 mb-3')}>Service fee</Text>
-                    <Text style={tailwind('text-sm font-normal text-slate-500')}>10% of your total order capped at N500. This fee goes towards maintaining the platform nd payment processing cost ensuring you get reliable service</Text>
+                    <Text style={tailwind('text-sm font-normal text-slate-500')}>10% of your total order capped at N500. This fee goes towards maintaining the platform and payment processing cost ensuring you get reliable service</Text>
                 </View>
             </AdditionalInfoModal>
         </ScrollView>

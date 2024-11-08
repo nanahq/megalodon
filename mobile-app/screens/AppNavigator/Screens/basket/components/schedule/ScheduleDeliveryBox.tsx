@@ -1,7 +1,6 @@
 import React, {memo} from "react";
 import {View, Text, Pressable} from "react-native";
 import {tailwind} from "@tailwind";
-import {IconComponent} from "@components/commons/IconComponent";
 import {CalendarDays, ChevronRight} from "lucide-react-native";
 
 const _ScheduleDeliveryBox: React.FC<{selectedDate: {time: string, date: string} | undefined,  onPress: () => void}> = (props) => {

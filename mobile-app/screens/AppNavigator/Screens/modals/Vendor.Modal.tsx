@@ -14,19 +14,17 @@ import {
     VendorCategorySection
 } from "@screens/AppNavigator/Screens/home/components/CategorySection";
 import {FlashList} from "@shopify/flash-list";
-import {RootState, useAppDispatch, useAppSelector} from "@store/index";
 import {GenericButton} from "@components/commons/buttons/GenericButton";
-import {readCartFromStorage} from "@store/cart.reducer";
 import {BasketScreenName} from "@screens/AppNavigator/Screens/basket/BasketScreenName.enum";
 import {AppScreenName, ModalScreenName} from "@screens/AppNavigator/ScreenName.enum";
 import {AppParamList} from "@screens/AppNavigator/AppNav";
-import {fetchSubscriptions} from "@store/vendors.reducer";
 import FastImage from "react-native-fast-image";
 import moment from 'moment';
 import {useAnalytics} from "@segment/analytics-react-native";
 import {isRestaurantOpen} from "../../../../../utils/DateFormatter";
 import { AlarmClockCheck, AlarmClockOff} from 'lucide-react-native'
 import {useCart} from "@contexts/cart.provider";
+import {useProfile} from "@contexts/profile.provider";
 type VendorModalScreenProps = StackScreenProps<AppParamList, ModalScreenName.MODAL_VENDOR_SCREEN>
 
  export const VendorModal: React.FC<VendorModalScreenProps> = ({navigation, route}) => {
@@ -37,14 +35,12 @@ type VendorModalScreenProps = StackScreenProps<AppParamList, ModalScreenName.MOD
     const [scheduled, setScheduled] = useState<ScheduledListingI[]>([])
     const toast = useToast()
      const {readCart} = useCart()
-     const dispatch = useAppDispatch()
     const analytics = useAnalytics()
 
 
     const {cart} = useCart()
 
-    const {subscriptions} = useAppSelector((state: RootState) => state.vendors)
-    const {profile} = useAppSelector((state: RootState) => state.profile)
+    const {profile} = useProfile()
     const [subscribing, setSubscribing] = useState<boolean>(false)
      const filteredCategories = useMemo(() => {
          if (categories.length) {
@@ -52,19 +48,6 @@ type VendorModalScreenProps = StackScreenProps<AppParamList, ModalScreenName.MOD
          }
      }, [categories])
 
-     const vendorHasSubscription = useMemo(() => {
-         if (!subscriptions) {
-return
-}
-         const vendorSub = subscriptions.find(sb => sb.vendor === route.params.vendor?._id)
-
-         const userIsSubscribed = vendorSub?.subscribers.some((sb: any) => sb === profile?._id)
-
-         return {
-             userIsSubscribed,
-             vendorHasEnabledSub: Boolean(vendorSub?.enabledByVendor)
-         }
-     }, [subscriptions?.length])
 
 
 
@@ -72,26 +55,6 @@ return
          void analytics.screen(ModalScreenName.MODAL_VENDOR_SCREEN)
      }, [])
 
-     const handleSubscriptions = async () => {
-        const subStatus = vendorHasSubscription?.userIsSubscribed
-       try {
-           setSubscribing(true)
-           await _api.requestData({
-               method: 'POST',
-               url: 'vendor/subscribe',
-               data: {
-                   "vendor": route.params.vendor._id,
-                   "subscriberId": profile._id
-               }
-           })
-           dispatch(fetchSubscriptions(profile._id))
-           showTost(toast, subStatus ? 'You have unsubscribed from vendor' : 'You have subscribed to vendor', 'success')
-       } catch (error) {
-           showTost(toast, 'Failed to subscribe to vendor', "error")
-       } finally {
-           setSubscribing(false)
-       }
-     }
 
     useEffect(() => {
         async function fetchData () {
