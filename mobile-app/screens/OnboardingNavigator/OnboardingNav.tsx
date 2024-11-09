@@ -68,13 +68,6 @@ export function OnboardingNagivator (): JSX.Element {
                     }}
                 />
                 <OnboardingStack.Screen
-                    component={GuestAppNavigator}
-                    name={'ONBOARDING_GUEST'}
-                    options={{
-                        headerShown: false
-                    }}
-                />
-                <OnboardingStack.Screen
                     component={VerifyPhoneNumberScreen}
                     name={OnboardingScreenName.VERIFY_PHONE_NUMBER}
                     options={{
