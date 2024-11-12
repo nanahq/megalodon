@@ -17,11 +17,17 @@ import {SafeAreaView} from "react-native-safe-area-context";
 import FastImage from "react-native-fast-image";
 import AppLogo from '@assets/app/nana-logo.png'
 import {useLoading} from "@contexts/loading.provider";
+import * as Device from 'expo-device'
+
 type EnterPhoneNumberScreenProps = StackScreenProps<OnboardingParamsList, OnboardingScreenName.ENTER_MOBILE_PHONE>
 export function EnterPhoneNumberScreen ({navigation}: EnterPhoneNumberScreenProps): JSX.Element {
     const [phoneNumber, setPhoneNumber] = useState<string>('')
     const [loading, setLoading] = useState<boolean>(false)
     const analytics = useAnalytics()
+
+    const isAndroid = Device.osName?.toLowerCase()?.includes('android')
+
+
     const {setLoadingState} = useLoading()
     useEffect(() => {
        void analytics.screen(OnboardingScreenName.ENTER_MOBILE_PHONE)
@@ -58,13 +64,15 @@ export function EnterPhoneNumberScreen ({navigation}: EnterPhoneNumberScreenProp
         >
             <View style={tailwind('flex h-full w-full flex-col items-between justify-between')}>
                 <View>
-                    <GenericButtonLink
-                        disabled={true}
-                        style={tailwind('')}
-                        labelColor={tailwind('text-gray-300 text-right text-sm mb-2')}
-                        onPress={() => navigation.navigate<any>('ONBOARDING_GUEST')}
-                        label="Continue as guest"
-                    />
+                    {!isAndroid && (
+                        <GenericButtonLink
+                            disabled={true}
+                            style={tailwind('')}
+                            labelColor={tailwind('text-gray-300 text-right text-sm mb-2')}
+                            onPress={() => navigation.navigate<any>('ONBOARDING_GUEST')}
+                            label="Continue as guest"
+                        />
+                    )}
                     <View style={tailwind('flex flex-row items-center justify-center w-full')}>
                         <FastImage source={AppLogo} style={{width: 100, height: 65}} />
                     </View>
