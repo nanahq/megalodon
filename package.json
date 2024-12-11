@@ -118,7 +118,7 @@
   "devDependencies": {
     "@babel/core": "^7.21.0",
     "@babel/plugin-proposal-export-namespace-from": "^7.18.9",
-    "@cypress/code-coverage": "^3.10.0",
+    "@cypress/code-coverage": "^3.13.9",
     "@expo/metro-config": "~0.17.1",
     "@expo/webpack-config": "^19.0.0",
     "@testing-library/cypress": "^9.0.0",
