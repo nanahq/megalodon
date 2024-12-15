@@ -19,7 +19,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ navigation, route })
             headerTitle: `Payment for your order`,
             headerBackTitleVisible: false,
             headerTitleAlign: 'center',
-            headerTitleStyle: tailwind('text-2xl font-bold  text-slate-900'),
+            headerTitleStyle: tailwind('text-xl font-bold  text-slate-900'),
             headerLeft: () => <ModalCloseIcon size={18} onPress={handleNavigationBack} />,
         });
     }, []);

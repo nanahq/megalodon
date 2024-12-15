@@ -128,6 +128,9 @@ export function BottomTabNavigator(): JSX.Element {
                 name={AppScreenName.Courier}
                 component={CourierScreen}
                 options={{
+                    headerShown: true,
+                    headerTitle: "Nana Box",
+                    headerTitleStyle: tailwind('text-xl font-bold text-slate-900'),
                     tabBarLabel: ({ focused, color }) => getTabBarLabel({ focused, color, title: 'Courier' }),
                     tabBarIcon: ({ focused, color }) => (
                         <TabIcon focused={focused} color={color} IconComponent={PackageOpen} />

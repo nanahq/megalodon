@@ -36,10 +36,10 @@ export const BasketSingle: React.FC = () => {
     useEffect(() => {
         navigation.setOptions({
             headerShown: true,
-            headerTitle: "Basket",
+            headerTitle: "Preview Order",
             headerBackTitleVisible: false,
             headerTitleAlign: 'center',
-            headerTitleStyle: tailwind('text-2xl font-bold text-slate-900'),
+            headerTitleStyle: tailwind('text-xl font-bold text-slate-900'),
             headerLeft: () => <ModalCloseIcon size={18} onPress={() => navigation.goBack()} />,
         })
     }, [])
@@ -65,7 +65,7 @@ export const BasketSingle: React.FC = () => {
            <ScrollView style={tailwind('flex-1 flex-col ')}>
                <View style={tailwind('flex flex-col mt-4')}>
                    <Text style={tailwind('text-lg text-slate-900 font-semibold')}>Order Items</Text>
-                   <View style={tailwind('flex flex-col my-1.5')}>
+                   <View style={tailwind('flex flex-col my-1.5 bg-gray-50 border-0.5 border-gray-200 rounded-xl p-2 ')}>
                        {cart.cart?.map((_cart, index) => (
                            <CartSwipeable
                                key={`${_cart.cartItem._id}-${index}`}
@@ -76,15 +76,15 @@ export const BasketSingle: React.FC = () => {
                            </CartSwipeable>
                        ))}
                    </View>
-                   <View style={tailwind('flex flex-row items-center justify-between mb-24 w-full')}>
-                       <Text style={tailwind('text-slate-900 font-bold text-lg')}>Subtotal</Text>
+                   <View style={tailwind('flex flex-row items-center justify-between mt-5 w-full')}>
+                       <Text style={tailwind('text-slate-900 font-bold text-base')}>Subtotal</Text>
                        <NumberFormat
                            prefix="₦"
                            value={totalCartValue}
                            thousandSeparator
                            displayType="text"
                            renderText={(value) => (
-                               <Text style={tailwind("text-slate-900 font-bold text-lg")}>{value}</Text>
+                               <Text style={tailwind("text-slate-900 font-bold text-base")}>{value}</Text>
                            )}
                        />
                    </View>

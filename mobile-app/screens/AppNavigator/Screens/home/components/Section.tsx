@@ -18,7 +18,7 @@ export const HomepageSectionScreen: React.FC<ScreenProps> = ({route, navigation}
             headerShown: true,
             headerTitle: route.params.heading,
             headerLeftContainerStyle: tailwind('px-5'),
-            headerTitleStyle: tailwind('font-bold text-2xl text-slate-900'),
+            headerTitleStyle: tailwind('font-bold text-xl text-slate-900'),
             headerTitleAlign: 'center',
             headerLeft: () => <Pressable onPress={() => navigation.goBack()}>
                 <ArrowLeft style={tailwind('text-slate-900')} size={26} />

@@ -28,8 +28,8 @@ export function BasketNavigator(): JSX.Element {
                 name={BasketScreenName.BASKET}
                 options={{
                     headerShown: true,
-                    headerTitle: 'Basket',
-                    headerTitleStyle:tailwind('font-bold text-slate-900 text-2xl')
+                    headerTitle: 'Preview Order',
+                    headerTitleStyle:tailwind('font-semibold text-slate-900 text-xl')
                 }}
             />
 

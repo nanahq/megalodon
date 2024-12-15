@@ -16,7 +16,7 @@ export const HomepageCategory: React.FC<HomepageCategoryProps> = ({navigation}) 
             headerTitle: 'All categories',
             headerBackTitleVisible: false,
             headerTitleAlign: 'center',
-            headerTitleStyle: tailwind('text-2xl  text-slate-900 font-bold'),
+            headerTitleStyle: tailwind('text-xl  text-slate-900 font-bold'),
             headerStyle:  {
                 shadowOpacity: 8,
                 shadowRadius: 12,

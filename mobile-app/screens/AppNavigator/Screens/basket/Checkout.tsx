@@ -12,7 +12,6 @@ import {
     OrderBreakDown, OrderI,
     OrderTypes,
     VendorOperationType,
-    VendorUserI,
 } from "@nanahq/sticky";
 import {CheckoutBreakDown} from "@screens/AppNavigator/Screens/basket/components/CheckoutBreakDown";
 import {DeliveryAddressBox} from "@screens/AppNavigator/Screens/basket/components/address/DeliveryAddressBox";
@@ -42,6 +41,7 @@ import {mutate} from "swr";
 import {useProfile} from "@contexts/profile.provider";
 import {AdditionalInfoModal} from "@screens/AppNavigator/Screens/basket/components/AdditionalInforModal";
 import {useAddress} from "@contexts/address-book.provider";
+import {AddressMapPreview} from "@screens/AppNavigator/Screens/basket/components/address-map-view";
 
 export const ADDRESS_MODAL = 'ADDRESS_MODAL'
 
@@ -269,6 +269,7 @@ export const Checkout: React.FC = () => {
         const payload = {
             user: profile._id,
             deliveryAddress: selectedAddress?.address ?? '',
+            pickupAddress: vendor?.businessAddress,
             listing: cart.cart?.map(crt => crt.cartItem._id) ?? [],
             isThirdParty: isThirdParty,
             orderType: view === 'ON_DEMAND' ? OrderTypes.INSTANT : OrderTypes.PRE,
@@ -285,6 +286,10 @@ export const Checkout: React.FC = () => {
             preciseLocation: {
                 type: 'Point',
                 coordinates: selectedAddress?.location?.coordinates
+            },
+            precisePickupLocation: {
+                type: 'Point',
+                    coordinates: vendor?.location?.coordinates
             },
             primaryContact: profile?.phone,
             vendor: vendor?._id ?? '',
@@ -345,14 +350,22 @@ export const Checkout: React.FC = () => {
             { view === 'ON_DEMAND' && selectedAddress !== undefined && deliveryEta !== undefined && vendor !== undefined && (
                 <View style={tailwind('mt-3')}>
                     <View style={tailwind('flex flex-row items-center w-full')}>
-                        <Text style={tailwind('font-normal text-slate-500 text-sm')}>Delivery in</Text>
+                        <Text style={tailwind('font-normal text-slate-500 text-sm')}>Delivery in </Text>
                         {fetchingDeliveryFee ? (
                             <LoaderComponent size="small" />
                         ) : (
-                            <Text style={tailwind('text-sm text-slate-500 ml-2 font-normal')}>{Number(deliveryEta.duration) + Number(vendor.settings?.operations?.preparationTime)} Minutes</Text>
+                            <Text style={tailwind('text-sm text-slate-500 text-center font-normal')}>{Number(deliveryEta.duration) + Number(vendor.settings?.operations?.preparationTime)}   Minutes</Text>
                         )}
                     </View>
                 </View>
+            )}
+
+            {selectedAddress !== undefined && (
+                <AddressMapPreview
+                    longitude={selectedAddress?.location?.coordinates[1]}
+                    latitude={selectedAddress?.location?.coordinates[0]}
+                    address={selectedAddress?.address}
+                />
             )}
 
             {view === 'PRE_ORDER' && (
@@ -383,7 +396,6 @@ export const Checkout: React.FC = () => {
                     totalAmount={`₦${(orderBreakDown.orderCost + orderBreakDown.deliveryFee + orderBreakDown.systemFee - (discount ?? 0)).toLocaleString('en-NG')}`}
                     onOrderComplete={() => setConfirmOrder(true)}
                 />
-                {/* <GenericButton  loading={placingOrder} disabled={check()} onPress={placeOrder} labelColor={tailwind('text-white font-bold')}  label="Place order" backgroundColor={tailwind('bg-primary-100')} /> */}
             </View>
             <AddressBookModal
                 selectedAddressId={selectedAddress?._id}

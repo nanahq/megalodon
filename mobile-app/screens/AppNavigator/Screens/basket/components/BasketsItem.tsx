@@ -28,7 +28,7 @@ export const BasketsItem: React.FC<{cart: Cart[], vendor: any}> = ({cart, vendor
             <View style={tailwind('flex flex-row items-start')}>
                 <FastImage source={{uri: vendor?.businessLogo}} style={tailwind('rounded-full w-16 h-16')} />
                  <View style={tailwind('w-2/3 ml-5')}>
-                    <Text style={tailwind('font-medium text-2xl')}>{vendor?.businessName}</Text>
+                    <Text style={tailwind('font-medium text-xl')}>{vendor?.businessName}</Text>
                     <View>
                         <View style={tailwind("flex flex-row items-center")}>
                             <Text style={tailwind('text-sltate-900 text-sm')}>{cart?.length} Items</Text>

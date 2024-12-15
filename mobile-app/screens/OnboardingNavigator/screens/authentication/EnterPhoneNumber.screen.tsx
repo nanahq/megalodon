@@ -62,23 +62,10 @@ export function EnterPhoneNumberScreen ({navigation}: EnterPhoneNumberScreenProp
             testID="OnboardingScreen.EnterPhoneNumberScreen"
             style={tailwind('bg-white p-5 flex-1 overflow-hidden')}
         >
-            <View style={tailwind('flex h-full w-full flex-col items-between justify-between')}>
+            <View style={tailwind('flex h-full w-full flex-col')}>
                 <View>
-                    {!isAndroid && (
-                        <GenericButtonLink
-                            disabled={true}
-                            style={tailwind('')}
-                            labelColor={tailwind('text-gray-300 text-right text-sm mb-2')}
-                            onPress={() => navigation.navigate<any>('ONBOARDING_GUEST')}
-                            label="Continue as guest"
-                        />
-                    )}
-                    <View style={tailwind('flex flex-row items-center justify-center w-full')}>
-                        <FastImage source={AppLogo} style={{width: 100, height: 65}} />
-                    </View>
-                    <View style={tailwind('flex flex-col w-full mt-10')}>
-                        <Text style={[tailwind('w-4/5 font-bold text-left text-3xl text-slate-900'), {lineHeight: 30}]}>Groceries, Food and Parcel delivery at your fingerprint</Text>
-                        <Text style={tailwind('font-normal text-sm mt-3')}>We deliver food, groceries, and packages from top restaurants and stores right to your doorstep</Text>
+                    <View style={tailwind('flex flex-col w-full my-10')}>
+                        <Text style={[tailwind('w-4/5 font-bold text-left text-2xl text-slate-900'), {lineHeight: 30}]}>Groceries, Food and Parcel delivery at your fingerprint</Text>
                     </View>
                 </View>
 

@@ -113,7 +113,7 @@ export const AddAddressModal: React.FC<AddAddressModalProps> = ({navigation, rou
             headerTitle: 'Add new address',
             headerBackTitleVisible: false,
             headerTitleAlign: 'center',
-            headerTitleStyle: tailwind('text-2xl font-bold  text-slate-900'),
+            headerTitleStyle: tailwind('text-xl font-bold  text-slate-900'),
             headerLeft: () => <ModalCloseIcon size={18} onPress={() => profileNavigation.goBack()} />,
         })
     }, [])
@@ -152,13 +152,12 @@ export const AddAddressModal: React.FC<AddAddressModalProps> = ({navigation, rou
 
         const {coordinates, house_number, ...rest} = newAddress
 
-        console.log({...rest, location: {coordinates}})
         try {
             setLoadingState(true)
             await _api.requestData<AddressBookDto>({
                 method: 'post',
                 url: 'address-books',
-                data: {...rest, location: {coordinates}}
+                data: {...rest, shareable: true, location: {coordinates}}
             } as any)
             setTimeout(() => {
                 if (route?.params?.callback !== undefined) {
@@ -213,24 +212,26 @@ export const AddAddressModal: React.FC<AddAddressModalProps> = ({navigation, rou
     }, [newAddress.coordinates])
 
     const fetchDeliveryMeta = async () => {
-        const MAPBOX_TOKEN =  process.env.EXPO_PUBLIC_MAPBOX_TOKEN ??  "pk.eyJ1Ijoic3VyYWphdXdhbCIsImEiOiJjbTJ6d3Y3ZDkwZml2MmtzNzZ4ODNkejc1In0.gQYN5B1HIFdJhpwv3Hyeqw"
+        const apiKey = 'AIzaSyBjFkN1A1PHGRRDK9EejYcQOQxtO-piDRA';
+        const url = `/maps/api/geocode/json?latlng=${newAddress.coordinates[0]},${newAddress.coordinates[1]}&key=${apiKey}`;
 
-        const coords = mapboxLocationMapper(newAddress.coordinates, true)
-
-        const url = `geocoding/v5/mapbox.places/${coords}.json?access_token=${MAPBOX_TOKEN}`
-
-        const {data} = await  _api.requestData<null, MapboxResponse>({
+        try {
+            const {data} = await  _api.requestData<null, any>({
                 method: 'GET',
-            baseUrl: 'https://api.mapbox.com',
-            url,
-        })
+                baseUrl: 'https://maps.googleapis.com',
+                url,
+            })
 
-        const address = extractAddress(data)
-
-        if (address !== undefined) {
-            handleUpdateForm('address', address)
+           if(Boolean(data.results[0]?.formatted_address)) {
+               handleUpdateForm('address', data.results[0]?.formatted_address)
+           }
+        } catch (error) {
+            console.error('Error fetching GeoJSON:', error);
+            throw error;
         }
-    }
+    };
+
+
     return (
         <ScrollView style={tailwind('flex-1 h-full bg-white px-4 pt-4 relative')}>
             <View>

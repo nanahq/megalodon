@@ -29,7 +29,7 @@ export const AddressBookScreen: React.FC = () => {
             headerTitle: "Address Book",
             headerBackTitleVisible: false,
             headerTitleAlign: 'center',
-            headerTitleStyle: tailwind('text-2xl font-bold text-slate-900'),
+            headerTitleStyle: tailwind('text-xl font-bold text-slate-900'),
             headerLeft: () => <ModalCloseIcon size={18} onPress={() => navigation.goBack()} />,
         })
     }, [])

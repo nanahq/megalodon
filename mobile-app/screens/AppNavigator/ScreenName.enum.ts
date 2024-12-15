@@ -11,6 +11,7 @@ export enum AppScreenName {
 
 export enum ModalScreenName  {
     MODAL_VENDOR_SCREEN = 'ModalVendorScreen',
+    MODAL_BOX_SCREEN = 'ModalBoxScreen',
 
     MODAL_LISTING_SCREEN = 'ModalListingScreen',
     MODAL_ADD_ADDRESS_SCREEN = 'ModalAddAddressScreen',

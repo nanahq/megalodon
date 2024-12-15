@@ -32,7 +32,7 @@ export const PromotionModal: React.FC<PromotionModalProps> = ({ navigation }) =>
             headerTitle: `Coupon & Gift cards`,
             headerBackTitleVisible: false,
             headerTitleAlign: 'center',
-            headerTitleStyle: tailwind('text-2xl font-bold  text-slate-900'),
+            headerTitleStyle: tailwind('text-xl font-bold  text-slate-900'),
             headerLeft: () => <ModalCloseIcon size={18} onPress={handleNavigationBack} />,
         });
     }, []);

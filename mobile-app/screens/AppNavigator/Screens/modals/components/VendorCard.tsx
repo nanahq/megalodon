@@ -58,16 +58,14 @@ const _VendorCard: React.FC<{ vendor: VendorUserI, fullWidth?: boolean, style?: 
     }
     return (
         <Pressable
-            onPress={onPress} style={[tailwind("w-full mb-1 flex flex-col "), props.style, { width: screenWidth / 2 }]}>
-            <View style={tailwind("flex flex-col w-full items-center")}>
+            onPress={onPress} style={[tailwind("w-full mb-1 flex flex-1 flex-col "), props.style, { maxWidth: "100%", minHeight:200,  width: screenWidth / 2 }]}>
                 <FastImage
                     source={{ uri: props.vendor.businessImage, priority: FastImage.priority.high }}
                     resizeMode={FastImage.resizeMode.cover}
                     style={[tailwind("w-full rounded-lg "), { aspectRatio: 4/2 }]}
                 />
-            </View>
-            <View style={tailwind("")}>
-                <Text style={tailwind("font-semibold text-lg text-slate-900")}>{`${props.vendor.businessName}`}</Text>
+            <View style={tailwind("px-1.5")}>
+                <Text style={tailwind("font-semibold mt-1 uppercase text-base text-slate-900")}>{`${props.vendor.businessName}`}</Text>
                 {loading && (
                     <View>
                         <SkeletonLoader row={1} screen={SkeletonLoaderScreen.VendorDistanceLoader} />
@@ -75,15 +73,9 @@ const _VendorCard: React.FC<{ vendor: VendorUserI, fullWidth?: boolean, style?: 
                 )}
                 <View style={tailwind('flex mt-1 flex-row w-full justify-between items-center')}>
                     {!loading && !error && (
-                        <View style={tailwind("flex flex-row items-center ")}>
-                            <View style={tailwind("flex flex-row items-center border-r-0.5 pr-1 border-gray-300")}>
-                                <IconComponent iconType="MaterialIcons" name="delivery-dining" size={12} style={tailwind('text-slate-900 mr-1')} />
-                                <Text style={tailwind("font-normal text-base text-slate-900")}>&#8358; {travelInfo?.fee}</Text>
-                            </View>
-                            <View style={tailwind("flex flex-row items-center ml-1")}>
-                                <Clock style={tailwind('text-black mr-1')} size={12} />
-                                <Text style={tailwind("text-slate-900 font-normal text-base")}>{Number(travelInfo?.duration ?? 0) + Number(props?.vendor?.settings?.preparationTime ?? 0)} Min</Text>
-                            </View>
+                        <View style={tailwind("flex flex-col ")}>
+                                <Text style={tailwind("font-light text-sm text-slate-500 mb-1")}>&#8358; {travelInfo?.fee} Delivery fee</Text>
+                                <Text style={tailwind("text-slate-500 font-light text-sm")}>At your doorsteps in {Number(travelInfo?.duration ?? 0) + Number(props?.vendor?.settings?.preparationTime ?? 0)} Minutes</Text>
                         </View>
                     )}
                 </View>
@@ -147,7 +139,7 @@ const _VendorCardFullWidth:  React.FC<{ vendor: VendorUserI, fullWidth?: boolean
                 />
             </View>
             <View style={tailwind("p-1 mt-2")}>
-                <Text style={tailwind("font-semibold text-lg text-slate-900")}>{`${props.vendor.businessName}`}</Text>
+                <Text style={tailwind("font-semibold uppercase text-base text-slate-900")}>{`${props.vendor.businessName}`}</Text>
                 {loading && (
                     <View>
                         <SkeletonLoader row={1} screen={SkeletonLoaderScreen.VendorDistanceLoader} />
@@ -155,15 +147,9 @@ const _VendorCardFullWidth:  React.FC<{ vendor: VendorUserI, fullWidth?: boolean
                 )}
                 <View style={tailwind('flex mt-1 flex-row w-full justify-between items-center')}>
                     {!loading && !error && (
-                        <View style={tailwind("flex flex-row items-center ")}>
-                            <View style={tailwind("flex flex-row items-center border-r-0.5 pr-1 border-gray-300")}>
-                                <IconComponent iconType="MaterialIcons" name="delivery-dining" size={12} style={tailwind('text-slate-900 mr-1')} />
-                                <Text style={tailwind("font-normal text-base text-slate-900")}>&#8358; {travelInfo?.fee}</Text>
-                            </View>
-                            <View style={tailwind("flex flex-row items-center ml-1")}>
-                                <Clock style={tailwind('text-black mr-1')} size={12} />
-                                <Text style={tailwind("text-slate-900 font-normal text-base")}>{Number(travelInfo?.duration ?? 0) + Number(props?.vendor?.settings?.preparationTime ?? 0)} Min</Text>
-                            </View>
+                        <View style={tailwind("flex flex-col ")}>
+                            <Text style={tailwind("font-light text-sm text-slate-500 mb-1")}>&#8358;{travelInfo?.fee} delivery fee</Text>
+                            <Text style={tailwind("text-slate-500 font-light text-sm")}>At your doorsteps in {Number(travelInfo?.duration ?? 0) + Number(props?.vendor?.settings?.preparationTime ?? 0)} Minutes</Text>
                         </View>
                     )}
                 </View>

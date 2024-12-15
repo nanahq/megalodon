@@ -19,7 +19,7 @@ export const SearchBar: React.FC<SearchBarProps> = (props) => {
                     onFocus={() => setTextFocus(true)}
                     onBlur={() => setTextFocus(false)}
                     onPressOut={() => setTextFocus(false)}
-                    style={tailwind('text-base ml-2 font-normal')}
+                    style={tailwind('text-sm ml-2 font-light')}
                     placeholderTextColor={getColor('slate-600')}
                     placeholder="Search for food, groceries, mart etc"
                 />

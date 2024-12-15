@@ -36,7 +36,7 @@ export const AddReviewScreen: React.FC<SingleOrderScreenProps> = ({navigation, r
             headerTitle: `Rate your order`,
             headerBackTitleVisible: false,
             headerTitleAlign: 'center',
-            headerTitleStyle: tailwind('text-2xl font-bold  text-slate-900'),
+            headerTitleStyle: tailwind('font-bold  text-slate-900'),
             headerLeft: () => <ModalCloseIcon onPress={() => navigation.goBack()} />,
         })
     }, [])

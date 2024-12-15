@@ -13,7 +13,7 @@ const _DeliveryAddressBox: React.FC<{selectedAddress: AddressBookI | undefined, 
                 <View style={tailwind('flex flex-row items-center justify-between w-full')}>
                     <MapPin style={tailwind('text-primary-100')} size={20} />
                     <View style={tailwind('flex flex-col')}>
-                        <Text style={tailwind('font-normal text-base')}>{props.selectedAddress === undefined ? 'Choose delivery address' : props.selectedAddress.labelName}</Text>
+                        <Text style={tailwind('font-normal text-slate-900 text-sm')}>{props.selectedAddress === undefined ? 'Choose delivery address' : props.selectedAddress.labelName}</Text>
                     </View>
                     <ChevronRight  size={20} style={tailwind('text-gray-500')} />
                 </View>

@@ -14,13 +14,13 @@ const _VendorCategorySection: React.FC<{category: ListingCategoryI, vendorOperat
                 <View style={tailwind('flex flex-row items-center')}>
                     <Text style={tailwind('font-semibold capitalize text-slate-900 text-lg')}>{props.category.name}</Text>
                     {props.category.type === 'PRE_ORDER' && (
-                        <View style={tailwind('bg-primary-100 py-0.5 px-1 rounded-full ml-2')}>
-                            <Text style={tailwind('text-white font-normal text-center')}>Pre-orders</Text>
+                        <View style={tailwind('bg-primary-100 p-0.5 rounded-full ml-2')}>
+                            <Text style={tailwind('text-white font-light text-xs text-center')}>pre-orders</Text>
                         </View>
                     )}
                 </View>
                 {props.category.type === 'PRE_ORDER' && (
-                    <Text style={tailwind('text-xs text-slate-600 font-normal mt-1')}>This menu is only available on a scheduled basis. subscribe to vendor and we will let you know when menu is available</Text>
+                    <Text style={tailwind('text-xs text-slate-500 font-light mt-1')}>This menu is only available on a scheduled basis. subscribe to vendor and we will let you know when menu is available</Text>
                 )}
             </View>
             <View style={tailwind('flex flex-col')}>
@@ -41,14 +41,14 @@ const VendorMenuCard: React.FC<{menu: ListingMenuI, onPress: () => void, disable
          <Pressable disabled={props.disabled} onPress={props.onPress} style={tailwind('flex flex-row items-center py-4 border-b-0.5 border-slate-200 justify-between')}>
             <View style={tailwind('flex flex-col w-2/3')}>
                 <Text style={tailwind('font-normal text-slate-900 text-base')}>{props.menu.name}</Text>
-                <Text style={tailwind('font-normal text-slate-900 my-1 text-xs')} ellipsizeMode="tail" numberOfLines={3}>{props.menu.desc}</Text>
+                <Text style={tailwind('font-light text-slate-900 my-1 text-sm ')} ellipsizeMode="tail" numberOfLines={3}>{props.menu.desc}</Text>
                 <NumberFormat
                     prefix="₦"
                     value={props.menu.price}
                     thousandSeparator
                     displayType="text"
                     renderText={(value) => (
-                        <Text style={tailwind("text-primary-100 text-base font-medium")}>{value}</Text>
+                        <Text style={tailwind("text-primary-100 mt-1 text-lg font-light")}>{value}</Text>
                     )}
                 />
             </View>

@@ -18,7 +18,7 @@ import {useVendor} from "@contexts/vendor.provider";
      useEffect(() => {
          void analytics.screen(BasketScreenName.BASKET)
          navigation.setOptions({
-             headerLeft: () => <ModalCloseIcon onPress={() => navigation.goBack()} />,
+             headerLeft: () => <ModalCloseIcon onPress={() => navigation.goBack()} />
          })
 
      }, [])

@@ -40,7 +40,7 @@ export const OrderScreen: React.FC = () => {
             headerTitle: 'Orders',
             headerBackTitleVisible: false,
             headerTitleAlign: 'center',
-            headerTitleStyle: tailwind('font-bold text-2xl'),
+            headerTitleStyle: tailwind('text-xl font-bold  text-slate-900'),
             headerLeft: () => <ModalCloseIcon onPress={() => navigation.goBack()} />,
         })
     }, [])

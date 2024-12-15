@@ -161,18 +161,18 @@ type VendorModalScreenProps = StackScreenProps<AppParamList, ModalScreenName.MOD
                 <View style={tailwind('flex flex-col w-full')}>
                     <View style={tailwind('relative')}>
                         <FastImage  resizeMode={FastImage.resizeMode.cover} source={{ uri: route.params?.vendor?.businessImage, priority:FastImage.priority.high }} style={[tailwind("w-full"), { height: 250 }]} />
-                        <ModalCloseIcon size={18} iconStyle={tailwind('mx-0 m-1.5')} buttonStyle={tailwind('left-2 absolute top-10 bg-gray-200 rounded-full')} onPress={() => navigation.goBack()} />
+                        <ModalCloseIcon size={24} iconStyle={tailwind('mx-0 m-1.5')} buttonStyle={tailwind('left-2 absolute top-10 bg-gray-200 rounded-full')} onPress={() => navigation.goBack()} />
                         <View style={tailwind('absolute bottom-2  left-2 flex flex-row items-center')}>
                             {route.params.vendor.settings.deliveryType !== 'PRE_ORDER' && (
                                 <View style={tailwind('rounded-xl py-1.5 ', {'bg-primary-100 px-4': restaurantOperationStatus, 'bg-gray-100 px-2': !restaurantOperationStatus})}>
-                                    <Text style={tailwind('text-center text-white', {'text-black': !restaurantOperationStatus } )}>{restaurantOperationStatus ? 'Open' : `Closed`}</Text>
+                                    <Text style={tailwind('text-center text-sm text-white', {'text-black': !restaurantOperationStatus } )}>{restaurantOperationStatus ? 'Open' : `Closed`}</Text>
                                 </View>
                             )}
                         </View>
                     </View>
                     <View style={tailwind('px-4 flex flex-col mt-3')}>
                         <View style={tailwind('flex flex-row items-center w-full justify-between')}>
-                            <Text style={tailwind('w-2/3 p-0 m-0 mb-2 text-slate-900 font-bold text-3xl')}>
+                            <Text style={tailwind('w-2/3 p-0 m-0 mb-2 text-slate-900 font-bold text-2xl')}>
                                 {route.params?.vendor?.businessName}
                             </Text>
                                 {/* <View style={tailwind('flex flex-row')}> */}
@@ -199,22 +199,22 @@ type VendorModalScreenProps = StackScreenProps<AppParamList, ModalScreenName.MOD
                                     </View>
                                 <View style={tailwind('flex flex-row items-center w-full')}>
                                     <View style={tailwind('flex flex-row items-center mt-1')}>
-                                        <Text style={tailwind('text-slate-900 font-normal text-base')}>Delivery in {route.params.delivery?.duration ?? '20'} Minutes</Text>
+                                        <Text style={tailwind('text-slate-900 font-normal text-sm')}>Delivery in {route.params.delivery?.duration ?? '20'} Minutes</Text>
                                     </View>
                                     <View style={tailwind('flex flex-row items-center mt-1 border-l-1.5 ml-5 px-2 border-brand-gray-700')}>
-                                        <Text style={tailwind('text-slate-900 font-normal text-base')}>Accepts {getVendorDelivery()}</Text>
+                                        <Text style={tailwind('text-slate-900 font-normal text-sm')}>Accepts {getVendorDelivery()}</Text>
                                     </View>
                                 </View>
                                 <View style={tailwind('flex pb-3 flex-row items-center w-full border-b-0.5 border-gray-200')}>
                                     <View style={tailwind('flex flex-row mt-1  items-center mr-3')}>
                                         <AlarmClockCheck size={16} style={tailwind('text-slate-900')} />
-                                        <Text  style={tailwind('text-slate-900 font-normal text-base ml-1')}>Opens</Text>
-                                        <Text style={tailwind('text-slate-900 font-normal text-base ml-2')}>{moment(route.params.vendor.settings?.operations?.startTime).format('HH:mm')}</Text>
+                                        <Text  style={tailwind('text-slate-900 font-normal text-sm ml-1')}>Opens</Text>
+                                        <Text style={tailwind('text-slate-900 font-normal text-sm ml-2')}>{moment(route.params.vendor.settings?.operations?.startTime).format('HH:mm')}</Text>
                                     </View>
                                     <View style={tailwind('flex flex-row mt-1 items-center')}>
                                         <AlarmClockOff size={16} style={tailwind('text-slate-900 font-normal')} />
-                                        <Text  style={tailwind('text-slate-900 font-normal text-base ml-1')}>Closes</Text>
-                                        <Text style={tailwind('text-slate-900 font-normal text-base ml-2')}>{moment(route.params.vendor.settings?.operations?.cutoffTime).format('HH:mm')}</Text>
+                                        <Text  style={tailwind('text-slate-900 font-normal text-sm ml-1')}>Closes</Text>
+                                        <Text style={tailwind('text-slate-900 font-normal text-sm ml-2')}>{moment(route.params.vendor.settings?.operations?.cutoffTime).format('HH:mm')}</Text>
                                     </View>
                                 </View>
                                 {scheduled.length > 0 && (
@@ -237,7 +237,7 @@ type VendorModalScreenProps = StackScreenProps<AppParamList, ModalScreenName.MOD
             </ScrollView>
             {cart.hasItemsInCart && (
                 <View style={tailwind('px-4 mb-7')}>
-                    <GenericButton onPress={() => goToBasket() } label={`View order ${cart?.cart?.length}`} labelColor={tailwind('text-white')} backgroundColor={tailwind('bg-primary-100 py-2.5')} testId="" />
+                    <GenericButton onPress={() => goToBasket() } label={`Proceed to order ${cart?.cart?.length} item`} labelColor={tailwind('text-white  py-2 ')} backgroundColor={tailwind('bg-primary-100 py-3')} testId="" />
                 </View>
             )}
         </View>

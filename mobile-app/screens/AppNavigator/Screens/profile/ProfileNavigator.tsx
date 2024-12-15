@@ -42,7 +42,7 @@ export const ProfileNavigator: React.FC = () => {
                 options={{
                     headerShown: true,
                     headerTitleAlign: 'center',
-                    headerTitleStyle: tailwind('text-2xl font-bold  text-slate-900'),
+                    headerTitleStyle: tailwind('text-xl font-bold  text-slate-900'),
                     headerTitle: 'Profile',
                     headerBackTitleVisible: false,
                 }}
@@ -62,7 +62,7 @@ export const ProfileNavigator: React.FC = () => {
                 options={{
                     headerShown: true,
                     headerTitleAlign: 'center',
-                    headerTitleStyle: tailwind('text-xl text-2xl font-bold  text-slate-900'),
+                    headerTitleStyle: tailwind('text-xl font-bold  text-slate-900'),
                     headerTitle: 'Wallet',
                     headerBackTitleVisible: false,
                 }}
@@ -75,7 +75,7 @@ export const ProfileNavigator: React.FC = () => {
                     headerShown: true,
                     presentation: 'modal',
                     headerTitleAlign: 'center',
-                    headerTitleStyle: tailwind('text-xl text-2xl font-bold  text-slate-900'),
+                    headerTitleStyle: tailwind('text-xl font-bold  text-slate-900'),
                     headerTitle: 'Saved addresses',
                     headerBackTitleVisible: false,
                 }}
@@ -93,7 +93,7 @@ export const ProfileNavigator: React.FC = () => {
                     presentation: 'modal',
                     headerTitle: 'Account',
                     headerTitleAlign: 'center',
-                    headerTitleStyle: tailwind('text-xl text-2xl font-bold  text-slate-900'),
+                    headerTitleStyle: tailwind('text-xl font-bold  text-slate-900'),
                 }}
             />
             <Profile.Screen

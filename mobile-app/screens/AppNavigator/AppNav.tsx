@@ -23,6 +23,7 @@ import {useLocation} from "@contexts/location.provider";
 import {LocationPermission} from "@screens/AppNavigator/components/LocationPersmission";
 import Constants from "expo-constants";
 import {useCart} from "@contexts/cart.provider";
+import {BoxDeliveryAddress} from "@screens/AppNavigator/Screens/modals/box-delivery-address";
 
 const App = createStackNavigator<AppParamList>()
 
@@ -32,6 +33,9 @@ export interface AppParamList {
         delivery?: DeliveryFeeResult
     },
 
+    [ModalScreenName.MODAL_BOX_SCREEN]: {
+        deliveryType: "SEND" | "RECEIVE",
+    },
     [ModalScreenName.MODAL_LISTING_SCREEN]: {
         listing: ListingMenuI
         vendor: VendorUserI
@@ -132,6 +136,10 @@ export function AppNavigator(): JSX.Element {
                     <App.Screen
                         name={ModalScreenName.MODAL_VENDOR_SCREEN}
                         component={VendorModal}
+                    />
+                    <App.Screen
+                        name={ModalScreenName.MODAL_BOX_SCREEN}
+                        component={BoxDeliveryAddress}
                     />
                     <App.Screen
                         name={ModalScreenName.MODAL_LISTING_SCREEN}

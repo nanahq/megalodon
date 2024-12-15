@@ -9,8 +9,9 @@
         "EXPO_IMAGE_UTILS_NO_SHARP": "1",
         "EXPO_PUBLIC_API_URL": "https://prod-api.trynanaapp.com",
         "EXPO_NODE_ENV": "production",
-        "EXPO_PUBLIC_MAPBOX_TOKEN":"pk.eyJ1Ijoic3VyYWphdXdhbCIsImEiOiJjbTJ6d3Y3ZDkwZml2MmtzNzZ4ODNkejc1In0.gQYN5B1HIFdJhpwv3Hyeqw"
-
+        "EXPO_PUBLIC_MAPBOX_TOKEN":"pk.eyJ1Ijoic3VyYWphdXdhbCIsImEiOiJjbTJ6d3Y3ZDkwZml2MmtzNzZ4ODNkejc1In0.gQYN5B1HIFdJhpwv3Hyeqw",
+        "EXPO_PUBLIC_COURIER_VENDOR": "675e21fda0242d31b1fca247",
+        "EXPO_PUBLIC_COURIER_LISTING": "675e2266a0242d31b1fca248"
       }
     },
     "development": {
@@ -41,6 +42,8 @@
         "simulator": true
       },
       "env": {
+        "EXPO_PUBLIC_COURIER_VENDOR": "675e2034a0242d31b1fca244",
+        "EXPO_PUBLIC_COURIER_LISTING": "675e20fea0242d31b1fca246",
         "EXPO_PUBLIC_API_URL": "https://staging-api.trynanaapp.com",
         "EXPO_NODE_ENV": "staging",
         "EXPO_PUBLIC_MAPBOX_TOKEN":"pk.eyJ1Ijoic3VyYWphdXdhbCIsImEiOiJjbTJ6d3Y3ZDkwZml2MmtzNzZ4ODNkejc1In0.gQYN5B1HIFdJhpwv3Hyeqw"

@@ -24,7 +24,7 @@ export const  TextInputWithCurrency =  forwardRef<any, TextInputWithLabelProps>(
                     label}
                 </Text>
                 <View style={[tailwind('bg-brand-blue-200 w-full rounded-lg flex flex-row items-center h-12'), style]}>
-                    <View style={tailwind('rounded-tl-lg  rounded-bl-lg h-full bg-brand-gray-700 px-4')}>
+                    <View style={tailwind('rounded-tl-lg  rounded-bl-lg h-full px-4')}>
                         <Text style={tailwind('font-medium text-lg')}>{NAIRA_UNICODE}</Text>
                     </View>
                     <TextInput

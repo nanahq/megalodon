@@ -18,7 +18,7 @@ const _PaymentMethodBox: React.FC<{selectedMethod: PaymentMethodI | undefined,  
                 <View style={tailwind('flex flex-row items-center justify-between w-full')}>
                     <HandCoins  style={tailwind('text-primary-100')} size={20} />
                     <View style={tailwind('flex flex-col')}>
-                        <Text style={tailwind('font-normal text-base')}>{props.selectedMethod === undefined ? 'Choose payment method' : props.selectedMethod.label}</Text>
+                        <Text style={tailwind('font-normal text-sm text-slate-900')}>{props.selectedMethod === undefined ? 'Choose payment method' : props.selectedMethod.label}</Text>
                     </View>
                     <ChevronRight  style={tailwind('text-gray-500')} size={20} />
                 </View>

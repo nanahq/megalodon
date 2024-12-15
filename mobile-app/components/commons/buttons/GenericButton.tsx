@@ -39,9 +39,9 @@ export function GenericButton (props: Props): JSX.Element {
     return (
         <TouchableOpacity
             activeOpacity={activeOpacity}
-            style={[ tailwind('rounded-2xl', {
+            style={[ tailwind('rounded-xl', {
                 'bg-gray-700': props.disabled || props.loading,
-            }), style, tailwind('bg-primary-100 py-3'), backgroundColor, {
+            }), style, tailwind('bg-primary-100 py-4'), backgroundColor, {
                 shadowColor: 'rgba(0,0,0, .4)', // IOS
                 shadowOffset: { height: 1, width: 1 }, // IOS
                 shadowOpacity: 1, // IOS
@@ -50,7 +50,7 @@ export function GenericButton (props: Props): JSX.Element {
             }]}
             {...rest}
         >
-            <Text style={[tailwind('text-center text-lg font-semibold'), props.labelColor as any] }>{label} {props.loading !== undefined && props.loading && <LoaderComponent loaderColor="white" size={16} style={tailwind('pl-2 text-white')} />}</Text>
+            <Text style={[tailwind('text-center text-base font-semibold'), props.labelColor as any] }>{label} {props.loading !== undefined && props.loading && <LoaderComponent loaderColor="white" size={16} style={tailwind('pl-2 text-white')} />}</Text>
         </TouchableOpacity>
     )
 }
@@ -85,8 +85,8 @@ export const GenericIconButton: React.FC<PropsWithChildren<GenericIconButtonProp
         <TouchableOpacity
             activeOpacity={activeOpacity}
             style={[backgroundColor as any, tailwind('rounded-xl', {
-                'bg-brand-gray-700': props.disabled,
-                'flex flex-row justify-center w-full items-center bg-brand-gray-700': props.loading
+                'bg-slate-100': props.disabled,
+                'flex flex-row justify-center w-full items-center': props.loading
             }), style, tailwind('bg-primary-100')]}
             {...rest}
         >

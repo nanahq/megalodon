@@ -47,6 +47,7 @@ export function EnterPasswordScreen ({navigation, route}: EnterPasswordScreenPro
         navigation.setOptions({
             headerLeft: () => <BackButton onPress={() => navigation.goBack()} testID="" />,
             headerTitle: '',
+            headerShadowVisible: true
         })
     }, [route.params.phoneNumber])
 
@@ -110,22 +111,22 @@ export function EnterPasswordScreen ({navigation, route}: EnterPasswordScreenPro
     const HeaderTextExistingAccount = `Welcome back, ${route?.params?.firstName  ?? 'User'}`
 
     return (
-        <SafeAreaView
+        <View
             testID="OnboardingScreen.EnterPasswordScreen"
             style={[tailwind('flex-1 bg-white')]}
         >
 
-            <View style={tailwind('px-5 flex-grow')}>
+            <View style={tailwind('p-5 flex-grow')}>
                    <Text
                        testID='OnboardingScreen.EnterPasswordScreen.EnterPasswordText'
-                       style={tailwind('font-bold text-xl mb-5 text-brand-black-500')}
+                       style={tailwind('font-bold text-xl mb-5 text-slate-900')}
                    >
                        {route.params.hasAccount ? HeaderTextExistingAccount : 'Sign up for a new account'}
                    </Text>
                 <View style={tailwind('flex flex-col')}>
                     {!route.params.hasAccount && (
                         <>
-                            <TextInputWithLabel placeholder="" label="Email" containerStyle={tailwind('my-3')} labelTestId="EnterPasswordScreen.TextInput.Label" onChangeText={setEmail} value={email} />
+                            <TextInputWithLabel placeholder="" label="Your email address" containerStyle={tailwind('my-3')} labelTestId="EnterPasswordScreen.TextInput.Label" onChangeText={setEmail} value={email} />
                             <View style={tailwind('my-3')}>
                                 <Text
                                     style={tailwind('font-normal text-xs text-brand-gray-700')}>
@@ -138,7 +139,7 @@ export function EnterPasswordScreen ({navigation, route}: EnterPasswordScreenPro
                             </View>
                         </>
                     )}
-                    <TextInputWithLabel secureTextEntry containerStyle={tailwind('my-3 mb-10')}  label="Password" placeholder="" moreInfo={route.params.hasAccount ? undefined : "Password should be at least 8 characters"} labelTestId="EnterPasswordScreen.TextInput.Label" onChangeText={setPassword} value={password} />
+                    <TextInputWithLabel secureTextEntry containerStyle={tailwind('my-3 mb-10')}  label="Enter your password" placeholder="" moreInfo={route.params.hasAccount ? undefined : "Password should be at least 8 characters"} labelTestId="EnterPasswordScreen.TextInput.Label" onChangeText={setPassword} value={password} />
                 </View>
                 <GenericButton
                     loading={loading}
@@ -150,6 +151,6 @@ export function EnterPasswordScreen ({navigation, route}: EnterPasswordScreenPro
                     disabled={password === "" || password.length <= 7 || loading}
                 />
             </View>
-        </SafeAreaView>
+        </View>
     )
 }

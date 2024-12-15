@@ -216,7 +216,7 @@ export const ListingModal: React.FC<ListingModalScreenProps>  = ({navigation, ro
                    <View style={tailwind('px-4 flex flex-col mt-2')}>
                        <View style={tailwind('flex flex-row items-center w-full justify-between')}>
                            <View style={tailwind('flex flex-col w-3/4')}>
-                               <Text style={[tailwind('mb-2 font-bold text-2xl text-slate-900')]}>
+                               <Text style={[tailwind('mb-2 font-semibold text-lg text-slate-900')]}>
                                    {route.params.listing.name}
                                </Text>
                                <View style={tailwind('flex flex-row items-center')}>
@@ -227,13 +227,13 @@ export const ListingModal: React.FC<ListingModalScreenProps>  = ({navigation, ro
                                        displayType="text"
                                        renderText={(value) => (
                                            <Text
-                                               style={tailwind('font-medium text-slate-900 text-base text-primary-100')}
+                                               style={tailwind('font-normal text-slate-500 text-sm text-primary-100')}
                                            >
                                                {value}
                                            </Text>
                                        )}
                                    />
-                                   <Text style={tailwind(' ml-2 text-base font-normal text-slate-900')}>
+                                   <Text style={tailwind(' ml-2 text-sm font-normal text-slate-500')}>
                                        {route.params.listing.serving}
                                    </Text>
                                </View>
@@ -248,7 +248,7 @@ export const ListingModal: React.FC<ListingModalScreenProps>  = ({navigation, ro
                                </TouchableOpacity>
                            </View>
                        </View>
-                       <Text style={tailwind('mt-2 font-normal text-base text-slate-900')}>
+                       <Text style={tailwind('mt-2 font-normal text-sm text-slate-500')}>
                            {route.params.listing.desc}
                        </Text>
                    </View>
@@ -268,9 +268,9 @@ export const ListingModal: React.FC<ListingModalScreenProps>  = ({navigation, ro
             {!loading && (
                 <View style={tailwind('px-4 py-2 border-t-0.5 border-gray-300 bg-white py-6')}>
                     {cart.hasItemsInCart && cart?.cart?.length && cartvendor === listing?.vendor._id ? (
-                        <GenericButton onPress={() => goToBasket() } label={`View basket (${cart?.cart?.length})`} labelColor={tailwind('text-white')} backgroundColor={tailwind('bg-primary-100')} testId="" />
+                        <GenericButton onPress={() => goToBasket() } label={`View basket (${cart?.cart?.length})`} labelColor={tailwind('text-white py-2.5')} backgroundColor={tailwind('bg-primary-100 py-3')} testId="" />
                     ) : (
-                        <GenericButton onPress={() => addToBasket()} label={`Add ${_cart.quantity} to basket ~ ₦${_cart.totalValue.toLocaleString()}`} labelColor={tailwind('text-white')} backgroundColor={tailwind('bg-primary-100')} testId="" />
+                        <GenericButton onPress={() => addToBasket()} label={`Add ${_cart.quantity} to basket ~ ₦${_cart.totalValue.toLocaleString()}`} labelColor={tailwind('text-white py-2.5')} backgroundColor={tailwind('bg-primary-100 py-3')} testId="" />
                     )}
                 </View>
             )}
