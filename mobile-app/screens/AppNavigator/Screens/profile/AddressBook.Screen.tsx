@@ -1,7 +1,5 @@
 import {Pressable, ScrollView, Text, View, Modal} from "react-native";
-import { IconComponent } from "@components/commons/IconComponent";
 import React, {useEffect, useState} from "react";
-import { AddressIconMapper } from "@screens/AppNavigator/Screens/basket/components/address/AddressModal";
 import { tailwind } from "@tailwind";
 import { GenericButton } from "@components/commons/buttons/GenericButton";
 import {useToast} from "react-native-toast-notifications";
@@ -11,9 +9,11 @@ import {NavigationProp, useNavigation} from "@react-navigation/native";
 import {ModalScreenName} from "@screens/AppNavigator/ScreenName.enum";
 import {ProfileScreenName} from "@screens/AppNavigator/Screens/profile/ProfileScreenName";
 import {AppParamList} from "@screens/AppNavigator/AppNav";
-import {ModalBackIcon, ModalCloseIcon} from "@screens/AppNavigator/Screens/modals/components/ModalCloseIcon";
+import { ModalCloseIcon} from "@screens/AppNavigator/Screens/modals/components/ModalCloseIcon";
 import {useLoading} from "@contexts/loading.provider";
 import {useAddress} from "@contexts/address-book.provider";
+import {Building, Trash} from "lucide-react-native";
+import {MultiShare} from "@screens/AppNavigator/Screens/profile/share-address-component";
 
 export const AddressBookScreen: React.FC = () => {
     const { addressBook } = useAddress()
@@ -57,24 +57,33 @@ export const AddressBookScreen: React.FC = () => {
                 {addressBook.length > 0 ? (
                     <View style={tailwind('flex flex-col')}>
                         {addressBook.map((address, index) => {
-                            const iconMeta: any = AddressIconMapper[address?.labelId?.name ?? 'Other'];
                             return (
                                 <View
                                     key={index}
-                                    style={tailwind('py-3 justify-between flex flex-row items-center border-b-1.5 border-brand-ash')}
+                                    style={tailwind('py-3 border-b-0.5 border-slate-200 my-2 justify-between flex flex-row items-center rounded-lg')}
                                 >
-                                    <View style={tailwind('flex flex-row items-center')}>
-                                        <IconComponent iconType={iconMeta.type} name={iconMeta.name} style={tailwind('text-primary-100 mr-3')} size={30} />
-                                        <View style={tailwind('flex flex-col')}>
-                                            <Text style={tailwind('text-lg font-semibold text-slate-900 capitalize')}>{address.labelName}</Text>
-                                            <Text style={tailwind('text-sm font-normal text-slate-900')}>{address.address}</Text>
+                                    <View style={tailwind('flex flex-col')}>
+                                        <View style={tailwind('flex flex-row items-center')}>
+                                            <Building style={tailwind('text-primary-100 mr-3')} size={20} />
+                                            <View style={tailwind('flex flex-col')}>
+                                                <Text style={tailwind('text-lg font-semibold text-slate-900 capitalize')}>{address.labelName}</Text>
+                                                <Text style={tailwind('text-sm font-normal text-slate-900')}>{address.address.substring(0, 40)}</Text>
+                                            </View>
+                                        </View>
+                                        <View style={tailwind('flex flex-row my-3 items-center')}>
+                                           <MultiShare text={`Here is my address on Nana ${address.address}. Use the Pin: ${address.pin} for more accurate delivery`} >
+                                                   <Text style={tailwind('underline text-slate-500')}>Share address</Text>
+                                           </MultiShare>
+                                            <View style={tailwind('flex ml-5 flex-row items-center')}>
+                                                <Text style={tailwind('text-slate-500')}>PIN: {address.pin} </Text>
+                                            </View>
                                         </View>
                                     </View>
                                     <Pressable style={tailwind('p-1')} onPress={() =>{
                                         setDeleteModalVisible(true)
                                         setAddressId(address._id)
                                     } }>
-                                        <IconComponent iconType="AntDesign" name="delete" style={tailwind('text-red-600')} size={16}/>
+                                        <Trash style={tailwind('text-red-600')} size={16}/>
                                     </Pressable>
                                 </View>
                             );

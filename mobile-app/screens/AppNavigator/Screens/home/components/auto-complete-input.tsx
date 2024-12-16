@@ -1,4 +1,3 @@
-import { GenericTextInput } from "@components/commons/inputs/TextInput";
 import {Alert, View} from "react-native";
 import {tailwind} from "@tailwind";
 import {GooglePlacesAutocomplete} from "react-native-google-places-autocomplete";
@@ -33,13 +32,18 @@ export const PlacesInput = ({
     return (
         <View>
             <GooglePlacesAutocomplete
-              textInputProps={{onChangeText: (text) => {
+              textInputProps={
+                {
+
+                    onChangeText: (text) => {
                      if(onAddressChange !== undefined) {
                          onAddressChange(text)
                      }
                   }}}
                 placeholder={placeholder}
                 fetchDetails={true}
+                keepResultsAfterBlur={true}
+              keyboardShouldPersistTaps="always"
                 onPress={(data, details = null) => {
                     if (details) {
                         const locality = extractLocality(details.address_components);

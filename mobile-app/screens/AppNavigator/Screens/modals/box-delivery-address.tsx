@@ -24,6 +24,7 @@ import moment from "moment/moment";
 import {showTost} from "@components/commons/Toast";
 import {mutate} from "swr";
 import {useToast} from "react-native-toast-notifications";
+import {useBottomSheetModal} from "@gorhom/bottom-sheet";
 
 
 
@@ -45,6 +46,7 @@ export const BoxDeliveryAddress: React.FC<BoxDeliveryAddressModalProps>  = ({nav
     const [thirdPartyName, setThirdPartyName] = useState('')
     const [thirdPartyPhone, setThirdPartyPhone] = useState('')
     const [confirmOrder, setConfirmOrder] = useState(false)
+    const { dismiss } = useBottomSheetModal();
 
     const toast = useToast()
     const isSendType = route.params.deliveryType.toLowerCase().includes('send')
@@ -78,7 +80,7 @@ export const BoxDeliveryAddress: React.FC<BoxDeliveryAddressModalProps>  = ({nav
                 method: "POST",
                 url: "location/delivery-fee",
                 data: {
-                    userCoords: [pickupAddress?.location.coordinates[0], pickupAddress?.location.coordinates[1]],
+                    userCoords: [pickupAddress?.location?.coordinates[0], pickupAddress?.location.coordinates[1]],
                     vendorCoords: [destinationAddress?.location.coordinates[0], destinationAddress?.location.coordinates[1]] ,
                 },
             });
@@ -262,7 +264,10 @@ export const BoxDeliveryAddress: React.FC<BoxDeliveryAddressModalProps>  = ({nav
                    promptModalName={DESTINATION_ADDRESS_MODAL}
                    addressLabel={addressLabels}
                    addressBook={addressBook}
-                   onAddressSelect={(address) => setDestinationAddress(address)}
+                   onAddressSelect={(address) => {
+                       setDestinationAddress(address)
+                       dismiss(DESTINATION_ADDRESS_MODAL)
+                   }}
                />
 
                <AdditionalInfoModal

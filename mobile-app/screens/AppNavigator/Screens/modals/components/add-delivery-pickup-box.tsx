@@ -1,6 +1,6 @@
 import React, {RefObject, useCallback, useState} from "react";
 import {tailwind} from "@tailwind";
-import {View, Text, TouchableOpacity, ScrollView, Pressable} from "react-native";
+import {View, Text, TouchableOpacity, ScrollView, Pressable, Alert} from "react-native";
 import * as Device from 'expo-device'
 import {
     BottomSheetBackdropProps,
@@ -149,6 +149,7 @@ export function BoxAddressModal(props: AddressBookModalProps): JSX.Element {
                         }}
                         placeholder="Type Address or enter address pin"
                         onLocationSelect={(location) => {
+
                             const formattedAddress: AddressBookI = {
                                 address: location.address,
                                 location: {

@@ -25,7 +25,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ navigation, route })
     }, []);
 
     const handleNavigationBack = () => {
-        navigation.goBack();
+        navigation.navigate(ModalScreenName.MODAL_SUCCESS_SCREEN as any);
     };
 
 

@@ -137,7 +137,6 @@ export const Map: React.FC<{ order: OrderI, delivery: DeliveryI }> = ({ order, d
     const [_sound] = useState<Sound | null>(null);
 
     const animateMarker = (newLocation: LocationCoordinates) => {
-        console.log(newLocation)
         if (!newLocation?.coordinates) return;
 
         setPrevDeliveryPosition(currentDeliveryPosition);

@@ -1,9 +1,8 @@
 import * as Device from 'expo-device'
 import * as Location from "expo-location";
 import {CardStyleInterpolators, createStackNavigator} from "@react-navigation/stack";
-import {LinkingOptions, NavigationContainer} from "@react-navigation/native";
+import { NavigationContainer} from "@react-navigation/native";
 import {BottomTabNavigator, linking} from "@screens/AppNavigator/BottomTabNavigator";
-import * as Linking from "expo-linking"
 import {useEffect, useRef} from "react";
 import {ModalScreenName} from "@screens/AppNavigator/ScreenName.enum";
 import {DeliveryFeeResult, ListingMenuI, OrderI, VendorUserI} from "@nanahq/sticky";
@@ -24,6 +23,7 @@ import {LocationPermission} from "@screens/AppNavigator/components/LocationPersm
 import Constants from "expo-constants";
 import {useCart} from "@contexts/cart.provider";
 import {BoxDeliveryAddress} from "@screens/AppNavigator/Screens/modals/box-delivery-address";
+import {SuccessScreen} from "@screens/AppNavigator/Screens/modals/success-screen";
 
 const App = createStackNavigator<AppParamList>()
 
@@ -136,6 +136,10 @@ export function AppNavigator(): JSX.Element {
                     <App.Screen
                         name={ModalScreenName.MODAL_VENDOR_SCREEN}
                         component={VendorModal}
+                    />
+                    <App.Screen
+                        name={ModalScreenName.MODAL_SUCCESS_SCREEN}
+                        component={SuccessScreen}
                     />
                     <App.Screen
                         name={ModalScreenName.MODAL_BOX_SCREEN}
