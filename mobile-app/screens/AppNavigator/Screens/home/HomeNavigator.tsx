@@ -2,9 +2,8 @@ import {CardStyleInterpolators, createStackNavigator} from "@react-navigation/st
 import {HomeScreen} from "@screens/AppNavigator/Screens/home/Home.Screen";
 import {HomeScreenName} from "@screens/AppNavigator/Screens/home/HomeScreenNames.enum";
 import * as Device from 'expo-device'
-import {HomepageCategory} from "@screens/AppNavigator/Screens/home/Categories";
 import {SingleCategoryScreen} from "@screens/AppNavigator/Screens/home/Category.screen";
-import {VendorUserI, UserHomePage} from "@nanahq/sticky";
+import {VendorUserI} from "@nanahq/sticky";
 import {HomepageSectionScreen} from "@screens/AppNavigator/Screens/home/components/Section";
 
 export interface HomeParamsList {
@@ -30,9 +29,6 @@ export function HomeNavigator(): JSX.Element {
             <HomeStack.Screen
                 component={HomeScreen}
                 name={HomeScreenName.HOME}
-                options={{
-                    headerShown: false,
-                }}
             />
 
             <HomeStack.Screen

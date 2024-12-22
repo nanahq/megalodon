@@ -9,7 +9,7 @@ import {
     TravelDistanceResult
 } from '@nanahq/sticky';
 import DeliveryIcon from '@assets/app/delivery-icon.png'
-import HomeIcon from '@assets/app/home.png'
+import HomeIcon from '@assets/app/home-icon.png'
 import MapView, { Marker, PROVIDER_GOOGLE, Region, Polyline } from 'react-native-maps'
 import {Sound} from "expo-av/build/Audio/Sound";
 import {socket} from "../../../../../../App";

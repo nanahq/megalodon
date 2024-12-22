@@ -4,7 +4,7 @@ import { View, Animated } from 'react-native';
 import { tailwind } from "@tailwind";
 import { LinearGradient } from "expo-linear-gradient";
 import Image  from "react-native-fast-image";
-import Logo from "@assets/onboarding/nana_logo_White.png";
+import Logo from "@assets/app-config/ios-icon-new.png";
 
 export const LoaderScreen = () => {
     const scaleAnim = useRef(new Animated.Value(1)).current;

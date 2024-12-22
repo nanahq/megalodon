@@ -1,31 +1,22 @@
-import {Dimensions, Image, Pressable, ScrollView, Text, View, Alert} from "react-native";
-import {getColor, tailwind} from "@tailwind";
+import {Dimensions, Image, Pressable, ScrollView, Text, View} from "react-native";
+import { tailwind} from "@tailwind";
 import React, {useState, useRef, useEffect} from "react";
 
 import {useLocation} from "@contexts/location.provider";
 import {NotfoundLocation} from "@screens/AppNavigator/components/NotfoundLocation";
-import Courier from "@assets/app/courier-icon.png";
-import SendCourier from "@assets/app/send-courier.png";
-import Checkbox from "expo-checkbox";
+import Courier from "@assets/app/send-icon.png";
+import SendCourier from "@assets/app/courier-icon.png";
 
-import {PlacesInput} from "@screens/AppNavigator/Screens/home/components/auto-complete-input";
-import {TextInputWithLabel} from "@components/commons/inputs/TextInputWithLabel";
-import {useLoading} from "@contexts/loading.provider";
-import {_api} from "@api/_request";
-import {DeliveryFeeResult} from "@nanahq/sticky";
-import {CourierModal} from "@screens/AppNavigator/Screens/home/components/Courier-fee-modal";
 import {ModalScreenName} from "@screens/AppNavigator/ScreenName.enum";
 import {NavigationProp, useNavigation} from "@react-navigation/native";
 import {AppParamList} from "@screens/AppNavigator/AppNav";
-export const COURIER_FEE_MODAL = 'COURIER_FEE_MODAL'
+import BoxDP from "@assets/app-config/Box.png";
 
-interface DeliveryLocation {
-    address: string;
-    latitude: number;
-    longitude: number;
-    locality?: string;
-}
-
+const HeaderCenter = () => (
+    <View style={tailwind('flex flex-row items-center')}>
+        <Image source={BoxDP} style={tailwind('w-28 h-14')} resizeMode="contain" width={100} height={40} />
+    </View>
+);
 export const CourierScreen: React.FC = () => {
     const navigator = useNavigation<NavigationProp<AppParamList>>()
     const { height, width } = Dimensions.get("window");
@@ -41,7 +32,23 @@ export const CourierScreen: React.FC = () => {
 
     useEffect(() => {
         setDeliveryType(undefined)
-
+        navigator.setOptions({
+            headerShown: true,
+            headerTitleAlign: 'center',
+            headerStyle: {
+                height: 120,
+                backgroundColor: 'white',
+                shadowColor: '#000',
+                shadowOffset: {
+                    width: 0,
+                    height: 2,
+                },
+                shadowOpacity: 0.1,
+                shadowRadius: 3.84,
+                elevation: 5,
+            },
+            headerTitle: () => <HeaderCenter />,
+        })
     },[])
 
     useEffect(() => {

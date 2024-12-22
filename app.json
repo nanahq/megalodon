@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Nana",
-    "description": "Order food online and get it delivered in minutes",
+    "description": "Order anything online and get it delivered in minutes",
     "slug": "nana-app",
     "owner": "nana_logistics",
     "version": "1.11.0",
@@ -36,7 +36,7 @@
       ]
     ],
     "splash": {
-      "image": "./assets/app-config/nana-splash.png",
+      "image": "./assets/app-config/splash-screen-new.png",
       "resizeMode": "cover",
       "backgroundColor": "#00C2E8"
     },
@@ -51,17 +51,17 @@
       "associatedDomains": [
         "appLinks:trynanaapp.com"
       ],
-      "icon": "./assets/app-config/Icon-blue-ios1024.png",
+      "icon": "./assets/app-config/ios-icon-new.png",
       "supportsTablet": false,
       "bundleIdentifier": "com.nanaeats.nana.app",
       "config": {
-        "googleMapsApiKey": "AIzaSyBxd-WGMl-H1BdgKsG2dNBYoQiWXsXc-Y8"
+        "googleMapsApiKey": "AIzaSyBjFkN1A1PHGRRDK9EejYcQOQxtO-piDRA"
       }
     },
     "android": {
-      "icon": "./assets/app-config/Icon-Android-512px.png",
+      "icon": "./assets/app-config/android-icon-new.png",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/app-config/Icon-Android-512px.png",
+        "foregroundImage": "./assets/app-config/android-icon-new.png",
         "backgroundColor": "#000000"
       },
       "permissions": [
@@ -75,7 +75,7 @@
       "googleServicesFile": "./google-services.json",
       "config": {
         "googleMaps": {
-          "apiKey": "AIzaSyA4FLTREZvoZ6HQrfoNXm1bgWJksyvLLo4"
+          "apiKey": "AIzaSyBjFkN1A1PHGRRDK9EejYcQOQxtO-piDRA"
         }
       },
       "intentFilters": [

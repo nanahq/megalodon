@@ -1,14 +1,12 @@
-import {Dimensions, Pressable, ScrollView, Text, View} from "react-native";
+import {Dimensions, Image, Pressable, ScrollView, Text, View} from "react-native";
 import {getColor, tailwind} from "@tailwind";
-import {SafeAreaView, useSafeAreaInsets} from "react-native-safe-area-context";
+import {SafeAreaView} from "react-native-safe-area-context";
 import {SearchBar} from "@screens/AppNavigator/Screens/home/SearchBar";
 import React, {useEffect} from "react";
-import {AdvertComponent} from "@screens/AppNavigator/Screens/home/components/Advert";
-import AdImageFood from "@assets/ads/cravings.png";
 import {HomeSection, HomeSectionVertical} from "@screens/AppNavigator/Screens/home/components/HomeSection";
 import {FlashList} from "@shopify/flash-list";
 import {VendorCard, VendorCardFullWidth} from "@screens/AppNavigator/Screens/modals/components/VendorCard";
-import {MapPin} from "lucide-react-native";
+import {MapPin, User} from "lucide-react-native";
 import {ListingMenuCard} from "@screens/AppNavigator/Screens/modals/components/ListingCard";
 import {NotfoundLocation} from "@screens/AppNavigator/components/NotfoundLocation";
 import {useLocation} from "@contexts/location.provider";
@@ -18,6 +16,14 @@ import {VendorUserI} from "@nanahq/sticky";
 import {HomeScreenName} from "@screens/AppNavigator/Screens/home/HomeScreenNames.enum";
 import {useAnalytics} from "@segment/analytics-react-native";
 import {useNavigation} from "@react-navigation/native";
+import FoodDp from "@assets/app-config/Food.png";
+
+const HeaderCenter = () => (
+    <View style={tailwind('flex flex-row items-center')}>
+        <Image source={FoodDp} style={tailwind('w-28 h-14')} resizeMode="contain" width={100} height={40} />
+    </View>
+);
+
 
 export const FoodScreen: React.FC= () => {
     const {height} = Dimensions.get('window')
@@ -29,6 +35,23 @@ export const FoodScreen: React.FC= () => {
 
     useEffect(() => {
         void analytics.screen(HomeScreenName.FOOD_SCREEN)
+        navigation.setOptions({
+            headerShown: true,
+            headerTitleAlign: 'center',
+            headerStyle: {
+                height: 120,
+                backgroundColor: 'white',
+                shadowColor: '#000',
+                shadowOffset: {
+                    width: 0,
+                    height: 2,
+                },
+                shadowOpacity: 0.1,
+                shadowRadius: 3.84,
+                elevation: 5,
+            },
+            headerTitle: () => <HeaderCenter />,
+        })
     }, [])
     function PopularRenderItem({item}: any) {
         return <VendorCard style={tailwind('mr-2.5')} vendor={item} height={400}  />
@@ -54,21 +77,16 @@ export const FoodScreen: React.FC= () => {
     }
 
     return (
-        <SafeAreaView style={tailwind('flex-1 bg-white pt-4')}>
             <ScrollView
                 showsVerticalScrollIndicator={false}
-                style={{height}}
+                style={[tailwind('flex-1 bg-white pt-4'), {height}]}
             >
                 <StatusBar style={tailwind('bg-primary-100 h-full w-full')} backgroundColor={getColor('primary-100')} />
                 <View style={tailwind('px-5 flex flex-col w-full ')}>
-                    <View style={tailwind('flex flex-row items-center')}>
-                        <MapPin size={16} style={tailwind('text-slate-900 text-primary-100')} />
-                        <Text style={tailwind('font-light text-sm text-slate-900')}>{currentCity}</Text>
-                    </View>
                     <SearchBar />
                 </View>
             <View style={tailwind('px-5')}>
-                <AdvertComponent source={AdImageFood} />
+                {/* <AdvertComponent source={AdImageFood} /> */}
                 {listings?.mostPopularVendors !== undefined && listings?.mostPopularVendors.length > 0 && (
                     <HomeSection
                         onPress={() =>handleGoToSection("Top Rated Vendors", listings?.mostPopularVendors ?? [])}
@@ -144,7 +162,5 @@ export const FoodScreen: React.FC= () => {
                 </HomeSectionVertical>
             </View>
             </ScrollView>
-        </SafeAreaView>
-
     )
 }

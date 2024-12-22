@@ -2,7 +2,7 @@ import {Image, ScrollView, View, Text} from "react-native";
 import {tailwind} from "@tailwind";
 import React, {memo, useEffect, useMemo} from "react";
 import {BasketsItem} from "@screens/AppNavigator/Screens/basket/components/BasketsItem";
-import EmptyCart from '@assets/app/emptycart.png'
+import EmptyCart from '@assets/app/nana-logo.png'
 import {useAnalytics} from "@segment/analytics-react-native";
 import {BasketScreenName} from "@screens/AppNavigator/Screens/basket/BasketScreenName.enum";
 import {useNavigation} from "@react-navigation/native";

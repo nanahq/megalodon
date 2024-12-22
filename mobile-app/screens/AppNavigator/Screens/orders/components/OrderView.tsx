@@ -11,7 +11,7 @@ const _OrderView: React.FC<{onButtonClick: (name: string) => void, view: OrderSt
             <View style={tailwind('bg-gray-100 p-2 rounded-lg')}>
                 <View style={tailwind('flex flex-row items-center justify-between w-full')}>
                     <Pressable onPress={() => onButtonClick(OrderStatus.PAYMENT_PENDING)} style={[tailwind('rounded-lg py-2 px-12', {'bg-white': view !== OrderStatus.FULFILLED}), {width: (screenWidth - 50) / 2}]}>
-                        <Text style={tailwind('text-base text-slate-900 font-medium text-center', {'text-primary-100': view !== OrderStatus.FULFILLED})}>In progress</Text>
+                        <Text style={tailwind('text-base text-slate-900 font-medium text-center', {'text-primary-100': view !== OrderStatus.FULFILLED})}>Active</Text>
                     </Pressable>
                     <Pressable onPress={() => onButtonClick(OrderStatus.FULFILLED)} style={[tailwind(' rounded-lg py-2 px-12', {'bg-white': view === OrderStatus.FULFILLED}), {width: (screenWidth - 50) / 2}]}>
                         <Text style={tailwind('text-base text-center text-slate-900 font-medium', {'text-primary-100': view === OrderStatus.FULFILLED})}>Delivered</Text>
