@@ -7364,6 +7364,19 @@ csstype@^3.0.2:
   resolved "https://registry.yarnpkg.com/csstype/-/csstype-3.1.3.tgz#d80ff294d114fb0e6ac500fbf85b60137d7eff81"
   integrity sha512-M1uQkMl8rQK/szD0LNhtqxIPLpimGm8sOBwU7lLnCpSbTyY3yeU1Vc7l4KT5zT4s/yOxHH5O7tIuuLOCnLADRw==
 
+customerio-expo-plugin@^2.0.0-beta.1:
+  version "2.0.0-beta.1"
+  resolved "https://registry.yarnpkg.com/customerio-expo-plugin/-/customerio-expo-plugin-2.0.0-beta.1.tgz#8cf6b831b4fbe412c3f163e8eb3a469493d76dbb"
+  integrity sha512-+UW/ie6V7rmp1jUWh2Xvv+oYp85CBP0jA0fW9Je78jJpFtZY0SOHypwfETCZpI90nDsxD2WAn5g4+YefmlS8OA==
+  dependencies:
+    find-package-json "^1.2.0"
+    fs-extra "^11.2.0"
+
+customerio-reactnative@^4.1.1:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/customerio-reactnative/-/customerio-reactnative-4.1.1.tgz#c3cce26f074d1e26d31d00424e45ecf0f41f5d63"
+  integrity sha512-jbwPGAp/T3B2uK3HmllsWUI1i9Z07cUJ+NIrzpsBncorDEz2wBxWQG2I85o8cWRb+D2DrUYopGbNwfMR3jSC0Q==
+
 cypress-image-diff-js@^1.23.0:
   version "1.32.0"
   resolved "https://registry.yarnpkg.com/cypress-image-diff-js/-/cypress-image-diff-js-1.32.0.tgz#d406305348fa9b7a4be30563a10df024767b7203"
@@ -8882,6 +8895,11 @@ find-in-files@^0.5.0:
   dependencies:
     find "^0.1.5"
     q "^1.0.1"
+
+find-package-json@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/find-package-json/-/find-package-json-1.2.0.tgz#4057d1b943f82d8445fe52dc9cf456f6b8b58083"
+  integrity sha512-+SOGcLGYDJHtyqHd87ysBhmaeQ95oWspDKnMXBrnQ9Eq4OkLNqejgoaD8xVWu6GPa0B6roa6KinCMEMcVeqONw==
 
 find-up@^2.0.0:
   version "2.1.0"

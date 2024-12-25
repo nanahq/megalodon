@@ -18,8 +18,13 @@ import {AmplitudeSessionPlugin} from "@segment/analytics-react-native-plugin-amp
 import {PromoCodeProvider} from "@contexts/PromoCode";
 import {LoadingProvider} from "@contexts/loading.provider";
 import {io} from "socket.io-client";
-import firebase from '@react-native-firebase/app';
-import crashlytics from '@react-native-firebase/crashlytics';
+import * as  firebase from '@react-native-firebase/app';
+import * as  crashlytics from '@react-native-firebase/crashlytics';
+
+import {
+    CioLogLevel, CioRegion, CustomerIO, CioConfig, PushClickBehaviorAndroid
+} from 'customerio-reactnative';
+import {useEffect} from "react";
 
 export const socket = io(`${process.env.EXPO_PUBLIC_API_URL}`, {transports: ["websocket"]})
 
@@ -46,6 +51,25 @@ export default function App() {
         app_toast_error: (toast: ToastProps) => <AppToast type="error" toast={toast} />,
         app_toast_warning: (toast: ToastProps) => <AppToast type="warning" toast={toast} />,
     };
+
+    useEffect(() => {
+        const config: CioConfig = {
+            cdpApiKey: '064b10f6a9b755367903', // Mandatory
+            migrationSiteId: 'siteId', // Required if migrating from an earlier version
+            region: CioRegion.US,
+            logLevel: CioLogLevel.Debug,
+            trackApplicationLifecycleEvents: true,
+            inApp: {
+                siteId: 'site_id',
+            },
+            push: {
+                android: {
+                    pushClickBehavior: PushClickBehaviorAndroid.ResetTaskStack
+                }
+            }
+        };
+        CustomerIO.initialize(config)
+    }, [])
 
     return (
         <NativeLoggingProvider>

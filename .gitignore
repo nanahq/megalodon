@@ -62,3 +62,5 @@ ANDROID_SERVICE_ACCOUNT.json
 ./google-services.json
 google-services.json
 **/ANDROID_SERVICE_ACCOUNT.json
+.GoogleService-Info.plist
+GoogleService-Info.plist

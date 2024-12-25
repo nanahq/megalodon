@@ -14,14 +14,15 @@
         "customerio-expo-plugin",
         {
           "android": {
-            "googleServicesFile": "./files/google-services.json"
+            "googleServicesFile": "./google-services.json"
           },
           "ios": {
+            "useFrameworks": "static",
             "pushNotification": {
               "useRichPush": true,
               "env": {
-                "cdpApiKey": "<apiKey>",
-                "region": "<region>"
+                "cdpApiKey": "064b10f6a9b755367903",
+                "region": "us"
               }
             }
           }
@@ -32,6 +33,9 @@
         {
           "android": {
             "usesCleartextTraffic": true
+          },
+          "ios": {
+            "useFrameworks": "static"
           }
         }
       ],
@@ -67,6 +71,7 @@
       "infoPlist": {
         "NSLocationWhenInUseUsageDescription": "This app needs access to location when open to show accurate delivery fee information and nearby restaurants."
       },
+      "googleServicesFile": "./GoogleService-Info.plist",
       "icon": "./assets/app-config/ios-icon-new.png",
       "supportsTablet": false,
       "bundleIdentifier": "com.nanaeats.nana.app",
