@@ -128,6 +128,13 @@
     },
     "runtimeVersion": {
       "policy": "appVersion"
+    },
+    "hooks": {
+      "beforeBuild": [
+        {
+          "script": "if [ \"$EAS_BUILD_PLATFORM\" = \"android\" ]; then echo $GOOGLE_SERVICES_JSON_BASE64 | base64 -d > google-services.json; else echo $GOOGLE_SERVICES_PLIST_BASE64 | base64 -d > GoogleService-Info.plist; fi"
+        }
+      ]
     }
   }
 }
