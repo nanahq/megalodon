@@ -28,11 +28,6 @@ export const AdvertComponent: React.FC<PropsWithChildren<AdvertProps>> = ({
                     paddingHorizontal: 20,
                     borderRadius: 8,
                     overflow: 'hidden',
-                    elevation: 2, // Android shadow
-                    shadowColor: '#000', // iOS shadow
-                    shadowOffset: { width: 0, height: 2 },
-                    shadowOpacity: 0.25,
-                    shadowRadius: 3.84,
                 }}
             >
                 <Image

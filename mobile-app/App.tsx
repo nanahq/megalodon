@@ -16,15 +16,10 @@ import {SafeAreaProvider} from "react-native-safe-area-context";
 import {createClient, AnalyticsProvider} from "@segment/analytics-react-native";
 import {AmplitudeSessionPlugin} from "@segment/analytics-react-native-plugin-amplitude-session";
 import {PromoCodeProvider} from "@contexts/PromoCode";
-import Wrapper from "./Wrapper";
-import { LogLevel, OneSignal } from 'react-native-onesignal';
-import Constants from "expo-constants";
 import {LoadingProvider} from "@contexts/loading.provider";
 import {io} from "socket.io-client";
-
-OneSignal.Debug.setLogLevel(LogLevel.Verbose);
-OneSignal.initialize(Constants.expoConfig?.extra?.oneSignalAppId);
-void OneSignal.Notifications.requestPermission(true);
+import firebase from '@react-native-firebase/app';
+import crashlytics from '@react-native-firebase/crashlytics';
 
 export const socket = io(`${process.env.EXPO_PUBLIC_API_URL}`, {transports: ["websocket"]})
 
@@ -53,7 +48,6 @@ export default function App() {
     };
 
     return (
-    <Wrapper>
         <NativeLoggingProvider>
             <ErrorBoundary>
                 <AuthPersistenceProvider
@@ -83,6 +77,5 @@ export default function App() {
                 </AuthPersistenceProvider>
             </ErrorBoundary>
         </NativeLoggingProvider>
-    </Wrapper>
   );
 }

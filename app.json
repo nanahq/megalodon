@@ -11,6 +11,23 @@
     "jsEngine": "hermes",
     "plugins": [
       [
+        "customerio-expo-plugin",
+        {
+          "android": {
+            "googleServicesFile": "./files/google-services.json"
+          },
+          "ios": {
+            "pushNotification": {
+              "useRichPush": true,
+              "env": {
+                "cdpApiKey": "<apiKey>",
+                "region": "<region>"
+              }
+            }
+          }
+        }
+      ],
+      [
         "expo-build-properties",
         {
           "android": {
@@ -28,17 +45,13 @@
       "expo-font",
       "expo-localization",
       "expo-secure-store",
-      [
-        "onesignal-expo-plugin",
-        {
-          "mode": "production"
-        }
-      ]
+      "@react-native-firebase/app",
+      "@react-native-firebase/crashlytics"
     ],
     "splash": {
       "image": "./assets/app-config/splash-screen-new.png",
       "resizeMode": "cover",
-      "backgroundColor": "#00C2E8"
+      "backgroundColor": "#469ADC"
     },
     "updates": {
       "fallbackToCacheTimeout": 0,
@@ -51,6 +64,9 @@
       "associatedDomains": [
         "appLinks:trynanaapp.com"
       ],
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "This app needs access to location when open to show accurate delivery fee information and nearby restaurants."
+      },
       "icon": "./assets/app-config/ios-icon-new.png",
       "supportsTablet": false,
       "bundleIdentifier": "com.nanaeats.nana.app",

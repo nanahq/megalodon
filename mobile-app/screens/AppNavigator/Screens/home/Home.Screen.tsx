@@ -33,7 +33,7 @@ const HeaderRight = ({ navigation }) => (
         style={tailwind('bg-primary-100 my-5 mr-5 border-2 border-primary-100 rounded-full p-2')}
         onPress={() => navigation?.navigate(AppScreenName.PROFILE)}
     >
-        <User size={20} color={getColor('black')} />
+        <User size={20} color={getColor('white')} />
     </Pressable>
 );
 

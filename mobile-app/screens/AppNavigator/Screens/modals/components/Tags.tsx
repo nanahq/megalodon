@@ -56,7 +56,7 @@ export function CategorySection() {
             screen: AppScreenName.FOOD
         },
         {
-            name: "Supermarket",
+            name: "Stores",
             icon: GroceriesIcon,
             screen: AppScreenName.MART
         },

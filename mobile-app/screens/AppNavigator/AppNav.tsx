@@ -15,8 +15,6 @@ import {useAnalytics} from "@segment/analytics-react-native";
 import {PromotionModal} from "@screens/AppNavigator/Screens/modals/Promotion.modal";
 import {ProfileNavigator} from "@screens/AppNavigator/Screens/profile/ProfileNavigator";
 import {BasketNavigator} from "@screens/AppNavigator/Screens/basket/BasketNavigator";
-import { DdRumReactNavigationTracking } from "@datadog/mobile-react-navigation";
-import {OneSignal} from "react-native-onesignal";
 import {useProfile} from "@contexts/profile.provider";
 import {useLocation} from "@contexts/location.provider";
 import {LocationPermission} from "@screens/AppNavigator/components/LocationPersmission";
@@ -88,10 +86,6 @@ export function AppNavigator(): JSX.Element {
                     brand: Device.brand
                 }
             })
-            OneSignal.login(profile._id)
-            OneSignal.User.addEmail(profile.email);
-            OneSignal.User.addSms(profile.phone)
-            OneSignal.User.addTag('app_version', String(Constants.expoConfig?.version ?? ''))
         }
 
     }, [profile])
@@ -105,9 +99,6 @@ export function AppNavigator(): JSX.Element {
     return (
         <NavigationContainer
             ref={navigationRef}
-            onReady={() => {
-                DdRumReactNavigationTracking.startTrackingViews(navigationRef.current)
-            }}
             linking={linking}>
             <App.Navigator screenOptions={{
                 headerShown: false
