@@ -1,0 +1,57 @@
+{
+  "project_info": {
+    "project_number": "605182525067",
+    "project_id": "nana-434920",
+    "storage_bucket": "nana-434920.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:605182525067:android:4bc33cfd28b552b4415e8e",
+        "android_client_info": {
+          "package_name": "com.nanaeats.nana_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBjCp5JMas6AUDweGUnzI5qpgALez_UcLI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:605182525067:android:e668fae119c0b9d4415e8e",
+        "android_client_info": {
+          "package_name": "com.nanaeats.nana_vendors"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "605182525067-9s0jubv9ujbopn5df0dgjoer5t60q0qb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nanaeats.nana_vendors",
+            "certificate_hash": "f6d2f7133e1cd12244a750f15ebbd4593874a3d5"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBjCp5JMas6AUDweGUnzI5qpgALez_UcLI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
