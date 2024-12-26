@@ -16,7 +16,6 @@ import AdvertImage from '@assets/ads/ad-food.png'
 import Logo from '@assets/app-config/nana-logo.jpg'
 import {AdvertComponent} from "@screens/AppNavigator/Screens/home/components/Advert";
 const {height} = Dimensions.get('window')
-
 const HeaderLeft = ({ currentCity, navigation }) => (
     <View style={tailwind('flex py-5 flex-row items-center ml-5 w-4/5')}>
         <Text style={tailwind('font-light text-xs text-slate-900')}>{currentCity.substring(0, 40)}</Text>

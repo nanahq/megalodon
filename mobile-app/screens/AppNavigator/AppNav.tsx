@@ -22,7 +22,7 @@ import Constants from "expo-constants";
 import {useCart} from "@contexts/cart.provider";
 import {BoxDeliveryAddress} from "@screens/AppNavigator/Screens/modals/box-delivery-address";
 import {SuccessScreen} from "@screens/AppNavigator/Screens/modals/success-screen";
-
+import {CustomerIO} from 'customerio-reactnative'
 const App = createStackNavigator<AppParamList>()
 
 export interface AppParamList {
@@ -86,8 +86,20 @@ export function AppNavigator(): JSX.Element {
                     brand: Device.brand
                 }
             })
-        }
 
+            CustomerIO.identify({
+                userId: profile._id,
+                traits: {
+                    first_name: profile.firstName,
+                    last_name: profile.lastName,
+                    phone_number: profile.phone,
+                    email: profile.email,
+                    version: Device.osVersion,
+                    name: Device.osName,
+                    brand: Device.brand
+                },
+            });
+        }
     }, [profile])
 
 

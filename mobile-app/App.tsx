@@ -39,6 +39,24 @@ segmentClient.add({ plugin: new AmplitudeSessionPlugin()});
  function App() {
   const isLoaded = useCachedResource()
    const logger = useLogger()
+     useEffect(() => {
+         const config: CioConfig = {
+             cdpApiKey: '064b10f6a9b755367903', // Mandatory
+             migrationSiteId: 'b4a0e8fbee0dfc9c46ca', // Required if migrating from an earlier version
+             region: CioRegion.US,
+             logLevel: CioLogLevel.Debug,
+             trackApplicationLifecycleEvents: true,
+             inApp: {
+                 siteId: 'b4a0e8fbee0dfc9c46ca',
+             },
+             push: {
+                 android: {
+                     pushClickBehavior: PushClickBehaviorAndroid.ResetTaskStack
+                 }
+             }
+         };
+         CustomerIO.initialize(config)
+     }, [])
 
     if (!isLoaded) {
         setTimeout(() => {
@@ -53,24 +71,6 @@ segmentClient.add({ plugin: new AmplitudeSessionPlugin()});
         app_toast_warning: (toast: ToastProps) => <AppToast type="warning" toast={toast} />,
     };
 
-    useEffect(() => {
-        const config: CioConfig = {
-            cdpApiKey: '064b10f6a9b755367903', // Mandatory
-            migrationSiteId: 'siteId', // Required if migrating from an earlier version
-            region: CioRegion.US,
-            logLevel: CioLogLevel.Debug,
-            trackApplicationLifecycleEvents: true,
-            inApp: {
-                siteId: 'site_id',
-            },
-            push: {
-                android: {
-                    pushClickBehavior: PushClickBehaviorAndroid.ResetTaskStack
-                }
-            }
-        };
-        CustomerIO.initialize(config)
-    }, [])
 
     return (
         <NativeLoggingProvider>

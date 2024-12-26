@@ -10,6 +10,8 @@ import DeliveryIcon from '@assets/app/delivery-icon.png' // Assuming you have th
 import {AppScreenName} from "@screens/AppNavigator/ScreenName.enum";
 import {useProfile} from "@contexts/profile.provider";
 
+import { CustomerIO } from "customerio-reactnative";
+
 interface TagItemI {
     name: string
     icon: ImageSourcePropType
@@ -46,6 +48,9 @@ export function CategorySection() {
     const navigation = useNavigation<any>()
     const {profile} = useProfile()
     const onPress = (screen: string) => {
+        CustomerIO.track("homepage_actions", {
+            screen
+        });
         void navigation.navigate(screen)
     }
 
