@@ -18,13 +18,14 @@ import {AmplitudeSessionPlugin} from "@segment/analytics-react-native-plugin-amp
 import {PromoCodeProvider} from "@contexts/PromoCode";
 import {LoadingProvider} from "@contexts/loading.provider";
 import {io} from "socket.io-client";
-import * as  firebase from '@react-native-firebase/app';
-import * as  crashlytics from '@react-native-firebase/crashlytics';
 
 import {
     CioLogLevel, CioRegion, CustomerIO, CioConfig, PushClickBehaviorAndroid
 } from 'customerio-reactnative';
 import {useEffect} from "react";
+
+import * as Sentry from '@sentry/react-native';
+
 
 export const socket = io(`${process.env.EXPO_PUBLIC_API_URL}`, {transports: ["websocket"]})
 
@@ -35,7 +36,7 @@ const segmentClient = createClient({
 
 segmentClient.add({ plugin: new AmplitudeSessionPlugin()});
 
-export default function App() {
+ function App() {
   const isLoaded = useCachedResource()
    const logger = useLogger()
 
@@ -103,3 +104,5 @@ export default function App() {
         </NativeLoggingProvider>
   );
 }
+
+export default Sentry.wrap(App)

@@ -46,14 +46,24 @@
           "locationAlwaysPermission": "Nana requires access to your location to show restaurants/shops nearest to you, calculate delivery fees and delivery time estimates"
         }
       ],
+      [
+        "@sentry/react-native/expo",
+        {
+          "organization": "nanaeats-delivery-service",
+          "project": "nana-main-app"
+        }
+      ],
       "expo-font",
       "expo-localization",
-      "expo-secure-store",
-      "@react-native-firebase/app",
-      "@react-native-firebase/crashlytics"
+      "expo-secure-store"
     ],
     "splash": {
-      "image": "./assets/app-config/splash-screen-new.png",
+      "android": {
+        "image": "./assets/app-config/nana-splash.png"
+      },
+      "ios": {
+        "image": "./assets/app-config/splash-screen-new.png"
+      },
       "resizeMode": "cover",
       "backgroundColor": "#469ADC"
     },
