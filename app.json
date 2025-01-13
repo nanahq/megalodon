@@ -17,7 +17,6 @@
             "googleServicesFile": "./google-services.json"
           },
           "ios": {
-            "useFrameworks": "static",
             "pushNotification": {
               "useRichPush": true,
               "env": {
