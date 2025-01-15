@@ -45,8 +45,10 @@
       [
         "@sentry/react-native/expo",
         {
-          "organization": "nanaeats-delivery-service",
-          "project": "nana-main-app"
+          "url": "https://sentry.io/",
+          "note": "Use SENTRY_AUTH_TOKEN env to authenticate with Sentry.",
+          "project": "nana-main-app",
+          "organization": "nanaeats-delivery-service"
         }
       ],
       "expo-font",
