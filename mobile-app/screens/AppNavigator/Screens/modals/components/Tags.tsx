@@ -1,4 +1,3 @@
-import {AllCategoryTags, CategoryTags} from "@constants/MappedTags";
 import {Image, Text, ImageSourcePropType, View, Pressable, Dimensions} from "react-native";
 import {tailwind} from "@tailwind";
 import {useNavigation} from "@react-navigation/native";
@@ -22,13 +21,12 @@ export const TagItem: React.FC<TagItemI> = (props) => {
     return (
         <Pressable
             onPress={() => props.onPress(props.name)}
-            style={tailwind('items-center p-1 w-1/4')} // Changed to w-1/4 and added padding
+            style={tailwind('items-center p-1 w-1/3')}
         >
             <View style={[
                 tailwind('flex bg-primary-50 flex-col items-center justify-center p-1 rounded-lg w-full'),
                 {
-                    // backgroundColor: 'rgba(230, 230, 230, 0.4)',
-                    minHeight: 120 // Set a fixed height
+                    minHeight: 120
                 }
             ]}>
                 <Image

@@ -60,8 +60,7 @@
       "ios": {
         "image": "./assets/app-config/splash-screen-new.png"
       },
-      "resizeMode": "cover",
-      "backgroundColor": "#469ADC"
+      "resizeMode": "cover"
     },
     "updates": {
       "fallbackToCacheTimeout": 0,

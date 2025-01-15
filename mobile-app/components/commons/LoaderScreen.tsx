@@ -4,7 +4,7 @@ import { View, Animated } from 'react-native';
 import { tailwind } from "@tailwind";
 import { LinearGradient } from "expo-linear-gradient";
 import Image  from "react-native-fast-image";
-import Logo from "@assets/app-config/ios-icon-new.png";
+import Logo from "@assets/app/tranaparent-icon.png";
 
 export const LoaderScreen = () => {
     const scaleAnim = useRef(new Animated.Value(1)).current;
@@ -34,7 +34,7 @@ export const LoaderScreen = () => {
             />
             <View style={tailwind('w-full flex flex-row justify-center h-full flex-1 items-center')}>
                 <Animated.View style={{ transform: [{ scale: scaleAnim }] } as any}>
-                    <Image source={Logo} style={{ width: 100, height: 65 }} />
+                    <Image source={Logo} style={{ width: 200, height: 50 }} />
                 </Animated.View>
             </View>
         </View>

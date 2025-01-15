@@ -13,8 +13,8 @@ import {AppScreenName} from "@screens/AppNavigator/ScreenName.enum";
 import {useProfile} from "@contexts/profile.provider";
 import {CategorySection} from "@screens/AppNavigator/Screens/modals/components/Tags";
 import AdvertImage from '@assets/ads/ad-food.png'
-import Logo from '@assets/app-config/nana-logo.jpg'
-import {AdvertComponent} from "@screens/AppNavigator/Screens/home/components/Advert";
+import Logo from '@assets/app/tranaparent-icon.png'
+import {AdBannerCarousel} from "@screens/AppNavigator/Screens/home/components/Advert";
 const {height} = Dimensions.get('window')
 const HeaderLeft = ({ currentCity, navigation }) => (
     <View style={tailwind('flex py-5 flex-row items-center ml-5 w-4/5')}>
@@ -72,15 +72,11 @@ export function HomeScreen(): JSX.Element {
 
     return (
         <View style={tailwind('flex-1 relative bg-white')}>
-            {/* <AdvertMiniComponent */}
-            {/*     source={AdvertImage1} */}
-            {/*     height={100} */}
-            {/* /> */}
             <View style={[ {height}]}>
                 <View style={tailwind('px-5')}>
                     <CategorySection />
+                    <AdBannerCarousel source={AdvertImage} />
                 </View>
-                <AdvertComponent source={AdvertImage} />
             </View>
             {cart?.hasItemsInCart && <CartIcon/>}
         </View>
