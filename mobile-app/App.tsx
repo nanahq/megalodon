@@ -41,8 +41,7 @@ segmentClient.add({ plugin: new AmplitudeSessionPlugin()});
    const logger = useLogger()
      useEffect(() => {
          const config: CioConfig = {
-             cdpApiKey: '064b10f6a9b755367903', // Mandatory
-             migrationSiteId: 'b4a0e8fbee0dfc9c46ca', // Required if migrating from an earlier version
+             cdpApiKey: '064b10f6a9b755367903',
              region: CioRegion.US,
              logLevel: CioLogLevel.Debug,
              trackApplicationLifecycleEvents: true,
@@ -53,15 +52,16 @@ segmentClient.add({ plugin: new AmplitudeSessionPlugin()});
                  android: {
                      pushClickBehavior: PushClickBehaviorAndroid.ResetTaskStack
                  }
+
              }
          };
-         CustomerIO.initialize(config)
+         void CustomerIO.initialize(config)
      }, [])
 
     if (!isLoaded) {
         setTimeout(() => {
             SplashScreen.preventAutoHideAsync().catch(logger.error);
-        }, 2000)
+        }, 5000)
         return null;
     }
 

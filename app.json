@@ -18,7 +18,7 @@
           },
           "ios": {
             "pushNotification": {
-              "useRichPush": false,
+              "useRichPush": true,
               "env": {
                 "cdpApiKey": "064b10f6a9b755367903",
                 "region": "us"
@@ -128,9 +128,19 @@
       "favicon": "./assets/app-config/favicon.png"
     },
     "extra": {
-      "oneSignalAppId": "639c55ed-b3da-4238-b6c4-d01f5872f406",
+
       "eas": {
-        "projectId": "8235481d-016d-4aa1-a436-7cc06ccc1f14"
+        "projectId": "8235481d-016d-4aa1-a436-7cc06ccc1f14",
+        "build": {
+          "experimental": {
+            "ios": {
+              "appExtensions": [{
+                "targetName": "NotificationService",
+                "bundleIdentifier": "${appIdentifier}.richpush"
+              }]
+            }
+          }
+        }
       }
     },
     "runtimeVersion": {

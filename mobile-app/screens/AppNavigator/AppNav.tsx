@@ -11,14 +11,12 @@ import {ListingModal} from "@screens/AppNavigator/Screens/modals/Listing.Modal";
 import {AddAddressModal} from "@screens/AppNavigator/Screens/modals/AddAddress.Modal";
 import {PaymentModal} from "@screens/AppNavigator/Screens/modals/Payment.Modal";
 import {RedeemModal} from "@screens/AppNavigator/Screens/modals/Redeem.Modal";
-import {useAnalytics} from "@segment/analytics-react-native";
 import {PromotionModal} from "@screens/AppNavigator/Screens/modals/Promotion.modal";
 import {ProfileNavigator} from "@screens/AppNavigator/Screens/profile/ProfileNavigator";
 import {BasketNavigator} from "@screens/AppNavigator/Screens/basket/BasketNavigator";
 import {useProfile} from "@contexts/profile.provider";
 import {useLocation} from "@contexts/location.provider";
 import {LocationPermission} from "@screens/AppNavigator/components/LocationPersmission";
-import Constants from "expo-constants";
 import {useCart} from "@contexts/cart.provider";
 import {BoxDeliveryAddress} from "@screens/AppNavigator/Screens/modals/box-delivery-address";
 import {SuccessScreen} from "@screens/AppNavigator/Screens/modals/success-screen";
@@ -61,11 +59,10 @@ export interface AppParamList {
 }
 
 export function AppNavigator(): JSX.Element {
-    const {profile, fetched} = useProfile()
+    const {profile} = useProfile()
     const isAndroid  = Device.osName === 'Android'
     const {locationPermission} = useLocation()
     const {readCart} = useCart()
-    const analytics = useAnalytics()
     const navigationRef = useRef<any>(null)
 
     useEffect(() => {
@@ -73,21 +70,21 @@ export function AppNavigator(): JSX.Element {
     }, [])
 
     useEffect(() => {
-        if (fetched && profile?._id) {
-            void analytics.identify(profile._id, {
-                firstName: profile?.firstName,
-                lastName: profile?.lastName,
-                email: profile.email,
-                phone: profile.phone,
-                location: profile.location?.coordinates,
-                device: {
-                    version: Device.osVersion,
-                    name: Device.osName,
-                    brand: Device.brand
-                }
-            })
+        if (profile?._id) {
+            // void analytics.identify(profile._id, {
+            //     firstName: profile?.firstName,
+            //     lastName: profile?.lastName,
+            //     email: profile.email,
+            //     phone: profile.phone,
+            //     location: profile.location?.coordinates,
+            //     device: {
+            //         version: Device.osVersion,
+            //         name: Device.osName,
+            //         brand: Device.brand
+            //     }
+            // })
 
-            CustomerIO.identify({
+            void CustomerIO.identify({
                 userId: profile._id,
                 traits: {
                     first_name: profile.firstName,
@@ -100,6 +97,8 @@ export function AppNavigator(): JSX.Element {
                 },
             });
         }
+        const options = {"ios" : {"sound" : true, "badge" : true}}
+        void CustomerIO.pushMessaging.showPromptForPushNotifications(options)
     }, [profile])
 
 

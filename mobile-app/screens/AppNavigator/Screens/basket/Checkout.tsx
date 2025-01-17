@@ -107,7 +107,7 @@ export const Checkout: React.FC = () => {
 
     useEffect(() => {
         async function fetchDeliveryFee () {
-            if (vendor !== undefined) {
+            if (vendor !== undefined && selectedAddress?._id) {
                 setFetchingDeliveryFee(true)
                 try {
                     const response = (await _api.requestData<{userCoords: number[], vendorCoords: number[]}, DeliveryFeeResult>({
