@@ -4,7 +4,7 @@
     "description": "Order anything online and get it delivered in minutes",
     "slug": "nana-app",
     "owner": "nana_logistics",
-    "version": "1.12.0",
+    "version": "1.13.0",
     "orientation": "portrait",
     "scheme": "nanaDelivery",
     "userInterfaceStyle": "automatic",
@@ -128,16 +128,17 @@
       "favicon": "./assets/app-config/favicon.png"
     },
     "extra": {
-
       "eas": {
         "projectId": "8235481d-016d-4aa1-a436-7cc06ccc1f14",
         "build": {
           "experimental": {
             "ios": {
-              "appExtensions": [{
-                "targetName": "NotificationService",
-                "bundleIdentifier": "${appIdentifier}.richpush"
-              }]
+              "appExtensions": [
+                {
+                  "targetName": "NotificationService",
+                  "bundleIdentifier": "${appIdentifier}.richpush"
+                }
+              ]
             }
           }
         }
