@@ -136,7 +136,7 @@
               "appExtensions": [
                 {
                   "targetName": "NotificationService",
-                  "bundleIdentifier": "${appIdentifier}.richpush"
+                  "bundleIdentifier": "com.nanaeats.nana.app.richpush"
                 }
               ]
             }
