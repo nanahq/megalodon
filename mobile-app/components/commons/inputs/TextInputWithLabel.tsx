@@ -50,7 +50,7 @@ export const  TextInputWithLabel =  forwardRef<any, TextInputWithLabelProps>(
                     returnKeyType='done'
                     onFocus={() => setInputFocus(true)}
                     onBlur={() => setInputFocus(false)}
-                    placeholderTextColor={props.placeholderTextColor ?? getColor('brand-gray-800')}
+                    placeholderTextColor={props.placeholderTextColor}
                     ref={ref}
                     style={[tailwind('rounded-lg border-1.5 border-gray-200 font-normal  flex w-full items-center px-3 py-3 text-slate-900 text-base ', {
                         'border-1.5 border-primary-100': inputFocus
@@ -103,7 +103,7 @@ export function ModalTextInput (props: ModalTextInputProps): JSX.Element {
                 )}
             </View>
             <BottomSheetTextInput
-                placeholderTextColor={props.placeholderTextColor ?? getColor('brand-gray-800')}
+                placeholderTextColor={props.placeholderTextColor}
                 onFocus={() => setInputFocus(true)}
                 onBlur={() => setInputFocus(false)}
                 style={[tailwind('rounded-lg bg-primary-200 py-3.5 px-3 font-medium text-lg text-brand-black-500', {

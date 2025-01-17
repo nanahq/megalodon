@@ -21,7 +21,7 @@
               "useRichPush": true,
               "env": {
                 "cdpApiKey": "064b10f6a9b755367903",
-                "region": "us"
+                "region": "eu"
               }
             }
           }

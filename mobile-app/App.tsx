@@ -42,7 +42,7 @@ segmentClient.add({ plugin: new AmplitudeSessionPlugin()});
      useEffect(() => {
          const config: CioConfig = {
              cdpApiKey: '064b10f6a9b755367903',
-             region: CioRegion.US,
+             region: CioRegion.EU,
              logLevel: CioLogLevel.Debug,
              trackApplicationLifecycleEvents: true,
              inApp: {

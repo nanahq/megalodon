@@ -63,7 +63,7 @@ async function base<T>(param: baseParamProps<T>) {
             });
         })
         .catch((err: any) => {
-            if (err.message.includes('401')) {
+            if (err.message.includes('401') && err.response?.data?.message !== 'Provided Password is incorrect') {
                 clearOnAuthError()
                 return Promise.reject(err.response?.data);
             }

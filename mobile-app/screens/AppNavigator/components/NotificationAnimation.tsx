@@ -21,9 +21,9 @@ export function NotificationAnimation (): JSX.Element {
                 autoPlay
                 loop
             />
-            <Text style={tailwind('text-center text-brand-gray-800 text-2xl font-bold')}>Enable Notifications</Text>
-            <Text style={tailwind('text-center text-brand-gray-700 text-lg font-normal')}>
-               Updates on your order, deals and promotions.
+            <Text style={tailwind('text-center  text-xl font-bold')}>Enable Notifications</Text>
+            <Text style={tailwind('text-center text-slate-900 font-normal px-4')}>
+              To receive updates on your order, new deals and promotions.
             </Text>
         </View>
     )

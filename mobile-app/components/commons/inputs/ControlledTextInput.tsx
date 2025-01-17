@@ -68,7 +68,6 @@ export function ControlledTextInputWithLabel(props: ControlledTextInputWithLabel
                     returnKeyType='done'
                     onFocus={() => setInputFocus(true)}
                     onBlur={() => setInputFocus(false)}
-                    placeholderTextColor={getColor('brand-gray-800')}
                     style={[tailwind('rounded-lg bg-primary-200 flex lowercase flex-row items-center justify-center w-full p-3 text-xs font-medium text-black', {
                         'text-sm': Device.osName === 'iOS',
                         'border-0.5 border-primary-500': inputFocus

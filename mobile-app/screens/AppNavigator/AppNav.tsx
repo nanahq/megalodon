@@ -3,7 +3,7 @@ import * as Location from "expo-location";
 import {CardStyleInterpolators, createStackNavigator} from "@react-navigation/stack";
 import { NavigationContainer} from "@react-navigation/native";
 import {BottomTabNavigator, linking} from "@screens/AppNavigator/BottomTabNavigator";
-import {useEffect, useRef} from "react";
+import {useEffect, useRef, useState} from "react";
 import {ModalScreenName} from "@screens/AppNavigator/ScreenName.enum";
 import {DeliveryFeeResult, ListingMenuI, OrderI, VendorUserI} from "@nanahq/sticky";
 import {VendorModal} from "@screens/AppNavigator/Screens/modals/Vendor.Modal";
@@ -20,7 +20,8 @@ import {LocationPermission} from "@screens/AppNavigator/components/LocationPersm
 import {useCart} from "@contexts/cart.provider";
 import {BoxDeliveryAddress} from "@screens/AppNavigator/Screens/modals/box-delivery-address";
 import {SuccessScreen} from "@screens/AppNavigator/Screens/modals/success-screen";
-import {CustomerIO} from 'customerio-reactnative'
+import {CioPushPermissionStatus, CustomerIO} from 'customerio-reactnative'
+import {NotificationPermission} from "@screens/AppNavigator/components/NotificationPermission";
 const App = createStackNavigator<AppParamList>()
 
 export interface AppParamList {
@@ -63,10 +64,18 @@ export function AppNavigator(): JSX.Element {
     const isAndroid  = Device.osName === 'Android'
     const {locationPermission} = useLocation()
     const {readCart} = useCart()
+    const [notificationPermission, setNotificationPermission] = useState<CioPushPermissionStatus>('GRANTED')
+
+
     const navigationRef = useRef<any>(null)
 
     useEffect(() => {
         void readCart()
+
+        CustomerIO.pushMessaging.getPushPermissionStatus()
+            .then(permission => {
+                setNotificationPermission(permission)
+            })
     }, [])
 
     useEffect(() => {
@@ -97,10 +106,12 @@ export function AppNavigator(): JSX.Element {
                 },
             });
         }
-        const options = {"ios" : {"sound" : true, "badge" : true}}
-        void CustomerIO.pushMessaging.showPromptForPushNotifications(options)
     }, [profile])
 
+
+    if(notificationPermission !== 'GRANTED') {
+        return  <NotificationPermission setNotificationPermission={setNotificationPermission} />
+    }
 
     if(locationPermission !== Location.PermissionStatus.GRANTED) {
         return <LocationPermission />
