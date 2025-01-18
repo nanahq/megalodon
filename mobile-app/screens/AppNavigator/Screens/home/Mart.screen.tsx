@@ -6,6 +6,9 @@ import {useLocation} from "@contexts/location.provider";
 import {NotfoundLocation} from "@screens/AppNavigator/components/NotfoundLocation";
 
 import GroceriesDp from "@assets/app-config/Groceries 2.png";
+import {CustomerIO} from "customerio-reactnative";
+import {HomeScreenName} from "@screens/AppNavigator/Screens/home/HomeScreenNames.enum";
+import {AppScreenName} from "@screens/AppNavigator/ScreenName.enum";
 
 const HeaderCenter = () => (
     <View style={tailwind('flex flex-row items-center')}>
@@ -20,6 +23,7 @@ export const MartScreen: React.FC= () => {
     const {isWithinSupportedCities} = useLocation()
 
     useEffect(() => {
+        void CustomerIO.screen(AppScreenName.MART)
         navigation.setOptions({
             headerShown: true,
             headerTitleAlign: 'center',

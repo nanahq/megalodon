@@ -13,6 +13,7 @@ import {EnterPasswordScreen} from "@screens/OnboardingNavigator/screens/authenti
 import {VerifyPhoneNumberScreen} from "@screens/OnboardingNavigator/screens/authentication/VerifyPhoneNumber.screen";
 import {OnboardingScreenName} from "./ScreenName.enum";
 import * as SplashScreen from "expo-splash-screen";
+import {useLogger} from "@contexts/NativeLoggingProvider";
 export interface OnboardingParamsList {
     [OnboardingScreenName.ENTER_PASSWORD]: {
         phoneNumber: string
@@ -46,7 +47,7 @@ const LinkingConfiguration: LinkingOptions<ReactNavigation.RootParamList> = {
 
 export function OnboardingNagivator (): JSX.Element {
     const navigationRef = useRef<NavigationContainerRef<ReactNavigation.RootParamList>>(null)
-
+    const logger = useLogger()
     useEffect(() => {
         setTimeout(() => {
             SplashScreen.hideAsync().catch(logger.error);

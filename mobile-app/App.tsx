@@ -85,7 +85,6 @@ segmentClient.add({ plugin: new AmplitudeSessionPlugin()});
                                <PromoCodeProvider>
                                    <GestureHandlerRootView
                                        style={tailwind('flex-1')}
-                                       onLayout={onLayoutRootView}
                                    >
                                        <SafeAreaProvider>
                                            <BottomSheetModalProvider>

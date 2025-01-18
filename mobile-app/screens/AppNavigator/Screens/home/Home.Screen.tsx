@@ -6,7 +6,7 @@ import {CartIcon} from "@screens/AppNavigator/Screens/home/components/CartIcon";
 import {useNavigation} from "@react-navigation/native";
 import {NotfoundLocation} from "@screens/AppNavigator/components/NotfoundLocation";
 import {useLocation} from "@contexts/location.provider";
-import {MapPin, User} from 'lucide-react-native'
+import { User} from 'lucide-react-native'
 import {HomeScreenName} from "@screens/AppNavigator/Screens/home/HomeScreenNames.enum";
 import {useCart} from "@contexts/cart.provider";
 import {AppScreenName} from "@screens/AppNavigator/ScreenName.enum";
@@ -14,9 +14,12 @@ import {useProfile} from "@contexts/profile.provider";
 import {CategorySection} from "@screens/AppNavigator/Screens/modals/components/Tags";
 import AdvertImage from '@assets/ads/ad-food.png'
 import Logo from '@assets/app/tranaparent-icon.png'
+import {CustomerIO} from "customerio-reactnative";
 import {AdBannerCarousel} from "@screens/AppNavigator/Screens/home/components/Advert";
 const {height} = Dimensions.get('window')
-const HeaderLeft = ({ currentCity, navigation }) => (
+
+
+const HeaderLeft = ({ currentCity }) => (
     <View style={tailwind('flex py-5 flex-row items-center ml-5 w-4/5')}>
         <Text style={tailwind('font-light text-xs text-slate-900')}>{currentCity.substring(0, 40)}</Text>
     </View>
@@ -30,7 +33,12 @@ const HeaderCenter = () => (
 const HeaderRight = ({ navigation }) => (
     <Pressable
         style={tailwind('bg-primary-100 my-5 mr-5 border-2 border-primary-100 rounded-full p-2')}
-        onPress={() => navigation?.navigate(AppScreenName.PROFILE)}
+        onPress={() => {
+            void CustomerIO.track('go_to_profile', {
+                ref: AppScreenName.HOME
+            })
+            return navigation?.navigate(AppScreenName.PROFILE)
+        }}
     >
         <User size={20} color={getColor('white')} />
     </Pressable>
@@ -39,12 +47,12 @@ const HeaderRight = ({ navigation }) => (
 export function HomeScreen(): JSX.Element {
     const {isWithinSupportedCities, currentCity} = useLocation()
     const {cart} = useCart()
-    const {profile} = useProfile()
     const navigation = useNavigation()
     const analytics = useAnalytics()
 
     useEffect(() => {
-        void analytics.screen(HomeScreenName.HOME)
+        void analytics.screen(AppScreenName.HOME)
+        void CustomerIO.screen(AppScreenName.HOME)
         navigation.setOptions({
             headerShown: true,
             headerTitleAlign: 'center',

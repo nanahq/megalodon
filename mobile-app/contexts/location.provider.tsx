@@ -57,7 +57,7 @@ export function useLocation(): LocationProviderValues {
 
 export function LocationProvider (props: PropsWithChildren<any>): any {
     const [city, setCity] = useState<string>('');
-    const [locationPermission, setLocationPermission] = useState<Location.PermissionStatus>(Location.PermissionStatus.DENIED)
+    const [locationPermission, setLocationPermission] = useState<Location.PermissionStatus>(Location.PermissionStatus.GRANTED)
     const [isWithinSupportedCities, setIsWithinSupportedCities] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const {setLoadingState} = useLoading()

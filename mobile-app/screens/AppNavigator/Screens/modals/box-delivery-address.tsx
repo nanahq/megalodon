@@ -25,6 +25,7 @@ import {showTost} from "@components/commons/Toast";
 import {mutate} from "swr";
 import {useToast} from "react-native-toast-notifications";
 import {useBottomSheetModal} from "@gorhom/bottom-sheet";
+import {CustomerIO} from "customerio-reactnative";
 
 
 
@@ -52,7 +53,6 @@ export const BoxDeliveryAddress: React.FC<BoxDeliveryAddressModalProps>  = ({nav
     const isSendType = route.params.deliveryType.toLowerCase().includes('send')
 
     useEffect(() => {
-
         if(Boolean(pickupAddress?.address) && Boolean(destinationAddress?.address)) {
             void fetchDeliveryFee()
         }
@@ -170,6 +170,13 @@ export const BoxDeliveryAddress: React.FC<BoxDeliveryAddressModalProps>  = ({nav
             })).data
 
 
+            void CustomerIO.track('box_order', {
+                value: deliveryPricing?.fee + 300
+            })
+
+            void CustomerIO.setProfileAttributes({
+                last_order: new Date(),
+            })
             navigation.navigate(ModalScreenName.MODAL_PAYMENT_SCREEN as any, {
                 order: response.data.order,
                 meta: response.data.paymentMeta

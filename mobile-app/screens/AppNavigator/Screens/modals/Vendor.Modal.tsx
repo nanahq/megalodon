@@ -25,6 +25,7 @@ import {isRestaurantOpen} from "../../../../../utils/DateFormatter";
 import { AlarmClockCheck, AlarmClockOff} from 'lucide-react-native'
 import {useCart} from "@contexts/cart.provider";
 import {useProfile} from "@contexts/profile.provider";
+import {CustomerIO} from "customerio-reactnative";
 type VendorModalScreenProps = StackScreenProps<AppParamList, ModalScreenName.MODAL_VENDOR_SCREEN>
 
  export const VendorModal: React.FC<VendorModalScreenProps> = ({navigation, route}) => {
@@ -53,6 +54,9 @@ type VendorModalScreenProps = StackScreenProps<AppParamList, ModalScreenName.MOD
 
      useEffect(() => {
          void analytics.screen(ModalScreenName.MODAL_VENDOR_SCREEN)
+         void CustomerIO.screen(ModalScreenName.MODAL_VENDOR_SCREEN, {
+             vendor: route.params.vendor._id
+         })
      }, [])
 
 

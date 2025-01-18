@@ -7,10 +7,11 @@ import {NotfoundLocation} from "@screens/AppNavigator/components/NotfoundLocatio
 import Courier from "@assets/app/send-icon.png";
 import SendCourier from "@assets/app/courier-icon.png";
 
-import {ModalScreenName} from "@screens/AppNavigator/ScreenName.enum";
+import {AppScreenName, ModalScreenName} from "@screens/AppNavigator/ScreenName.enum";
 import {NavigationProp, useNavigation} from "@react-navigation/native";
 import {AppParamList} from "@screens/AppNavigator/AppNav";
 import BoxDP from "@assets/app-config/Box.png";
+import {CustomerIO} from "customerio-reactnative";
 
 const HeaderCenter = () => (
     <View style={tailwind('flex flex-row items-center')}>
@@ -31,6 +32,7 @@ export const CourierScreen: React.FC = () => {
     const formattedWidth = width - 60;
 
     useEffect(() => {
+        CustomerIO.screen(AppScreenName.Courier)
         setDeliveryType(undefined)
         navigator.setOptions({
             headerShown: true,
@@ -53,6 +55,9 @@ export const CourierScreen: React.FC = () => {
 
     useEffect(() => {
         if(deliveryType !== undefined) {
+            CustomerIO.track('selected_box_delivery_type', {
+                type: deliveryType
+            })
             navigator.navigate(ModalScreenName.MODAL_BOX_SCREEN, {
                 deliveryType
             } as any)

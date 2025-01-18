@@ -25,6 +25,8 @@ import {NotificationPermission} from "@screens/AppNavigator/components/Notificat
 import * as SplashScreen from "expo-splash-screen"
 import * as Application from 'expo-application';
 import { Platform } from 'react-native';
+import {useAnalytics} from "@segment/analytics-react-native";
+import {useLogger} from "@contexts/NativeLoggingProvider";
 
 
 const App = createStackNavigator<AppParamList>()
@@ -80,10 +82,9 @@ export function AppNavigator(): JSX.Element {
     const {locationPermission} = useLocation()
     const {readCart} = useCart()
     const [notificationPermission, setNotificationPermission] = useState<CioPushPermissionStatus>('GRANTED')
-
-
+    const analytics = useAnalytics()
     const navigationRef = useRef<any>(null)
-
+    const logger = useLogger()
     useEffect(() => {
         void readCart()
         CustomerIO.pushMessaging.getPushPermissionStatus()
@@ -94,18 +95,18 @@ export function AppNavigator(): JSX.Element {
 
     useEffect(() => {
         if (profile?._id) {
-            // void analytics.identify(profile._id, {
-            //     firstName: profile?.firstName,
-            //     lastName: profile?.lastName,
-            //     email: profile.email,
-            //     phone: profile.phone,
-            //     location: profile.location?.coordinates,
-            //     device: {
-            //         version: Device.osVersion,
-            //         name: Device.osName,
-            //         brand: Device.brand
-            //     }
-            // })
+            void analytics.identify(profile._id, {
+                firstName: profile?.firstName,
+                lastName: profile?.lastName,
+                email: profile.email,
+                phone: profile.phone,
+                location: profile.location?.coordinates,
+                device: {
+                    version: Device.osVersion,
+                    name: Device.osName,
+                    brand: Device.brand
+                }
+            })
 
             void CustomerIO.identify({
                 userId: profile._id,

@@ -46,8 +46,8 @@ export function CategorySection() {
     const navigation = useNavigation<any>()
     const {profile} = useProfile()
     const onPress = (screen: string) => {
-        CustomerIO.track("homepage_actions", {
-            screen
+        CustomerIO.track("homepage_action_buttons", {
+            action_button: screen
         });
         void navigation.navigate(screen)
     }
@@ -72,7 +72,7 @@ export function CategorySection() {
 
     return (
         <View style={tailwind('mt-5 mb-10 w-full bg-white')}>
-            <Text style={tailwind('font-bold text-lg my-3 text-slate-900')}>Hi {profile?.firstName}, What would you like to do?</Text>
+            <Text style={tailwind('font-bold text-lg my-3 text-slate-900')}>Hi {profile?.firstName}, what would you like to do?</Text>
             <View style={tailwind('flex flex-row flex-wrap ')}>
                 {categories.map((category, index) => (
                     <TagItem

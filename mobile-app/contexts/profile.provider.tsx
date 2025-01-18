@@ -6,7 +6,6 @@ import {useLoading} from "@contexts/loading.provider";
 
 export interface ProfileProviderValues {
     profile: UserI
-
     parsedLocation?: string
     fetched: boolean
 }
@@ -31,7 +30,7 @@ export function useProfile(): ProfileProviderValues {
 }
 
 export function ProfileProvider (props: PropsWithChildren<any>): any {
-    const {data, isLoading} = useSWR('user/profile', fetcher, {refreshWhenHidden: true, refreshWhenOffline: true, revalidateOnMount: true, revalidateOnFocus: true, refreshInterval: 30000})
+    const {data, isLoading} = useSWR<UserI>('user/profile', fetcher, {refreshWhenHidden: true, refreshWhenOffline: true, revalidateOnMount: true, revalidateOnFocus: true, refreshInterval: 30000})
     const { setLoadingState} = useLoading()
     const value: ProfileProviderValues = {
         profile: data,

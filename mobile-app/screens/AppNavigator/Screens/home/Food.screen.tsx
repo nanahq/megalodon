@@ -17,6 +17,8 @@ import {HomeScreenName} from "@screens/AppNavigator/Screens/home/HomeScreenNames
 import {useAnalytics} from "@segment/analytics-react-native";
 import {useNavigation} from "@react-navigation/native";
 import FoodDp from "@assets/app-config/Food.png";
+import {CustomerIO} from "customerio-reactnative";
+import {AppScreenName} from "@screens/AppNavigator/ScreenName.enum";
 
 const HeaderCenter = () => (
     <View style={tailwind('flex flex-row items-center')}>
@@ -34,7 +36,8 @@ export const FoodScreen: React.FC= () => {
 
 
     useEffect(() => {
-        void analytics.screen(HomeScreenName.FOOD_SCREEN)
+        void analytics.screen(AppScreenName.FOOD)
+        void CustomerIO.screen(AppScreenName.FOOD)
         navigation.setOptions({
             headerShown: true,
             headerTitleAlign: 'center',
