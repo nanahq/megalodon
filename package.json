@@ -26,7 +26,7 @@
     "@expo/config-plugins": "^7.8.0",
     "@expo/vector-icons": "^14.0.0",
     "@gorhom/bottom-sheet": "^4.4.7",
-    "@nanahq/sticky": "^0.4.8",
+    "@nanahq/sticky": "^0.4.9",
     "@react-native-async-storage/async-storage": "1.21.0",
     "@react-native-community/netinfo": "11.1.0",
     "@react-native-community/slider": "4.4.2",
