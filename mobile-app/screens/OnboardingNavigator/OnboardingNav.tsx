@@ -7,11 +7,12 @@ import {
 import { createStackNavigator } from "@react-navigation/stack";
 
 import * as Linking from "expo-linking";
-import {useRef} from "react";
+import {useRef, useEffect} from "react";
 import {EnterPhoneNumberScreen} from "@screens/OnboardingNavigator/screens/authentication/EnterPhoneNumber.screen";
 import {EnterPasswordScreen} from "@screens/OnboardingNavigator/screens/authentication/EnterPassword.Screen";
 import {VerifyPhoneNumberScreen} from "@screens/OnboardingNavigator/screens/authentication/VerifyPhoneNumber.screen";
 import {OnboardingScreenName} from "./ScreenName.enum";
+import * as SplashScreen from "expo-splash-screen";
 export interface OnboardingParamsList {
     [OnboardingScreenName.ENTER_PASSWORD]: {
         phoneNumber: string
@@ -45,6 +46,13 @@ const LinkingConfiguration: LinkingOptions<ReactNavigation.RootParamList> = {
 
 export function OnboardingNagivator (): JSX.Element {
     const navigationRef = useRef<NavigationContainerRef<ReactNavigation.RootParamList>>(null)
+
+    useEffect(() => {
+        setTimeout(() => {
+            SplashScreen.hideAsync().catch(logger.error);
+        });
+    }, []);
+
     function OnboardingStacks (): JSX.Element {
         return (
             <OnboardingStack.Navigator

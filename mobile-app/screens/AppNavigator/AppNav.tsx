@@ -22,7 +22,22 @@ import {BoxDeliveryAddress} from "@screens/AppNavigator/Screens/modals/box-deliv
 import {SuccessScreen} from "@screens/AppNavigator/Screens/modals/success-screen";
 import {CioPushPermissionStatus, CustomerIO} from 'customerio-reactnative'
 import {NotificationPermission} from "@screens/AppNavigator/components/NotificationPermission";
+import * as SplashScreen from "expo-splash-screen"
+import * as Application from 'expo-application';
+import { Platform } from 'react-native';
+
+
 const App = createStackNavigator<AppParamList>()
+
+
+const getAppVersion = () => {
+    if (Platform.OS === 'ios') {
+        return Application.nativeApplicationVersion;
+    } else if (Platform.OS === 'android') {
+        return Application.nativeApplicationVersion;
+    }
+    return null;
+};
 
 export interface AppParamList {
     [ModalScreenName.MODAL_VENDOR_SCREEN]: {
@@ -71,7 +86,6 @@ export function AppNavigator(): JSX.Element {
 
     useEffect(() => {
         void readCart()
-
         CustomerIO.pushMessaging.getPushPermissionStatus()
             .then(permission => {
                 setNotificationPermission(permission)
@@ -102,11 +116,18 @@ export function AppNavigator(): JSX.Element {
                     email: profile.email,
                     version: Device.osVersion,
                     name: Device.osName,
-                    brand: Device.brand
+                    brand: Device.brand,
+                    app_version: getAppVersion()
                 },
             });
         }
     }, [profile])
+
+    useEffect(() => {
+        setTimeout(() => {
+            SplashScreen.hideAsync().catch(logger.error);
+        });
+    }, []);
 
 
     if(notificationPermission !== 'GRANTED') {

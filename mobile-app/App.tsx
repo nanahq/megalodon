@@ -1,9 +1,9 @@
 import 'expo-dev-client';
 import * as SplashScreen from 'expo-splash-screen'
-import {LoadCachedResourceAsync} from "@hooks/useCachedResource";
+import { useCachedResource} from "@hooks/useCachedResource";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import {tailwind} from "@tailwind";
-import {NativeLoggingProvider, useLogger} from "@contexts/NativeLoggingProvider";
+import {NativeLoggingProvider} from "@contexts/NativeLoggingProvider";
 import {AuthPersistenceProvider} from "@contexts/AuthPersistenceProvider";
 import {persistence} from "@api/persistence";
 import ErrorBoundary from "@screens/ErrorBoundary/ErrorBoundary";
@@ -26,10 +26,6 @@ import * as Sentry from '@sentry/react-native';
 import {StatusBar} from "expo-status-bar";
 import {RootNavigator} from "@screens/RootNavigator";
 
-SplashScreen.setOptions({
-    duration: 1000,
-    fade: true,
-});
 
 
 export const socket = io(`${process.env.EXPO_PUBLIC_API_URL}`, {transports: ["websocket"]})
@@ -42,29 +38,7 @@ const segmentClient = createClient({
 segmentClient.add({ plugin: new AmplitudeSessionPlugin()});
 
  function App() {
-     const [appIsReady, setAppIsReady] = useState(false);
-
-     useEffect(() => {
-         async function prepare() {
-             try {
-                 await SplashScreen.preventAutoHideAsync();
-                 await LoadCachedResourceAsync;
-                 await new Promise(resolve => setTimeout(resolve, 2000));
-             } catch (e) {
-                 console.warn(e);
-             } finally {
-                 setAppIsReady(true);
-             }
-         }
-
-        void prepare();
-     }, []);
-
-     const onLayoutRootView = useCallback(() => {
-         if (appIsReady) {
-             SplashScreen.hide();
-         }
-     }, [appIsReady]);
+     const isLoaded = useCachedResource()
 
 
      useEffect(() => {
@@ -93,12 +67,10 @@ segmentClient.add({ plugin: new AmplitudeSessionPlugin()});
         app_toast_warning: (toast: ToastProps) => <AppToast type="warning" toast={toast} />,
     };
 
-     if (!appIsReady) {
+     if (!isLoaded) {
+         SplashScreen.preventAutoHideAsync().catch(() => console.error('error'));
          return null;
      }
-
-
-
      return (
         <NativeLoggingProvider>
             <ErrorBoundary>
