@@ -1,7 +1,7 @@
 import 'expo-dev-client';
 import * as SplashScreen from 'expo-splash-screen'
 import {MainScreen} from "@screens/Main";
-import {useCachedResource} from "@hooks/useCachedResource";
+import {LoadCachedResourceAsync} from "@hooks/useCachedResource";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import {tailwind} from "@tailwind";
 import {NativeLoggingProvider, useLogger} from "@contexts/NativeLoggingProvider";
@@ -18,13 +18,21 @@ import {AmplitudeSessionPlugin} from "@segment/analytics-react-native-plugin-amp
 import {PromoCodeProvider} from "@contexts/PromoCode";
 import {LoadingProvider} from "@contexts/loading.provider";
 import {io} from "socket.io-client";
-
+import {useEffect, useCallback} from 'react'
 import {
     CioLogLevel, CioRegion, CustomerIO, CioConfig, PushClickBehaviorAndroid
 } from 'customerio-reactnative';
-import {useEffect} from "react";
 
 import * as Sentry from '@sentry/react-native';
+
+
+
+void SplashScreen.preventAutoHideAsync();
+
+SplashScreen.setOptions({
+    duration: 1000,
+    fade: true,
+});
 
 
 export const socket = io(`${process.env.EXPO_PUBLIC_API_URL}`, {transports: ["websocket"]})
@@ -37,8 +45,34 @@ const segmentClient = createClient({
 segmentClient.add({ plugin: new AmplitudeSessionPlugin()});
 
  function App() {
-  const isLoaded = useCachedResource()
    const logger = useLogger()
+     const [appIsReady, setAppIsReady] = useState(false);
+
+     useEffect(() => {
+         async function prepare() {
+             try {
+                 await LoadCachedResourceAsync;
+                 await new Promise(resolve => setTimeout(resolve, 2000));
+             } catch (e) {
+                 console.warn(e);
+             } finally {
+                 setAppIsReady(true);
+             }
+         }
+
+        void prepare();
+     }, []);
+
+     const onLayoutRootView = useCallback(() => {
+         if (appIsReady) {
+             SplashScreen.hide();
+         }
+     }, [appIsReady]);
+
+     if (!appIsReady) {
+         return null;
+     }
+
      useEffect(() => {
          const config: CioConfig = {
              cdpApiKey: '064b10f6a9b755367903',
@@ -58,12 +92,6 @@ segmentClient.add({ plugin: new AmplitudeSessionPlugin()});
          void CustomerIO.initialize(config)
      }, [])
 
-    if (!isLoaded) {
-        setTimeout(() => {
-            SplashScreen.preventAutoHideAsync().catch(logger.error);
-        }, 5000)
-        return null;
-    }
 
     const customToast = {
         app_toast_success: (toast: ToastProps) => <AppToast  type="success" toast={toast} />,
@@ -86,6 +114,7 @@ segmentClient.add({ plugin: new AmplitudeSessionPlugin()});
                                <PromoCodeProvider>
                                    <GestureHandlerRootView
                                        style={tailwind('flex-1')}
+                                       onLayout={onLayoutRootView}
                                    >
                                        <SafeAreaProvider>
                                            <BottomSheetModalProvider>

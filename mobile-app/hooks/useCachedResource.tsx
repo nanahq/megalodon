@@ -21,7 +21,7 @@ export function useCachedResource (): boolean {
     return isLoaded
 }
 
-async function LoadCachedResourceAsync (): Promise<void> {
+export async function LoadCachedResourceAsync (): Promise<void> {
     try {
         await Font.loadAsync({
             ThinFont: fontLight,
