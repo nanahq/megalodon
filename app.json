@@ -58,12 +58,15 @@
     ],
     "splash": {
       "android": {
-        "image": "./assets/app-config/nana-splash.png"
+        "image": "./assets/app-config/splash-screen-new.png",
+        "backgroundColor": "#FFFFFF",
+        "resizeMode": "cover"
       },
       "ios": {
-        "image": "./assets/app-config/splash-screen-new.png"
-      },
-      "resizeMode": "cover"
+        "image": "./assets/app-config/splash-screen-new.png",
+        "backgroundColor": "#FFFFFF",
+        "resizeMode": "cover"
+      }
     },
     "updates": {
       "fallbackToCacheTimeout": 0,

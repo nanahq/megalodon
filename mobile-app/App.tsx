@@ -1,6 +1,5 @@
 import 'expo-dev-client';
 import * as SplashScreen from 'expo-splash-screen'
-import {MainScreen} from "@screens/Main";
 import {LoadCachedResourceAsync} from "@hooks/useCachedResource";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import {tailwind} from "@tailwind";
@@ -18,16 +17,14 @@ import {AmplitudeSessionPlugin} from "@segment/analytics-react-native-plugin-amp
 import {PromoCodeProvider} from "@contexts/PromoCode";
 import {LoadingProvider} from "@contexts/loading.provider";
 import {io} from "socket.io-client";
-import {useEffect, useCallback} from 'react'
+import {useEffect, useCallback, useState} from 'react'
 import {
     CioLogLevel, CioRegion, CustomerIO, CioConfig, PushClickBehaviorAndroid
 } from 'customerio-reactnative';
 
 import * as Sentry from '@sentry/react-native';
-
-
-
-void SplashScreen.preventAutoHideAsync();
+import {StatusBar} from "expo-status-bar";
+import {RootNavigator} from "@screens/RootNavigator";
 
 SplashScreen.setOptions({
     duration: 1000,
@@ -45,12 +42,12 @@ const segmentClient = createClient({
 segmentClient.add({ plugin: new AmplitudeSessionPlugin()});
 
  function App() {
-   const logger = useLogger()
      const [appIsReady, setAppIsReady] = useState(false);
 
      useEffect(() => {
          async function prepare() {
              try {
+                 await SplashScreen.preventAutoHideAsync();
                  await LoadCachedResourceAsync;
                  await new Promise(resolve => setTimeout(resolve, 2000));
              } catch (e) {
@@ -69,9 +66,6 @@ segmentClient.add({ plugin: new AmplitudeSessionPlugin()});
          }
      }, [appIsReady]);
 
-     if (!appIsReady) {
-         return null;
-     }
 
      useEffect(() => {
          const config: CioConfig = {
@@ -99,8 +93,13 @@ segmentClient.add({ plugin: new AmplitudeSessionPlugin()});
         app_toast_warning: (toast: ToastProps) => <AppToast type="warning" toast={toast} />,
     };
 
+     if (!appIsReady) {
+         return null;
+     }
 
-    return (
+
+
+     return (
         <NativeLoggingProvider>
             <ErrorBoundary>
                 <AuthPersistenceProvider
@@ -120,7 +119,10 @@ segmentClient.add({ plugin: new AmplitudeSessionPlugin()});
                                            <BottomSheetModalProvider>
                                                <ToastProvider renderType={customToast}>
                                                    <AnalyticsProvider client={segmentClient}>
-                                                       <MainScreen />
+                                                       <SafeAreaProvider>
+                                                           <StatusBar backgroundColor={"transparent"} />
+                                                           <RootNavigator />
+                                                       </SafeAreaProvider>
                                                    </AnalyticsProvider>
                                                </ToastProvider>
                                            </BottomSheetModalProvider>

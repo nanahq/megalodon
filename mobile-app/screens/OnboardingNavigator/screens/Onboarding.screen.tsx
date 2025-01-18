@@ -12,11 +12,6 @@ export function OnboardingScreen (): JSX.Element {
     const navigator = useNavigation<NavigationProp<OnboardingParamsList>>()
     const logger = useLogger()
     const { top: topInset } = useSafeAreaInsets();
-    useEffect(() => {
-        setTimeout(() => {
-            SplashScreen.hideAsync().catch(logger.error);
-        });
-    }, []);
 
     return (
         <ScrollView
