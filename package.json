@@ -123,7 +123,7 @@
     "@types/find-in-files": "^0.5.1",
     "@types/jest": "^29.4.0",
     "@types/lodash": "^4.14.191",
-    "@types/node": "^18.15.0",
+    "@types/node": "^18.19.74",
     "@types/randomcolor": "^0.5.7",
     "@types/react": "~18.2.14",
     "@types/react-native-loading-spinner-overlay": "^0.5.3",
